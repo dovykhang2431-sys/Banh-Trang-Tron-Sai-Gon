@@ -1,0 +1,2121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Bánh Tráng Trộn Sài Gòn - 30 Năm Bí Kíp Dì Tư</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(160deg, #fffbeb 0%, #ffedd5 50%, #fde68a 100%);
+            color: #1e293b;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .soft-card {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(8px);
+            border-radius: 1.25rem;
+            box-shadow: 0 8px 24px -4px rgba(234, 88, 12, 0.12), 0 2px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(251, 191, 36, 0.45);
+        }
+        .soft-btn {
+            transition: all 0.16s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+        }
+        .soft-btn:active:not(:disabled) {
+            transform: scale(0.94);
+        }
+        .soft-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .pulse-ring {
+            animation: pulseRing 1.4s infinite;
+        }
+        @keyframes pulseRing {
+            0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.55); }
+            70% { box-shadow: 0 0 0 8px rgba(249, 115, 22, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+        }
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(0.95); }
+            100% { opacity: 0; transform: translateY(-28px) scale(1.08); }
+        }
+        .floating-badge {
+            animation: floatUp 0.95s ease-out forwards;
+            pointer-events: none;
+        }
+        /* Tùy chỉnh thanh cuộn gọn nhẹ */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: rgba(254, 243, 199, 0.5); border-radius: 8px; }
+        ::-webkit-scrollbar-thumb { background: #f59e0b; border-radius: 8px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- THÔNG BÁO NỔI (TOAST) -->
+    <div id="toastContainer" class="fixed top-14 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-1.5 pointer-events-none w-11/12 max-w-md"></div>
+
+    <!-- THANH HEADER TRÊN CÙNG -->
+    <header class="bg-gradient-to-r from-orange-600 via-amber-600 to-rose-600 text-white shadow-md sticky top-0 z-30">
+        <div class="max-w-5xl mx-auto px-2.5 py-2 flex flex-wrap items-center justify-between gap-1.5">
+            <!-- Thương hiệu & Cấp độ -->
+            <div class="flex items-center gap-2">
+                <button onclick="openModal('levelModal')" class="soft-btn bg-amber-300 text-amber-950 font-black text-xs px-2.5 py-1 rounded-xl shadow flex items-center gap-1 border border-white/60" title="Xem phần thưởng Cấp độ">
+                    <span>⭐ Cấp <span id="uiLevel">1</span></span>
+                    <span id="levelRewardDot" class="hidden w-2 h-2 rounded-full bg-rose-600 animate-ping"></span>
+                </button>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <h1 class="font-black text-xs sm:text-sm tracking-tight leading-none">BÁNH TRÁNG DÌ TƯ</h1>
+                        <span class="bg-white/20 text-[10px] font-bold px-1.5 py-0.5 rounded-lg">Ngày <span id="uiDay">1</span></span>
+                    </div>
+                    <p id="uiTimeText" class="text-[10px] text-amber-100 font-semibold mt-0.5">🌅 06:00 - Sơ chế & Đi chợ</p>
+                </div>
+            </div>
+
+            <!-- Chỉ số Tiền, Uy tín & Các nút chức năng -->
+            <div class="flex items-center gap-1.5 flex-wrap">
+                <div class="bg-black/25 backdrop-blur px-2.5 py-1 rounded-xl flex items-center gap-1 border border-white/15">
+                    <span class="text-xs">💰</span>
+                    <span id="uiMoney" class="font-black text-xs sm:text-sm text-amber-200">500.000đ</span>
+                </div>
+                <div class="bg-black/25 backdrop-blur px-2 py-1 rounded-xl flex items-center gap-1 border border-white/15" title="Điểm Uy Tín của quán">
+                    <span class="text-xs">❤️</span>
+                    <span id="uiRep" class="font-extrabold text-xs text-rose-200">100</span>
+                </div>
+                <button onclick="openModal('storyModal')" class="soft-btn bg-white/20 hover:bg-white/30 text-white font-bold text-[10px] sm:text-xs px-2 py-1 rounded-xl border border-white/25 flex items-center gap-1">
+                    <span>📖</span>
+                    <span id="uiStoryBtnText" class="hidden sm:inline">Chương 1</span>
+                </button>
+                <button onclick="openModal('accountModal')" class="soft-btn bg-white/20 hover:bg-white/30 text-white font-bold text-[10px] sm:text-xs px-2 py-1 rounded-xl border border-white/25 flex items-center gap-1" title="Tài khoản & Lưu tiến trình">
+                    <span id="headerAvatar">🧑‍🍳</span>
+                    <span id="headerPlayerName" class="max-w-[72px] truncate">Quán Dì Tư</span>
+                    <span id="saveStatusDot" class="w-2 h-2 rounded-full bg-emerald-300" title="Đã tự động lưu"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- THANH ĐIỀU HƯỚNG 4 TAB -->
+        <nav class="max-w-5xl mx-auto px-2 pb-1.5 grid grid-cols-4 gap-1.5">
+            <button id="tabBtn-market" onclick="switchTab('market')" class="soft-btn py-1.5 rounded-xl font-extrabold text-[11px] sm:text-xs flex items-center justify-center gap-1 bg-white text-orange-700 shadow">
+                <span>🛒</span> <span>1. Đi Chợ</span>
+            </button>
+            <button id="tabBtn-sell" onclick="switchTab('sell')" class="soft-btn py-1.5 rounded-xl font-extrabold text-[11px] sm:text-xs flex items-center justify-center gap-1 bg-white/15 text-white hover:bg-white/25">
+                <span>🥣</span> <span>2. Đứng Bán</span>
+            </button>
+            <button id="tabBtn-upgrade" onclick="switchTab('upgrade')" class="soft-btn py-1.5 rounded-xl font-extrabold text-[11px] sm:text-xs flex items-center justify-center gap-1 bg-white/15 text-white hover:bg-white/25">
+                <span>🛠️</span> <span>3. Sổ Sách & Xe</span>
+            </button>
+            <button id="tabBtn-leaderboard" onclick="switchTab('leaderboard')" class="soft-btn py-1.5 rounded-xl font-extrabold text-[11px] sm:text-xs flex items-center justify-center gap-1 bg-white/15 text-white hover:bg-white/25">
+                <span>🏆</span> <span>4. Đua Top</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- NỘI DUNG CHÍNH -->
+    <main class="max-w-5xl w-full mx-auto px-2.5 py-2.5 flex-1 flex flex-col">
+
+        <!-- ================= TAB 1: ĐI CHỢ & SƠ CHẾ ================= -->
+        <section id="tab-market" class="space-y-2.5">
+            <!-- Khung Sơ Chế Buổi Sáng (Mini-game tăng tiền lời mỗi bịch) -->
+            <div class="soft-card p-3">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <div>
+                        <h2 class="font-black text-xs sm:text-sm text-orange-900 flex items-center gap-1.5">
+                            <span>🔥 Giai đoạn Sơ Chế Tại Nhà (Tăng độ ngon & Tiền thưởng)</span>
+                        </h2>
+                        <p class="text-[11px] text-slate-600">Tự tay thắng sa tế, phi hành, lột trứng giúp mỗi phần bán ra được khách thưởng thêm tiền!</p>
+                    </div>
+                    <div class="bg-amber-100 border border-amber-300 text-amber-900 font-extrabold text-xs px-2.5 py-1 rounded-xl">
+                        Thưởng sơ chế: <span id="uiPrepBonus" class="text-orange-700">+0đ/phần</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <button id="prepBtn-sate" onclick="openPrepModal('sate')" class="soft-btn p-2 rounded-xl border border-orange-200 bg-orange-50 hover:bg-orange-100 flex flex-col items-center text-center">
+                        <span class="text-lg">🌶️</span>
+                        <span class="font-extrabold text-xs text-slate-800">Thắng Sa Tế</span>
+                        <span id="prepStatus-sate" class="text-[10px] font-bold text-orange-600 mt-0.5">+1.500đ/phần</span>
+                    </button>
+                    <button id="prepBtn-hanh" onclick="openPrepModal('hanh')" class="soft-btn p-2 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 flex flex-col items-center text-center">
+                        <span class="text-lg">🧅</span>
+                        <span class="font-extrabold text-xs text-slate-800">Phi Hành Giòn</span>
+                        <span id="prepStatus-hanh" class="text-[10px] font-bold text-amber-700 mt-0.5">+1.500đ/phần</span>
+                    </button>
+                    <button id="prepBtn-trung" onclick="openPrepModal('trung')" class="soft-btn p-2 rounded-xl border border-yellow-200 bg-yellow-50 hover:bg-yellow-100 flex flex-col items-center text-center">
+                        <span class="text-lg">🥚</span>
+                        <span class="font-extrabold text-xs text-slate-800">Lột Trứng Cút</span>
+                        <span id="prepStatus-trung" class="text-[10px] font-bold text-yellow-700 mt-0.5">+1.000đ/phần</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Khung Chợ Sỉ Đầu Mối (Nhập số lượng tự do từ bàn phím) -->
+            <div class="soft-card p-3">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <div>
+                        <h2 class="font-black text-xs sm:text-sm text-orange-900">🛒 Chợ Sỉ Nguyên Liệu (Gõ Số Lượng Tùy Ý)</h2>
+                        <p class="text-[11px] text-slate-600">💡 <strong>Đồ Khô</strong> để qua đêm được. <strong>Đồ Tươi</strong> (Xoài, Rau, Trứng) dư cuối ngày sẽ bị hỏng!</p>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="fillSuggestedOrder(15)" class="soft-btn bg-amber-100 hover:bg-amber-200 text-amber-900 font-extrabold text-[11px] px-2.5 py-1 rounded-xl border border-amber-300">
+                            ⚡ Điền nhanh +15 phần
+                        </button>
+                        <button onclick="clearOrderInputs()" class="soft-btn bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] px-2 py-1 rounded-xl">
+                            Xóa số
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Danh sách 8 nguyên liệu -->
+                <div id="marketGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3"></div>
+
+                <!-- Thanh Tổng Tiền & Nút Xác Nhận Nhập Kho Cuối Bảng -->
+                <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-orange-200 rounded-2xl p-2.5 flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-3">
+                        <div>
+                            <div class="text-[10px] font-bold text-slate-500 uppercase">Tổng số lượng nhập</div>
+                            <div id="uiTotalOrderItems" class="font-black text-sm text-slate-800">0 phần</div>
+                        </div>
+                        <div class="h-6 w-px bg-orange-200"></div>
+                        <div>
+                            <div class="text-[10px] font-bold text-slate-500 uppercase">Tổng tiền thanh toán</div>
+                            <div id="uiTotalOrderCost" class="font-black text-sm text-rose-600">0đ</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                        <button onclick="confirmMarketOrder()" class="soft-btn flex-1 sm:flex-initial bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-md flex items-center justify-center gap-1.5">
+                            <span>✅ Xác Nhận Nhập Kho</span>
+                        </button>
+                        <button onclick="switchTab('sell')" class="soft-btn bg-gradient-to-r from-orange-500 to-rose-600 text-white font-black text-xs sm:text-sm px-3.5 py-2.5 rounded-xl shadow-md">
+                            Đẩy Xe Ra Bán ➡️
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: ĐỨNG BÁN (ZERO-SCROLL COMPACT) ================= -->
+        <section id="tab-sell" class="hidden space-y-2">
+            <!-- Băng rôn Sự Kiện Khẩn Cấp (Mưa rào / Đô thị kiểm tra) -->
+            <div id="emergencyBanner" class="hidden bg-gradient-to-r from-rose-600 to-red-600 text-white p-2.5 rounded-2xl shadow-lg flex items-center justify-between gap-2 animate-bounce">
+                <div class="flex items-center gap-2">
+                    <span id="emergencyIcon" class="text-2xl">🌧️</span>
+                    <div>
+                        <div id="emergencyTitle" class="font-black text-xs sm:text-sm">TRỜI ĐỔ MƯA RÀO SÀI GÒN!</div>
+                        <div id="emergencyDesc" class="text-[11px] text-rose-100">Bấm xử lý ngay trước khi ướt nguyên liệu hoặc bị phạt!</div>
+                    </div>
+                </div>
+                <button onclick="resolveEmergencyEvent()" id="emergencyBtn" class="soft-btn bg-amber-300 text-slate-900 font-black text-xs px-3 py-2 rounded-xl shadow shrink-0">
+                    ☂️ Che Bạt Ngay!
+                </button>
+            </div>
+
+            <!-- Hàng trên: Khách hàng Chibi + Xe đẩy & Thau chế biến -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-2">
+                <!-- Cột Trái (5/12): Thông tin Khách Hàng Chibi & Phiếu Order -->
+                <div class="md:col-span-5 soft-card p-3 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-1.5">
+                            <span class="bg-orange-100 text-orange-800 font-extrabold text-[10px] px-2 py-0.5 rounded-lg border border-orange-200">
+                                Khách #<span id="uiCustNumber">1</span> trong ngày
+                            </span>
+                            <div class="flex items-center gap-1 text-[11px] font-extrabold text-slate-600">
+                                <span>⏳ Kiên nhẫn:</span>
+                                <span id="uiPatiencePct" class="text-emerald-600">100%</span>
+                            </div>
+                        </div>
+
+                        <!-- Thanh kiên nhẫn -->
+                        <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden mb-2">
+                            <div id="uiPatienceBar" class="h-full bg-emerald-500 transition-all duration-300" style="width: 100%"></div>
+                        </div>
+
+                        <!-- Hồ sơ Chibi Khách hàng -->
+                        <div class="flex items-center gap-2.5 bg-amber-50/90 border border-amber-200 rounded-2xl p-2 mb-2">
+                            <div id="uiCustAvatar" class="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-200 to-amber-100 border-2 border-orange-400 flex items-center justify-center text-3xl shrink-0 shadow-inner">
+                                👧
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span id="uiCustName" class="font-black text-xs sm:text-sm text-slate-900 truncate">Bé Thảo Vy</span>
+                                    <span id="uiCustAgeJob" class="bg-white text-slate-700 font-bold text-[10px] px-1.5 py-0.5 rounded-md border border-slate-200">16t • Học sinh cấp 3</span>
+                                </div>
+                                <p id="uiCustQuote" class="text-[11px] text-slate-700 italic mt-0.5 line-clamp-2">"Dì Tư ơi làm lẹ giùm con 1 phần kẻo trễ giờ học thêm nha!"</p>
+                            </div>
+                        </div>
+
+                        <!-- Phiếu Order (Tự động đổi màu xanh khi người chơi chọn đúng) -->
+                        <div class="bg-white border-2 border-dashed border-orange-300 rounded-2xl p-2">
+                            <div class="text-[10px] font-black text-slate-500 uppercase mb-1 flex items-center justify-between">
+                                <span>📋 Phiếu Yêu Cầu Của Khách:</span>
+                                <span class="text-orange-600 font-bold">(Xanh = Đã chọn khớp)</span>
+                            </div>
+                            <!-- Món chính khách gọi -->
+                            <div id="reqBadge-dish" class="mb-1.5 px-2.5 py-1 rounded-xl font-black text-xs flex items-center justify-between border">
+                                <span id="reqText-dish">🥣 Bánh Tráng Trộn Thập Cẩm</span>
+                                <span id="reqIcon-dish">⏳</span>
+                            </div>
+                            <!-- 3 tag gia giảm -->
+                            <div class="grid grid-cols-3 gap-1 text-[10px] font-extrabold text-center">
+                                <div id="reqBadge-chili" class="py-1 px-1 rounded-lg border">🌶️ Cay vừa</div>
+                                <div id="reqBadge-herbs" class="py-1 px-1 rounded-lg border">🌿 Có rau răm</div>
+                                <div id="reqBadge-onion" class="py-1 px-1 rounded-lg border">🧅 Có hành phi</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chỉnh giá bán lẻ & Kết thúc ngày -->
+                    <div class="mt-2 pt-2 border-t border-amber-200/70 flex items-center justify-between gap-1 text-[11px]">
+                        <div class="flex items-center gap-1">
+                            <span class="font-bold text-slate-600">Giá bán:</span>
+                            <button onclick="changePriceOffset(-2000)" class="soft-btn bg-slate-200 hover:bg-slate-300 font-black px-2 py-0.5 rounded-lg">-</button>
+                            <span id="uiCurrentDishPrice" class="font-black text-orange-700">25.000đ</span>
+                            <button onclick="changePriceOffset(2000)" class="soft-btn bg-slate-200 hover:bg-slate-300 font-black px-2 py-0.5 rounded-lg">+</button>
+                        </div>
+                        <button onclick="openEndDayModal()" class="soft-btn bg-slate-800 hover:bg-slate-900 text-amber-300 font-extrabold text-[11px] px-2.5 py-1 rounded-xl">
+                            🌙 Đóng Quầy Chốt Sổ
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Cột Phải (7/12): Bàn Chế Biến, Chọn Món, Gia Giảm & 4 Bước Trộn -->
+                <div class="md:col-span-7 soft-card p-3 flex flex-col justify-between space-y-2">
+                    <!-- Bước A: Chọn 1 trong 4 món bánh tráng trên Menu -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[11px] font-black text-orange-900">1. Chọn Món Bánh Tráng Khách Gọi:</span>
+                            <span class="text-[10px] font-bold text-slate-500">Đã bán hôm nay: <strong id="uiSoldToday" class="text-orange-700">0</strong> phần</span>
+                        </div>
+                        <div id="dishSelectGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-1.5"></div>
+                    </div>
+
+                    <!-- Bước B: Gia giảm theo ý khách (Không có nút tự chỉnh sẵn) -->
+                    <div>
+                        <div class="text-[11px] font-black text-orange-900 mb-1">2. Gia Giảm Gia Vị Đúng Ý Khách:</div>
+                        <div class="grid grid-cols-3 gap-1.5">
+                            <!-- Độ cay -->
+                            <div class="bg-slate-100 p-1 rounded-xl flex items-center justify-between gap-0.5">
+                                <button id="optChili-0" onclick="setOption('chili', 0)" class="soft-btn flex-1 py-1 rounded-lg font-extrabold text-[10px]">Ko cay</button>
+                                <button id="optChili-1" onclick="setOption('chili', 1)" class="soft-btn flex-1 py-1 rounded-lg font-extrabold text-[10px]">Cay vừa</button>
+                                <button id="optChili-2" onclick="setOption('chili', 2)" class="soft-btn flex-1 py-1 rounded-lg font-extrabold text-[10px]">Siêu cay</button>
+                            </div>
+                            <!-- Rau răm -->
+                            <div class="bg-slate-100 p-1 rounded-xl flex items-center justify-between gap-0.5">
+                                <button id="optHerbs-true" onclick="setOption('herbs', true)" class="soft-btn flex-1 py-1 rounded-lg font-extrabold text-[10px]">🌿 Có Rau</button>
+                                <button id="optHerbs-false" onclick="setOption('herbs', false)" class="soft-btn flex-1 py-1 rounded-lg font-extrabold text-[10px]">🚫 Ko Rau</button>
+                            </div>
+                            <!-- Hành phi -->
+                            <div class="bg-slate-100 p-1 rounded-xl flex items-center justify-between gap-0.5">
+                                <button id="optOnion-true" onclick="setOption('onion', true)" class="soft-btn flex-1 py-1 rounded-lg font-extrabold text-[10px]">🧅 Có Hành</button>
+                                <button id="optOnion-false" onclick="setOption('onion', false)" class="soft-btn flex-1 py-1 rounded-lg font-extrabold text-[10px]">🚫 Ko Hành</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bước C: Minh họa Thau Inox / Vỉ Nướng & Thanh Canh Lực -->
+                    <div class="bg-gradient-to-b from-amber-50/90 to-orange-50/90 border border-amber-200 rounded-2xl p-2 flex flex-col sm:flex-row items-center gap-2.5 relative">
+                        <!-- Hình vẽ SVG Thau Trộn Inox trực quan -->
+                        <div onclick="tapBowlCenter()" class="relative w-28 h-28 shrink-0 cursor-pointer flex items-center justify-center group" title="Chạm vào thau để làm bước tiếp theo!">
+                            <div id="floatingActionContainer" class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"></div>
+                            <svg viewBox="0 0 140 140" class="w-full h-full drop-shadow">
+                                <!-- Vành thau inox -->
+                                <circle cx="70" cy="70" r="64" fill="#cbd5e1" stroke="#64748b" stroke-width="4"/>
+                                <circle cx="70" cy="70" r="54" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+                                <!-- Lớp 1: Bánh tráng & Xoài -->
+                                <g id="svgLayerStep1" class="hidden">
+                                    <rect x="35" y="48" width="52" height="10" rx="4" transform="rotate(-15 60 55)" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+                                    <rect x="48" y="65" width="54" height="10" rx="4" transform="rotate(18 70 70)" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+                                    <rect x="38" y="75" width="48" height="9" rx="4" transform="rotate(-8 60 80)" fill="#fef08a" stroke="#eab308" stroke-width="1.5"/>
+                                    <!-- Sợi xoài & rau -->
+                                    <path d="M45 55 Q70 40 95 60" stroke="#84cc16" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                    <path d="M42 82 Q70 95 92 72" stroke="#65a30d" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                </g>
+                                <!-- Lớp 2: Sốt bò/Sốt bơ & Muối ớt -->
+                                <g id="svgLayerStep2" class="hidden">
+                                    <path d="M42 62 Q68 48 94 66 T52 86" fill="none" stroke="#9a3412" stroke-width="4" stroke-linecap="round"/>
+                                    <circle cx="56" cy="58" r="3" fill="#ef4444"/>
+                                    <circle cx="82" cy="64" r="2.5" fill="#ef4444"/>
+                                    <circle cx="65" cy="78" r="3" fill="#ea580c"/>
+                                </g>
+                                <!-- Lớp 4: Topping Khô bò, Trứng cút, Đậu phộng -->
+                                <g id="svgLayerStep4" class="hidden">
+                                    <ellipse cx="56" cy="64" rx="9" ry="7" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+                                    <circle cx="56" cy="64" r="4" fill="#f59e0b"/>
+                                    <ellipse cx="82" cy="74" rx="9" ry="7" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+                                    <circle cx="82" cy="74" r="4" fill="#f59e0b"/>
+                                    <rect x="64" y="48" width="12" height="8" rx="2" fill="#7c2d12"/>
+                                    <rect x="46" y="76" width="13" height="8" rx="2" fill="#7c2d12"/>
+                                </g>
+                            </svg>
+                            <span class="absolute bottom-0 bg-slate-900/75 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">Chạm thau thao tác</span>
+                        </div>
+
+                        <!-- Thanh Canh Lực Trộn/Cuộn/Nướng (Sweet Spot) -->
+                        <div class="flex-1 w-full space-y-1.5">
+                            <div class="flex items-center justify-between text-[11px]">
+                                <span id="uiMixLabel" class="font-black text-slate-800">Độ thấm / Độ chín: <strong id="uiMixPct" class="text-orange-600">0%</strong></span>
+                                <span id="uiSweetSpotText" class="text-[10px] font-extrabold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">Vùng chuẩn: 65% - 90%</span>
+                            </div>
+                            <div class="relative w-full h-5 bg-slate-200 rounded-xl overflow-hidden border border-slate-300">
+                                <!-- Vùng xanh chuẩn -->
+                                <div id="uiSweetSpotZone" class="absolute top-0 bottom-0 bg-emerald-400/45 border-x-2 border-emerald-600 z-10" style="left: 65%; width: 25%;"></div>
+                                <!-- Thanh tiến độ lực -->
+                                <div id="uiMixBar" class="h-full bg-gradient-to-r from-amber-400 via-orange-500 to-rose-600 transition-all duration-150" style="width: 0%;"></div>
+                            </div>
+                            <p id="uiStepHint" class="text-[11px] font-bold text-orange-800 bg-orange-100/80 px-2.5 py-1 rounded-xl">
+                                👉 Bước 1: Bấm [1. Nền Bánh & Xoài] hoặc chạm vào thau để bắt đầu!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Bước D: 4 Nút Thao Tác + Nút Giao Khách -->
+                    <div class="grid grid-cols-5 gap-1.5">
+                        <button id="stepBtn-1" onclick="doRecipeStep(1)" class="soft-btn p-1.5 rounded-xl border-2 border-orange-400 bg-orange-50 text-center flex flex-col items-center justify-between pulse-ring">
+                            <span class="text-base">🫓</span>
+                            <span class="font-black text-[10px] text-slate-800 leading-tight">1. Bánh & Xoài</span>
+                            <span id="stockBadge-step1" class="text-[9px] font-bold text-slate-600">Kho: 20</span>
+                        </button>
+                        <button id="stepBtn-2" onclick="doRecipeStep(2)" class="soft-btn p-1.5 rounded-xl border border-slate-300 bg-white text-center flex flex-col items-center justify-between">
+                            <span class="text-base">🥣</span>
+                            <span class="font-black text-[10px] text-slate-800 leading-tight">2. Rưới Sốt</span>
+                            <span id="stockBadge-step2" class="text-[9px] font-bold text-slate-600">Kho: 20</span>
+                        </button>
+                        <button id="stepBtn-3" onclick="doRecipeStep(3)" class="soft-btn p-1.5 rounded-xl border border-slate-300 bg-white text-center flex flex-col items-center justify-between">
+                            <span class="text-base">🧤</span>
+                            <span id="step3Title" class="font-black text-[10px] text-slate-800 leading-tight">3. Nhào Trộn</span>
+                            <span class="text-[9px] font-bold text-emerald-700">+25% lực/chạm</span>
+                        </button>
+                        <button id="stepBtn-4" onclick="doRecipeStep(4)" class="soft-btn p-1.5 rounded-xl border border-slate-300 bg-white text-center flex flex-col items-center justify-between">
+                            <span class="text-base">🥚</span>
+                            <span class="font-black text-[10px] text-slate-800 leading-tight">4. Topping</span>
+                            <span id="stockBadge-step4" class="text-[9px] font-bold text-slate-600">Kho: 20</span>
+                        </button>
+                        <button id="btnDeliver" onclick="deliverBag()" class="soft-btn p-1.5 rounded-xl bg-gradient-to-b from-emerald-500 to-teal-600 text-white text-center flex flex-col items-center justify-center shadow-md">
+                            <span class="text-base">🛍️</span>
+                            <span class="font-black text-[10px] leading-tight">GIAO KHÁCH</span>
+                            <span class="text-[9px] text-emerald-100">Thu tiền</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 3: SỔ SÁCH KHẤU HAO & NÂNG CẤP XE ================= -->
+        <section id="tab-upgrade" class="hidden space-y-2.5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                <!-- Bảng Chi Phí Cố Định & Khấu Hao Thiết Bị Hàng Ngày -->
+                <div class="soft-card p-3 space-y-2">
+                    <h2 class="font-black text-xs sm:text-sm text-orange-900 flex items-center gap-1.5">
+                        <span>📊 Bài Toán Kinh Tế & Khấu Hao Mỗi Ngày</span>
+                    </h2>
+                    <p class="text-[11px] text-slate-600">Dì Tư tính kỹ từng đồng khấu hao xe đẩy, bình ắc quy, bếp gas để con nắm rõ lời lãi thực tế:</p>
+                    <div class="bg-amber-50/90 border border-amber-200 rounded-xl p-2.5 space-y-1.5 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">• Khấu hao Xe đẩy inox + Tủ kính (5 năm):</span>
+                            <span class="font-bold text-slate-800">3.300đ/ngày</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">• Khấu hao Thau, kéo, bào xoài (1 năm):</span>
+                            <span class="font-bold text-slate-800">1.400đ/ngày</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">• Khấu hao Bình ắc quy + Đèn LED:</span>
+                            <span class="font-bold text-slate-800">1.200đ/ngày</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">• Khấu hao Bếp gas & Nồi sơ chế:</span>
+                            <span class="font-bold text-slate-800">1.400đ/ngày</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">• Tiền điện, nước, gas, bao bì lẻ:</span>
+                            <span class="font-bold text-slate-800">20.000đ/ngày</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">• Tiền thuê chỗ đứng vỉa hè:</span>
+                            <span id="uiRentCostText" class="font-bold text-orange-700">0đ (Đứng lụi dễ bị phạt)</span>
+                        </div>
+                        <div class="border-t border-amber-300 pt-1.5 flex justify-between font-black text-rose-700">
+                            <span>Tổng chi phí cố định & khấu hao/ngày:</span>
+                            <span id="uiTotalFixedCost">27.300đ</span>
+                        </div>
+                    </div>
+
+                    <!-- Lịch sử sổ sách các ngày -->
+                    <div>
+                        <h3 class="font-black text-xs text-slate-700 mb-1">📜 Nhật Ký Chốt Sổ Gần Đây:</h3>
+                        <div id="financeHistoryList" class="space-y-1 max-h-40 overflow-y-auto text-[11px]"></div>
+                    </div>
+                </div>
+
+                <!-- Danh sách Nâng Cấp Xe Đẩy & Công Thức -->
+                <div class="soft-card p-3 space-y-2">
+                    <h2 class="font-black text-xs sm:text-sm text-orange-900">🛠️ Nâng Cấp Xe Đẩy & Bí Kíp Gia Truyền</h2>
+                    <div id="upgradesList" class="space-y-2 max-h-[340px] overflow-y-auto pr-1"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 4: BẢNG PHONG THẦN ĐUA TOP ================= -->
+        <section id="tab-leaderboard" class="hidden space-y-2.5">
+            <div class="soft-card p-3">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                    <div>
+                        <h2 class="font-black text-sm text-orange-900">🏆 Bảng Phong Thần Vua Bánh Tráng Sài Gòn</h2>
+                        <p class="text-[11px] text-slate-600">Đua Top cùng bạn bè theo Tổng Tài Sản hoặc Số Phần Đã Bán!</p>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button id="sortBtn-money" onclick="setLeaderboardSort('money')" class="soft-btn bg-orange-600 text-white font-extrabold text-xs px-3 py-1.5 rounded-xl">
+                            💰 Top Đại Gia
+                        </button>
+                        <button id="sortBtn-sold" onclick="setLeaderboardSort('sold')" class="soft-btn bg-slate-200 text-slate-700 font-extrabold text-xs px-3 py-1.5 rounded-xl">
+                            🛍️ Top Đắt Hàng
+                        </button>
+                        <button onclick="openModal('accountModal')" class="soft-btn bg-amber-100 text-amber-900 border border-amber-300 font-extrabold text-xs px-2.5 py-1.5 rounded-xl">
+                            ✏️ Đổi Tên Quán
+                        </button>
+                    </div>
+                </div>
+                <div id="leaderboardList" class="space-y-1.5 max-h-80 overflow-y-auto"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= CÁC CỬA SỔ POP-UP (MODALS) ================= -->
+
+    <!-- 1. POP-UP MINI-GAME SƠ CHẾ TẠI NHÀ -->
+    <div id="prepActionModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-3">
+        <div class="soft-card max-w-sm w-full p-4 text-center space-y-3">
+            <div id="prepModalIcon" class="text-5xl">🌶️</div>
+            <h3 id="prepModalTitle" class="font-black text-base text-orange-900">Thắng Sa Tế Tôm</h3>
+            <p id="prepModalDesc" class="text-xs text-slate-600">Bấm liên tục vào chảo để đảo đều tay cho dậy mùi thơm lừng!</p>
+            <div class="w-full h-4 bg-slate-200 rounded-full overflow-hidden border border-slate-300">
+                <div id="prepModalBar" class="h-full bg-gradient-to-r from-amber-400 to-rose-600 transition-all duration-150" style="width: 0%"></div>
+            </div>
+            <button onclick="tapPrepAction()" class="soft-btn w-full py-3 rounded-2xl bg-gradient-to-r from-orange-500 to-rose-600 text-white font-black text-sm shadow-lg">
+                🔥 Đảo Đều Tay (+25%)
+            </button>
+            <button onclick="closeModal('prepActionModal')" class="text-xs font-bold text-slate-500 hover:text-slate-700">Đóng lại</button>
+        </div>
+    </div>
+
+    <!-- 2. POP-UP KẾT QUẢ GIAO BÁNH CHO KHÁCH -->
+    <div id="deliveryModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-3">
+        <div class="soft-card max-w-sm w-full p-4 text-center space-y-2.5">
+            <!-- Hình vẽ Bịch bánh tráng cột dây thun đỏ -->
+            <div class="w-20 h-20 mx-auto bg-amber-50 rounded-2xl border border-amber-200 flex items-center justify-center shadow-inner">
+                <svg viewBox="0 0 100 100" class="w-16 h-16">
+                    <path d="M35 28 L65 28 L78 84 Q50 92 22 84 Z" fill="#fef3c7" stroke="#f59e0b" stroke-width="3"/>
+                    <rect x="32" y="24" width="36" height="6" rx="3" fill="#ef4444"/>
+                    <line x1="42" y1="14" x2="55" y2="75" stroke="#a16207" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="48" cy="55" r="7" fill="#fff" stroke="#cbd5e1"/>
+                    <circle cx="48" cy="55" r="3.5" fill="#f59e0b"/>
+                    <circle cx="60" cy="65" r="5" fill="#9a3412"/>
+                </svg>
+            </div>
+            <div id="deliveryStars" class="text-xl tracking-widest">⭐⭐⭐⭐⭐</div>
+            <h3 id="deliveryTitle" class="font-black text-base text-emerald-700">Khách Khen Tuyệt Cú Mèo!</h3>
+            <p id="deliveryFeedback" class="text-xs text-slate-600 italic">"Bánh tráng thấm đều, đúng ý mình luôn!"</p>
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 text-xs space-y-1">
+                <div class="flex justify-between">
+                    <span>Tiền bán + Thưởng sơ chế:</span>
+                    <strong id="deliveryMoneyText" class="text-emerald-700">+28.000đ</strong>
+                </div>
+                <div class="flex justify-between">
+                    <span>Điểm Uy Tín & Kinh Nghiệm:</span>
+                    <strong id="deliveryRepText" class="text-orange-700">+2 Uy tín</strong>
+                </div>
+            </div>
+            <button onclick="closeDeliveryAndNext()" class="soft-btn w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-xs sm:text-sm shadow">
+                Phục Vụ Khách Tiếp Theo ➡️
+            </button>
+        </div>
+    </div>
+
+    <!-- 3. POP-UP CHỐT SỔ CUỐI NGÀY (END OF DAY) -->
+    <div id="endDayModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-3">
+        <div class="soft-card max-w-md w-full p-4 space-y-3">
+            <div class="flex items-center justify-between">
+                <h3 class="font-black text-base text-orange-900">🌙 Bảng Chốt Sổ Cuối Ngày <span id="eodDayNum">1</span></h3>
+                <button onclick="closeModal('endDayModal')" class="text-slate-400 hover:text-slate-700 font-black">✕</button>
+            </div>
+            <div class="bg-amber-50/90 border border-amber-200 rounded-2xl p-3 space-y-1.5 text-xs">
+                <div class="flex justify-between">
+                    <span>Số phần bán ra hôm nay:</span>
+                    <strong id="eodSold">0 phần</strong>
+                </div>
+                <div class="flex justify-between text-emerald-700">
+                    <span>+ Tổng doanh thu bán hàng:</span>
+                    <strong id="eodRevenue">+0đ</strong>
+                </div>
+                <div class="flex justify-between text-slate-600">
+                    <span>- Chi phí nhập nguyên liệu hôm nay:</span>
+                    <strong id="eodSpent">-0đ</strong>
+                </div>
+                <div class="flex justify-between text-rose-600">
+                    <span>- Khấu hao xe đẩy, điện nước & mặt bằng:</span>
+                    <strong id="eodFixed">-27.300đ</strong>
+                </div>
+                <div class="flex justify-between text-amber-800">
+                    <span>- Đồ tươi dư bị hỏng cuối ngày (Xoài, Trứng):</span>
+                    <strong id="eodSpoiled">0 phần</strong>
+                </div>
+                <div class="border-t border-amber-300 pt-1.5 flex justify-between font-black text-sm">
+                    <span>Lợi nhuận ròng trong ngày:</span>
+                    <span id="eodNetProfit">0đ</span>
+                </div>
+            </div>
+            <button onclick="startNextDay()" class="soft-btn w-full py-3 rounded-2xl bg-gradient-to-r from-orange-500 to-rose-600 text-white font-black text-xs sm:text-sm shadow-lg">
+                🌅 Qua Ngày Mới & Đi Chợ Sáng Sớm
+            </button>
+        </div>
+    </div>
+
+    <!-- 4. POP-UP HỆ THỐNG 10 CẤP ĐỘ & PHẦN THƯỞNG -->
+    <div id="levelModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-3">
+        <div class="soft-card max-w-md w-full p-4 space-y-3">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="font-black text-base text-orange-900">⭐ Hệ Thống 10 Cấp Độ & Thưởng</h3>
+                    <p class="text-[11px] text-slate-600">Bán đắt hàng & nâng cấp xe để lên cấp nhận vốn thưởng từ Dì Tư!</p>
+                </div>
+                <button onclick="closeModal('levelModal')" class="text-slate-400 hover:text-slate-700 font-black">✕</button>
+            </div>
+            <div id="levelRewardsList" class="space-y-1.5 max-h-80 overflow-y-auto pr-1"></div>
+        </div>
+    </div>
+
+    <!-- 5. POP-UP CỐT TRUYỆN 4 CHƯƠNG DÌ TƯ -->
+    <div id="storyModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-3">
+        <div class="soft-card max-w-md w-full p-4 space-y-3">
+            <div class="flex items-center justify-between">
+                <h3 id="storyTitle" class="font-black text-base text-orange-900">📖 Chương 1: Đôi Quang Gánh Của Dì Tư</h3>
+                <button onclick="closeModal('storyModal')" class="text-slate-400 hover:text-slate-700 font-black">✕</button>
+            </div>
+            <p id="storyQuote" class="text-xs text-slate-700 italic bg-amber-50 p-3 rounded-xl border border-amber-200"></p>
+            <div id="storyGoals" class="space-y-1.5 text-xs"></div>
+            <button id="btnClaimStory" onclick="claimStoryChapter()" class="soft-btn w-full py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-rose-600 text-white font-black text-xs shadow">
+                🎁 Nhận Thưởng Chương
+            </button>
+        </div>
+    </div>
+
+    <!-- 6. POP-UP TÀI KHOẢN & LƯU TIẾN TRÌNH TỰ ĐỘNG -->
+    <div id="accountModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-3">
+        <div class="soft-card max-w-md w-full p-4 space-y-3">
+            <div class="flex items-center justify-between">
+                <h3 class="font-black text-base text-orange-900">🧑‍🍳 Tài Khoản Quán & Lưu Tiến Trình</h3>
+                <button onclick="closeModal('accountModal')" class="text-slate-400 hover:text-slate-700 font-black">✕</button>
+            </div>
+
+            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-2.5 flex items-center justify-between gap-2 text-xs">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">💾</span>
+                    <div>
+                        <div class="font-black text-emerald-900">Đã bật Lưu Tự Động 100%</div>
+                        <div id="accountSaveStatusText" class="text-[11px] text-emerald-700">Lưu trực tiếp trên máy & đồng bộ Đua Top</div>
+                    </div>
+                </div>
+                <button onclick="manualSaveNow()" class="soft-btn bg-emerald-600 text-white font-extrabold text-[11px] px-3 py-1.5 rounded-xl shrink-0">
+                    Lưu Ngay
+                </button>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+                <div>
+                    <label class="font-extrabold text-slate-700 block mb-1">1. Chọn Hình Đại Diện Chủ Quán:</label>
+                    <div id="avatarPicker" class="grid grid-cols-6 gap-1.5"></div>
+                </div>
+                <div>
+                    <label class="font-extrabold text-slate-700 block mb-1">2. Tên Bảng Hiệu Quán:</label>
+                    <input id="inputAccountName" type="text" maxlength="24" placeholder="VD: Bánh Tráng Cô Ba" class="w-full px-3 py-2 rounded-xl border border-amber-300 font-bold text-slate-800" />
+                </div>
+                <div>
+                    <label class="font-extrabold text-slate-700 block mb-1">3. Mã PIN (4 số bảo vệ & khôi phục quán):</label>
+                    <input id="inputAccountPin" type="password" maxlength="8" placeholder="VD: 1234" class="w-full px-3 py-2 rounded-xl border border-amber-300 font-bold text-slate-800" />
+                    <p class="text-[10px] text-slate-500 mt-1">💡 Tiến trình được lưu tự động ngay trên trình duyệt máy của con và đồng bộ lên Đám mây khi có mạng.</p>
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <button onclick="handleRegisterOrLogin()" class="soft-btn flex-1 bg-gradient-to-r from-orange-500 to-rose-600 text-white font-black text-xs py-2.5 rounded-xl shadow">
+                    💾 Lưu Tên Quán & Đồng Bộ
+                </button>
+                <button onclick="resetGameData()" class="soft-btn bg-slate-200 hover:bg-rose-100 text-rose-700 font-bold text-[11px] px-3 py-2.5 rounded-xl">
+                    Chơi Lại Từ Đầu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MÃ NGUỒN LOGIC GAME ================= -->
+    <script>
+        const LOCAL_STORAGE_KEY = 'BANH_TRANG_DI_TU_SAVE_V3';
+
+        // Âm thanh Web Audio API (Không cần tải file ngoài, không bao giờ lỗi mạng)
+        const SoundFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) this.ctx = new AudioCtx();
+                }
+            },
+            beep(freq = 520, duration = 0.08, type = 'sine', vol = 0.12) {
+                try {
+                    this.init();
+                    if (!this.ctx) return;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch (e) {}
+            },
+            pop() { this.beep(620, 0.07, 'triangle', 0.14); },
+            cash() {
+                this.beep(780, 0.08, 'sine', 0.15);
+                setTimeout(() => this.beep(1040, 0.14, 'sine', 0.15), 75);
+            },
+            error() { this.beep(220, 0.18, 'sawtooth', 0.14); }
+        };
+
+        // 4 MÓN BÁNH TRÁNG ĐẶC SẢN TRONG MENU
+        const MENU_DISHES = [
+            {
+                id: 'tron',
+                name: 'Bánh Tráng Trộn',
+                shortName: 'Trộn Thập Cẩm',
+                icon: '🥣',
+                basePrice: 25000,
+                actionVerb: 'Nhào Trộn',
+                reqIngredients: ['banhtrang', 'xoairau', 'muoihanh', 'sotbo', 'khobo', 'trungcut']
+            },
+            {
+                id: 'cuon',
+                name: 'Bánh Tráng Cuộn Bơ',
+                shortName: 'Cuộn Sốt Bơ',
+                icon: '🌯',
+                basePrice: 28000,
+                actionVerb: 'Cuộn Đều Tay',
+                reqIngredients: ['banhtrang', 'xoairau', 'sotbo_me', 'khobo', 'trungcut']
+            },
+            {
+                id: 'bo',
+                name: 'Bánh Tráng Bơ Tép Mỡ',
+                shortName: 'Bơ Tép Mỡ',
+                icon: '🧈',
+                basePrice: 30000,
+                actionVerb: 'Phết Bơ & Trộn',
+                reqIngredients: ['banhtrang', 'muoihanh', 'sotbo_me', 'topping_vip', 'trungcut']
+            },
+            {
+                id: 'nuong',
+                name: 'Bánh Tráng Nướng Đà Lạt',
+                shortName: 'Nướng Phô Mai',
+                icon: '🔥',
+                basePrice: 33000,
+                actionVerb: 'Xoay Vỉ Nướng',
+                reqIngredients: ['banhtrang', 'muoihanh', 'sotbo', 'topping_vip', 'trungcut']
+            }
+        ];
+
+        // 8 NGUYÊN LIỆU TẠI CHỢ SỈ
+        const INGREDIENTS_CONFIG = {
+            banhtrang: { name: 'Bánh tráng phơi sương', icon: '🫓', baseCost: 2500, currentCost: 2500, stock: 25, isFresh: false, step: 1 },
+            xoairau:   { name: 'Xoài xanh, Rau răm & Tắc', icon: '🥭', baseCost: 1500, currentCost: 1500, stock: 20, isFresh: true,  step: 1 },
+            muoihanh:  { name: 'Muối tôm & Hành phi', icon: '🧅', baseCost: 1500, currentCost: 1500, stock: 25, isFresh: false, step: 2 },
+            sotbo:     { name: 'Sốt bò đen & Sa tế', icon: '🌶️', baseCost: 1500, currentCost: 1500, stock: 25, isFresh: false, step: 2 },
+            sotbo_me:  { name: 'Sốt bơ trứng & Cốt me', icon: '🧈', baseCost: 2200, currentCost: 2200, stock: 20, isFresh: false, step: 2 },
+            khobo:     { name: 'Khô bò, Mực & Đậu phộng', icon: '🥩', baseCost: 3500, currentCost: 3500, stock: 20, isFresh: false, step: 4 },
+            topping_vip:{ name: 'Chà bông, Tép mỡ & Phô mai', icon: '🧀', baseCost: 4000, currentCost: 4000, stock: 20, isFresh: false, step: 4 },
+            trungcut:  { name: 'Trứng cút tươi (2-3 quả)', icon: '🥚', baseCost: 2000, currentCost: 2000, stock: 20, isFresh: true,  step: 4 }
+        };
+
+        // DANH SÁCH KHÁCH HÀNG CHIBI ĐA DẠNG
+        const CUSTOMER_PROFILES = [
+            { name: 'Bé Thảo Vy', ageJob: '16t • Học sinh cấp 3', avatar: '👧', quote: 'Dì Tư ơi làm lẹ giùm con 1 phần kẻo trễ giờ học thêm nha!' },
+            { name: 'Anh Minh Tuấn', ageJob: '27t • Tài xế công nghệ', avatar: '🛵', quote: 'Làm giúp mình 1 phần đậm đà ăn lấy sức chạy cuốc chiều nhé!' },
+            { name: 'Chị Ngọc Lan', ageJob: '31t • Nhân viên văn phòng', avatar: '👩‍💼', quote: 'Cả phòng mình đang thèm bánh tráng của Dì Tư lắm luôn!' },
+            { name: 'Bé Hoàng Bo', ageJob: '12t • Học sinh cấp 2', avatar: '👦', quote: 'Con để dành tiền ăn sáng mua bánh tráng của dì nè!' },
+            { name: 'Ken Thực Thần', ageJob: '23t • TikToker Review', avatar: '🤳', quote: 'Để mình quay cận cảnh bàn tay trộn bánh thần sầu của quán nha!' },
+            { name: 'Cô Hạnh Tổ Trưởng', ageJob: '54t • Hàng xóm', avatar: '👵', quote: 'Mua cho mấy đứa cháu ở nhà, nhớ làm đúng ý cô dặn nghen!' },
+            { name: 'Chú Bảy Bảo Vệ', ageJob: '48t • Bảo vệ trường học', avatar: '👮', quote: 'Trực cổng trường nghe mùi hành phi thơm quá chịu không nổi!' },
+            { name: 'Bạn Khánh Linh', ageJob: '20t • Sinh viên Mỹ thuật', avatar: '👩‍🎨', quote: 'Cho em một phần thật ngon vừa ăn vừa vẽ bài đồ án nha dì!' }
+        ];
+
+        // 10 CẤP ĐỘ & PHẦN THƯỞNG
+        const LEVEL_REWARDS = [
+            { level: 1, reqSold: 0,   title: 'Khởi Nghiệp Góc Trường', rewardMoney: 0 },
+            { level: 2, reqSold: 8,   title: 'Quen Tay Nhào Trộn', rewardMoney: 50000 },
+            { level: 3, reqSold: 20,  title: 'Thơm Nức Đầu Hẻm', rewardMoney: 80000 },
+            { level: 4, reqSold: 35,  title: 'Khách Xếp Hàng Dài', rewardMoney: 120000 },
+            { level: 5, reqSold: 55,  title: 'Bí Kíp Sốt Bơ Thần Thánh', rewardMoney: 180000 },
+            { level: 6, reqSold: 80,  title: 'Hot Trend Ẩm Thực Đường Phố', rewardMoney: 250000 },
+            { level: 7, reqSold: 110, title: 'Tiệm Bánh Tráng Đỏ Lửa', rewardMoney: 350000 },
+            { level: 8, reqSold: 145, title: 'Danh Tiếng Khắp Quận', rewardMoney: 500000 },
+            { level: 9, reqSold: 190, title: 'Chuỗi Xe Đẩy Sài Gòn', rewardMoney: 700000 },
+            { level: 10, reqSold: 250, title: 'Huyền Thoại 30 Năm Dì Tư', rewardMoney: 1200000 }
+        ];
+
+        // NÂNG CẤP THIẾT BỊ & MẶT BẰNG
+        const UPGRADES_CONFIG = [
+            { id: 'led_sign', name: 'Bảng Hiệu Đèn LED Rực Rỡ', cost: 120000, desc: 'Thu hút khách đi đường, khách kiên nhẫn chờ lâu hơn +20%.', purchased: false },
+            { id: 'egg_peeler', name: 'Máy Lột Trứng Cút Tự Động', cost: 180000, desc: 'Tự động hoàn thành Sơ chế Lột trứng mỗi sáng (+1.000đ/phần).', purchased: false },
+            { id: 'secret_sauce', name: 'Công Thức Nước Sốt Me Thốt Nốt', cost: 250000, desc: 'Mỗi phần bánh bán ra được khách thưởng thêm +3.000đ.', purchased: false },
+            { id: 'rent_spot', name: 'Thuê Chỗ Đứng Vỉa Hè Cố Định', cost: 300000, desc: 'Phí 50.000đ/ngày nhưng không bao giờ sợ bị Đội trật tự phạt tiền!', purchased: false },
+            { id: 'food_app', name: 'Đăng Ký Bán Trên App Giao Đồ Ăn', cost: 550000, desc: 'Tăng +4.000đ giá trị thương hiệu cho mọi món trên Menu!', purchased: false }
+        ];
+
+        // 4 CHƯƠNG CỐT TRUYỆN
+        const STORY_CHAPTERS = [
+            {
+                chapter: 1,
+                title: 'Chương 1: Đôi Quang Gánh Của Dì Tư',
+                quote: '"Hồi năm 1995, dì chỉ có cái thau nhôm với bịch bánh tráng vụn Tây Ninh. Nhớ lấy nguyên liệu vừa đủ, đồ tươi như xoài với trứng cút đừng ôm nhiều kẻo qua đêm hư hết nghen con!"',
+                reqSold: 5,
+                reqMoney: 550000,
+                rewardMoney: 60000
+            },
+            {
+                chapter: 2,
+                title: 'Chương 2: Mưa Rào Sài Gòn & Chỗ Đứng Vỉa Hè',
+                quote: '"Bán vỉa hè sợ nhất là đang đông khách thì trời đổ mưa rào hoặc mấy anh trật tự đô thị đi tuần. Con phải lẹ tay che bạt và ráng sắm cái bảng đèn LED cho khách dễ thấy!"',
+                reqSold: 25,
+                reqMoney: 750000,
+                rewardMoney: 120000
+            },
+            {
+                chapter: 3,
+                title: 'Chương 3: Cơn Sốt TikTok Review Ẩm Thực',
+                quote: '"Giờ tụi nhỏ ăn bánh tráng còn quay video đăng mạng nữa. Con làm đủ 4 món Trộn, Cuộn, Bơ, Nướng thật chuẩn vị là khách kéo tới nườm nượp!"',
+                reqSold: 60,
+                reqMoney: 1200000,
+                rewardMoney: 250000
+            },
+            {
+                chapter: 4,
+                title: 'Chương 4: Huyền Thoại Vua Bánh Tráng Sài Gòn',
+                quote: '"30 năm giữ lửa nghề, từ gánh hàng rong thành thương hiệu nức tiếng Sài Gòn. Giờ con đã thật sự là truyền nhân xuất sắc nhất của Dì Tư rồi đó!"',
+                reqSold: 120,
+                reqMoney: 2500000,
+                rewardMoney: 600000
+            }
+        ];
+
+        const AVATAR_LIST = ['🧑‍🍳', '👩‍🍳', '👨‍🍳', '👧', '👦', '👵'];
+
+        // TRẠNG THÁI CHÍNH CỦA GAME
+        const state = {
+            playerName: 'Quán Dì Tư',
+            playerAvatar: '🧑‍🍳',
+            playerPin: '',
+            money: 500000,
+            reputation: 100,
+            level: 1,
+            claimedLevelRewards: [1],
+            day: 1,
+            soldToday: 0,
+            totalSold: 0,
+            revenueToday: 0,
+            spentIngredientsToday: 0,
+            priceOffset: 0,
+            storyChapter: 1,
+            prepDone: { sate: false, hanh: false, trung: false },
+            prepBonusPerBag: 0,
+            activePrepKey: null,
+            activePrepProgress: 0,
+            orderDraft: {},
+            currentCustomer: null,
+            patience: 100,
+            emergencyEvent: null,
+            bowl: {
+                dishId: 'tron',
+                chili: 1,
+                herbs: true,
+                onion: true,
+                step1: false,
+                step2: false,
+                mixProgress: 0,
+                step4: false
+            },
+            history: []
+        };
+
+        let globalLeaderboardData = [];
+        let leaderboardSortMode = 'money';
+        let patienceTimer = null;
+
+        // ĐỊNH DẠNG TIỀN VNĐ
+        function formatVND(num) {
+            return Math.round(num).toLocaleString('vi-VN') + 'đ';
+        }
+
+        // HIỂN THỊ THÔNG BÁO NỔI (TOAST)
+        function showToast(msg, icon = '✨') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+            const el = document.createElement('div');
+            el.className = 'bg-slate-900/90 text-white text-xs font-extrabold px-3.5 py-2 rounded-2xl shadow-lg flex items-center gap-2 border border-amber-400/40';
+            el.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
+            container.appendChild(el);
+            setTimeout(() => {
+                el.style.opacity = '0';
+                el.style.transition = 'opacity 0.25s';
+                setTimeout(() => el.remove(), 250);
+            }, 2400);
+        }
+
+        // HIỆU ỨNG CHỮ BAY TRÊN THAU TRỘN
+        function spawnFloatingText(text) {
+            const box = document.getElementById('floatingActionContainer');
+            if (!box) return;
+            const tag = document.createElement('div');
+            tag.className = 'floating-badge bg-orange-600 text-white font-black text-[11px] px-2.5 py-1 rounded-full shadow';
+            tag.textContent = text;
+            box.appendChild(tag);
+            setTimeout(() => tag.remove(), 900);
+        }
+
+        // MỞ / ĐÓNG MODAL
+        function openModal(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (id === 'levelModal') renderLevelRewardsModal();
+            if (id === 'storyModal') renderStoryModal();
+            if (id === 'accountModal') renderAccountModal();
+            el.classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('hidden');
+        }
+
+        // CHUYỂN TAB
+        function switchTab(tabName) {
+            ['market', 'sell', 'upgrade', 'leaderboard'].forEach(t => {
+                const sec = document.getElementById('tab-' + t);
+                const btn = document.getElementById('tabBtn-' + t);
+                if (sec) sec.classList.toggle('hidden', t !== tabName);
+                if (btn) {
+                    if (t === tabName) {
+                        btn.className = 'soft-btn py-1.5 rounded-xl font-extrabold text-[11px] sm:text-xs flex items-center justify-center gap-1 bg-white text-orange-700 shadow';
+                    } else {
+                        btn.className = 'soft-btn py-1.5 rounded-xl font-extrabold text-[11px] sm:text-xs flex items-center justify-center gap-1 bg-white/15 text-white hover:bg-white/25';
+                    }
+                }
+            });
+            const timeEl = document.getElementById('uiTimeText');
+            if (timeEl) {
+                if (tabName === 'market') timeEl.textContent = '🌅 06:00 - Sơ chế & Đi chợ sỉ';
+                else if (tabName === 'sell') timeEl.textContent = '🌇 15:00 - Đứng bán góc trường Sài Gòn';
+                else if (tabName === 'upgrade') timeEl.textContent = '📊 Kiểm kê sổ sách & Nâng cấp xe';
+                else timeEl.textContent = '🏆 Bảng Phong Thần Đua Top';
+            }
+            renderAll();
+        }
+
+        // ================= LOGIC SƠ CHẾ TẠI NHÀ =================
+        const PREP_META = {
+            sate:  { title: 'Thắng Sa Tế Tôm Ớt', icon: '🌶️', bonus: 1500, desc: 'Bấm đảo đều chảo dầu điều tỏi ớt cho sa tế lên màu đỏ rực!' },
+            hanh:  { title: 'Phi Hành Tím Vàng Giòn', icon: '🧅', bonus: 1500, desc: 'Canh lửa đảo đều để hành phi vàng ruộm không bị cháy!' },
+            trung: { title: 'Luộc & Lột Trứng Cút', icon: '🥚', bonus: 1000, desc: 'Ngâm nước đá rồi bóc vỏ trứng cút thật khéo không bị bể!' }
+        };
+
+        function openPrepModal(key) {
+            if (state.prepDone[key]) {
+                showToast('Món sơ chế này đã hoàn thành hôm nay rồi!', '✅');
+                return;
+            }
+            state.activePrepKey = key;
+            state.activePrepProgress = 0;
+            const meta = PREP_META[key];
+            document.getElementById('prepModalIcon').textContent = meta.icon;
+            document.getElementById('prepModalTitle').textContent = meta.title;
+            document.getElementById('prepModalDesc').textContent = meta.desc;
+            document.getElementById('prepModalBar').style.width = '0%';
+            openModal('prepActionModal');
+        }
+
+        function tapPrepAction() {
+            const key = state.activePrepKey;
+            if (!key || state.prepDone[key]) return;
+            SoundFX.pop();
+            state.activePrepProgress = Math.min(100, state.activePrepProgress + 25);
+            document.getElementById('prepModalBar').style.width = state.activePrepProgress + '%';
+            if (state.activePrepProgress >= 100) {
+                const meta = PREP_META[key];
+                state.prepDone[key] = true;
+                state.prepBonusPerBag += meta.bonus;
+                SoundFX.cash();
+                saveGameEverywhere(false);
+                setTimeout(() => {
+                    closeModal('prepActionModal');
+                    showToast(`Hoàn tất ${meta.title}! (+${formatVND(meta.bonus)}/phần)`, meta.icon);
+                    renderAll();
+                }, 180);
+            }
+        }
+
+        // ================= LOGIC CHỢ SỈ (GÕ SỐ LƯỢNG TỰ DO) =================
+        function updateOrderQty(key, val) {
+            const parsed = Math.max(0, Math.min(999, parseInt(val, 10) || 0));
+            state.orderDraft[key] = parsed;
+            updateMarketSummaryOnly();
+        }
+
+        function adjustOrderQty(key, delta) {
+            SoundFX.pop();
+            const cur = state.orderDraft[key] || 0;
+            state.orderDraft[key] = Math.max(0, Math.min(999, cur + delta));
+            const inputEl = document.getElementById('qtyInput-' + key);
+            if (inputEl) inputEl.value = state.orderDraft[key];
+            updateMarketSummaryOnly();
+        }
+
+        function fillSuggestedOrder(amount = 15) {
+            SoundFX.pop();
+            Object.keys(INGREDIENTS_CONFIG).forEach(k => {
+                state.orderDraft[k] = amount;
+            });
+            renderMarket();
+        }
+
+        function clearOrderInputs() {
+            Object.keys(INGREDIENTS_CONFIG).forEach(k => {
+                state.orderDraft[k] = 0;
+            });
+            renderMarket();
+        }
+
+        function updateMarketSummaryOnly() {
+            let totalItems = 0;
+            let totalCost = 0;
+            Object.keys(INGREDIENTS_CONFIG).forEach(k => {
+                const qty = state.orderDraft[k] || 0;
+                totalItems += qty;
+                totalCost += qty * INGREDIENTS_CONFIG[k].currentCost;
+            });
+            const itemsEl = document.getElementById('uiTotalOrderItems');
+            const costEl = document.getElementById('uiTotalOrderCost');
+            if (itemsEl) itemsEl.textContent = `${totalItems} phần`;
+            if (costEl) costEl.textContent = formatVND(totalCost);
+        }
+
+        function confirmMarketOrder() {
+            let totalItems = 0;
+            let totalCost = 0;
+            Object.keys(INGREDIENTS_CONFIG).forEach(k => {
+                const qty = state.orderDraft[k] || 0;
+                totalItems += qty;
+                totalCost += qty * INGREDIENTS_CONFIG[k].currentCost;
+            });
+            if (totalItems <= 0) {
+                SoundFX.error();
+                showToast('Con hãy gõ số lượng nguyên liệu cần mua trước nhé!', '⚠️');
+                return;
+            }
+            if (totalCost > state.money) {
+                SoundFX.error();
+                showToast('Không đủ tiền vốn để thanh toán đơn hàng này!', '💸');
+                return;
+            }
+            state.money -= totalCost;
+            state.spentIngredientsToday += totalCost;
+            Object.keys(INGREDIENTS_CONFIG).forEach(k => {
+                const qty = state.orderDraft[k] || 0;
+                if (qty > 0) {
+                    INGREDIENTS_CONFIG[k].stock += qty;
+                    state.orderDraft[k] = 0;
+                }
+            });
+            SoundFX.cash();
+            showToast(`Đã nhập ${totalItems} phần nguyên liệu vào kho thành công!`, '🛒');
+            saveGameEverywhere(false);
+            renderAll();
+        }
+
+        function renderMarket() {
+            // Cập nhật trạng thái 3 nút sơ chế
+            ['sate', 'hanh', 'trung'].forEach(k => {
+                const statusEl = document.getElementById('prepStatus-' + k);
+                const btnEl = document.getElementById('prepBtn-' + k);
+                if (statusEl && btnEl) {
+                    if (state.prepDone[k]) {
+                        statusEl.textContent = '✅ Đã làm xong';
+                        statusEl.className = 'text-[10px] font-black text-emerald-700 mt-0.5';
+                        btnEl.classList.add('ring-2', 'ring-emerald-400');
+                    } else {
+                        statusEl.textContent = `+${formatVND(PREP_META[k].bonus)}/phần`;
+                        statusEl.className = 'text-[10px] font-bold text-orange-600 mt-0.5';
+                        btnEl.classList.remove('ring-2', 'ring-emerald-400');
+                    }
+                }
+            });
+            const prepBonusEl = document.getElementById('uiPrepBonus');
+            if (prepBonusEl) prepBonusEl.textContent = `+${formatVND(state.prepBonusPerBag)}/phần`;
+
+            const grid = document.getElementById('marketGrid');
+            if (!grid) return;
+            grid.innerHTML = Object.keys(INGREDIENTS_CONFIG).map(k => {
+                const item = INGREDIENTS_CONFIG[k];
+                const qty = state.orderDraft[k] || 0;
+                const badge = item.isFresh
+                    ? `<span class="bg-rose-100 text-rose-700 text-[9px] font-extrabold px-1.5 py-0.5 rounded">Đồ tươi trong ngày</span>`
+                    : `<span class="bg-emerald-100 text-emerald-800 text-[9px] font-extrabold px-1.5 py-0.5 rounded">Đồ khô để lâu</span>`;
+                return `
+                    <div class="bg-white border border-amber-200 rounded-xl p-2 flex items-center justify-between gap-2 shadow-2xs">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="text-2xl shrink-0">${item.icon}</span>
+                            <div class="min-w-0">
+                                <div class="font-extrabold text-xs text-slate-800 truncate">${item.name}</div>
+                                <div class="flex items-center gap-1.5 flex-wrap mt-0.5">
+                                    <span class="text-[11px] font-black text-orange-700">${formatVND(item.currentCost)}</span>
+                                    <span class="text-[10px] font-bold text-slate-500">• Kho: <strong class="${item.stock < 5 ? 'text-rose-600' : 'text-slate-800'}">${item.stock}</strong></span>
+                                    ${badge}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1 shrink-0">
+                            <button type="button" onclick="adjustOrderQty('${k}', -5)" class="soft-btn w-6 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 font-black text-xs text-slate-700">-5</button>
+                            <input id="qtyInput-${k}" type="number" min="0" max="999" value="${qty}"
+                                oninput="updateOrderQty('${k}', this.value)"
+                                class="w-14 h-7 text-center font-black text-xs border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400" />
+                            <button type="button" onclick="adjustOrderQty('${k}', 5)" class="soft-btn w-6 h-7 rounded-lg bg-amber-100 hover:bg-amber-200 font-black text-xs text-amber-900">+5</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            updateMarketSummaryOnly();
+        }
+
+        // ================= LOGIC KHÁCH HÀNG & ĐỨNG BÁN =================
+        function getSweetSpotBounds() {
+            // Độ khó tăng dần theo cấp độ: vùng xanh hẹp hơn một chút khi lên cấp cao
+            const min = Math.min(72, 64 + Math.floor(state.level * 0.7));
+            const max = Math.max(85, 92 - Math.floor(state.level * 0.5));
+            return { min, max };
+        }
+
+        function spawnNextCustomer() {
+            const profile = CUSTOMER_PROFILES[Math.floor(Math.random() * CUSTOMER_PROFILES.length)];
+            // Ở cấp 1 khách ưu tiên gọi Trộn hoặc Cuộn, từ cấp 2 trở lên gọi đủ 4 món
+            const maxDishIdx = state.level <= 1 ? 2 : MENU_DISHES.length;
+            const dish = MENU_DISHES[Math.floor(Math.random() * maxDishIdx)];
+            const chili = Math.floor(Math.random() * 3); // 0, 1, 2
+            const herbs = Math.random() > 0.3;
+            const onion = Math.random() > 0.25;
+
+            state.currentCustomer = {
+                ...profile,
+                dishId: dish.id,
+                chili,
+                herbs,
+                onion
+            };
+            state.patience = 100;
+            resetBowlState();
+
+            // Tỉ lệ 18% xảy ra sự kiện khẩn cấp khi đang bán (Mưa rào hoặc Đội trật tự)
+            const hasFixedSpot = UPGRADES_CONFIG.find(u => u.id === 'rent_spot')?.purchased;
+            if (!state.emergencyEvent && state.soldToday > 0 && Math.random() < 0.18) {
+                if (Math.random() < 0.55 || hasFixedSpot) {
+                    state.emergencyEvent = {
+                        type: 'rain',
+                        icon: '🌧️',
+                        title: 'TRỜI ĐỔ MƯA RÀO SÀI GÒN BẤT CHỢT!',
+                        desc: 'Bấm che bạt ngay kẻo bánh tráng và hành phi bị ướt nhẹp!',
+                        btnText: '☂️ Bung Dù Che Bạt Ngay!'
+                    };
+                } else {
+                    state.emergencyEvent = {
+                        type: 'urban',
+                        icon: '🚨',
+                        title: 'ĐỘI TRẬT TỰ VỈA HÈ ĐANG ĐI TUẦN!',
+                        desc: 'Thu gọn ghế nhựa và đẩy xe sát vào lề ngay kẻo bị phạt tiền!',
+                        btnText: '🏃 Thu Gọn Xe Nhanh!'
+                    };
+                }
+            }
+            startPatienceLoop();
+            renderAll();
+        }
+
+        function resolveEmergencyEvent() {
+            if (!state.emergencyEvent) return;
+            SoundFX.cash();
+            showToast('Đã xử lý tình huống kịp thời! Khách vỗ tay khen lẹ tay!', '👏');
+            state.emergencyEvent = null;
+            renderAll();
+        }
+
+        function startPatienceLoop() {
+            if (patienceTimer) clearInterval(patienceTimer);
+            patienceTimer = setInterval(() => {
+                const sellSection = document.getElementById('tab-sell');
+                if (!sellSection || sellSection.classList.contains('hidden')) return;
+
+                const hasLed = UPGRADES_CONFIG.find(u => u.id === 'led_sign')?.purchased;
+                const baseDecay = 0.65 + state.level * 0.08;
+                const decay = hasLed ? baseDecay * 0.78 : baseDecay;
+                state.patience = Math.max(0, state.patience - decay);
+
+                renderHeaderAndPatience();
+
+                if (state.patience <= 0) {
+                    SoundFX.error();
+                    state.reputation = Math.max(0, state.reputation - 4);
+                    showToast('Khách chờ lâu quá nên bỏ đi rồi! (-4 Uy tín)', '💢');
+                    spawnNextCustomer();
+                }
+            }, 1000);
+        }
+
+        function resetBowlState() {
+            state.bowl = {
+                dishId: state.bowl ? state.bowl.dishId : 'tron',
+                chili: 1,
+                herbs: true,
+                onion: true,
+                step1: false,
+                step2: false,
+                mixProgress: 0,
+                step4: false
+            };
+        }
+
+        function selectDish(dishId) {
+            SoundFX.pop();
+            state.bowl.dishId = dishId;
+            renderCustomer();
+            renderBowl();
+        }
+
+        function setOption(type, val) {
+            SoundFX.pop();
+            state.bowl[type] = val;
+            renderCustomer();
+            renderBowl();
+        }
+
+        function changePriceOffset(delta) {
+            SoundFX.pop();
+            state.priceOffset = Math.max(-6000, Math.min(12000, state.priceOffset + delta));
+            renderCustomer();
+        }
+
+        function getCurrentDishPrice() {
+            const dish = MENU_DISHES.find(d => d.id === state.bowl.dishId) || MENU_DISHES[0];
+            const appBonus = UPGRADES_CONFIG.find(u => u.id === 'food_app')?.purchased ? 4000 : 0;
+            return dish.basePrice + state.priceOffset + appBonus;
+        }
+
+        // THAO TÁC 4 BƯỚC CHẾ BIẾN
+        function doRecipeStep(stepNum) {
+            const dish = MENU_DISHES.find(d => d.id === state.bowl.dishId) || MENU_DISHES[0];
+
+            if (stepNum === 1) {
+                if (state.bowl.step1) {
+                    showToast('Đã có nền bánh tráng trong thau rồi, sang Bước 2 nhé!', '👉');
+                    return;
+                }
+                if (INGREDIENTS_CONFIG.banhtrang.stock <= 0 || INGREDIENTS_CONFIG.xoairau.stock <= 0) {
+                    SoundFX.error();
+                    showToast('Hết Bánh tráng hoặc Xoài rau! Hãy qua tab 1. Đi Chợ nhập thêm!', '🛒');
+                    return;
+                }
+                INGREDIENTS_CONFIG.banhtrang.stock--;
+                INGREDIENTS_CONFIG.xoairau.stock--;
+                state.bowl.step1 = true;
+                SoundFX.pop();
+                spawnFloatingText('+ Bánh tráng & Xoài');
+            } else if (stepNum === 2) {
+                if (!state.bowl.step1) {
+                    SoundFX.error();
+                    showToast('Phải bỏ [1. Bánh & Xoài] vào thau trước đã con ơi!', '⚠️');
+                    return;
+                }
+                if (state.bowl.step2) {
+                    showToast('Đã rưới sốt rồi, bấm Bước 3 để trộn/nướng nhé!', '👉');
+                    return;
+                }
+                const sauceKey = (dish.id === 'cuon' || dish.id === 'bo') ? 'sotbo_me' : 'sotbo';
+                if (INGREDIENTS_CONFIG.muoihanh.stock <= 0 || INGREDIENTS_CONFIG[sauceKey].stock <= 0) {
+                    SoundFX.error();
+                    showToast(`Hết Muối hành hoặc ${INGREDIENTS_CONFIG[sauceKey].name}! Qua chợ nhập thêm nhé!`, '🛒');
+                    return;
+                }
+                INGREDIENTS_CONFIG.muoihanh.stock--;
+                INGREDIENTS_CONFIG[sauceKey].stock--;
+                state.bowl.step2 = true;
+                SoundFX.pop();
+                spawnFloatingText('+ Muối & Nước sốt');
+            } else if (stepNum === 3) {
+                if (!state.bowl.step1 || !state.bowl.step2) {
+                    SoundFX.error();
+                    showToast('Hãy hoàn thành Bước 1 và Bước 2 trước khi trộn/nướng!', '⚠️');
+                    return;
+                }
+                SoundFX.pop();
+                const gain = 24;
+                state.bowl.mixProgress = Math.min(100, state.bowl.mixProgress + gain);
+                spawnFloatingText(`${dish.actionVerb} ${state.bowl.mixProgress}%`);
+            } else if (stepNum === 4) {
+                if (state.bowl.mixProgress < 35) {
+                    SoundFX.error();
+                    showToast('Hãy trộn/nướng ở Bước 3 cho thấm gia vị trước khi bỏ Topping!', '⚠️');
+                    return;
+                }
+                if (state.bowl.step4) {
+                    showToast('Đã cho đầy đủ Topping & Trứng cút, bấm GIAO KHÁCH ngay!', '🛍️');
+                    return;
+                }
+                const topKey = (dish.id === 'bo' || dish.id === 'nuong') ? 'topping_vip' : 'khobo';
+                if (INGREDIENTS_CONFIG[topKey].stock <= 0 || INGREDIENTS_CONFIG.trungcut.stock <= 0) {
+                    SoundFX.error();
+                    showToast(`Hết ${INGREDIENTS_CONFIG[topKey].name} hoặc Trứng cút! Qua chợ nhập thêm nhé!`, '🛒');
+                    return;
+                }
+                INGREDIENTS_CONFIG[topKey].stock--;
+                INGREDIENTS_CONFIG.trungcut.stock--;
+                state.bowl.step4 = true;
+                SoundFX.pop();
+                spawnFloatingText('+ Topping & Trứng cút');
+            }
+            renderBowl();
+            renderMarket();
+        }
+
+        // CHẠM GIỮA THAU ĐỂ TỰ ĐỘNG LÀM BƯỚC TIẾP THEO
+        function tapBowlCenter() {
+            const bounds = getSweetSpotBounds();
+            if (!state.bowl.step1) doRecipeStep(1);
+            else if (!state.bowl.step2) doRecipeStep(2);
+            else if (state.bowl.mixProgress < bounds.min) doRecipeStep(3);
+            else if (!state.bowl.step4) doRecipeStep(4);
+            else deliverBag();
+        }
+
+        // GIAO BÁNH CHO KHÁCH & CHẤM ĐIỂM
+        function deliverBag() {
+            if (!state.bowl.step1 || !state.bowl.step2 || !state.bowl.step4) {
+                SoundFX.error();
+                showToast('Chưa làm đủ các bước nguyên liệu (Bước 1, 2, 4)!', '⚠️');
+                return;
+            }
+            const cust = state.currentCustomer;
+            const bounds = getSweetSpotBounds();
+            let stars = 5;
+            const issues = [];
+
+            // Kiểm tra chọn đúng món khách gọi chưa
+            if (state.bowl.dishId !== cust.dishId) {
+                stars -= 2;
+                const wantedDish = MENU_DISHES.find(d => d.id === cust.dishId);
+                issues.push(`Khách gọi ${wantedDish.name} nhưng làm nhầm món`);
+            }
+            // Kiểm tra gia giảm
+            if (state.bowl.chili !== cust.chili) {
+                stars -= 1;
+                issues.push('Sai độ cay');
+            }
+            if (state.bowl.herbs !== cust.herbs) {
+                stars -= 1;
+                issues.push(cust.herbs ? 'Thiếu rau răm' : 'Khách dặn không ăn rau răm');
+            }
+            if (state.bowl.onion !== cust.onion) {
+                stars -= 1;
+                issues.push(cust.onion ? 'Thiếu hành phi' : 'Khách dặn không hành phi');
+            }
+
+            // Kiểm tra lực trộn / nướng
+            if (state.bowl.mixProgress < bounds.min) {
+                stars -= 1;
+                issues.push('Trộn chưa đều tay, muối còn sống');
+            } else if (state.bowl.mixProgress > bounds.max) {
+                stars -= 1;
+                issues.push('Trộn/nướng quá tay làm bánh bị nhão/khét');
+            }
+
+            // Nếu đang có sự kiện mưa/đô thị mà chưa bấm xử lý
+            if (state.emergencyEvent) {
+                stars -= 1;
+                issues.push('Chưa xử lý sự kiện mưa/trật tự vỉa hè');
+            }
+
+            stars = Math.max(1, Math.min(5, stars));
+
+            // Tính tiền thu được
+            const basePrice = getCurrentDishPrice();
+            const sauceBonus = UPGRADES_CONFIG.find(u => u.id === 'secret_sauce')?.purchased ? 3000 : 0;
+            const tip = stars === 5 ? 3000 : (stars === 4 ? 1000 : 0);
+            const totalEarned = basePrice + state.prepBonusPerBag + sauceBonus + tip;
+            const repDelta = stars >= 4 ? (stars === 5 ? 2 : 1) : -3;
+
+            state.money += totalEarned;
+            state.revenueToday += totalEarned;
+            state.soldToday++;
+            state.totalSold++;
+            state.reputation = Math.max(0, Math.min(100, state.reputation + repDelta));
+
+            // Kiểm tra lên cấp (10 cấp độ)
+            checkLevelProgression();
+
+            SoundFX.cash();
+            saveGameEverywhere(false);
+
+            // Hiển thị Pop-up kết quả giao bánh
+            document.getElementById('deliveryStars').textContent = '⭐'.repeat(stars);
+            document.getElementById('deliveryTitle').textContent =
+                stars === 5 ? 'Hoàn Hảo 10 Điểm! Khách Khen Nức Nở!' :
+                stars === 4 ? 'Ngon Miệng! Khách Hài Lòng!' :
+                stars === 3 ? 'Tạm Ổn Nhưng Cần Khéo Hơn!' : 'Khách Phàn Nàn Vì Làm Sai Yêu Cầu!';
+            document.getElementById('deliveryFeedback').textContent =
+                issues.length === 0
+                    ? '"Đúng chuẩn hương vị 30 năm của Dì Tư, mai mình lại ghé mua tiếp!"'
+                    : 'Lưu ý: ' + issues.join(' • ');
+            document.getElementById('deliveryMoneyText').textContent = `+${formatVND(totalEarned)}`;
+            document.getElementById('deliveryRepText').textContent = `${repDelta >= 0 ? '+' : ''}${repDelta} Uy tín`;
+
+            openModal('deliveryModal');
+            renderAll();
+        }
+
+        function closeDeliveryAndNext() {
+            closeModal('deliveryModal');
+            spawnNextCustomer();
+        }
+
+        function checkLevelProgression() {
+            for (let i = LEVEL_REWARDS.length - 1; i >= 0; i--) {
+                const item = LEVEL_REWARDS[i];
+                if (state.totalSold >= item.reqSold && state.level < item.level) {
+                    state.level = item.level;
+                    showToast(`Chúc mừng lên Cấp ${state.level}: ${item.title}! Bấm ô Cấp độ để nhận thưởng!`, '🎉');
+                    break;
+                }
+            }
+        }
+
+        // ================= CHỐT SỔ CUỐI NGÀY & QUA NGÀY MỚI =================
+        function getDailyFixedCost() {
+            const baseDepreciation = 7300 + 20000; // 7.300đ khấu hao + 20.000đ điện nước gas
+            const hasRent = UPGRADES_CONFIG.find(u => u.id === 'rent_spot')?.purchased;
+            return baseDepreciation + (hasRent ? 50000 : 0);
+        }
+
+        function openEndDayModal() {
+            const fixedCost = getDailyFixedCost();
+            const spoiledCount = INGREDIENTS_CONFIG.xoairau.stock + INGREDIENTS_CONFIG.trungcut.stock;
+            const netProfit = state.revenueToday - state.spentIngredientsToday - fixedCost;
+
+            document.getElementById('eodDayNum').textContent = state.day;
+            document.getElementById('eodSold').textContent = `${state.soldToday} phần`;
+            document.getElementById('eodRevenue').textContent = `+${formatVND(state.revenueToday)}`;
+            document.getElementById('eodSpent').textContent = `-${formatVND(state.spentIngredientsToday)}`;
+            document.getElementById('eodFixed').textContent = `-${formatVND(fixedCost)}`;
+            document.getElementById('eodSpoiled').textContent = `${spoiledCount} phần (Hủy cuối ngày)`;
+
+            const netEl = document.getElementById('eodNetProfit');
+            netEl.textContent = (netProfit >= 0 ? '+' : '') + formatVND(netProfit);
+            netEl.className = netProfit >= 0 ? 'font-black text-emerald-700' : 'font-black text-rose-600';
+
+            openModal('endDayModal');
+        }
+
+        function startNextDay() {
+            const fixedCost = getDailyFixedCost();
+            const spoiledCount = INGREDIENTS_CONFIG.xoairau.stock + INGREDIENTS_CONFIG.trungcut.stock;
+            const netProfit = state.revenueToday - state.spentIngredientsToday - fixedCost;
+
+            state.money = Math.max(0, state.money - fixedCost);
+            state.history.unshift({
+                day: state.day,
+                sold: state.soldToday,
+                revenue: state.revenueToday,
+                netProfit,
+                spoiled: spoiledCount
+            });
+
+            // Hủy nguyên liệu tươi tồn qua đêm
+            INGREDIENTS_CONFIG.xoairau.stock = 0;
+            INGREDIENTS_CONFIG.trungcut.stock = 0;
+
+            // Sang ngày mới
+            state.day++;
+            state.soldToday = 0;
+            state.revenueToday = 0;
+            state.spentIngredientsToday = 0;
+            state.emergencyEvent = null;
+
+            // Reset sơ chế (Nếu đã mua máy lột trứng thì tự động xong phần trứng)
+            const hasPeeler = UPGRADES_CONFIG.find(u => u.id === 'egg_peeler')?.purchased;
+            state.prepDone = { sate: false, hanh: false, trung: !!hasPeeler };
+            state.prepBonusPerBag = hasPeeler ? 1000 : 0;
+
+            // Biến động giá chợ sỉ mỗi sáng (-10% đến +15%)
+            Object.keys(INGREDIENTS_CONFIG).forEach(k => {
+                const item = INGREDIENTS_CONFIG[k];
+                const factor = 0.9 + Math.random() * 0.25;
+                item.currentCost = Math.round((item.baseCost * factor) / 100) * 100;
+            });
+
+            closeModal('endDayModal');
+            switchTab('market');
+            spawnNextCustomer();
+            saveGameEverywhere(false);
+            showToast(`Ngày ${state.day} bắt đầu! Giá chợ sỉ hôm nay đã cập nhật!`, '🌅');
+            renderAll();
+        }
+
+        // ================= NÂNG CẤP, CẤP ĐỘ & CỐT TRUYỆN =================
+        function buyUpgrade(id) {
+            const upg = UPGRADES_CONFIG.find(u => u.id === id);
+            if (!upg || upg.purchased) return;
+            if (state.money < upg.cost) {
+                SoundFX.error();
+                showToast('Chưa đủ tiền vốn để sắm nâng cấp này!', '💸');
+                return;
+            }
+            state.money -= upg.cost;
+            upg.purchased = true;
+            if (id === 'egg_peeler' && !state.prepDone.trung) {
+                state.prepDone.trung = true;
+                state.prepBonusPerBag += 1000;
+            }
+            SoundFX.cash();
+            showToast(`Đã sắm [${upg.name}] thành công!`, '🛠️');
+            saveGameEverywhere(false);
+            renderAll();
+        }
+
+        function renderLevelRewardsModal() {
+            const box = document.getElementById('levelRewardsList');
+            if (!box) return;
+            box.innerHTML = LEVEL_REWARDS.map(r => {
+                const unlocked = state.totalSold >= r.reqSold;
+                const claimed = state.claimedLevelRewards.includes(r.level);
+                let actionHtml = '';
+                if (claimed) {
+                    actionHtml = `<span class="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-xl">Đã nhận</span>`;
+                } else if (unlocked) {
+                    actionHtml = `<button onclick="claimLevelReward(${r.level})" class="soft-btn bg-gradient-to-r from-orange-500 to-rose-600 text-white font-black text-xs px-3 py-1.5 rounded-xl shadow">Nhận +${formatVND(r.rewardMoney)}</button>`;
+                } else {
+                    actionHtml = `<span class="text-[11px] font-bold text-slate-500">Cần bán ${r.reqSold} phần</span>`;
+                }
+                return `
+                    <div class="p-2.5 rounded-xl border ${unlocked ? 'bg-amber-50 border-amber-300' : 'bg-slate-50 border-slate-200'} flex items-center justify-between gap-2">
+                        <div>
+                            <div class="font-black text-xs text-slate-800">⭐ Cấp ${r.level}: ${r.title}</div>
+                            <div class="text-[11px] text-slate-600">Mốc tích lũy: ${r.reqSold} phần • Thưởng: <strong class="text-orange-700">${formatVND(r.rewardMoney)}</strong></div>
+                        </div>
+                        ${actionHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function claimLevelReward(lvl) {
+            const r = LEVEL_REWARDS.find(item => item.level === lvl);
+            if (!r || state.totalSold < r.reqSold || state.claimedLevelRewards.includes(lvl)) return;
+            state.claimedLevelRewards.push(lvl);
+            state.money += r.rewardMoney;
+            SoundFX.cash();
+            showToast(`Đã nhận thưởng Cấp ${lvl}: +${formatVND(r.rewardMoney)}!`, '🎁');
+            saveGameEverywhere(false);
+            renderLevelRewardsModal();
+            renderAll();
+        }
+
+        function renderStoryModal() {
+            const idx = Math.min(STORY_CHAPTERS.length - 1, state.storyChapter - 1);
+            const ch = STORY_CHAPTERS[idx];
+            document.getElementById('storyTitle').textContent = '📖 ' + ch.title;
+            document.getElementById('storyQuote').textContent = ch.quote;
+
+            const okSold = state.totalSold >= ch.reqSold;
+            const okMoney = state.money >= ch.reqMoney;
+
+            document.getElementById('storyGoals').innerHTML = `
+                <div class="p-2 rounded-xl border ${okSold ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-slate-50 border-slate-200'} flex justify-between font-bold">
+                    <span>1. Tổng số bánh đã bán (${state.totalSold}/${ch.reqSold} phần)</span>
+                    <span>${okSold ? '✅ Đạt' : '⏳ Chưa đạt'}</span>
+                </div>
+                <div class="p-2 rounded-xl border ${okMoney ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-slate-50 border-slate-200'} flex justify-between font-bold">
+                    <span>2. Tích lũy tiền mặt (${formatVND(state.money)} / ${formatVND(ch.reqMoney)})</span>
+                    <span>${okMoney ? '✅ Đạt' : '⏳ Chưa đạt'}</span>
+                </div>
+            `;
+            const btn = document.getElementById('btnClaimStory');
+            if (okSold && okMoney) {
+                btn.disabled = false;
+                btn.textContent = `🎁 Nhận Thưởng Chương (+${formatVND(ch.rewardMoney)})`;
+            } else {
+                btn.disabled = true;
+                btn.textContent = `Hoàn thành 2 mục tiêu trên để nhận +${formatVND(ch.rewardMoney)}`;
+            }
+        }
+
+        function claimStoryChapter() {
+            const idx = Math.min(STORY_CHAPTERS.length - 1, state.storyChapter - 1);
+            const ch = STORY_CHAPTERS[idx];
+            if (state.totalSold < ch.reqSold || state.money < ch.reqMoney) return;
+            state.money += ch.rewardMoney;
+            if (state.storyChapter < STORY_CHAPTERS.length) state.storyChapter++;
+            SoundFX.cash();
+            showToast(`Hoàn thành ${ch.title}! Nhận +${formatVND(ch.rewardMoney)}!`, '📖');
+            saveGameEverywhere(false);
+            renderStoryModal();
+            renderAll();
+        }
+
+        // ================= TÀI KHOẢN, LƯU LOCALSTORAGE & CLOUD =================
+        function renderAccountModal() {
+            const picker = document.getElementById('avatarPicker');
+            if (picker) {
+                picker.innerHTML = AVATAR_LIST.map(av => `
+                    <button type="button" onclick="selectAvatar('${av}')" class="soft-btn text-2xl py-1.5 rounded-xl border ${state.playerAvatar === av ? 'bg-amber-200 border-orange-500 ring-2 ring-orange-400' : 'bg-slate-50 border-slate-200'}">
+                        ${av}
+                    </button>
+                `).join('');
+            }
+            const nameInput = document.getElementById('inputAccountName');
+            const pinInput = document.getElementById('inputAccountPin');
+            if (nameInput) nameInput.value = state.playerName || '';
+            if (pinInput) pinInput.value = state.playerPin || '';
+        }
+
+        function selectAvatar(av) {
+            SoundFX.pop();
+            state.playerAvatar = av;
+            renderAccountModal();
+            renderHeaderAndPatience();
+        }
+
+        function handleRegisterOrLogin() {
+            const name = (document.getElementById('inputAccountName').value || '').trim();
+            const pin = (document.getElementById('inputAccountPin').value || '').trim();
+            if (name.length < 2) {
+                SoundFX.error();
+                showToast('Tên bảng hiệu quán cần ít nhất 2 ký tự!', '⚠️');
+                return;
+            }
+            state.playerName = name;
+            state.playerPin = pin;
+            saveGameEverywhere(true);
+            if (typeof window._restoreOrSaveAccountFn === 'function' && pin.length >= 4) {
+                window._restoreOrSaveAccountFn(name, pin);
+            } else {
+                closeModal('accountModal');
+                SoundFX.cash();
+                showToast(`Đã lưu quán [${name}] thành công!`, '🏆');
+                renderAll();
+            }
+        }
+
+        function manualSaveNow() {
+            SoundFX.cash();
+            saveGameEverywhere(true);
+        }
+
+        function resetGameData() {
+            try {
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+            } catch (e) {}
+            location.reload();
+        }
+
+        function serializeFullGameState(uid) {
+            const stockMap = {};
+            Object.keys(INGREDIENTS_CONFIG).forEach(k => {
+                stockMap[k] = INGREDIENTS_CONFIG[k].stock;
+            });
+            const purchasedUpgrades = UPGRADES_CONFIG.filter(u => u.purchased).map(u => u.id);
+            return {
+                userId: uid || window._currentUserId || 'local',
+                playerName: state.playerName,
+                playerAvatar: state.playerAvatar,
+                playerPin: state.playerPin || '',
+                money: state.money,
+                reputation: state.reputation,
+                priceOffset: state.priceOffset,
+                level: state.level,
+                claimedLevelRewards: state.claimedLevelRewards || [1],
+                day: state.day,
+                soldToday: state.soldToday,
+                totalSold: state.totalSold,
+                revenueToday: state.revenueToday,
+                spentIngredientsToday: state.spentIngredientsToday,
+                storyChapter: state.storyChapter,
+                prepDone: state.prepDone,
+                prepBonusPerBag: state.prepBonusPerBag,
+                stockMapJson: JSON.stringify(stockMap),
+                purchasedUpgrades: purchasedUpgrades,
+                historyJson: JSON.stringify((state.history || []).slice(0, 15)),
+                updatedAt: Date.now()
+            };
+        }
+
+        function applySavedGameState(saved) {
+            if (!saved) return;
+            if (saved.playerName) state.playerName = saved.playerName;
+            if (saved.playerAvatar) state.playerAvatar = saved.playerAvatar;
+            if (typeof saved.playerPin === 'string') state.playerPin = saved.playerPin;
+            if (typeof saved.money === 'number') state.money = saved.money;
+            if (typeof saved.reputation === 'number') state.reputation = saved.reputation;
+            if (typeof saved.priceOffset === 'number') state.priceOffset = saved.priceOffset;
+            if (typeof saved.level === 'number') state.level = saved.level;
+            if (Array.isArray(saved.claimedLevelRewards)) state.claimedLevelRewards = saved.claimedLevelRewards;
+            if (typeof saved.day === 'number') state.day = saved.day;
+            if (typeof saved.soldToday === 'number') state.soldToday = saved.soldToday;
+            if (typeof saved.totalSold === 'number') state.totalSold = saved.totalSold;
+            if (typeof saved.revenueToday === 'number') state.revenueToday = saved.revenueToday;
+            if (typeof saved.spentIngredientsToday === 'number') state.spentIngredientsToday = saved.spentIngredientsToday;
+            if (typeof saved.storyChapter === 'number') state.storyChapter = saved.storyChapter;
+            if (saved.prepDone && typeof saved.prepDone === 'object') state.prepDone = saved.prepDone;
+            if (typeof saved.prepBonusPerBag === 'number') state.prepBonusPerBag = saved.prepBonusPerBag;
+
+            if (saved.stockMapJson) {
+                try {
+                    const parsedStock = JSON.parse(saved.stockMapJson);
+                    Object.keys(parsedStock).forEach(k => {
+                        if (INGREDIENTS_CONFIG[k] && typeof parsedStock[k] === 'number') {
+                            INGREDIENTS_CONFIG[k].stock = parsedStock[k];
+                        }
+                    });
+                } catch (e) {}
+            }
+            if (Array.isArray(saved.purchasedUpgrades)) {
+                UPGRADES_CONFIG.forEach(u => {
+                    u.purchased = saved.purchasedUpgrades.includes(u.id);
+                });
+            }
+            if (saved.historyJson) {
+                try {
+                    const parsedHist = JSON.parse(saved.historyJson);
+                    if (Array.isArray(parsedHist)) state.history = parsedHist;
+                } catch (e) {}
+            }
+        }
+
+        function saveGameEverywhere(showNotif = false) {
+            const payload = serializeFullGameState();
+            try {
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(payload));
+                const statusEl = document.getElementById('accountSaveStatusText');
+                if (statusEl) {
+                    const nowStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    statusEl.textContent = `Đã lưu tự động lúc ${nowStr}`;
+                }
+            } catch (e) {}
+            if (typeof window._cloudSyncFn === 'function') {
+                window._cloudSyncFn(showNotif);
+            } else if (showNotif) {
+                showToast('Đã lưu toàn bộ tiến trình trên thiết bị!', '💾');
+            }
+        }
+
+        function loadFromLocalStorage() {
+            try {
+                const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (!raw) return false;
+                const data = JSON.parse(raw);
+                applySavedGameState(data);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // ================= RENDER GIAO DIỆN =================
+        function renderHeaderAndPatience() {
+            document.getElementById('uiLevel').textContent = state.level;
+            document.getElementById('uiDay').textContent = state.day;
+            document.getElementById('uiMoney').textContent = formatVND(state.money);
+            document.getElementById('uiRep').textContent = state.reputation;
+            document.getElementById('headerAvatar').textContent = state.playerAvatar;
+            document.getElementById('headerPlayerName').textContent = state.playerName;
+            document.getElementById('uiStoryBtnText').textContent = `Chương ${state.storyChapter}`;
+
+            // Chấm đỏ báo có quà cấp độ chưa nhận
+            const hasUnclaimed = LEVEL_REWARDS.some(r => state.totalSold >= r.reqSold && !state.claimedLevelRewards.includes(r.level));
+            const dot = document.getElementById('levelRewardDot');
+            if (dot) dot.classList.toggle('hidden', !hasUnclaimed);
+
+            // Thanh kiên nhẫn khách hàng
+            const pct = Math.round(state.patience);
+            const pctEl = document.getElementById('uiPatiencePct');
+            const barEl = document.getElementById('uiPatienceBar');
+            if (pctEl) pctEl.textContent = pct + '%';
+            if (barEl) {
+                barEl.style.width = pct + '%';
+                barEl.className = `h-full transition-all duration-300 ${pct > 55 ? 'bg-emerald-500' : pct > 25 ? 'bg-amber-500' : 'bg-rose-600'}`;
+            }
+        }
+
+        function renderCustomer() {
+            const cust = state.currentCustomer;
+            if (!cust) return;
+
+            // Băng rôn sự kiện khẩn cấp
+            const banner = document.getElementById('emergencyBanner');
+            if (banner) {
+                if (state.emergencyEvent) {
+                    banner.classList.remove('hidden');
+                    document.getElementById('emergencyIcon').textContent = state.emergencyEvent.icon;
+                    document.getElementById('emergencyTitle').textContent = state.emergencyEvent.title;
+                    document.getElementById('emergencyDesc').textContent = state.emergencyEvent.desc;
+                    document.getElementById('emergencyBtn').textContent = state.emergencyEvent.btnText;
+                } else {
+                    banner.classList.add('hidden');
+                }
+            }
+
+            document.getElementById('uiCustNumber').textContent = state.soldToday + 1;
+            document.getElementById('uiCustAvatar').textContent = cust.avatar;
+            document.getElementById('uiCustName').textContent = cust.name;
+            document.getElementById('uiCustAgeJob').textContent = cust.ageJob;
+            document.getElementById('uiCustQuote').textContent = `"${cust.quote}"`;
+            document.getElementById('uiSoldToday').textContent = state.soldToday;
+            document.getElementById('uiCurrentDishPrice').textContent = formatVND(getCurrentDishPrice());
+
+            // Phiếu yêu cầu (tự đổi sang màu xanh lá khi chọn khớp)
+            const wantedDish = MENU_DISHES.find(d => d.id === cust.dishId) || MENU_DISHES[0];
+            const dishMatched = state.bowl.dishId === cust.dishId;
+            const dishBadge = document.getElementById('reqBadge-dish');
+            dishBadge.className = `mb-1.5 px-2.5 py-1 rounded-xl font-black text-xs flex items-center justify-between border ${dishMatched ? 'bg-emerald-100 border-emerald-400 text-emerald-900' : 'bg-rose-50 border-rose-300 text-rose-900'}`;
+            document.getElementById('reqText-dish').textContent = `${wantedDish.icon} Món gọi: ${wantedDish.name}`;
+            document.getElementById('reqIcon-dish').textContent = dishMatched ? '✅ Đúng món' : '⚠️ Chọn món';
+
+            const chiliTexts = ['🚫 Không cay', '🌶️ Cay vừa', '🔥 Siêu cay'];
+            const chiliMatched = state.bowl.chili === cust.chili;
+            const chiliEl = document.getElementById('reqBadge-chili');
+            chiliEl.textContent = chiliTexts[cust.chili];
+            chiliEl.className = `py-1 px-1 rounded-lg border ${chiliMatched ? 'bg-emerald-100 border-emerald-400 text-emerald-900' : 'bg-amber-50 border-amber-300 text-amber-900'}`;
+
+            const herbsMatched = state.bowl.herbs === cust.herbs;
+            const herbsEl = document.getElementById('reqBadge-herbs');
+            herbsEl.textContent = cust.herbs ? '🌿 Có rau răm' : '🚫 Ko rau răm';
+            herbsEl.className = `py-1 px-1 rounded-lg border ${herbsMatched ? 'bg-emerald-100 border-emerald-400 text-emerald-900' : 'bg-amber-50 border-amber-300 text-amber-900'}`;
+
+            const onionMatched = state.bowl.onion === cust.onion;
+            const onionEl = document.getElementById('reqBadge-onion');
+            onionEl.textContent = cust.onion ? '🧅 Có hành phi' : '🚫 Ko hành phi';
+            onionEl.className = `py-1 px-1 rounded-lg border ${onionMatched ? 'bg-emerald-100 border-emerald-400 text-emerald-900' : 'bg-amber-50 border-amber-300 text-amber-900'}`;
+        }
+
+        function renderBowl() {
+            // Render 4 nút chọn món
+            const dishGrid = document.getElementById('dishSelectGrid');
+            if (dishGrid) {
+                dishGrid.innerHTML = MENU_DISHES.map(d => {
+                    const active = state.bowl.dishId === d.id;
+                    return `
+                        <button type="button" onclick="selectDish('${d.id}')" class="soft-btn p-1.5 rounded-xl border text-left flex items-center gap-1.5 ${active ? 'bg-orange-600 text-white border-orange-700 shadow' : 'bg-white text-slate-800 border-slate-200 hover:bg-orange-50'}">
+                            <span class="text-base">${d.icon}</span>
+                            <div class="min-w-0">
+                                <div class="font-black text-[10px] truncate">${d.shortName}</div>
+                                <div class="text-[9px] ${active ? 'text-amber-200' : 'text-slate-500'} font-bold">${formatVND(d.basePrice + state.priceOffset)}</div>
+                            </div>
+                        </button>
+                    `;
+                }).join('');
+            }
+
+            // Render các nút Gia giảm
+            [0, 1, 2].forEach(c => {
+                const btn = document.getElementById('optChili-' + c);
+                if (btn) {
+                    btn.className = state.bowl.chili === c
+                        ? 'soft-btn flex-1 py-1 rounded-lg font-extrabold text-[10px] bg-orange-600 text-white shadow'
+                        : 'soft-btn flex-1 py-1 rounded-lg font-extrabold text-[10px] text-slate-600 hover:bg-slate-200';
+                }
+            });
+            [true, false].forEach(v => {
+                const btnH = document.getElementById('optHerbs-' + v);
+                if (btnH) {
+                    btnH.className = state.bowl.herbs === v
+                        ? 'soft-btn flex-1 py-1 rounded-lg font-extrabold text-[10px] bg-emerald-600 text-white shadow'
+                        : 'soft-btn flex-1 py-1 rounded-lg font-extrabold text-[10px] text-slate-600 hover:bg-slate-200';
+                }
+                const btnO = document.getElementById('optOnion-' + v);
+                if (btnO) {
+                    btnO.className = state.bowl.onion === v
+                        ? 'soft-btn flex-1 py-1 rounded-lg font-extrabold text-[10px] bg-amber-600 text-white shadow'
+                        : 'soft-btn flex-1 py-1 rounded-lg font-extrabold text-[10px] text-slate-600 hover:bg-slate-200';
+                }
+            });
+
+            // Lớp SVG trong thau trộn
+            document.getElementById('svgLayerStep1').classList.toggle('hidden', !state.bowl.step1);
+            document.getElementById('svgLayerStep2').classList.toggle('hidden', !state.bowl.step2);
+            document.getElementById('svgLayerStep4').classList.toggle('hidden', !state.bowl.step4);
+
+            // Thanh canh lực
+            const dish = MENU_DISHES.find(d => d.id === state.bowl.dishId) || MENU_DISHES[0];
+            const bounds = getSweetSpotBounds();
+            document.getElementById('step3Title').textContent = '3. ' + dish.actionVerb;
+            document.getElementById('uiMixPct').textContent = state.bowl.mixProgress + '%';
+            document.getElementById('uiSweetSpotText').textContent = `Chuẩn: ${bounds.min}% - ${bounds.max}%`;
+            const zoneEl = document.getElementById('uiSweetSpotZone');
+            zoneEl.style.left = bounds.min + '%';
+            zoneEl.style.width = (bounds.max - bounds.min) + '%';
+            document.getElementById('uiMixBar').style.width = state.bowl.mixProgress + '%';
+
+            // Số tồn kho trên từng bước
+            const sauceKey = (dish.id === 'cuon' || dish.id === 'bo') ? 'sotbo_me' : 'sotbo';
+            const topKey = (dish.id === 'bo' || dish.id === 'nuong') ? 'topping_vip' : 'khobo';
+            document.getElementById('stockBadge-step1').textContent = `Kho: ${Math.min(INGREDIENTS_CONFIG.banhtrang.stock, INGREDIENTS_CONFIG.xoairau.stock)}`;
+            document.getElementById('stockBadge-step2').textContent = `Kho: ${Math.min(INGREDIENTS_CONFIG.muoihanh.stock, INGREDIENTS_CONFIG[sauceKey].stock)}`;
+            document.getElementById('stockBadge-step4').textContent = `Kho: ${Math.min(INGREDIENTS_CONFIG[topKey].stock, INGREDIENTS_CONFIG.trungcut.stock)}`;
+
+            // Highlight bước cần bấm tiếp theo
+            const activeStep = !state.bowl.step1 ? 1 : !state.bowl.step2 ? 2 : state.bowl.mixProgress < bounds.min ? 3 : !state.bowl.step4 ? 4 : 5;
+            [1, 2, 3, 4].forEach(s => {
+                const btn = document.getElementById('stepBtn-' + s);
+                if (!btn) return;
+                const done = (s === 1 && state.bowl.step1) || (s === 2 && state.bowl.step2) || (s === 3 && state.bowl.mixProgress >= bounds.min && state.bowl.mixProgress <= bounds.max) || (s === 4 && state.bowl.step4);
+                if (s === activeStep) {
+                    btn.className = 'soft-btn p-1.5 rounded-xl border-2 border-orange-500 bg-orange-50 text-center flex flex-col items-center justify-between pulse-ring';
+                } else if (done) {
+                    btn.className = 'soft-btn p-1.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-center flex flex-col items-center justify-between';
+                } else {
+                    btn.className = 'soft-btn p-1.5 rounded-xl border border-slate-300 bg-white text-center flex flex-col items-center justify-between';
+                }
+            });
+
+            const hintEl = document.getElementById('uiStepHint');
+            if (activeStep === 1) hintEl.textContent = '👉 Bước 1: Bấm [1. Bánh & Xoài] hoặc chạm giữa thau inox!';
+            else if (activeStep === 2) hintEl.textContent = '👉 Bước 2: Bấm [2. Rưới Sốt] để thêm muối tôm & nước sốt!';
+            else if (activeStep === 3) hintEl.textContent = `👉 Bước 3: Bấm [3. ${dish.actionVerb}] khoảng 3 lần để lực vào vùng xanh (${bounds.min}%-${bounds.max}%)!`;
+            else if (activeStep === 4) hintEl.textContent = '👉 Bước 4: Bấm [4. Topping] để xếp khô bò, tép mỡ & trứng cút!';
+            else hintEl.textContent = '✅ Đã hoàn tất! Bấm [GIAO KHÁCH] để thu tiền ngay!';
+        }
+
+        function renderUpgradesAndFinance() {
+            const hasRent = UPGRADES_CONFIG.find(u => u.id === 'rent_spot')?.purchased;
+            const rentEl = document.getElementById('uiRentCostText');
+            if (rentEl) rentEl.textContent = hasRent ? '50.000đ/ngày (An toàn 100%)' : '0đ (Đứng lụi dễ gặp Đội trật tự)';
+            const fixedEl = document.getElementById('uiTotalFixedCost');
+            if (fixedEl) fixedEl.textContent = formatVND(getDailyFixedCost());
+
+            const upgBox = document.getElementById('upgradesList');
+            if (upgBox) {
+                upgBox.innerHTML = UPGRADES_CONFIG.map(u => `
+                    <div class="p-2.5 rounded-xl border ${u.purchased ? 'bg-emerald-50 border-emerald-300' : 'bg-white border-amber-200'} flex items-center justify-between gap-2">
+                        <div>
+                            <div class="font-extrabold text-xs text-slate-800">${u.name}</div>
+                            <div class="text-[11px] text-slate-600">${u.desc}</div>
+                        </div>
+                        ${u.purchased
+                            ? `<span class="text-[11px] font-black text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-xl shrink-0">Đã sắm ✅</span>`
+                            : `<button onclick="buyUpgrade('${u.id}')" class="soft-btn bg-gradient-to-r from-orange-500 to-rose-600 text-white font-black text-xs px-3 py-1.5 rounded-xl shrink-0 shadow">${formatVND(u.cost)}</button>`
+                        }
+                    </div>
+                `).join('');
+            }
+
+            const histBox = document.getElementById('financeHistoryList');
+            if (histBox) {
+                if (!state.history || state.history.length === 0) {
+                    histBox.innerHTML = `<div class="text-slate-400 italic p-2">Chưa có ngày nào chốt sổ. Hãy bán hàng rồi bấm "Đóng Quầy Chốt Sổ" cuối ngày nhé!</div>`;
+                } else {
+                    histBox.innerHTML = state.history.map(h => `
+                        <div class="bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 flex items-center justify-between">
+                            <span class="font-bold text-slate-700">Ngày ${h.day} (${h.sold} phần)</span>
+                            <span class="font-black ${h.netProfit >= 0 ? 'text-emerald-700' : 'text-rose-600'}">Lãi ròng: ${(h.netProfit >= 0 ? '+' : '') + formatVND(h.netProfit)}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function setLeaderboardSort(mode) {
+            leaderboardSortMode = mode;
+            document.getElementById('sortBtn-money').className = mode === 'money'
+                ? 'soft-btn bg-orange-600 text-white font-extrabold text-xs px-3 py-1.5 rounded-xl'
+                : 'soft-btn bg-slate-200 text-slate-700 font-extrabold text-xs px-3 py-1.5 rounded-xl';
+            document.getElementById('sortBtn-sold').className = mode === 'sold'
+                ? 'soft-btn bg-orange-600 text-white font-extrabold text-xs px-3 py-1.5 rounded-xl'
+                : 'soft-btn bg-slate-200 text-slate-700 font-extrabold text-xs px-3 py-1.5 rounded-xl';
+            renderLeaderboardUI();
+        }
+
+        function renderLeaderboardUI() {
+            const box = document.getElementById('leaderboardList');
+            if (!box) return;
+
+            // Gộp người chơi hiện tại và các quán mẫu Sài Gòn nếu chưa có dữ liệu Cloud
+            const fallbackRivals = [
+                { userId: 'npc1', playerName: 'Bánh Tráng Dì Tư Gốc', playerAvatar: '👵', money: 1450000, totalSold: 95, level: 6 },
+                { userId: 'npc2', playerName: 'Trộn Nguyễn Thượng Hiền', playerAvatar: '👩‍🍳', money: 920000, totalSold: 62, level: 5 },
+                { userId: 'npc3', playerName: 'Bánh Tráng Cô Năm Sài Gòn', playerAvatar: '🧑‍🍳', money: 680000, totalSold: 38, level: 4 }
+            ];
+
+            const map = new Map();
+            fallbackRivals.forEach(r => map.set(r.userId, r));
+            globalLeaderboardData.forEach(item => {
+                if (item && item.userId) map.set(item.userId, item);
+            });
+            const myId = window._currentUserId || 'local';
+            map.set(myId, serializeFullGameState(myId));
+
+            const list = Array.from(map.values()).sort((a, b) => {
+                if (leaderboardSortMode === 'sold') return (b.totalSold || 0) - (a.totalSold || 0);
+                return (b.money || 0) - (a.money || 0);
+            });
+
+            box.innerHTML = list.map((item, idx) => {
+                const isMe = item.userId === myId;
+                const rankBadge = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `#${idx + 1}`;
+                return `
+                    <div class="p-2.5 rounded-xl border ${isMe ? 'bg-amber-100/90 border-orange-400' : 'bg-white border-slate-200'} flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2.5">
+                            <span class="font-black text-sm w-6 text-center">${rankBadge}</span>
+                            <span class="text-2xl">${item.playerAvatar || '🧑‍🍳'}</span>
+                            <div>
+                                <div class="font-black text-xs text-slate-900 flex items-center gap-1">
+                                    <span>${item.playerName || 'Quán Ẩn Danh'}</span>
+                                    ${isMe ? '<span class="bg-orange-600 text-white text-[9px] px-1.5 py-0.5 rounded">Quán của con</span>' : ''}
+                                </div>
+                                <div class="text-[10px] font-bold text-slate-500">⭐ Cấp ${item.level || 1} • Đã bán: ${item.totalSold || 0} phần</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-black text-xs text-orange-700">${formatVND(item.money || 0)}</div>
+                            <div class="text-[10px] font-bold text-slate-500">${item.totalSold || 0} bịch</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderAll() {
+            renderHeaderAndPatience();
+            renderMarket();
+            renderCustomer();
+            renderBowl();
+            renderUpgradesAndFinance();
+            renderLeaderboardUI();
+        }
+
+        window.onload = function() {
+            const loadedLocal = loadFromLocalStorage();
+            spawnNextCustomer();
+            renderAll();
+            if (loadedLocal) {
+                showToast(`Đã khôi phục tiến trình quán [${state.playerName}]!`, '💾');
+            }
+        };
+    </script>
+
+    <!-- ĐỒNG BỘ ĐÁM MÂY FIREBASE (TỰ ĐỘNG HOẠT ĐỘNG KHI CÓ KẾT NỐI) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'banh-trang-tron-30-nam';
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+
+        async function initCloudSystem() {
+            try {
+                if (typeof __firebase_config === 'undefined' || !__firebase_config) return;
+                const app = initializeApp(JSON.parse(__firebase_config));
+                db = getFirestore(app);
+                auth = getAuth(app);
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                onAuthStateChanged(auth, async (user) => {
+                    currentUser = user;
+                    if (!currentUser) return;
+                    window._currentUserId = currentUser.uid;
+                    const snap = await getDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'savegame', 'main'));
+                    if (snap.exists()) {
+                        applySavedGameState(snap.data());
+                        renderAll();
+                    }
+                    onSnapshot(
+                        collection(db, 'artifacts', appId, 'public', 'data', 'leaderboard'),
+                        (qs) => {
+                            const items = [];
+                            qs.forEach(d => items.push(d.data()));
+                            globalLeaderboardData = items;
+                            renderLeaderboardUI();
+                        },
+                        () => {}
+                    );
+                });
+            } catch (e) {}
+        }
+
+        window._cloudSyncFn = async function(showNotif = false) {
+            if (!currentUser || !db) {
+                if (showNotif) showToast('Đã lưu tiến trình vào bộ nhớ máy!', '💾');
+                return;
+            }
+            try {
+                const payload = serializeFullGameState(currentUser.uid);
+                await Promise.all([
+                    setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'savegame', 'main'), payload),
+                    setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'leaderboard', currentUser.uid), payload)
+                ]);
+                if (showNotif) showToast('Đã lưu & đồng bộ lên Bảng Phong Thần!', '☁️');
+            } catch (e) {}
+        };
+
+        window._restoreOrSaveAccountFn = async function(name, pin) {
+            if (!currentUser || !db) {
+                closeModal('accountModal');
+                showToast(`Đã lưu quán [${name}] trên máy!`, '🏆');
+                renderAll();
+                return;
+            }
+            try {
+                const matchedOld = globalLeaderboardData.find(
+                    item => item && item.playerName && item.playerName.toLowerCase() === name.toLowerCase() && item.playerPin === pin && item.userId !== currentUser.uid
+                );
+                if (matchedOld) {
+                    applySavedGameState(matchedOld);
+                    state.playerName = name;
+                    state.playerPin = pin;
+                    saveGameEverywhere(false);
+                    closeModal('accountModal');
+                    showToast(`Đã khôi phục toàn bộ quán [${name}] thành công!`, '🎉');
+                    renderAll();
+                } else {
+                    await window._cloudSyncFn(false);
+                    closeModal('accountModal');
+                    showToast(`Đã lưu quán [${name}] & bảo vệ bằng PIN!`, '🏆');
+                    renderAll();
+                }
+            } catch (e) {}
+        };
+
+        initCloudSystem();
+    </script>
+</body>
+</html>
