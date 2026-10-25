@@ -55,6 +55,21 @@
       animation: swayLantern 3.5s infinite ease-in-out;
     }
 
+    /* Hiệu ứng mưa Sài Gòn */
+    .rain-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 40;
+      background-image: linear-gradient(105deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 45%, rgba(191,219,254,0.45) 50%, rgba(255,255,255,0) 55%);
+      background-size: 28px 90px;
+      animation: rainFall 0.35s linear infinite;
+    }
+    @keyframes rainFall {
+      0% { background-position: 0 0; }
+      100% { background-position: -28px 90px; }
+    }
+
     /* Khung Thẻ Mềm Mại Pha Kính Ấm */
     .soft-card {
       background: rgba(255, 251, 244, 0.95);
@@ -62,13 +77,6 @@
       border-radius: 22px;
       border: 2px solid rgba(253, 224, 171, 0.9);
       box-shadow: 0 12px 30px -6px rgba(45, 14, 4, 0.35), inset 0 2px 0 0 rgba(255, 255, 255, 0.9);
-    }
-
-    .glass-dark {
-      background: rgba(28, 12, 38, 0.82);
-      backdrop-filter: blur(16px);
-      border: 1.5px solid rgba(251, 191, 36, 0.4);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
     }
 
     .soft-btn {
@@ -102,6 +110,15 @@
       background-color: #fff7ed !important;
     }
 
+    @keyframes bowlShake {
+      0%, 100% { transform: translateX(0) rotate(0deg); }
+      25% { transform: translateX(-4px) rotate(-6deg); }
+      75% { transform: translateX(4px) rotate(6deg); }
+    }
+    .bowl-shake-anim {
+      animation: bowlShake 0.22s ease-in-out;
+    }
+
     /* Tùy chỉnh thanh cuộn gọn đẹp */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: rgba(254, 243, 199, 0.3); border-radius: 8px; }
@@ -110,9 +127,11 @@
 </head>
 <body class="flex flex-col items-center justify-start min-h-screen p-2 sm:p-3">
 
+  <!-- LỚP HIỆU ỨNG MƯA RÀO KHI CÓ SỰ KIỆN MƯA -->
+  <div id="rain-visual-layer" class="rain-overlay hidden"></div>
+
   <!-- ================= BACKGROUND NGHỆ THUẬT PHỐ ĐÊM SÀI GÒN ================= -->
   <div class="saigon-bg">
-    <!-- Ánh đèn Bokeh phố thị -->
     <div class="bokeh-light w-48 h-48 bg-amber-400 top-10 left-10"></div>
     <div class="bokeh-light w-64 h-64 bg-rose-500 top-1/3 right-8" style="animation-delay: 1.5s"></div>
     <div class="bokeh-light w-56 h-56 bg-orange-400 bottom-20 left-1/4" style="animation-delay: 3s"></div>
@@ -154,32 +173,26 @@
     </svg>
   </div>
 
-  <!-- ================= MÀN HÌNH ĐĂNG NHẬP / MỞ QUÁN CHÍNH (TRƯỚC KHI CHƠI) ================= -->
+  <!-- ================= MÀN HÌNH ĐĂNG NHẬP / MỞ QUÁN CHÍNH ================= -->
   <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-3 overflow-y-auto bg-black/55 backdrop-blur-md">
     <div class="w-full max-w-md soft-card p-5 sm:p-6 border-4 border-amber-400 shadow-2xl relative my-auto">
-      
-      <!-- Huy hiệu 30 năm -->
       <div class="flex flex-col items-center text-center">
         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-red-600 to-orange-500 text-white text-xs font-extrabold shadow-md mb-2">
           <span>🔥 TRUYỀN NGHỀ 30 NĂM DÌ TƯ</span>
           <span>•</span>
-          <span>ONLINE CLOUD</span>
+          <span>50 CẤP ĐỘ</span>
         </div>
 
         <!-- Hình vẽ Xe Đẩy Bánh Tráng Mini -->
         <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-amber-100 to-orange-200 border-2 border-amber-400 shadow-inner flex items-center justify-center mb-2 relative">
           <svg class="w-20 h-20" viewBox="0 0 120 120">
-            <!-- Bạt che đỏ vàng -->
             <path d="M15,35 L105,35 L112,50 L8,50 Z" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
             <path d="M35,35 L55,35 L55,50 L32,50 Z" fill="#fef08a"/>
             <path d="M70,35 L90,35 L92,50 L70,50 Z" fill="#fef08a"/>
-            <!-- Khung xe inox -->
             <rect x="20" y="50" width="80" height="45" rx="5" fill="#f8fafc" stroke="#64748b" stroke-width="2.5"/>
             <rect x="25" y="55" width="70" height="20" rx="3" fill="#e0f2fe" stroke="#94a3b8" stroke-width="1.5"/>
-            <!-- Bảng hiệu -->
             <rect x="26" y="78" width="68" height="13" rx="3" fill="#dc2626"/>
             <text x="60" y="87" font-size="7.5" font-weight="900" fill="#fef08a" text-anchor="middle">BÁNH TRÁNG SÀI GÒN</text>
-            <!-- Bánh xe -->
             <circle cx="35" cy="98" r="9" fill="#334155" stroke="#cbd5e1" stroke-width="3"/>
             <circle cx="85" cy="98" r="9" fill="#334155" stroke="#cbd5e1" stroke-width="3"/>
           </svg>
@@ -190,7 +203,7 @@
           VUA BÁNH TRÁNG SÀI GÒN
         </h1>
         <p class="text-xs text-amber-800 font-semibold mt-0.5">
-          Đăng nhập hoặc tạo Bảng Hiệu Quán để tự động lưu tiến trình & đua Top!
+          Đăng nhập hoặc tạo Bảng Hiệu Quán để lưu Đám Mây & chinh phục 50 Cấp Độ!
         </p>
       </div>
 
@@ -217,9 +230,7 @@
           <label class="block text-xs font-extrabold text-amber-900 mb-1">
             1. Chọn Hình Đại Diện Chủ Quán:
           </label>
-          <div id="login-avatar-grid" class="grid grid-cols-8 gap-1">
-            <!-- Render bằng JS -->
-          </div>
+          <div id="login-avatar-grid" class="grid grid-cols-8 gap-1"></div>
         </div>
 
         <div>
@@ -237,7 +248,7 @@
           <input id="login-shop-pin" type="password" inputmode="numeric" maxlength="4" placeholder="Nhập 4 số (VD: 1234)" 
             class="w-full px-3.5 py-2.5 rounded-xl border-2 border-amber-300 focus:border-orange-500 focus:outline-none text-sm font-black tracking-widest text-amber-950 bg-white shadow-inner" />
           <p class="text-[11px] text-amber-700 mt-1 font-medium">
-            💡 <b>Mẹo:</b> Nhập lại đúng <b>Tên Quán + Mã PIN</b> này trên điện thoại hay máy tính bất kỳ để tải lại đúng tiền & cấp độ đã lưu trên Đám Mây!
+            💡 <b>Mẹo:</b> Nhập đúng <b>Tên Quán + Mã PIN</b> trên máy bất kỳ để tải lại đúng tiền & cấp độ đã lưu trên Đám Mây!
           </p>
         </div>
 
@@ -263,26 +274,26 @@
           <div class="text-center text-amber-700 py-1 text-[11px]">Đang tải bảng xếp hạng từ máy chủ...</div>
         </div>
       </div>
-
     </div>
   </div>
 
   <!-- ================= KHUNG GIAO DIỆN CHÍNH CỦA GAME ================= -->
-  <div id="game-app" class="w-full max-w-2xl flex flex-col gap-2">
+  <div id="game-app" class="w-full max-w-2xl flex flex-col gap-2 pb-8">
 
     <!-- THANH HEADER TRẠNG THÁI GỌN GÀNG -->
     <header class="soft-card p-2.5 sm:p-3 border-2 border-amber-400">
       <div class="flex flex-wrap items-center justify-between gap-2">
-        <!-- Thông tin Quán & Cấp độ -->
+        <!-- Thông tin Quán & Cấp độ (1 -> 50) -->
         <div class="flex items-center gap-2">
           <button onclick="openLoginModalForSwitch()" title="Đổi tài khoản / Lưu Cloud" class="soft-btn w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-2xl flex items-center justify-center shadow border-2 border-white relative">
             <span id="header-avatar">👩‍🍳</span>
             <span class="absolute -bottom-1 -right-1 bg-emerald-500 w-3.5 h-3.5 rounded-full border-2 border-white"></span>
           </button>
           <div>
-            <div class="flex items-center gap-1.5">
-              <span id="header-shop-name" class="font-black text-sm sm:text-base text-amber-950 truncate max-w-[140px] sm:max-w-[200px]">Quán Dì Tư</span>
-              <span id="header-level-badge" class="px-2 py-0.5 rounded-full bg-amber-500 text-white font-black text-[11px] shadow-sm">Cấp 1</span>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span id="header-shop-name" class="font-black text-sm sm:text-base text-amber-950 truncate max-w-[130px] sm:max-w-[190px]">Quán Dì Tư</span>
+              <span id="header-level-badge" class="px-2 py-0.5 rounded-full bg-amber-500 text-white font-black text-[11px] shadow-sm">Cấp 1/50</span>
+              <span id="header-stage-title" class="hidden sm:inline-block text-[10px] font-extrabold text-orange-800 bg-orange-100 px-2 py-0.5 rounded-full border border-orange-300">Gánh Hàng Khởi Nghiệp</span>
             </div>
             <!-- Thanh kinh nghiệm XP -->
             <div class="flex items-center gap-1.5 mt-0.5">
@@ -300,7 +311,7 @@
             <span class="text-sm">💵</span>
             <span id="header-money" class="font-black text-xs sm:text-sm text-emerald-900">500.000đ</span>
           </div>
-          <div class="px-2 py-1 rounded-xl bg-amber-100 border border-amber-300 flex items-center gap-1">
+          <div class="px-2 py-1 rounded-xl bg-amber-100 border border-amber-300 flex items-center gap-1" title="Điểm Uy Tín Quán">
             <span class="text-xs">⭐</span>
             <span id="header-rep" class="font-black text-xs text-amber-900">100</span>
           </div>
@@ -311,21 +322,29 @@
         </div>
       </div>
 
-      <!-- Dòng phụ: Nút Cốt Truyện, Trạng thái Cloud Auto-Save & Đổi Quán -->
-      <div class="flex items-center justify-between mt-2 pt-1.5 border-t border-amber-200/80 text-[11px]">
-        <div class="flex items-center gap-1.5">
-          <button onclick="openStoryModal()" class="soft-btn px-2.5 py-1 rounded-lg bg-gradient-to-r from-amber-600 to-orange-600 text-white font-bold flex items-center gap-1 shadow-sm">
+      <!-- Dòng phụ: Nút Cốt Truyện, Âm Thanh Chill, Đánh giá Khách, Cloud & Đổi Quán -->
+      <div class="flex flex-wrap items-center justify-between gap-1.5 mt-2 pt-1.5 border-t border-amber-200/80 text-[11px]">
+        <div class="flex flex-wrap items-center gap-1">
+          <button onclick="openStoryModal()" class="soft-btn px-2 py-1 rounded-lg bg-gradient-to-r from-amber-600 to-orange-600 text-white font-bold flex items-center gap-1 shadow-sm">
             <span>📖</span>
-            <span id="header-story-btn-text">Chương 1: Đôi Quang Gánh</span>
+            <span id="header-story-btn-text">Hồi Ký Dì Tư</span>
+          </button>
+          <button onclick="toggleAudioSystem()" id="btn-audio-toggle" class="soft-btn px-2 py-1 rounded-lg bg-purple-100 hover:bg-purple-200 text-purple-900 border border-purple-300 font-extrabold flex items-center gap-1">
+            <span id="audio-icon">🎵</span>
+            <span id="audio-label">Nhạc Chill: BẬT</span>
+          </button>
+          <button onclick="openReviewsModal()" class="soft-btn px-2 py-1 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-900 border border-rose-300 font-extrabold flex items-center gap-1 relative">
+            <span>💬</span>
+            <span>Review (<span id="header-review-count">0</span>)</span>
           </button>
           <button onclick="manualSyncCloud()" class="soft-btn px-2 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold flex items-center gap-1">
             <span id="cloud-sync-icon">☁️</span>
-            <span id="cloud-sync-text">Đã lưu Cloud</span>
+            <span id="cloud-sync-text" class="hidden sm:inline">Đã lưu Cloud</span>
           </button>
         </div>
 
         <button onclick="openLoginModalForSwitch()" class="soft-btn px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold">
-          🔑 Đổi Quán / PIN
+          🔑 Đổi Quán
         </button>
       </div>
     </header>
@@ -340,9 +359,10 @@
         <span class="text-base">🥣</span>
         <span>2. Đứng Bán</span>
       </button>
-      <button onclick="switchTab('upgrade')" id="tab-btn-upgrade" class="soft-btn py-2 px-1 rounded-xl font-extrabold text-[11px] sm:text-xs flex flex-col items-center gap-0.5 text-amber-900 hover:bg-amber-100">
+      <button onclick="switchTab('upgrade')" id="tab-btn-upgrade" class="soft-btn py-2 px-1 rounded-xl font-extrabold text-[11px] sm:text-xs flex flex-col items-center gap-0.5 text-amber-900 hover:bg-amber-100 relative">
         <span class="text-base">⚡</span>
         <span>3. Nâng Cấp</span>
+        <span id="badge-upgrade-notify" class="hidden absolute top-1 right-2 w-2.5 h-2.5 rounded-full bg-red-600 animate-ping"></span>
       </button>
       <button onclick="switchTab('ledger')" id="tab-btn-ledger" class="soft-btn py-2 px-1 rounded-xl font-extrabold text-[11px] sm:text-xs flex flex-col items-center gap-0.5 text-amber-900 hover:bg-amber-100">
         <span class="text-base">📊</span>
@@ -363,7 +383,7 @@
             <span id="market-price-badge" class="text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 font-bold">Giá ổn định</span>
           </h2>
           <p class="text-[11px] text-amber-800 font-medium">
-            Gõ số lượng muốn mua vào ô rồi bấm <b>Xác Nhận Nhập Kho</b> ở cuối bảng. Nhóm <b>Đồ Tươi</b> dư cuối ngày sẽ hỏng!
+            Gõ số lượng muốn mua vào ô rồi bấm <b>Xác Nhận Nhập Kho</b>. Nhóm <b>Đồ Tươi</b> dư cuối ngày sẽ hỏng (trừ khi nâng cấp Thùng Đá/Tủ Kính)!
           </p>
         </div>
         <button onclick="fillSuggestedOrder()" class="soft-btn px-2.5 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 font-extrabold text-xs border border-amber-300">
@@ -371,10 +391,8 @@
         </button>
       </div>
 
-      <!-- Lưới 8 nguyên liệu (Gõ số tự do) -->
-      <div id="market-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        <!-- Render bằng JS -->
-      </div>
+      <!-- Lưới 8 nguyên liệu -->
+      <div id="market-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
 
       <!-- Thanh Xác Nhận Nhập Kho Cuối Bảng -->
       <div class="p-3 rounded-2xl bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-2 border-amber-400 flex flex-wrap items-center justify-between gap-2">
@@ -397,7 +415,7 @@
         <div class="flex items-center justify-between mb-2">
           <div>
             <h3 class="text-xs sm:text-sm font-black text-amber-950">🔥 Bàn Sơ Chế Gia Truyền (Tăng hương vị & Tốc độ bán)</h3>
-            <p class="text-[11px] text-amber-700">Sơ chế đủ 3 món giúp khách cộng thêm tiền Tip +3.000đ/bịch trong ngày!</p>
+            <p class="text-[11px] text-amber-700">Sơ chế đủ 3 món giúp khách cộng thêm tiền Tip +3.000đ/bịch trong ngày! (Thuê Chị Mỹ Lan sẽ tự động làm mỗi sáng)</p>
           </div>
           <span id="prep-bonus-status" class="text-[11px] font-black px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
             Đã sơ chế: 0/3
@@ -429,9 +447,14 @@
       </button>
     </section>
 
-    <!-- ================= TAB 2: ĐỨNG BÁN (4 MÓN ĐẶC SẢN & CHIBI KHÁCH HÀNG) ================= -->
+    <!-- ================= TAB 2: ĐỨNG BÁN (10 MÓN ĐẶC SẢN, KHÁCH KHÓ TÍNH & NHÂN VIÊN PHỤ) ================= -->
     <section id="tab-sell" class="hidden soft-card p-3 sm:p-3.5 space-y-2.5">
       
+      <!-- Thanh Trạng Thái Nhân Viên Phụ Việc & Buff Quán -->
+      <div id="staff-active-strip" class="flex flex-wrap items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-xl bg-amber-100/90 border border-amber-300 text-[11px]">
+        <!-- Render bằng JS -->
+      </div>
+
       <!-- Banner Sự kiện khẩn cấp (Mưa rào / Đô thị) -->
       <div id="emergency-banner" class="hidden p-2.5 rounded-2xl bg-red-600 text-white flex items-center justify-between gap-2 animate-bounce">
         <div class="flex items-center gap-2">
@@ -446,18 +469,19 @@
         </button>
       </div>
 
-      <!-- Hàng 1: Hồ sơ Khách Hàng Chibi + Yêu cầu món -->
-      <div class="p-2.5 rounded-2xl bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-2 border-amber-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
+      <!-- Hàng 1: Hồ sơ Khách Hàng Chibi + Yêu cầu món (Có nhãn KHÓ TÍNH / VIP) -->
+      <div id="customer-card-box" class="p-2.5 rounded-2xl bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-2 border-amber-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
         <div class="flex items-center gap-2.5 min-w-0">
           <!-- Avatar Chibi SVG/Emoji sống động -->
           <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-200 to-amber-300 border-2 border-amber-500 flex items-center justify-center text-3xl shrink-0 shadow-inner relative">
             <span id="cust-avatar">👧</span>
-            <span id="cust-vip-badge" class="hidden absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full">VIP</span>
+            <span id="cust-vip-badge" class="hidden absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow">VIP</span>
           </div>
           <div class="min-w-0">
             <div class="flex items-center gap-1.5 flex-wrap">
               <span id="cust-name" class="font-black text-sm text-amber-950">Bé Na</span>
-              <span id="cust-meta" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">16 tuổi • Học sinh cấp 3</span>
+              <span id="cust-meta" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">16 tuổi • Học sinh</span>
+              <span id="cust-picky-badge" class="hidden text-[10px] font-black px-2 py-0.5 rounded-full bg-red-600 text-white shadow-sm animate-pulse">😤 KHÓ TÍNH (Tip x2)</span>
             </div>
             <p id="cust-dialogue" class="text-xs font-semibold text-amber-900 italic mt-0.5">
               "Dì Tư ơi làm cho con phần bánh tráng thiệt ngon nha!"
@@ -486,65 +510,40 @@
           <div class="w-32 sm:w-full h-2.5 bg-amber-200 rounded-full overflow-hidden border border-amber-300">
             <div id="cust-patience-bar" class="h-full bg-emerald-500 transition-all duration-300" style="width: 100%"></div>
           </div>
-          <button onclick="nextCustomer(true)" class="text-[10px] font-bold text-red-700 underline hover:text-red-900">
-            Đổi khách khác
-          </button>
+          <div class="flex items-center gap-2">
+            <button onclick="triggerRandomDilemmaEvent()" class="text-[10px] font-extrabold text-orange-700 underline hover:text-orange-900" title="Thử nghiệm tình huống đời thực">
+              🎭 Tình huống
+            </button>
+            <button onclick="nextCustomer(true)" class="text-[10px] font-bold text-red-700 underline hover:text-red-900">
+              Đổi khách
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Hàng 2: Chọn Món trong Menu 4 Món Đặc Sản -->
+      <!-- Hàng 2: Chọn Món trong Thực Đơn 10 Món Đặc Sản (Mở khóa theo cấp bằng tiền) -->
       <div>
         <div class="flex items-center justify-between mb-1">
-          <span class="text-[11px] font-black text-amber-900 uppercase">1. Chọn Món Bánh Tráng Khách Gọi:</span>
+          <span class="text-[11px] font-black text-amber-900 uppercase">1. Chọn Món Bánh Tráng Khách Gọi (Đã mở <span id="unlocked-dish-count">1</span>/10 món):</span>
           <span id="selected-dish-price" class="text-[11px] font-black text-emerald-700">Giá bán: 25.000đ</span>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
-          <button onclick="selectDish('tron')" id="dish-btn-tron" class="soft-btn p-2 rounded-xl border-2 border-orange-500 bg-orange-50 text-left flex items-center gap-1.5">
-            <span class="text-xl">🥣</span>
-            <div class="leading-tight">
-              <div class="font-black text-xs text-amber-950">Trộn Thập Cẩm</div>
-              <div class="text-[10px] font-bold text-emerald-700">25.000đ</div>
-            </div>
-          </button>
-          <button onclick="selectDish('cuon')" id="dish-btn-cuon" class="soft-btn p-2 rounded-xl border-2 border-amber-200 bg-white text-left flex items-center gap-1.5">
-            <span class="text-xl">🌯</span>
-            <div class="leading-tight">
-              <div class="font-black text-xs text-amber-950">Cuộn Sốt Bơ</div>
-              <div class="text-[10px] font-bold text-emerald-700">28.000đ</div>
-            </div>
-          </button>
-          <button onclick="selectDish('bo')" id="dish-btn-bo" class="soft-btn p-2 rounded-xl border-2 border-amber-200 bg-white text-left flex items-center gap-1.5">
-            <span class="text-xl">🧈</span>
-            <div class="leading-tight">
-              <div class="font-black text-xs text-amber-950">Bơ Tép Mỡ</div>
-              <div class="text-[10px] font-bold text-emerald-700">30.000đ</div>
-            </div>
-          </button>
-          <button onclick="selectDish('nuong')" id="dish-btn-nuong" class="soft-btn p-2 rounded-xl border-2 border-amber-200 bg-white text-left flex items-center gap-1.5">
-            <span class="text-xl">🔥</span>
-            <div class="leading-tight">
-              <div class="font-black text-xs text-amber-950">Nướng Đà Lạt</div>
-              <div class="text-[10px] font-bold text-emerald-700">33.000đ</div>
-            </div>
-          </button>
+        <div id="sell-dish-grid" class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 max-h-36 overflow-y-auto pr-0.5">
+          <!-- Render động 10 món bằng JS -->
         </div>
       </div>
 
       <!-- Hàng 3: Tùy chỉnh Gia Giảm (Rau Răm, Hành Phi, Độ Cay) -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-1.5 bg-amber-50/90 p-2 rounded-2xl border border-amber-200">
-        <!-- Rau răm -->
         <div class="flex items-center justify-between sm:justify-start gap-1">
           <span class="text-[11px] font-extrabold text-amber-900 mr-1">🌿 Rau:</span>
           <button onclick="setOption('rau', true)" id="opt-rau-yes" class="soft-btn flex-1 py-1.5 px-2 rounded-lg text-xs font-black bg-emerald-600 text-white">Có Rau</button>
           <button onclick="setOption('rau', false)" id="opt-rau-no" class="soft-btn flex-1 py-1.5 px-2 rounded-lg text-xs font-bold bg-white text-amber-900 border border-amber-300">Ko Rau</button>
         </div>
-        <!-- Hành phi -->
         <div class="flex items-center justify-between sm:justify-start gap-1">
           <span class="text-[11px] font-extrabold text-amber-900 mr-1">🧅 Hành:</span>
           <button onclick="setOption('hanh', true)" id="opt-hanh-yes" class="soft-btn flex-1 py-1.5 px-2 rounded-lg text-xs font-black bg-emerald-600 text-white">Có Hành</button>
           <button onclick="setOption('hanh', false)" id="opt-hanh-no" class="soft-btn flex-1 py-1.5 px-2 rounded-lg text-xs font-bold bg-white text-amber-900 border border-amber-300">Ko Hành</button>
         </div>
-        <!-- Độ cay -->
         <div class="flex items-center justify-between sm:justify-start gap-1">
           <span class="text-[11px] font-extrabold text-amber-900 mr-1">🌶️ Cay:</span>
           <button onclick="setOption('spice', 0)" id="opt-spice-0" class="soft-btn flex-1 py-1.5 px-1.5 rounded-lg text-[11px] font-bold bg-white text-amber-900 border border-amber-300">Ko cay</button>
@@ -560,7 +559,6 @@
         <div class="sm:col-span-5 flex flex-col items-center justify-center p-2.5 rounded-2xl bg-gradient-to-b from-amber-100/80 to-orange-100/80 border-2 border-amber-300 relative min-h-[168px]">
           <div id="floating-fx-container" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20"></div>
           
-          <!-- Hình vẽ Thau Inox nhiều lớp nguyên liệu -->
           <div onclick="triggerNextStepSmart()" class="cursor-pointer group relative flex flex-col items-center">
             <svg id="bowl-svg" class="w-32 h-32 transition-transform duration-200 group-active:scale-95" viewBox="0 0 160 160">
               <defs>
@@ -570,7 +568,6 @@
                   <stop offset="100%" stop-color="#64748b"/>
                 </radialGradient>
               </defs>
-              <!-- Vành thau inox -->
               <circle cx="80" cy="80" r="72" fill="#94a3b8" stroke="#475569" stroke-width="3"/>
               <circle cx="80" cy="80" r="64" fill="url(#inoxGrad)" stroke="#e2e8f0" stroke-width="2"/>
 
@@ -608,7 +605,7 @@
                 <circle cx="92" cy="62" r="3.5" fill="#f59e0b"/>
               </g>
             </svg>
-            <span id="bowl-instruction" class="text-[11px] font-black text-amber-950 bg-white/90 px-2.5 py-0.5 rounded-full border border-amber-300 shadow-sm -mt-2">
+            <span id="bowl-instruction" class="text-[11px] font-black text-amber-950 bg-white/90 px-2.5 py-0.5 rounded-full border border-amber-300 shadow-sm -mt-2 text-center">
               👇 Bấm Bước 1 bên phải (hoặc chạm thau)
             </span>
           </div>
@@ -620,9 +617,7 @@
               <span id="sweet-spot-label" class="text-emerald-700">Chuẩn: 65% - 90%</span>
             </div>
             <div class="w-full h-3.5 bg-gray-200 rounded-full overflow-hidden border border-amber-400 relative">
-              <!-- Vùng xanh chuẩn -->
               <div id="sweet-spot-zone" class="absolute top-0 bottom-0 bg-emerald-300/70 border-x-2 border-emerald-600" style="left: 65%; width: 25%"></div>
-              <!-- Thanh lực hiện tại -->
               <div id="mix-bar-fill" class="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-emerald-600 transition-all duration-150" style="width: 0%"></div>
             </div>
           </div>
@@ -637,7 +632,7 @@
             </div>
             <div>
               <div class="font-black text-xs text-amber-950">1. Bốc Bánh & Xoài</div>
-              <div id="stock-step-1" class="text-[10px] font-bold text-amber-700">Kho: Bánh 20 • Xoài 15</div>
+              <div id="stock-step-1" class="text-[10px] font-bold text-amber-700">Kho: Bánh 15 • Xoài 12</div>
             </div>
           </button>
 
@@ -648,14 +643,14 @@
             </div>
             <div>
               <div class="font-black text-xs text-amber-950">2. Rưới Sốt & Muối</div>
-              <div id="stock-step-2" class="text-[10px] font-bold text-amber-700">Kho: Muối 20 • Bơ 15</div>
+              <div id="stock-step-2" class="text-[10px] font-bold text-amber-700">Kho: Muối 15 • Bơ 12</div>
             </div>
           </button>
 
           <button onclick="doStep3Mix()" id="step-btn-3" class="soft-btn p-2.5 rounded-2xl border-2 border-amber-300 bg-white text-left flex flex-col justify-between min-h-[78px]">
             <div class="flex items-center justify-between">
               <span class="text-xl">🧤</span>
-              <span id="step-check-3" class="text-[10px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-900">Bước 3 (Bấm 3-4 lần)</span>
+              <span id="step-check-3" class="text-[10px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-900">Bước 3 (Tự tay canh)</span>
             </div>
             <div>
               <div class="font-black text-xs text-amber-950">3. Nhào Trộn / Nướng</div>
@@ -670,7 +665,7 @@
             </div>
             <div>
               <div class="font-black text-xs text-amber-950">4. Topping & Giao Khách</div>
-              <div id="stock-step-4" class="text-[10px] font-bold text-amber-700">Bò 15 • Trứng 15</div>
+              <div id="stock-step-4" class="text-[10px] font-bold text-amber-700">Bò 15 • Trứng 12</div>
             </div>
           </button>
         </div>
@@ -679,9 +674,7 @@
 
       <!-- Hàng 5: Thanh Tồn Kho Nhanh & Nút Kết Thúc Ngày -->
       <div class="pt-2 border-t border-amber-200 flex flex-wrap items-center justify-between gap-2">
-        <div id="quick-stock-bar" class="flex flex-wrap items-center gap-1 text-[10px] font-bold text-amber-900">
-          <!-- Render bằng JS -->
-        </div>
+        <div id="quick-stock-bar" class="flex flex-wrap items-center gap-1 text-[10px] font-bold text-amber-900"></div>
         <div class="flex items-center gap-1.5">
           <button onclick="resetBowl()" class="soft-btn px-2.5 py-1.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold text-xs">
             🗑️ Đổ thau làm lại
@@ -694,28 +687,45 @@
 
     </section>
 
-    <!-- ================= TAB 3: NÂNG CẤP & HỆ THỐNG 10 CẤP ĐỘ ================= -->
+    <!-- ================= TAB 3: TRUNG TÂM ĐẦU TƯ & NÂNG CẤP TOÀN DIỆN (50 CẤP ĐỘ) ================= -->
     <section id="tab-upgrade" class="hidden soft-card p-3 sm:p-4 space-y-3">
-      <!-- Bảng Thưởng Cấp Độ (Level 1 -> 10) -->
-      <div class="p-3 rounded-2xl bg-gradient-to-r from-amber-100 to-orange-100 border-2 border-amber-400">
-        <div class="flex items-center justify-between mb-2">
+      <!-- Bảng Tiến Trình 50 Cấp Độ & Độ Khó -->
+      <div class="p-3 rounded-2xl bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-2 border-amber-400">
+        <div class="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h3 class="text-sm font-black text-amber-950">🎖️ Lộ Trình 10 Cấp Độ Truyền Nghề & Phần Thưởng</h3>
-            <p class="text-[11px] text-amber-800">Bán bánh tích lũy XP để lên cấp và nhận tiền thưởng khởi nghiệp!</p>
+            <h3 class="text-sm font-black text-amber-950 flex items-center gap-1.5">
+              <span>🔥 Lộ Trình 50 Cấp Độ Truyền Nghề Dì Tư</span>
+              <span id="upgrade-current-lvl" class="px-2.5 py-0.5 rounded-full bg-orange-600 text-white font-black text-xs">Cấp 1/50</span>
+            </h3>
+            <p class="text-[11px] text-amber-800 mt-0.5">
+              ⚠️ <b>Quy tắc truyền nghề:</b> Lên cấp chỉ <b>Mở Quyền Mua</b>! Con phải dùng chính tiền bán bánh kiếm được để mở công thức, nâng cấp sao món ăn, mua dụng cụ, trang trí xe và thuê phụ việc!
+            </p>
           </div>
-          <span id="upgrade-current-lvl" class="px-2.5 py-1 rounded-full bg-orange-600 text-white font-black text-xs">Cấp 1/10</span>
         </div>
-        <div id="level-rewards-list" class="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
-          <!-- Render bằng JS -->
+        <div id="stage-progress-badges" class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 mt-2">
+          <!-- Render 5 chặng cấp độ bằng JS -->
         </div>
       </div>
 
-      <!-- Danh sách Nâng cấp thiết bị & Mặt bằng -->
-      <div>
-        <h3 class="text-sm font-black text-amber-950 mb-2">🛠️ Nâng Cấp Xe Đẩy & Bí Quyết Gia Truyền</h3>
-        <div id="upgrade-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <!-- Render bằng JS -->
-        </div>
+      <!-- Các Sub-Tab Đầu Tư Bằng Tiền -->
+      <div class="flex flex-wrap gap-1.5 bg-amber-100/70 p-1.5 rounded-2xl border border-amber-300">
+        <button onclick="switchUpgradeSubTab('dishes')" id="upg-sub-dishes" class="soft-btn flex-1 py-1.5 px-2 rounded-xl font-black text-[11px] bg-orange-600 text-white shadow">
+          🥙 1. Thực Đơn (10 Món)
+        </button>
+        <button onclick="switchUpgradeSubTab('staff')" id="upg-sub-staff" class="soft-btn flex-1 py-1.5 px-2 rounded-xl font-black text-[11px] text-amber-900 bg-white">
+          🧑‍🍳 2. Thuê Nhân Viên (3)
+        </button>
+        <button onclick="switchUpgradeSubTab('tools')" id="upg-sub-tools" class="soft-btn flex-1 py-1.5 px-2 rounded-xl font-black text-[11px] text-amber-900 bg-white">
+          🛠️ 3. Dụng Cụ & Trang Trí
+        </button>
+        <button onclick="switchUpgradeSubTab('licenses')" id="upg-sub-licenses" class="soft-btn flex-1 py-1.5 px-2 rounded-xl font-black text-[11px] text-amber-900 bg-white">
+          📜 4. Giấy Phép Pháp Lý
+        </button>
+      </div>
+
+      <!-- Khung hiển thị nội dung Sub-Tab Nâng Cấp -->
+      <div id="upgrade-sub-content" class="space-y-2.5">
+        <!-- Render bằng JS -->
       </div>
     </section>
 
@@ -732,30 +742,33 @@
       </div>
 
       <!-- Khung Chi phí cố định & Khấu hao mỗi ngày -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
         <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-300">
-          <div class="font-bold text-amber-800">Khấu hao Xe đẩy & Dụng cụ:</div>
-          <div class="text-base font-black text-red-700">7.300đ / ngày</div>
-          <div class="text-[10px] text-amber-700 mt-0.5">Xe đẩy 6tr (5 năm) + Thau kéo + Bình ắc quy</div>
+          <div class="font-bold text-amber-800">Khấu hao Xe đẩy:</div>
+          <div class="text-sm sm:text-base font-black text-red-700">7.300đ / ngày</div>
+          <div class="text-[10px] text-amber-700 mt-0.5">Xe đẩy 6tr + Thau kéo + Bình ắc quy</div>
         </div>
         <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-300">
-          <div class="font-bold text-amber-800">Điện, Nước, Gas sơ chế:</div>
-          <div class="text-base font-black text-red-700">20.000đ / ngày</div>
-          <div class="text-[10px] text-amber-700 mt-0.5">Luộc trứng, thắng sa tế, phi hành, sạc đèn</div>
+          <div class="font-bold text-amber-800">Điện, Nước, Gas:</div>
+          <div class="text-sm sm:text-base font-black text-red-700">20.000đ / ngày</div>
+          <div class="text-[10px] text-amber-700 mt-0.5">Luộc trứng, thắng sa tế, phi hành</div>
         </div>
         <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-300">
-          <div class="font-bold text-amber-800">Thuê chỗ đứng vỉa hè:</div>
-          <div id="ledger-rent-cost" class="text-base font-black text-red-700">0đ / ngày (Đứng lụi)</div>
-          <div class="text-[10px] text-amber-700 mt-0.5">Nâng cấp thuê chỗ cố định sẽ không bị phạt</div>
+          <div class="font-bold text-amber-800">Hợp đồng vỉa hè:</div>
+          <div id="ledger-rent-cost" class="text-sm sm:text-base font-black text-red-700">0đ / ngày</div>
+          <div class="text-[10px] text-amber-700 mt-0.5">Có hợp đồng không lo bị phạt</div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-300">
+          <div class="font-bold text-amber-800">Lương Nhân Viên:</div>
+          <div id="ledger-staff-cost" class="text-sm sm:text-base font-black text-red-700">0đ / ngày</div>
+          <div class="text-[10px] text-amber-700 mt-0.5">Trả lương phụ việc cuối mỗi ngày</div>
         </div>
       </div>
 
       <!-- Lịch sử các ngày -->
       <div>
         <h3 class="text-xs font-black text-amber-950 uppercase mb-1.5">Nhật Ký Doanh Thu Các Ngày:</h3>
-        <div id="ledger-history-list" class="space-y-1.5 max-h-60 overflow-y-auto pr-1">
-          <!-- Render bằng JS -->
-        </div>
+        <div id="ledger-history-list" class="space-y-1.5 max-h-60 overflow-y-auto pr-1"></div>
       </div>
     </section>
 
@@ -777,7 +790,6 @@
         </div>
       </div>
 
-      <!-- Chuyển kiểu xếp hạng -->
       <div class="flex gap-2">
         <button onclick="setLeaderboardSort('money')" id="lb-sort-money" class="soft-btn flex-1 py-2 rounded-xl font-black text-xs bg-amber-500 text-white shadow">
           💰 Top Đại Gia (Tổng Tài Sản)
@@ -787,10 +799,7 @@
         </button>
       </div>
 
-      <!-- Danh sách Bảng Xếp Hạng -->
-      <div id="leaderboard-container" class="space-y-1.5 max-h-80 overflow-y-auto pr-1">
-        <!-- Render bằng JS -->
-      </div>
+      <div id="leaderboard-container" class="space-y-1.5 max-h-80 overflow-y-auto pr-1"></div>
     </section>
 
   </div>
@@ -817,37 +826,55 @@
     </div>
   </div>
 
-  <!-- ================= POP-UP 2: KẾT QUẢ GIAO BÁNH CHO KHÁCH ================= -->
-  <div id="modal-serve-result" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="w-full max-w-sm soft-card p-5 text-center border-4 border-amber-400">
-      <!-- Minh họa Bịch bánh tráng cột dây thun đỏ -->
-      <div class="w-20 h-20 mx-auto rounded-2xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center text-4xl mb-2 shadow-inner">
+  <!-- ================= POP-UP 2: KẾT QUẢ GIAO BÁNH & CHỦ QUÁN PHẢN HỒI ĐÁNH GIÁ ================= -->
+  <div id="modal-serve-result" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="w-full max-w-sm soft-card p-5 text-center border-4 border-amber-400 my-auto">
+      <div class="w-16 h-16 mx-auto rounded-2xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center text-3xl mb-1.5 shadow-inner">
         🛍️
       </div>
-      <div id="serve-result-stars" class="text-xl mb-1">⭐⭐⭐⭐⭐</div>
-      <h3 id="serve-result-title" class="text-lg font-black text-amber-950">Tuyệt Hảo Đúng Ý Khách!</h3>
-      <p id="serve-result-comment" class="text-xs text-amber-800 italic mt-1">
+      <div id="serve-result-stars" class="text-xl mb-0.5">⭐⭐⭐⭐⭐</div>
+      <h3 id="serve-result-title" class="text-base font-black text-amber-950">Tuyệt Hảo Đúng Ý Khách!</h3>
+      <p id="serve-result-comment" class="text-xs text-amber-800 italic mt-0.5">
         "Bánh tráng thấm đều, xoài chua giòn đúng gu con luôn dì Tư ơi!"
       </p>
-      <div id="serve-result-breakdown" class="my-3 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-xs space-y-1 text-left">
-        <!-- Chi tiết tiền -->
+      <div id="serve-result-breakdown" class="my-2.5 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-xs space-y-1 text-left"></div>
+
+      <!-- Khu vực Chủ Quán Phản Hồi Đánh Giá Của Khách (Review & Reply) -->
+      <div class="p-2.5 rounded-xl bg-orange-50 border border-orange-300 text-left mb-3">
+        <div class="text-[11px] font-black text-orange-950 mb-1.5 flex items-center justify-between">
+          <span>💬 Phản hồi đánh giá của khách:</span>
+          <span id="reply-done-badge" class="hidden text-[10px] font-black text-emerald-700">✅ Đã phản hồi</span>
+        </div>
+        <div id="serve-reply-buttons" class="grid grid-cols-1 gap-1.5">
+          <button onclick="replyCurrentReview('thanks')" class="soft-btn py-1.5 px-2.5 rounded-lg bg-pink-600 hover:bg-pink-700 text-white font-extrabold text-[11px] text-left flex items-center justify-between">
+            <span>💖 Thả tim & Cảm ơn thân thiện</span>
+            <span class="text-[10px] bg-white/20 px-1.5 py-0.5 rounded">+5 XP • Khách sau +3k Tip</span>
+          </button>
+          <button onclick="replyCurrentReview('apology')" class="soft-btn py-1.5 px-2.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-[11px] text-left flex items-center justify-between">
+            <span>🙏 Xin lỗi chân thành & rút kinh nghiệm</span>
+            <span class="text-[10px] bg-white/20 px-1.5 py-0.5 rounded">Miễn phí • Gỡ +2 Uy tín</span>
+          </button>
+          <button onclick="replyCurrentReview('voucher')" class="soft-btn py-1.5 px-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] text-left flex items-center justify-between">
+            <span>🎁 Tặng phiếu bù Topping (-5.000đ)</span>
+            <span class="text-[10px] bg-white/20 px-1.5 py-0.5 rounded">+5 Uy tín • +10 XP</span>
+          </button>
+        </div>
       </div>
+
       <button onclick="closeServeResultModal()" class="soft-btn w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-sm shadow">
         👍 Phục Vụ Khách Tiếp Theo
       </button>
     </div>
   </div>
 
-  <!-- ================= POP-UP 3: CỐT TRUYỆN 4 CHƯƠNG DÌ TƯ ================= -->
+  <!-- ================= POP-UP 3: HỒI KÝ DÌ TƯ ================= -->
   <div id="modal-story" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="w-full max-w-md soft-card p-5 border-4 border-amber-400 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-amber-200 pb-2 mb-3">
         <h3 class="text-base font-black text-amber-950">📖 Hồi Ký 30 Năm Bánh Tráng Dì Tư</h3>
         <button onclick="closeStoryModal()" class="text-sm font-black text-amber-900 px-2 py-1 rounded-lg bg-amber-100">✕</button>
       </div>
-      <div id="story-chapters-container" class="space-y-2.5">
-        <!-- Render bằng JS -->
-      </div>
+      <div id="story-chapters-container" class="space-y-2.5"></div>
     </div>
   </div>
 
@@ -855,64 +882,330 @@
   <div id="modal-end-day" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="w-full max-w-md soft-card p-5 border-4 border-purple-400">
       <h3 id="end-day-title" class="text-lg font-black text-amber-950 text-center">🌙 Chốt Sổ Cuối Ngày 1</h3>
-      <p class="text-xs text-center text-amber-800 mb-3">Tổng kết doanh thu, trừ khấu hao thiết bị và kiểm kê đồ tươi tồn kho</p>
-      <div id="end-day-details" class="space-y-1.5 text-xs bg-amber-50 p-3 rounded-2xl border border-amber-200 mb-3">
-        <!-- Render bằng JS -->
-      </div>
+      <p class="text-xs text-center text-amber-800 mb-3">Tổng kết doanh thu, trừ khấu hao, lương nhân viên và kiểm kê đồ tươi</p>
+      <div id="end-day-details" class="space-y-1.5 text-xs bg-amber-50 p-3 rounded-2xl border border-amber-200 mb-3"></div>
       <button onclick="startNextDay()" class="soft-btn w-full py-3 rounded-2xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-black text-sm shadow-lg">
         ☀️ SANG NGÀY MỚI & ĐI CHỢ SỚM
       </button>
     </div>
   </div>
 
+  <!-- ================= POP-UP 5: DANH SÁCH ĐÁNH GIÁ CỦA KHÁCH (REVIEWS LOG) ================= -->
+  <div id="modal-reviews" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md soft-card p-5 border-4 border-rose-400 max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-amber-200 pb-2 mb-3">
+        <div>
+          <h3 class="text-base font-black text-amber-950">💬 Đánh Giá Của Thực Khách Sài Gòn</h3>
+          <p class="text-[11px] text-amber-800">Trả lời đánh giá của khách để giữ vững Uy Tín và nhận thêm XP!</p>
+        </div>
+        <button onclick="closeReviewsModal()" class="text-sm font-black text-amber-900 px-2.5 py-1 rounded-lg bg-amber-100">✕</button>
+      </div>
+      <div id="reviews-list-container" class="space-y-2 overflow-y-auto flex-1 pr-1"></div>
+    </div>
+  </div>
+
+  <!-- ================= POP-UP 6: TÌNH HUỐNG ĐỜI THỰC SÀI GÒN (7 NHÓM BIẾN CỐ) ================= -->
+  <div id="modal-dilemma" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md soft-card p-5 border-4 border-orange-500 shadow-2xl">
+      <div class="flex items-center gap-2 mb-2">
+        <span id="dilemma-icon" class="text-4xl">🎭</span>
+        <div>
+          <span id="dilemma-category" class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-orange-600 text-white">Tình huống đời thực</span>
+          <h3 id="dilemma-title" class="text-base font-black text-amber-950 mt-0.5">Sự Cố Bất Ngờ Tại Quầy!</h3>
+        </div>
+      </div>
+      <p id="dilemma-desc" class="text-xs text-amber-900 bg-amber-50 p-3 rounded-xl border border-amber-200 leading-relaxed mb-3 font-medium"></p>
+      <div id="dilemma-choices" class="space-y-2">
+        <!-- Render 2 lựa chọn xử lý bằng JS -->
+      </div>
+    </div>
+  </div>
+
   <!-- ================= TOAST THÔNG BÁO NHANH ================= -->
   <div id="toast-box" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 translate-y-4">
-    <div id="toast-content" class="px-4 py-2 rounded-2xl bg-amber-950/95 text-amber-100 font-extrabold text-xs shadow-xl border border-amber-400">
+    <div id="toast-content" class="px-4 py-2 rounded-2xl bg-amber-950/95 text-amber-100 font-extrabold text-xs shadow-xl border border-amber-400 text-center">
       Thông báo
     </div>
   </div>
 
   <!-- ================= SCRIPT LOGIC TOÀN BỘ GAME & FIREBASE CLOUD ================= -->
   <script>
-    // ĐƯỜNG DẪN FIREBASE REALTIME DATABASE CỦA CON
     const FIREBASE_DB_URL = "https://banh-trang-tron-sai-gon-default-rtdb.asia-southeast1.firebasedatabase.app";
     const LOCAL_STORAGE_KEY = "banh_trang_tron_saigon_v5_save";
-
     const AVATAR_LIST = ["👩‍🍳", "🧑‍🍳", "👨‍🍳", "👵", "👧", "👦", "🦊", "🐼"];
 
-    // DANH MỤC 4 MÓN BÁNH TRÁNG ĐẶC SẢN
+    // ================= 1. BỘ TỔNG HỢP ÂM THANH LO-FI CHILL & HIỆU ỨNG CHÂN THẬT (WEB AUDIO API) =================
+    let audioCtx = null;
+    let audioEnabled = true;
+    let bgmInterval = null;
+    let bgmStep = 0;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) audioCtx = new AudioContextClass();
+      }
+      if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+    }
+
+    function toggleAudioSystem() {
+      audioEnabled = !audioEnabled;
+      const label = document.getElementById("audio-label");
+      const icon = document.getElementById("audio-icon");
+      if (audioEnabled) {
+        initAudio();
+        startChillBGM();
+        if (icon) icon.textContent = "🎵";
+        if (label) label.textContent = "Nhạc Chill: BẬT";
+        showToast("🎵 Đã bật Nhạc nền Lo-fi Chill Sài Gòn & Âm thanh trộn bánh!");
+      } else {
+        stopChillBGM();
+        if (icon) icon.textContent = "🔇";
+        if (label) label.textContent = "Nhạc Chill: TẮT";
+        showToast("🔇 Đã tắt âm thanh.");
+      }
+    }
+
+    // Giai điệu Lo-fi Chill đêm Sài Gòn êm dịu (Hợp âm Fmaj7 - Em7 - Dm7 - Cmaj7)
+    const LOFI_CHORDS = [
+      [174.61, 220.00, 261.63, 329.63], // Fmaj7
+      [164.81, 196.00, 246.94, 293.66], // Em7
+      [146.83, 174.61, 220.00, 261.63], // Dm7
+      [130.81, 164.81, 196.00, 246.94]  // Cmaj7
+    ];
+
+    function startChillBGM() {
+      if (bgmInterval) clearInterval(bgmInterval);
+      if (!audioEnabled) return;
+      bgmInterval = setInterval(() => {
+        if (!audioEnabled || !audioCtx || document.getElementById("login-screen").classList.contains("hidden") === false) return;
+        try {
+          if (audioCtx.state === "suspended") return;
+          const chord = LOFI_CHORDS[bgmStep % LOFI_CHORDS.length];
+          const arpNote = chord[bgmStep % chord.length] * 2;
+          const now = audioCtx.currentTime;
+
+          // Âm đệm Rhodes ấm
+          if (bgmStep % 2 === 0) {
+            chord.forEach(freq => {
+              const osc = audioCtx.createOscillator();
+              const gain = audioCtx.createGain();
+              osc.type = "sine";
+              osc.frequency.setValueAtTime(freq, now);
+              gain.gain.setValueAtTime(0.012, now);
+              gain.gain.exponentialRampToValueAtTime(0.0008, now + 2.1);
+              osc.connect(gain);
+              gain.connect(audioCtx.destination);
+              osc.start(now);
+              osc.stop(now + 2.15);
+            });
+          }
+
+          // Nốt tỉa guitar/piano lo-fi
+          const melodyOsc = audioCtx.createOscillator();
+          const melodyGain = audioCtx.createGain();
+          melodyOsc.type = "triangle";
+          melodyOsc.frequency.setValueAtTime(arpNote, now);
+          melodyGain.gain.setValueAtTime(0.018, now);
+          melodyGain.gain.exponentialRampToValueAtTime(0.0008, now + 0.9);
+          melodyOsc.connect(melodyGain);
+          melodyGain.connect(audioCtx.destination);
+          melodyOsc.start(now);
+          melodyOsc.stop(now + 0.95);
+
+          bgmStep++;
+        } catch (e) {}
+      }, 1100);
+    }
+
+    function stopChillBGM() {
+      if (bgmInterval) clearInterval(bgmInterval);
+      bgmInterval = null;
+    }
+
+    // Hiệu ứng âm thanh SFX chân thật theo từng bước làm bánh
+    function playSFX(type) {
+      if (!audioEnabled) return;
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+
+        if (type === "snip") {
+          // Tiếng kéo cắt bánh tráng lách cách (Bước 1)
+          [0, 0.09].forEach(offset => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "sawtooth";
+            osc.frequency.setValueAtTime(900, now + offset);
+            osc.frequency.exponentialRampToValueAtTime(2400, now + offset + 0.045);
+            gain.gain.setValueAtTime(0.06, now + offset);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.055);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + offset);
+            osc.stop(now + offset + 0.06);
+          });
+        } else if (type === "sauce") {
+          // Tiếng rưới sốt me bơ xèo xèo (Bước 2)
+          const bufferSize = audioCtx.sampleRate * 0.18;
+          const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+          const noise = audioCtx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = "bandpass";
+          filter.frequency.setValueAtTime(1200, now);
+          const gain = audioCtx.createGain();
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.002, now + 0.18);
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+          noise.start(now);
+        } else if (type === "mix") {
+          // Tiếng đũa muỗng inox va vào thành thau inox leng keng (Bước 3)
+          [1150, 1680].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "triangle";
+            osc.frequency.setValueAtTime(freq + Math.random() * 120, now + idx * 0.05);
+            gain.gain.setValueAtTime(0.08, now + idx * 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.05 + 0.12);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.05);
+            osc.stop(now + idx * 0.05 + 0.13);
+          });
+        } else if (type === "cash") {
+          // Tiếng Ting Ting tiền về túi (Bước 4 / Mua hàng)
+          [987.77, 1318.51].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+            gain.gain.setValueAtTime(0.11, now + idx * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.28);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.08);
+            osc.stop(now + idx * 0.08 + 0.3);
+          });
+        } else if (type === "whistle") {
+          // Tiếng còi cảnh báo sự kiện khẩn cấp
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = "square";
+          osc.frequency.setValueAtTime(2600, now);
+          osc.frequency.setValueAtTime(2800, now + 0.08);
+          gain.gain.setValueAtTime(0.07, now);
+          gain.gain.exponentialRampToValueAtTime(0.002, now + 0.25);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.26);
+        }
+      } catch (e) {}
+    }
+
+    // ================= 2. THỰC ĐƠN 10 MÓN BÁNH TRÁNG MỞ KHÓA & NÂNG CẤP BẰNG TIỀN (CẤP 1 -> 45) =================
     const DISH_MENU = {
       tron: {
         id: "tron",
         name: "Trộn Thập Cẩm",
         icon: "🥣",
+        reqLevel: 1,
+        unlockCost: 0,
         price: 25000,
         recipe: { banhtrang: 1, xoai: 1, muoitom: 1, khobo: 1, dauphong: 1, trungcut: 1 }
+      },
+      chamme: {
+        id: "chamme",
+        name: "Chấm Sốt Me Bơ",
+        icon: "🍯",
+        reqLevel: 2,
+        unlockCost: 40000,
+        price: 27000,
+        recipe: { banhtrang: 1, sotbo: 1, muoitom: 1, dauphong: 1, trungcut: 1 }
       },
       cuon: {
         id: "cuon",
         name: "Cuộn Sốt Bơ",
         icon: "🌯",
-        price: 28000,
+        reqLevel: 5,
+        unlockCost: 80000,
+        price: 30000,
         recipe: { banhtrang: 1, xoai: 1, sotbo: 1, khobo: 1, dauphong: 1, trungcut: 1 }
+      },
+      phoisuong: {
+        id: "phoisuong",
+        name: "Phơi Sương Muối Nhuyễn",
+        icon: "🫔",
+        reqLevel: 9,
+        unlockCost: 140000,
+        price: 33000,
+        recipe: { banhtrang: 1, muoitom: 1, dauphong: 1, sotbo: 1 }
       },
       bo: {
         id: "bo",
         name: "Bơ Tép Mỡ",
         icon: "🧈",
-        price: 30000,
+        reqLevel: 14,
+        unlockCost: 220000,
+        price: 36000,
         recipe: { banhtrang: 1, sotbo: 1, tepmo: 1, dauphong: 1, trungcut: 1, muoitom: 1 }
       },
       nuong: {
         id: "nuong",
         name: "Nướng Đà Lạt",
         icon: "🔥",
-        price: 33000,
+        reqLevel: 20,
+        unlockCost: 320000,
+        price: 40000,
         recipe: { banhtrang: 1, tepmo: 1, trungcut: 1, sotbo: 1, muoitom: 1 }
+      },
+      xoainon: {
+        id: "xoainon",
+        name: "Phơi Sương Khô Bò Xoài",
+        icon: "🥭",
+        reqLevel: 26,
+        unlockCost: 450000,
+        price: 45000,
+        recipe: { banhtrang: 1, xoai: 1, khobo: 1, muoitom: 1, dauphong: 1 }
+      },
+      lacphomai: {
+        id: "lacphomai",
+        name: "Lắc Phô Mai Trứng Muối",
+        icon: "🧀",
+        reqLevel: 33,
+        unlockCost: 600000,
+        price: 50000,
+        recipe: { banhtrang: 1, tepmo: 1, sotbo: 1, trungcut: 1 }
+      },
+      mamruoc: {
+        id: "mamruoc",
+        name: "Nướng Mắm Ruốc Phô Mai",
+        icon: "🦀",
+        reqLevel: 40,
+        unlockCost: 850000,
+        price: 56000,
+        recipe: { banhtrang: 1, tepmo: 1, khobo: 1, trungcut: 1, muoitom: 1 }
+      },
+      metditu: {
+        id: "metditu",
+        name: "Mẹt Đặc Biệt Dì Tư",
+        icon: "👑",
+        reqLevel: 45,
+        unlockCost: 1200000,
+        price: 68000,
+        recipe: { banhtrang: 1, xoai: 1, muoitom: 1, khobo: 1, dauphong: 1, sotbo: 1, tepmo: 1, trungcut: 1 }
       }
     };
 
-    // DANH MỤC 8 NGUYÊN LIỆU CHỢ SỈ
+    // DANH MỤC 8 NGUYÊN LIỆU CHỢ SỈ BÌNH TÂY (GIỮ NGUYÊN BẢN GỐC)
     const INGREDIENTS = [
       { id: "banhtrang", name: "Bánh tráng phơi sương", icon: "🌾", baseCost: 2500, type: "dry", unit: "phần" },
       { id: "muoitom", name: "Muối tôm & Sốt bò đen", icon: "🧂", baseCost: 1500, type: "dry", unit: "phần" },
@@ -924,7 +1217,7 @@
       { id: "trungcut", name: "Trứng cút & Rau răm tươi", icon: "🥚", baseCost: 2000, type: "fresh", unit: "phần" }
     ];
 
-    // DANH SÁCH KHÁCH HÀNG CHIBI ĐA DẠNG ĐỘ TUỔI & NGHỀ NGHIỆP
+    // DANH SÁCH KHÁCH HÀNG CHIBI (BỔ SUNG KHÁCH KHÓ TÍNH TỪ CẤP 5+)
     const CUSTOMERS = [
       { name: "Bé Na", age: 15, job: "Học sinh lớp 9", avatar: "👧", quote: "Tan học đói bụng quá, dì làm lẹ cho con kịp đi học thêm nha!" },
       { name: "Minh Khôi", age: 20, job: "Sinh viên Bách Khoa", avatar: "👦", quote: "Cho con phần thiệt đậm đà để tối thức code đồ án nha dì!" },
@@ -932,33 +1225,276 @@
       { name: "Anh Tuấn", age: 32, job: "Tài xế Công nghệ", avatar: "🛵", quote: "Làm lẹ giùm anh bịch bánh tráng đem về cho bà xã đang thèm!" },
       { name: "Chú Bảy", age: 54, job: "Bảo vệ trường học", avatar: "👴", quote: "Trộn cho chú bịch bánh mềm mềm dễ nhai, nhâm nhi ca trực chiều!" },
       { name: "Phương Linh", age: 23, job: "TikToker Ẩm Thực", avatar: "🤳", quote: "Con đang quay clip review xe bánh tráng 30 năm của dì nè!", vip: true },
-      { name: "Cô Mai", age: 42, job: "Giáo viên tiểu học", avatar: "👩‍🏫", quote: "Cô mua ăn xế, dì nhớ nhìn kỹ phiếu gia giảm của cô nghen!" },
-      { name: "Hoàng Long", age: 18, job: "Vận động viên trẻ", avatar: "🏃", quote: "Tập thể lực xong chỉ thèm đúng mùi muối tôm hành phi của dì!" }
+      { name: "Bà Tư Hàng Xóm", age: 58, job: "Khách Kỹ Tính", avatar: "👵", quote: "Làm cho chuẩn vị nghen, trộn lố tay hay sai gia giảm là tui chê thẳng đó!", picky: true },
+      { name: "Anh Hoàng", age: 35, job: "Quản Lý Nhà Hàng", avatar: "🕵️‍♂️", quote: "Tôi rất khắt khe chuyện độ thấm sốt và đúng yêu cầu hành rau!", picky: true, vip: true },
+      { name: "Gia Hân", age: 25, job: "Thánh Soi Ẩm Thực", avatar: "🧐", quote: "Nghe đồn tiệm dì nổi tiếng, để xem tay nghề canh lực trộn cỡ nào!", picky: true }
     ];
 
-    // HỆ THỐNG 10 CẤP ĐỘ & PHẦN THƯỞNG
-    const LEVEL_DATA = [
-      { level: 1, xpNeed: 100, reward: 0, title: "Tập Sự Trộn Bánh" },
-      { level: 2, xpNeed: 220, reward: 50000, title: "Thợ Trộn Quen Tay" },
-      { level: 3, xpNeed: 380, reward: 80000, title: "Gánh Hàng Đông Khách" },
-      { level: 4, xpNeed: 580, reward: 120000, title: "Bậc Thầy Nước Sốt" },
-      { level: 5, xpNeed: 850, reward: 180000, title: "Ngôi Sao Vỉa Hè" },
-      { level: 6, xpNeed: 1200, reward: 250000, title: "Tiệm Bánh Tráng Hot" },
-      { level: 7, xpNeed: 1650, reward: 350000, title: "Đặc Sản Quận Nhất" },
-      { level: 8, xpNeed: 2200, reward: 500000, title: "Trùm Ẩm Thực Đêm" },
-      { level: 9, xpNeed: 2900, reward: 700000, title: "Danh Chấn Sài Thành" },
-      { level: 10, xpNeed: 4000, reward: 1000000, title: "Vua Bánh Tráng 30 Năm" }
+    // ================= 3. LỘ TRÌNH 50 CẤP ĐỘ ĐỘ KHÓ CAO =================
+    const LEVEL_DATA = Array.from({ length: 50 }, (_, idx) => {
+      const lvl = idx + 1;
+      const xpNeed = Math.round(90 + (lvl * 45) + Math.pow(lvl, 1.75) * 12);
+      let stageTitle = "Gánh Hàng Khởi Nghiệp";
+      if (lvl >= 41) stageTitle = "Huyền Thoại Vua Bánh Tráng";
+      else if (lvl >= 31) stageTitle = "Đặc Sản Quận Nhất";
+      else if (lvl >= 21) stageTitle = "Tiệm Sáng Đèn Phố Đêm";
+      else if (lvl >= 11) stageTitle = "Xe Đẩy Đầu Hẻm";
+      return { level: lvl, xpNeed, title: stageTitle };
+    });
+
+    // ================= 4. HỆ THỐNG 3 NHÂN VIÊN PHỤ VIỆC =================
+    const STAFF_CATALOG = [
+      {
+        id: "beti",
+        name: "Phụ Bếp Bé Tí",
+        avatar: "👦",
+        reqLevel: 6,
+        hireCost: 150000,
+        dailyWage: 15000,
+        role: "Tự động làm giùm Bước 1 (Bốc Bánh & Xoài) ngay khi con chọn món!",
+      },
+      {
+        id: "mylan",
+        name: "Chị Phụ Việc Mỹ Lan",
+        avatar: "👧",
+        reqLevel: 15,
+        hireCost: 300000,
+        dailyWage: 25000,
+        role: "Mỗi sáng tự động hoàn thành 3/3 món Sơ Chế & hỗ trợ rưới sốt Bước 2!",
+      },
+      {
+        id: "tunghia",
+        name: "Chú Bảo Vệ Tư Nghĩa",
+        avatar: "🐕",
+        reqLevel: 22,
+        hireCost: 450000,
+        dailyWage: 30000,
+        role: "Tự động xử lý Sự kiện khẩn cấp (Mưa/Trật tự) & giúp khách kiên nhẫn hơn +25%!",
+      }
     ];
 
-    // DANH SÁCH NÂNG CẤP
-    const UPGRADES = [
-      { id: "led", name: "Đèn LED & Bảng Hiệu Neon", cost: 120000, desc: "Tăng độ thu hút ban đêm, cộng thêm +2.000đ tiền Tip mỗi phần." },
-      { id: "peeler", name: "Máy Lột Trứng Cút Tự Động", cost: 180000, desc: "Bấm sơ chế chỉ cần 2 nhịp là xong ngay 100%, đỡ mỏi tay." },
-      { id: "sauce", name: "Công Thức Sốt Me Đường Thốt Nốt", cost: 250000, desc: "Mở rộng vùng xanh canh lực trộn rộng thêm +8%, khó bị hỏng bánh." },
-      { id: "rent", name: "Thuê Chỗ Đứng Vỉa Hè Cố Định", cost: 300000, desc: "Tốn 50.000đ/ngày nhưng không bao giờ bị Đội trật tự phạt tiền." }
+    // ================= 5. VẬT LIỆU TRANG TRÍ & DỤNG CỤ LÀM BÁNH (NÂNG CẤP 5 BẬC BẰNG TIỀN) =================
+    const EQUIP_UPGRADES = [
+      { id: "decor_lantern", branch: "Trang Trí", icon: "🏮", name: "Dây Đèn Lồng & LED Neon", baseCost: 85000, maxLvl: 5, desc: "Mỗi cấp cộng thêm +1.500đ tiền Tip cho mỗi bịch bánh." },
+      { id: "decor_sign", branch: "Trang Trí", icon: "🪧", name: "Bảng Hiệu Hộp Đèn Retro", baseCost: 110000, maxLvl: 5, desc: "Tăng tỷ lệ xuất hiện Khách VIP (+7%/cấp) và chống quán nhái." },
+      { id: "decor_stool", branch: "Trang Trí", icon: "🪑", name: "Ghế Đẩu Đỏ & Dù Nghệ Thuật", baseCost: 95000, maxLvl: 5, desc: "Khách ngồi chờ thoải mái, độ kiên nhẫn tụt chậm hơn +8%/cấp." },
+      { id: "decor_speaker", branch: "Trang Trí", icon: "📻", name: "Loa Chill Phố Đêm Sài Gòn", baseCost: 120000, maxLvl: 5, desc: "Tăng thêm +10% lượng XP nhận được mỗi cấp." },
+      { id: "tool_bowl", branch: "Dụng Cụ", icon: "🥣", name: "Thau Inox 304 Đáy Sâu & Đũa Cả", baseCost: 130000, maxLvl: 5, desc: "Mở rộng lại Vùng Xanh (Sweet Spot) thêm +2.5%/cấp (Chống độ khó cấp cao)." },
+      { id: "tool_bottle", branch: "Dụng Cụ", icon: "🍼", name: "Bình Rưới Sốt Định Lượng", baseCost: 115000, maxLvl: 5, desc: "Giúp lực trộn Bước 3 ổn định đều đặn, không bị nhảy vọt lố tay." },
+      { id: "tool_cooler", branch: "Dụng Cụ", icon: "🧊", name: "Thùng Đá Giữ Nhiệt & Tủ Kính", baseCost: 140000, maxLvl: 5, desc: "Giữ lại 20%/cấp lượng Đồ Tươi (Xoài, Trứng) không bị hỏng cuối ngày." }
     ];
 
-    // CỐT TRUYỆN 4 CHƯƠNG
+    // ================= 6. GIẤY PHÉP PHÁP LÝ & MẶT BẰNG =================
+    const LICENSES_CATALOG = [
+      { id: "lic_vsattp", icon: "🧼", name: "Giấy Chứng Nhận Vệ Sinh ATTP", reqLevel: 10, cost: 180000, dailyFee: 0, desc: "Đạt chuẩn Kiểm tra Liên ngành Phường (nhận thưởng nóng +50.000đ khi đoàn ghé)." },
+      { id: "lic_sidewalk", icon: "📐", name: "Hợp Đồng Thuê Vỉa Hè Đúng Quy Định", reqLevel: 18, cost: 350000, dailyFee: 35000, desc: "Đóng phí 35.000đ/ngày nhưng không bao giờ bị Đội Trật Tự Đô Thị phạt tiền." },
+      { id: "lic_brand", icon: "📜", name: "Giấy Phép Hộ Kinh Doanh & Thương Hiệu Độc Quyền", reqLevel: 30, cost: 650000, dailyFee: 0, desc: "Chống nạn Quán Nhái bảng hiệu Dì Tư & nhận đơn đặt hàng sỉ Công ty Quận 1 (+250.000đ)!" }
+    ];
+
+    // ================= 7. HỆ THỐNG 7 NHÓM TÌNH HUỐNG ĐỜI THỰC SÀI GÒN =================
+    const DILEMMA_EVENTS = [
+      {
+        id: "cust_allergy",
+        category: "1. Tình huống Khách Oái Oăm",
+        icon: "🤧",
+        title: "Khách Chợt Nhớ Ra Dị Ứng Hành Phi!",
+        desc: "Đang trộn tới Bước 3 thì vị khách hốt hoảng: \"Ấy chết dì Tư ơi! Con mới nhớ ra con bị dị ứng hành phi/đậu phộng, dì đổi giùm con bịch mới tinh nha!\"",
+        choiceA: {
+          label: "😊 Vui vẻ làm lại bịch mới miễn phí (-1 phần Bánh tráng)",
+          effect: (s) => {
+            if ((s.stock.banhtrang || 0) > 0) s.stock.banhtrang--;
+            s.reputation = Math.min(100, s.reputation + 6);
+            s.money += 15000;
+            return "Khách cảm kích vô cùng, tặng thêm +15.000đ tiền Tip và +6 Uy tín!";
+          }
+        },
+        choiceB: {
+          label: "😠 Bắt khách phụ thêm 15.000đ tiền nguyên liệu",
+          effect: (s) => {
+            s.money += 15000;
+            s.reputation = Math.max(0, s.reputation - 5);
+            return "Thu thêm được 15.000đ nhưng khách buồn lòng (-5 Uy tín).";
+          }
+        }
+      },
+      {
+        id: "cust_qr_lag",
+        category: "1. Tình huống Khách Oái Oăm",
+        icon: "📱",
+        title: "Khách Quên Ví & Mạng 4G Quét QR Chập Chờn!",
+        desc: "Khách cầm bịch bánh tráng trên tay rồi lục túi tái mặt vì quên mang tiền mặt, mở điện thoại quét QR thì mạng 4G cứ xoay vòng mãi...",
+        choiceA: {
+          label: "💖 Cho khách ghi sổ vui vẻ: \"Khi nào tiện ghé gửi dì sau!\"",
+          effect: (s) => {
+            s.reputation = Math.min(100, s.reputation + 8);
+            s.money += 35000;
+            addXP(25);
+            return "Tối đó có mạng khách chuyển khoản trả gấp đôi +35.000đ kèm lời khen (+8 Uy tín)!";
+          }
+        },
+        choiceB: {
+          label: "⏳ Giữ khách đứng đợi tới khi quét được mới thôi",
+          effect: (s) => {
+            s.reputation = Math.max(0, s.reputation - 3);
+            return "Đợi mất 15 phút làm khách phía sau sốt ruột (-3 Uy tín).";
+          }
+        }
+      },
+      {
+        id: "weather_heat",
+        category: "2. Thời Tiết Sài Gòn Đỏng Đảnh",
+        icon: "☀️",
+        title: "Nắng Nóng Hầm Hập 39°C Giữa Trưa!",
+        desc: "Trời Sài Gòn đứng bóng nóng hầm hập khiến khách đứng chờ dễ cáu gắt, độ kiên nhẫn tụt nhanh hơn bình thường!",
+        choiceA: {
+          label: "🧊 Chi 10.000đ làm thùng Trà Đá Miễn Phí mời khách",
+          effect: (s) => {
+            s.money = Math.max(0, s.money - 10000);
+            s.reputation = Math.min(100, s.reputation + 5);
+            currentPatience = 100;
+            return "Khách uống trà đá mát lòng, cây kiên nhẫn đầy 100% và +5 Uy tín!";
+          }
+        },
+        choiceB: {
+          label: "💦 Mặc kệ, ráng trộn nhanh tay hơn",
+          effect: (s) => {
+            currentPatience = Math.max(20, currentPatience - 25);
+            return "Khách đổ mồ hôi hối thúc liên tục!";
+          }
+        }
+      },
+      {
+        id: "urban_check",
+        category: "3. Trật Tự Đô Thị & Vỉa Hè",
+        icon: "🚓",
+        title: "Đoàn Trật Tự Đô Thị Kiểm Tra Tuyến Phố!",
+        desc: "Xe loa phường phát thông báo kiểm tra trật tự lòng lề đường đang tiến tới ngay góc ngã tư của quán con!",
+        choiceA: {
+          label: "📋 Xuất trình Hợp đồng vỉa hè / Xếp gọn xe khách",
+          effect: (s) => {
+            if (s.licenses.lic_sidewalk || s.staff.tunghia) {
+              s.reputation = Math.min(100, s.reputation + 5);
+              addXP(20);
+              return "Nhờ có Hợp đồng vỉa hè / Chú Tư Nghĩa xếp xe chuẩn chỉ, quán được khen ngợi (+5 Uy tín)!";
+            } else {
+              s.money = Math.max(0, s.money - 40000);
+              return "Do chưa mua Hợp đồng thuê vỉa hè, quán bị nhắc nhở và đóng phạt -40.000đ!";
+            }
+          }
+        },
+        choiceB: {
+          label: "🏃 Tạm nghỉ bán 30 phút đẩy xe vào hẻm tránh",
+          effect: (s) => {
+            s.clockMinutes += 30;
+            return "An toàn không mất tiền phạt nhưng mất 30 phút giờ vàng đứng bán.";
+          }
+        }
+      },
+      {
+        id: "vsattp_check",
+        category: "4. Vệ Sinh An Toàn Thực Phẩm",
+        icon: "🧼",
+        title: "Đoàn Kiểm Tra Liên Ngành VSATTP Ghé Thăm!",
+        desc: "Cán bộ Y tế Phường kiểm tra độ sạch của thau trộn inox, tủ kính che bụi, nguồn gốc nguyên liệu và Giấy Chứng Nhận VSATTP.",
+        choiceA: {
+          label: "✅ Mời đoàn kiểm tra Tủ kính & Giấy phép VSATTP",
+          effect: (s) => {
+            if (s.licenses.lic_vsattp || (s.equipLevels.tool_cooler || 0) >= 1) {
+              s.money += 50000;
+              s.reputation = Math.min(100, s.reputation + 8);
+              return "Quán đạt chuẩn 'Ẩm Thực Đường Phố Xanh - Sạch', được thưởng nóng +50.000đ & +8 Uy tín!";
+            } else {
+              s.money = Math.max(0, s.money - 60000);
+              s.reputation = Math.max(0, s.reputation - 4);
+              return "Quán chưa có Giấy phép VSATTP & Tủ kính, bị phạt hành chính -60.000đ! Hãy vào Tab 3 mua nhé.";
+            }
+          }
+        },
+        choiceB: {
+          label: "🧹 Xin cam kết bổ sung Giấy phép trong tuần (-20.000đ)",
+          effect: (s) => {
+            s.money = Math.max(0, s.money - 20000);
+            return "Đóng phí cam kết vệ sinh -20.000đ. Nhớ sắm Tủ kính & Giấy phép ở Tab 3 nha!";
+          }
+        }
+      },
+      {
+        id: "brand_copycat",
+        category: "5. Bảo Vệ Thương Hiệu & Đơn Sỉ",
+        icon: "🏢",
+        title: "Công Ty Quận 1 Đặt Đơn Sỉ & Nạn Quán Nhái!",
+        desc: "Một công ty truyền thông ở Quận 1 muốn đặt gấp gói bánh tráng liên hoan chiều nay, nhưng cần quán có Giấy Phép Hộ Kinh Doanh chính chủ!",
+        choiceA: {
+          label: "📜 Xuất hóa đơn Hộ Kinh Doanh & nhận đơn sỉ",
+          effect: (s) => {
+            if (s.licenses.lic_brand) {
+              s.money += 180000;
+              addXP(45);
+              return "Chốt đơn sỉ thành công! Thu ngay +180.000đ lợi nhuận ròng & +45 XP!";
+            } else {
+              s.money += 30000;
+              return "Chưa có Giấy phép Hộ Kinh Doanh nên chỉ bán lẻ được vài phần (+30.000đ).";
+            }
+          }
+        },
+        choiceB: {
+          label: "🎁 Tặng mẫu thử kèm danh thiếp quán",
+          effect: (s) => {
+            s.reputation = Math.min(100, s.reputation + 4);
+            return "Khách văn phòng rất ấn tượng (+4 Uy tín)!";
+          }
+        }
+      },
+      {
+        id: "neighbor_landlord",
+        category: "6. Mặt Bằng & Tình Làng Nghĩa Xóm",
+        icon: "🏘️",
+        title: "Chủ Nhà Mặt Tiền Nhắc Chuyện Điện Nước!",
+        desc: "Cô chủ nhà nơi con đặt xe đẩy ra bảo: \"Tháng này khách quán con đông quá, cô tính tăng thêm 30.000đ tiền gửi nhờ đồ nghen!\"",
+        choiceA: {
+          label: "🥙 Biếu gia đình cô 2 phần Bánh Tráng Đặc Biệt & quét dọn sạch",
+          effect: (s) => {
+            if ((s.stock.banhtrang || 0) >= 2) s.stock.banhtrang -= 2;
+            s.reputation = Math.min(100, s.reputation + 6);
+            return "Cô chủ nhà tấm tắc khen ngon, miễn luôn tiền tăng giá và còn giới thiệu khách cho quán (+6 Uy tín)!";
+          }
+        },
+        choiceB: {
+          label: "💵 Gửi cô 30.000đ tiền mặt sòng phẳng",
+          effect: (s) => {
+            s.money = Math.max(0, s.money - 30000);
+            return "Đã gửi cô chủ nhà 30.000đ tiền hỗ trợ điện nước.";
+          }
+        }
+      },
+      {
+        id: "staff_life",
+        category: "7. Đời Sống & Tâm Tư Nhân Viên",
+        icon: "💝",
+        title: "Chuyện Đời Thường Của Nhân Viên Phụ Việc!",
+        desc: "Cuối ca chiều, nhân viên phụ việc ngại ngùng tâm sự đang cần một khoản nhỏ mua sách vở ôn thi / thuốc men cho gia đình.",
+        choiceA: {
+          label: "🧧 Thưởng nóng động viên 35.000đ bằng cả tấm lòng",
+          effect: (s) => {
+            s.money = Math.max(0, s.money - 35000);
+            s.stock.xoai = (s.stock.xoai || 0) + 5;
+            s.stock.trungcut = (s.stock.trungcut || 0) + 5;
+            s.reputation = Math.min(100, s.reputation + 6);
+            addXP(30);
+            return "Nhân viên cảm động rơi nước mắt, sáng hôm sau đi chợ sớm biếu lại quán +5 phần Xoài & +5 Trứng cút (+30 XP)!";
+          }
+        },
+        choiceB: {
+          label: "🤝 Cho ứng lương trước rồi trừ dần cuối ngày",
+          effect: (s) => {
+            addXP(10);
+            return "Nhân viên cảm ơn dì Tư và tiếp tục chăm chỉ làm việc (+10 XP).";
+          }
+        }
+      }
+    ];
+
+    // CỐT TRUYỆN 4 CHƯƠNG (GIỮ NGUYÊN HỒI KÝ DÌ TƯ)
     const STORY_CHAPTERS = [
       {
         id: 1,
@@ -972,29 +1508,29 @@
         id: 2,
         title: "Chương 2: Mưa Rào Sài Gòn & Chỗ Đứng",
         story: "Buôn bán vỉa hè sợ nhất là những cơn mưa rào bất chợt lúc 5 giờ chiều và chuyện chỗ đứng. Người trụ vững là người biết tính toán lượng đồ tươi vừa đủ mỗi ngày!",
-        goalDesc: "Đạt Cấp độ 3 và bán được 15 phần bánh",
-        check: (s) => s.level >= 3 && s.totalSold >= 15,
+        goalDesc: "Đạt Cấp độ 5 và bán được 15 phần bánh",
+        check: (s) => s.level >= 5 && s.totalSold >= 15,
         reward: 120000
       },
       {
         id: 3,
         title: "Chương 3: Cơn Sốt Review Ẩm Thực",
-        story: "Thời đại mới, khách không chỉ ăn bánh tráng trộn truyền thống mà còn mê Bánh tráng cuộn sốt bơ, Bánh tráng nướng Đà Lạt. Làm đúng ý từng vị khách khó tính sẽ giúp quán lên xu hướng!",
-        goalDesc: "Sở hữu ít nhất 800.000đ tiền mặt",
-        check: (s) => s.money >= 800000,
+        story: "Thời đại mới, khách không chỉ ăn bánh tráng trộn truyền thống mà còn mê Bánh tráng chấm sốt me, Phơi sương, Nướng Đà Lạt. Làm đúng ý từng vị khách khó tính sẽ giúp quán lên xu hướng!",
+        goalDesc: "Sở hữu ít nhất 800.000đ tiền mặt & mở 5 món",
+        check: (s) => s.money >= 800000 && (s.unlockedDishes || []).length >= 5,
         reward: 200000
       },
       {
         id: 4,
-        title: "Chương 4: Huyền Thoại Vua Bánh Tráng",
+        title: "Chương 4: Huyền Thoại Vua Bánh Tráng 50 Cấp",
         story: "Sau bao ngày thức dậy từ 5 giờ sáng thắng sa tế, phi hành giòn, bảng hiệu của con đã trở thành biểu tượng ẩm thực đường phố Sài Gòn!",
-        goalDesc: "Đạt Cấp độ 6 và bán trên 40 phần bánh",
-        check: (s) => s.level >= 6 && s.totalSold >= 40,
-        reward: 400000
+        goalDesc: "Đạt Cấp độ 20 và bán trên 50 phần bánh",
+        check: (s) => s.level >= 20 && s.totalSold >= 50,
+        reward: 450000
       }
     ];
 
-    // TRẠNG THÁI NGƯỜI CHƠI (GAME STATE)
+    // ================= TRẠNG THÁI NGƯỜI CHƠI (GAME STATE) =================
     let state = {
       shopKey: "",
       shopName: "",
@@ -1005,7 +1541,7 @@
       level: 1,
       xp: 0,
       day: 1,
-      clockMinutes: 14 * 60, // 14:00 (2h chiều)
+      clockMinutes: 14 * 60,
       totalSold: 0,
       todaySold: 0,
       todayRevenue: 0,
@@ -1022,14 +1558,31 @@
         trungcut: 12
       },
       prepDone: { sate: false, hanhphi: false, trungcut: false },
-      upgrades: { led: false, peeler: false, sauce: false, rent: false },
-      claimedLevels: [1],
+      // Thực đơn mở khóa & bậc sao từng món (Mặc định Cấp 1 chỉ có sẵn món 'tron')
+      unlockedDishes: ["tron"],
+      dishStars: {
+        tron: 1, chamme: 1, cuon: 1, phoisuong: 1, bo: 1,
+        nuong: 1, xoainon: 1, lacphomai: 1, mamruoc: 1, metditu: 1
+      },
+      // Nhân viên đã thuê
+      staff: { beti: false, mylan: false, tunghia: false },
+      // Cấp độ 7 món trang trí & dụng cụ (0 -> 5)
+      equipLevels: {
+        decor_lantern: 0, decor_sign: 0, decor_stool: 0, decor_speaker: 0,
+        tool_bowl: 0, tool_bottle: 0, tool_cooler: 0
+      },
+      // 3 Giấy phép pháp lý
+      licenses: { lic_vsattp: false, lic_sidewalk: false, lic_brand: false },
+      // Lịch sử đánh giá của khách
+      reviews: [],
+      nextCustomerTipBonus: 0,
       claimedChapters: [],
       ledgerHistory: []
     };
 
     // BIẾN TẠM TRONG LÚC ĐỨNG BÁN
     let currentTab = "market";
+    let currentUpgradeSubTab = "dishes";
     let loginSelectedAvatar = "👩‍🍳";
     let currentCustomer = null;
     let patienceTimer = null;
@@ -1038,8 +1591,8 @@
     let activeEmergency = null;
     let lbSortBy = "money";
     let cloudLeaderboardCache = [];
+    let currentServeReviewId = null;
 
-    // Trạng thái Thau Trộn hiện tại
     let bowl = {
       selectedDish: "tron",
       rau: true,
@@ -1051,11 +1604,10 @@
       step3Done: false
     };
 
-    // Trạng thái Pop-up sơ chế
     let activePrepKey = null;
     let activePrepProgress = 0;
 
-    // ================= KHỞI ĐỘNG TRANG WEB & MÀN HÌNH ĐĂNG NHẬP =================
+    // ================= KHỞI ĐỘNG TRANG WEB =================
     window.addEventListener("DOMContentLoaded", () => {
       renderLoginAvatarGrid();
       checkExistingLocalSaveForLoginScreen();
@@ -1107,20 +1659,19 @@
           box.classList.remove("hidden");
           document.getElementById("quick-resume-avatar").textContent = saved.avatar || "👩‍🍳";
           document.getElementById("quick-resume-name").textContent = saved.shopName;
-          document.getElementById("quick-resume-stats").textContent = `Cấp ${saved.level || 1} • ${formatVND(saved.money || 0)} • Đã bán ${saved.totalSold || 0} bịch`;
+          document.getElementById("quick-resume-stats").textContent = `Cấp ${saved.level || 1}/50 • ${formatVND(saved.money || 0)} • Đã bán ${saved.totalSold || 0} bịch`;
           document.getElementById("login-shop-name").value = saved.shopName;
           document.getElementById("login-shop-pin").value = saved.pin || "";
           loginSelectedAvatar = saved.avatar || "👩‍🍳";
           renderLoginAvatarGrid();
         }
-      } catch (e) {
-        console.warn("Lỗi đọc save nội bộ:", e);
-      }
+      } catch (e) {}
     }
 
-    // Bấm nút "Chơi Tiếp" nhanh
     async function quickResumeGame() {
       try {
+        initAudio();
+        startChillBGM();
         const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (!raw) return;
         const saved = JSON.parse(raw);
@@ -1130,13 +1681,12 @@
         if (!currentCustomer) spawnCustomer();
         showToast(`Chào mừng chủ quán ${state.shopName} quay trở lại!`);
         await saveGameEverywhere();
-      } catch (e) {
-        console.error(e);
-      }
+      } catch (e) {}
     }
 
-    // Xử lý Đăng nhập hoặc Tạo Quán Mới đồng bộ với Firebase
     async function handleLoginOrRegister() {
+      initAudio();
+      startChillBGM();
       const nameInput = document.getElementById("login-shop-name").value.trim();
       const pinInput = document.getElementById("login-shop-pin").value.trim();
       const msgEl = document.getElementById("login-status-msg");
@@ -1161,18 +1711,15 @@
       showLoginMessage("☁️ Đang kiểm tra dữ liệu quán trên Đám Mây Firebase...", "info");
 
       try {
-        // Kiểm tra xem trên Firebase đã có quán này chưa
         const res = await fetch(`${FIREBASE_DB_URL}/shops/${key}.json`);
         const cloudShop = res.ok ? await res.json() : null;
 
         if (cloudShop && cloudShop.pin) {
-          // Quán đã tồn tại trên Cloud -> Kiểm tra PIN
           if (String(cloudShop.pin) !== String(pinInput)) {
             showLoginMessage("❌ Quán này đã có chủ! Vui lòng nhập đúng Mã PIN 4 số hoặc đặt Tên Quán khác.", "error");
             btn.disabled = false;
             return;
           }
-          // Đúng PIN -> Tải toàn bộ dữ liệu từ Cloud về
           if (cloudShop.fullState) {
             mergeLoadedState(cloudShop.fullState);
           } else {
@@ -1187,7 +1734,6 @@
           state.avatar = loginSelectedAvatar;
           showLoginMessage("✅ Đăng nhập thành công! Đã khôi phục tiến trình quán từ Đám Mây!", "success");
         } else {
-          // Tạo quán mới (hoặc đồng bộ quán đang có trên máy lên Cloud)
           const rawLocal = localStorage.getItem(LOCAL_STORAGE_KEY);
           if (rawLocal) {
             const parsedLocal = JSON.parse(rawLocal);
@@ -1214,7 +1760,6 @@
         }, 450);
 
       } catch (err) {
-        console.warn("Lỗi kết nối Firebase khi đăng nhập, chuyển sang lưu nội bộ:", err);
         state.shopKey = key;
         state.shopName = nameInput;
         state.pin = pinInput;
@@ -1250,20 +1795,26 @@
         ...loaded,
         stock: { ...state.stock, ...(loaded.stock || {}) },
         prepDone: { ...state.prepDone, ...(loaded.prepDone || {}) },
-        upgrades: { ...state.upgrades, ...(loaded.upgrades || {}) },
-        claimedLevels: Array.isArray(loaded.claimedLevels) ? loaded.claimedLevels : [1],
+        unlockedDishes: Array.isArray(loaded.unlockedDishes) && loaded.unlockedDishes.length > 0 ? loaded.unlockedDishes : ["tron"],
+        dishStars: { ...state.dishStars, ...(loaded.dishStars || {}) },
+        staff: { ...state.staff, ...(loaded.staff || {}) },
+        equipLevels: { ...state.equipLevels, ...(loaded.equipLevels || {}) },
+        licenses: { ...state.licenses, ...(loaded.licenses || {}) },
+        reviews: Array.isArray(loaded.reviews) ? loaded.reviews : [],
         claimedChapters: Array.isArray(loaded.claimedChapters) ? loaded.claimedChapters : [],
         ledgerHistory: Array.isArray(loaded.ledgerHistory) ? loaded.ledgerHistory : []
       };
+      // Nếu đã thuê Chị Mỹ Lan thì tự động xong 3 món sơ chế
+      if (state.staff.mylan) {
+        state.prepDone = { sate: true, hanhphi: true, trungcut: true };
+      }
     }
 
-    // ================= HỆ THỐNG LƯU TỰ ĐỘNG (LOCAL + FIREBASE REALTIME DB) =================
+    // ================= LƯU TỰ ĐỘNG (LOCAL + FIREBASE CLOUD) =================
     function saveToLocalOnly() {
       try {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
-      } catch (e) {
-        console.warn("Không thể lưu LocalStorage:", e);
-      }
+      } catch (e) {}
     }
 
     async function saveGameEverywhere() {
@@ -1312,7 +1863,6 @@
       showToast("☁️ Đã đồng bộ dữ liệu quán lên Đám Mây thành công!");
     }
 
-    // Tải Bảng Xếp Hạng từ Firebase
     async function fetchCloudLeaderboard(showFeedback = false) {
       const badge = document.getElementById("login-cloud-badge");
       try {
@@ -1337,11 +1887,10 @@
           });
         }
 
-        // Luôn kèm 3 quán huyền thoại Sài Gòn làm mốc phấn đấu
         const npcLegends = [
-          { shopKey: "npc_ditu", shopName: "Bánh Tráng Dì Tư Gốc", avatar: "👵", money: 1850000, level: 8, totalSold: 95, day: 12, isNpc: true },
-          { shopKey: "npc_nth", shopName: "Trộn Nguyễn Thượng Hiền", avatar: "👩‍🍳", money: 920000, level: 5, totalSold: 48, day: 6, isNpc: true },
-          { shopKey: "npc_conam", shopName: "Bánh Tráng Cô Năm Q.3", avatar: "🧑‍🍳", money: 680000, level: 3, totalSold: 25, day: 4, isNpc: true }
+          { shopKey: "npc_ditu", shopName: "Bánh Tráng Dì Tư Gốc", avatar: "👵", money: 3850000, level: 42, totalSold: 215, day: 25, isNpc: true },
+          { shopKey: "npc_nth", shopName: "Trộn Nguyễn Thượng Hiền", avatar: "👩‍🍳", money: 1920000, level: 24, totalSold: 118, day: 14, isNpc: true },
+          { shopKey: "npc_conam", shopName: "Bánh Tráng Cô Năm Q.3", avatar: "🧑‍🍳", money: 880000, level: 12, totalSold: 55, day: 7, isNpc: true }
         ];
 
         npcLegends.forEach(npc => {
@@ -1383,26 +1932,63 @@
       `).join("");
     }
 
+    // ================= HÀM TÍNH GIÁ BÁN MÓN THEO BẬC SAO (1 -> 5 SAO) =================
+    function getDishEffectivePrice(dishKey) {
+      const base = DISH_MENU[dishKey]?.price || 25000;
+      const star = state.dishStars[dishKey] || 1;
+      // Mỗi bậc sao tăng +15% giá bán
+      return Math.round((base * (1 + (star - 1) * 0.15)) / 500) * 500;
+    }
+
+    function getDishStarUpgradeCost(dishKey) {
+      const base = DISH_MENU[dishKey]?.price || 25000;
+      const star = state.dishStars[dishKey] || 1;
+      return Math.round((base * 2.2 * Math.pow(1.65, star - 1)) / 1000) * 1000;
+    }
+
+    function getEquipCost(eq) {
+      const curLvl = state.equipLevels[eq.id] || 0;
+      return Math.round((eq.baseCost * Math.pow(1.65, curLvl)) / 1000) * 1000;
+    }
+
+    function getDailyStaffWages() {
+      let sum = 0;
+      STAFF_CATALOG.forEach(st => {
+        if (state.staff[st.id]) sum += st.dailyWage;
+      });
+      return sum;
+    }
+
     // ================= CẬP NHẬT GIAO DIỆN CHUNG =================
     function updateAllUI() {
       document.getElementById("header-avatar").textContent = state.avatar || "👩‍🍳";
       document.getElementById("header-shop-name").textContent = state.shopName || "Quán Dì Tư";
-      document.getElementById("header-level-badge").textContent = `Cấp ${state.level}`;
+      document.getElementById("header-level-badge").textContent = `Cấp ${state.level}/50`;
       document.getElementById("header-money").textContent = formatVND(state.money);
       document.getElementById("header-rep").textContent = state.reputation;
+      document.getElementById("header-review-count").textContent = (state.reviews || []).length;
 
-      // Thanh XP
       const currentLvlObj = LEVEL_DATA.find(l => l.level === state.level) || LEVEL_DATA[LEVEL_DATA.length - 1];
+      document.getElementById("header-stage-title").textContent = currentLvlObj.title;
       const pct = Math.min(100, Math.round((state.xp / currentLvlObj.xpNeed) * 100));
       document.getElementById("header-xp-bar").style.width = `${pct}%`;
       document.getElementById("header-xp-text").textContent = `${state.xp}/${currentLvlObj.xpNeed} XP`;
 
-      // Nút Cốt truyện
       const nextChapter = STORY_CHAPTERS.find(c => !state.claimedChapters.includes(c.id)) || STORY_CHAPTERS[STORY_CHAPTERS.length - 1];
-      document.getElementById("header-story-btn-text").textContent = `Chương ${nextChapter.id}: Cốt truyện`;
+      document.getElementById("header-story-btn-text").textContent = `Chương ${nextChapter.id}: Hồi Ký`;
+
+      // Chấm đỏ báo có món hoặc nhân viên đủ cấp mở khóa
+      const canUnlockNewDish = Object.values(DISH_MENU).some(d => !state.unlockedDishes.includes(d.id) && state.level >= d.reqLevel && state.money >= d.unlockCost);
+      const notifyDot = document.getElementById("badge-upgrade-notify");
+      if (notifyDot) {
+        if (canUnlockNewDish) notifyDot.classList.remove("hidden");
+        else notifyDot.classList.add("hidden");
+      }
 
       renderMarketGrid();
       renderPrepStatus();
+      renderSellDishGrid();
+      renderStaffActiveStrip();
       renderQuickStockBar();
       updateStepStockLabels();
       updateSweetSpotUI();
@@ -1417,10 +2003,10 @@
         const btn = document.getElementById(`tab-btn-${t}`);
         if (t === tab) {
           sec.classList.remove("hidden");
-          btn.className = "soft-btn py-2 px-1 rounded-xl font-extrabold text-[11px] sm:text-xs flex flex-col items-center gap-0.5 bg-orange-600 text-white shadow";
+          btn.className = "soft-btn py-2 px-1 rounded-xl font-extrabold text-[11px] sm:text-xs flex flex-col items-center gap-0.5 bg-orange-600 text-white shadow relative";
         } else {
           sec.classList.add("hidden");
-          btn.className = "soft-btn py-2 px-1 rounded-xl font-extrabold text-[11px] sm:text-xs flex flex-col items-center gap-0.5 text-amber-900 hover:bg-amber-100";
+          btn.className = "soft-btn py-2 px-1 rounded-xl font-extrabold text-[11px] sm:text-xs flex flex-col items-center gap-0.5 text-amber-900 hover:bg-amber-100 relative";
         }
       });
 
@@ -1432,7 +2018,7 @@
       }
     }
 
-    // ================= TAB 1: ĐI CHỢ (NHẬP SỐ LƯỢNG TỰ DO) & SƠ CHẾ =================
+    // ================= TAB 1: ĐI CHỢ & SƠ CHẾ =================
     function getIngredientCost(ing) {
       return Math.round((ing.baseCost * state.marketPriceMultiplier) / 100) * 100;
     }
@@ -1441,7 +2027,6 @@
       const grid = document.getElementById("market-grid");
       if (!grid) return;
 
-      // Lưu lại giá trị đang gõ nếu có
       const currentInputs = {};
       INGREDIENTS.forEach(ing => {
         const el = document.getElementById(`buy-qty-${ing.id}`);
@@ -1546,6 +2131,7 @@
         if (el) el.value = "";
       });
 
+      playSFX("cash");
       updateAllUI();
       saveGameEverywhere();
       showToast(`✅ Đã nhập kho ${totalUnits} phần nguyên liệu (-${formatVND(totalCost)})!`);
@@ -1580,7 +2166,7 @@
 
     function openPrepModal(key) {
       if (state.prepDone[key]) {
-        showToast("✅ Công đoạn này hôm nay con đã chuẩn bị xong xuôi rồi!");
+        showToast("✅ Công đoạn này hôm nay đã chuẩn bị xong xuôi rồi!");
         return;
       }
       activePrepKey = key;
@@ -1601,7 +2187,8 @@
 
     function tapPrepAction() {
       if (!activePrepKey) return;
-      const step = state.upgrades.peeler ? 50 : 25;
+      playSFX("sauce");
+      const step = state.staff.mylan ? 50 : 25;
       activePrepProgress = Math.min(100, activePrepProgress + step);
       document.getElementById("prep-modal-bar").style.width = `${activePrepProgress}%`;
 
@@ -1622,18 +2209,96 @@
       activePrepKey = null;
     }
 
-    // ================= TAB 2: ĐỨNG BÁN (4 MÓN & 4 BƯỚC THAO TÁC) =================
+    // ================= TAB 2: ĐỨNG BÁN (10 MÓN, KHÁCH KHÓ TÍNH, NHÂN VIÊN PHỤ & TÌNH HUỐNG) =================
+    function renderStaffActiveStrip() {
+      const strip = document.getElementById("staff-active-strip");
+      if (!strip) return;
+      const activeNames = [];
+      if (state.staff.beti) activeNames.push("👦 Bé Tí (Phụ Bước 1)");
+      if (state.staff.mylan) activeNames.push("👧 Chị Lan (Sơ chế & Phụ Bước 2)");
+      if (state.staff.tunghia) activeNames.push("🐕 Chú Tư Nghĩa (Bảo vệ & Giữ khách)");
+
+      const sweetSpotBounds = getSweetSpotBounds();
+      strip.innerHTML = `
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <span class="font-black text-amber-950">🧑‍🍳 Phụ việc:</span>
+          ${activeNames.length > 0
+            ? activeNames.map(n => `<span class="px-2 py-0.5 rounded-full bg-emerald-600 text-white font-bold text-[10px]">${n}</span>`).join("")
+            : `<span class="text-amber-800 font-semibold">Chưa thuê (Vào Tab 3 thuê phụ việc nhẹ)</span>`
+          }
+        </div>
+        <div class="font-extrabold text-orange-800">
+          🎯 Vùng xanh Cấp ${state.level}: <b>${sweetSpotBounds.min}% - ${sweetSpotBounds.max}%</b>
+        </div>
+      `;
+    }
+
+    function renderSellDishGrid() {
+      const grid = document.getElementById("sell-dish-grid");
+      if (!grid) return;
+      const allDishes = Object.values(DISH_MENU);
+      document.getElementById("unlocked-dish-count").textContent = state.unlockedDishes.length;
+
+      grid.innerHTML = allDishes.map(d => {
+        const isUnlocked = state.unlockedDishes.includes(d.id);
+        const isSelected = bowl.selectedDish === d.id;
+        const effPrice = getDishEffectivePrice(d.id);
+        const stars = state.dishStars[d.id] || 1;
+
+        if (!isUnlocked) {
+          const canUnlockNow = state.level >= d.reqLevel;
+          return `
+            <button onclick="switchTab('upgrade'); switchUpgradeSubTab('dishes');" class="soft-btn p-1.5 rounded-xl border border-dashed ${canUnlockNow ? 'border-emerald-500 bg-emerald-50/70' : 'border-amber-300 bg-gray-100/80 opacity-65'} text-left flex items-center gap-1.5">
+              <span class="text-lg grayscale">${d.icon}</span>
+              <div class="leading-tight min-w-0">
+                <div class="font-extrabold text-[10px] text-gray-700 truncate">${d.name}</div>
+                <div class="text-[9px] font-black ${canUnlockNow ? 'text-emerald-700' : 'text-amber-700'}">
+                  ${canUnlockNow ? '🔓 Mua ở Tab 3' : `🔒 Mở Cấp ${d.reqLevel}`}
+                </div>
+              </div>
+            </button>
+          `;
+        }
+
+        return `
+          <button onclick="selectDish('${d.id}')" id="dish-btn-${d.id}" class="soft-btn p-1.5 rounded-xl border-2 ${isSelected ? 'border-orange-600 bg-orange-100 shadow-sm' : 'border-amber-200 bg-white'} text-left flex items-center gap-1.5">
+            <span class="text-lg shrink-0">${d.icon}</span>
+            <div class="leading-tight min-w-0">
+              <div class="font-black text-[11px] text-amber-950 truncate">${d.name}</div>
+              <div class="text-[10px] font-bold text-emerald-700">${formatVND(effPrice)} <span class="text-orange-600">★${stars}</span></div>
+            </div>
+          </button>
+        `;
+      }).join("");
+
+      document.getElementById("selected-dish-price").textContent = `Giá bán: ${formatVND(getDishEffectivePrice(bowl.selectedDish))} (★${state.dishStars[bowl.selectedDish] || 1})`;
+    }
+
     function spawnCustomer() {
-      const custTemplate = CUSTOMERS[Math.floor(Math.random() * CUSTOMERS.length)];
-      const dishKeys = Object.keys(DISH_MENU);
-      // Cấp 1 ưu tiên Trộn và Cuộn, từ Cấp 2 mở rộng đủ 4 món
-      const pool = state.level === 1 ? ["tron", "cuon"] : dishKeys;
-      const wantedDish = pool[Math.floor(Math.random() * pool.length)];
+      // Lọc danh sách khách, từ Cấp 5 trở đi xuất hiện Khách Khó Tính nhiều hơn theo cấp
+      const pickyChance = state.level < 5 ? 0 : Math.min(0.55, 0.18 + state.level * 0.008);
+      const vipChance = 0.12 + (state.equipLevels.decor_sign || 0) * 0.07;
+
+      const normalPool = CUSTOMERS.filter(c => !c.picky);
+      const pickyPool = CUSTOMERS.filter(c => c.picky);
+
+      let chosenTemplate;
+      if (Math.random() < pickyChance && pickyPool.length > 0) {
+        chosenTemplate = pickyPool[Math.floor(Math.random() * pickyPool.length)];
+      } else {
+        chosenTemplate = normalPool[Math.floor(Math.random() * normalPool.length)];
+      }
+
+      // Khách chỉ gọi trong số các món người chơi đã mở khóa (nhưng nếu người chơi lên cấp cao mà chưa chịu mua món mới, khách đôi khi sẽ hỏi món cấp cao để nhắc nhở)
+      const unlockedPool = state.unlockedDishes.length > 0 ? state.unlockedDishes : ["tron"];
+      const wantedDish = unlockedPool[Math.floor(Math.random() * unlockedPool.length)];
 
       currentCustomer = {
-        ...custTemplate,
+        ...chosenTemplate,
+        vip: chosenTemplate.vip || Math.random() < vipChance,
+        picky: Boolean(chosenTemplate.picky),
         wantedDish,
-        wantedSpice: Math.floor(Math.random() * 3), // 0, 1, 2
+        wantedSpice: Math.floor(Math.random() * 3),
         wantedRau: Math.random() > 0.25,
         wantedHanh: Math.random() > 0.2
       };
@@ -1643,9 +2308,13 @@
       renderCustomerOrderUI();
       startPatienceTimer();
 
-      // Xác suất xảy ra sự kiện ngẫu nhiên (Mưa rào / Đô thị) khi ở cấp >= 2
-      if (state.level >= 2 && !activeEmergency && Math.random() < 0.22) {
+      // Xác suất xuất hiện Sự kiện khẩn cấp (Mưa rào / Đô thị) hoặc Tình huống Đời thực
+      if (state.level >= 2 && !activeEmergency && Math.random() < 0.20) {
         triggerRandomEmergency();
+      } else if (state.totalSold > 0 && state.totalSold % 4 === 0 && Math.random() < 0.45) {
+        setTimeout(() => {
+          if (currentTab === "sell") triggerRandomDilemmaEvent();
+        }, 600);
       }
     }
 
@@ -1653,9 +2322,17 @@
       if (patienceTimer) clearInterval(patienceTimer);
       patienceTimer = setInterval(() => {
         if (currentTab !== "sell" || !currentCustomer) return;
-        // Độ khó tăng theo cấp: khách vội hơn một chút
-        const decay = 1.1 + (state.level * 0.12) + (activeEmergency ? 1.2 : 0);
-        currentPatience = Math.max(0, currentPatience - decay);
+
+        // Độ khó 50 cấp: Cấp càng cao thanh kiên nhẫn tụt càng nhanh
+        let baseDecay = 1.05 + (state.level * 0.075) + (activeEmergency ? 1.2 : 0);
+        if (currentCustomer.picky) baseDecay *= 1.4; // Khách khó tính tụt nhanh x1.4
+
+        // Giảm tốc độ tụt nhờ Ghế Đẩu & Dù che (+8%/cấp) và Chú Bảo Vệ Tư Nghĩa (+25%)
+        const stoolLv = state.equipLevels.decor_stool || 0;
+        const slowFactor = Math.max(0.4, 1 - (stoolLv * 0.08) - (state.staff.tunghia ? 0.25 : 0));
+        const finalDecay = baseDecay * slowFactor;
+
+        currentPatience = Math.max(0, currentPatience - finalDecay);
         const bar = document.getElementById("cust-patience-bar");
         if (bar) {
           bar.style.width = `${currentPatience}%`;
@@ -1663,8 +2340,9 @@
         }
         if (currentPatience <= 0) {
           clearInterval(patienceTimer);
-          state.reputation = Math.max(0, state.reputation - 4);
-          showToast("😣 Khách đợi lâu quá nên bỏ đi rồi (-4 Uy tín)!");
+          const repPenalty = currentCustomer.picky ? 7 : 4;
+          state.reputation = Math.max(0, state.reputation - repPenalty);
+          showToast(`😣 Khách chờ lâu quá nên bỏ đi rồi (-${repPenalty} Uy tín)!`);
           updateAllUI();
           spawnCustomer();
         }
@@ -1689,13 +2367,22 @@
       if (currentCustomer.vip) vipBadge.classList.remove("hidden");
       else vipBadge.classList.add("hidden");
 
+      const pickyBadge = document.getElementById("cust-picky-badge");
+      const cardBox = document.getElementById("customer-card-box");
+      if (currentCustomer.picky) {
+        pickyBadge.classList.remove("hidden");
+        cardBox.className = "p-2.5 rounded-2xl bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 border-2 border-red-400 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5";
+      } else {
+        pickyBadge.classList.add("hidden");
+        cardBox.className = "p-2.5 rounded-2xl bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-2 border-amber-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5";
+      }
+
       updateOrderMatchTags();
     }
 
-    // Tự động đổi màu xanh các thẻ yêu cầu khi người chơi chọn đúng món & gia giảm
     function updateOrderMatchTags() {
       if (!currentCustomer) return;
-      const dishObj = DISH_MENU[currentCustomer.wantedDish];
+      const dishObj = DISH_MENU[currentCustomer.wantedDish] || DISH_MENU.tron;
       const spiceLabels = ["🌶️ Không cay", "🌶️ Cay vừa", "🌶️ Siêu cay"];
 
       const tagDish = document.getElementById("req-tag-dish");
@@ -1722,19 +2409,20 @@
     }
 
     function selectDish(dishKey) {
+      if (!state.unlockedDishes.includes(dishKey)) return;
       bowl.selectedDish = dishKey;
-      Object.keys(DISH_MENU).forEach(k => {
-        const btn = document.getElementById(`dish-btn-${k}`);
-        if (!btn) return;
-        if (k === dishKey) {
-          btn.className = "soft-btn p-2 rounded-xl border-2 border-orange-600 bg-orange-100 text-left flex items-center gap-1.5 shadow-sm";
-        } else {
-          btn.className = "soft-btn p-2 rounded-xl border-2 border-amber-200 bg-white text-left flex items-center gap-1.5";
-        }
-      });
-      document.getElementById("selected-dish-price").textContent = `Giá bán: ${formatVND(DISH_MENU[dishKey].price)}`;
+      renderSellDishGrid();
       updateOrderMatchTags();
       spawnFloatingFX(`${DISH_MENU[dishKey].icon} ${DISH_MENU[dishKey].name}`);
+
+      // Nếu đã thuê Phụ Bếp Bé Tí và chọn đúng món khách gọi -> Bé Tí tự động làm giùm Bước 1!
+      if (state.staff.beti && !bowl.step1Done && currentCustomer && dishKey === currentCustomer.wantedDish) {
+        setTimeout(() => {
+          if (!bowl.step1Done) {
+            doStep1Base(true);
+          }
+        }, 220);
+      }
     }
 
     function setOption(type, val) {
@@ -1768,12 +2456,18 @@
       updateOrderMatchTags();
     }
 
+    // ĐỘ KHÓ 50 CẤP ĐỘ: Vùng xanh thu hẹp dần từ 25% (Cấp 1) xuống 9% (Cấp 41-50), nâng cấp Thau Inox 304 mở rộng lại +2.5%/cấp
     function getSweetSpotBounds() {
-      // Cấp càng cao vùng xanh càng thu hẹp nhẹ, nâng cấp sốt me mở rộng +8%
-      const min = 65;
-      const baseMax = Math.max(82, 92 - Math.floor(state.level / 2));
-      const max = Math.min(95, baseMax + (state.upgrades.sauce ? 6 : 0));
-      return { min, max };
+      const min = 68;
+      let baseWidth = 24;
+      if (state.level >= 41) baseWidth = 9;
+      else if (state.level >= 31) baseWidth = 12;
+      else if (state.level >= 21) baseWidth = 16;
+      else if (state.level >= 11) baseWidth = 20;
+
+      const bowlBonus = Math.round((state.equipLevels.tool_bowl || 0) * 2.5);
+      const width = Math.min(28, baseWidth + bowlBonus);
+      return { min, max: min + width };
     }
 
     function updateSweetSpotUI() {
@@ -1785,7 +2479,7 @@
         zone.style.width = `${max - min}%`;
       }
       if (label) {
-        label.textContent = `Vùng chuẩn: ${min}% - ${max}%`;
+        label.textContent = `Chuẩn: ${min}% - ${max}%`;
       }
     }
 
@@ -1806,6 +2500,13 @@
 
       updateStepButtonsHighlight();
       updateStepStockLabels();
+
+      // Nếu đã thuê Bé Tí và món hiện tại trùng với món khách gọi -> Bé Tí tự động bốc bánh Bước 1!
+      if (state.staff.beti && currentCustomer && bowl.selectedDish === currentCustomer.wantedDish) {
+        setTimeout(() => {
+          if (!bowl.step1Done && currentTab === "sell") doStep1Base(true);
+        }, 300);
+      }
     }
 
     function updateStepButtonsHighlight() {
@@ -1820,11 +2521,14 @@
       if (!bowl.step1Done) {
         b1.classList.add("step-highlight");
         document.getElementById("step-check-1").textContent = "Bước 1";
+        document.getElementById("step-check-2").textContent = "Bước 2";
+        document.getElementById("step-check-3").textContent = "Bước 3 (Tự tay canh)";
       } else if (!bowl.step2Done) {
         document.getElementById("step-check-1").textContent = "✅ Xong";
         b2.classList.add("step-highlight");
         document.getElementById("step-check-2").textContent = "Bước 2";
       } else if (bowl.mixProgress < min) {
+        document.getElementById("step-check-1").textContent = "✅ Xong";
         document.getElementById("step-check-2").textContent = "✅ Xong";
         b3.classList.add("step-highlight");
         document.getElementById("step-check-3").textContent = `${bowl.mixProgress}%`;
@@ -1854,13 +2558,12 @@
     }
 
     // BƯỚC 1: BỐC BÁNH TRÁNG & XOÀI
-    function doStep1Base() {
+    function doStep1Base(byStaff = false) {
       if (bowl.step1Done) {
-        showToast("Đã bỏ bánh tráng vào thau rồi, sang Bước 2 nhé!");
+        if (!byStaff) showToast("Đã bỏ bánh tráng vào thau rồi, sang Bước 2 nhé!");
         return;
       }
       const recipe = DISH_MENU[bowl.selectedDish].recipe;
-      // Kiểm tra kho trước khi làm
       for (const [ingKey, qty] of Object.entries(recipe)) {
         if ((state.stock[ingKey] || 0) < qty) {
           const ingObj = INGREDIENTS.find(x => x.id === ingKey);
@@ -1869,56 +2572,75 @@
         }
       }
 
+      playSFX("snip");
       bowl.step1Done = true;
       document.getElementById("svg-layer-base").classList.remove("hidden");
       document.getElementById("bowl-instruction").textContent = "👉 Tiếp theo bấm Bước 2: Rưới Sốt & Muối";
-      spawnFloatingFX("🌾 +Bánh tráng & Xoài");
+      spawnFloatingFX(byStaff ? "👦 Bé Tí: +Bánh & Xoài!" : "✂️ +Bánh tráng & Xoài");
       updateStepButtonsHighlight();
+
+      // Nếu đã thuê Chị Mỹ Lan -> Chị Lan phụ rưới sốt Bước 2 sau 350ms
+      if (state.staff.mylan && !bowl.step2Done) {
+        setTimeout(() => {
+          if (bowl.step1Done && !bowl.step2Done && currentTab === "sell") {
+            doStep2Sauce(true);
+          }
+        }, 350);
+      }
     }
 
     // BƯỚC 2: RƯỚI SỐT & MUỐI TÔM
-    function doStep2Sauce() {
+    function doStep2Sauce(byStaff = false) {
       if (!bowl.step1Done) {
         showToast("⚠️ Con phải bấm Bước 1 (Bốc Bánh & Xoài) trước đã nhé!");
         return;
       }
       if (bowl.step2Done) {
-        showToast("Đã rưới sốt rồi, bấm Bước 3 để nhào trộn nhé!");
+        if (!byStaff) showToast("Đã rưới sốt rồi, bấm Bước 3 để nhào trộn nhé!");
         return;
       }
+      playSFX("sauce");
       bowl.step2Done = true;
       document.getElementById("svg-layer-sauce").classList.remove("hidden");
       if (bowl.rau || bowl.hanh) {
         document.getElementById("svg-layer-herbs").classList.remove("hidden");
       }
-      document.getElementById("bowl-instruction").textContent = "🧤 Bấm Bước 3 (3-4 lần) để canh vào vùng xanh!";
-      spawnFloatingFX("🥣 +Sốt Bò, Muối Tôm & Tắc");
+      document.getElementById("bowl-instruction").textContent = "🧤 Tự tay bấm Bước 3 (3-4 lần) canh đúng Vùng Xanh!";
+      spawnFloatingFX(byStaff ? "👧 Chị Lan: +Rưới Sốt!" : "🥣 +Sốt Bò, Muối Tôm & Tắc");
       updateStepButtonsHighlight();
     }
 
-    // BƯỚC 3: NHÀO TRỘN / NƯỚNG CANH VÙNG XANH
+    // BƯỚC 3: NHÀO TRỘN / NƯỚNG CANH VÙNG XANH (NGƯỜI CHƠI LUÔN TỰ TAY CẦM CHỊCH!)
     function doStep3Mix() {
       if (!bowl.step2Done) {
         showToast("⚠️ Hãy hoàn thành Bước 1 và Bước 2 trước khi trộn nhé!");
         return;
       }
-      const gain = 24 + Math.floor(Math.random() * 5); // ~24-28% mỗi lần bấm -> 3 lần bấm là vào vùng xanh 72-84%
+      playSFX("mix");
+
+      // Nâng cấp Bình Rưới Sốt Định Lượng giúp lực trộn ổn định chuẩn xác (3 nhịp vào ngay tâm vùng xanh)
+      const bottleLv = state.equipLevels.tool_bottle || 0;
+      const variance = Math.max(1, 7 - bottleLv);
+      const gain = 24 + Math.floor(Math.random() * variance);
+
       bowl.mixProgress = Math.min(100, bowl.mixProgress + gain);
       bowl.step3Done = true;
 
       document.getElementById("mix-progress-label").textContent = `${bowl.mixProgress}%`;
       document.getElementById("mix-bar-fill").style.width = `${bowl.mixProgress}%`;
 
-      // Hiệu ứng xoay nhẹ thau inox
       const svg = document.getElementById("bowl-svg");
       svg.style.transform = `rotate(${bowl.mixProgress * 2}deg)`;
+      svg.classList.remove("bowl-shake-anim");
+      void svg.offsetWidth;
+      svg.classList.add("bowl-shake-anim");
 
       const { min, max } = getSweetSpotBounds();
       if (bowl.mixProgress >= min && bowl.mixProgress <= max) {
         document.getElementById("bowl-instruction").textContent = "✅ Đạt chuẩn vàng! Bấm Bước 4 Giao Khách ngay!";
         spawnFloatingFX("✨ Thấm Đều Chuẩn Vị!");
       } else if (bowl.mixProgress > max) {
-        document.getElementById("bowl-instruction").textContent = "⚠️ Hơi quá tay (bánh hơi nhão)! Bấm Bước 4 giao luôn!";
+        document.getElementById("bowl-instruction").textContent = "⚠️ Hơi quá tay (bánh nhão)! Bấm Bước 4 giao hoặc Đổ thau!";
         spawnFloatingFX("⚠️ Quá tay!");
       } else {
         document.getElementById("bowl-instruction").textContent = `🧤 Đang trộn (${bowl.mixProgress}%) - Bấm thêm lần nữa!`;
@@ -1938,7 +2660,6 @@
       const dishObj = DISH_MENU[bowl.selectedDish];
       const recipe = dishObj.recipe;
 
-      // Trừ tồn kho nguyên liệu theo công thức món đã làm
       for (const [ingKey, qty] of Object.entries(recipe)) {
         if ((state.stock[ingKey] || 0) < qty) {
           showToast("❌ Kho thiếu nguyên liệu, hãy sang Tab Đi Chợ nhập thêm!");
@@ -1949,79 +2670,111 @@
         state.stock[ingKey] -= qty;
       }
 
+      playSFX("cash");
       document.getElementById("svg-layer-topping").classList.remove("hidden");
 
-      // Chấm điểm chất lượng bịch bánh
+      // Chấm điểm chất lượng bịch bánh (Khách khó tính trừ nặng hơn nếu làm ẩu)
       let stars = 5;
       let notes = [];
       const { min, max } = getSweetSpotBounds();
+      const penaltyMult = currentCustomer.picky ? 2 : 1;
 
       if (bowl.selectedDish !== currentCustomer.wantedDish) {
-        stars -= 2;
+        stars -= 2 * penaltyMult;
         notes.push("Giao nhầm món khách gọi");
       }
       if (bowl.rau !== currentCustomer.wantedRau) {
-        stars -= 1;
+        stars -= 1 * penaltyMult;
         notes.push("Nhầm yêu cầu Rau răm");
       }
       if (bowl.hanh !== currentCustomer.wantedHanh) {
-        stars -= 1;
+        stars -= 1 * penaltyMult;
         notes.push("Nhầm yêu cầu Hành phi");
       }
       if (bowl.spice !== currentCustomer.wantedSpice) {
-        stars -= 1;
+        stars -= 1 * penaltyMult;
         notes.push("Nhầm độ cay");
       }
       if (bowl.mixProgress < min) {
-        stars -= 1;
-        notes.push("Trộn chưa tan hết muối");
+        stars -= 1 * penaltyMult;
+        notes.push("Trộn chưa thấm đều gia vị");
       } else if (bowl.mixProgress > max) {
-        stars -= 1;
-        notes.push("Trộn/nướng quá tay làm nhão/khét bánh");
+        stars -= 1 * penaltyMult;
+        notes.push("Trộn/nướng quá tay làm nhão bánh");
       }
 
       stars = Math.max(1, stars);
 
-      // Tính tiền thu được
-      const basePrice = dishObj.price;
+      // Tính tiền thu được theo Bậc Sao món ăn + Trang trí đèn lồng + Khách Khó Tính / VIP
+      const basePrice = getDishEffectivePrice(bowl.selectedDish);
       let tip = 0;
       if (stars === 5) {
         tip += 3000;
         if (state.prepDone.sate && state.prepDone.hanhphi && state.prepDone.trungcut) tip += 3000;
-        if (state.upgrades.led) tip += 2000;
+        tip += (state.equipLevels.decor_lantern || 0) * 1500;
         if (currentCustomer.vip) tip += 10000;
+        if (currentCustomer.picky) tip += 15000; // Khách khó tính hài lòng thưởng Tip cực đậm!
+        if (state.nextCustomerTipBonus > 0) {
+          tip += state.nextCustomerTipBonus;
+          state.nextCustomerTipBonus = 0;
+        }
       } else if (stars === 4) {
-        tip += 1000;
+        tip += 1500;
       }
 
-      const finalEarned = stars >= 3 ? (basePrice + tip) : Math.round(basePrice * 0.6);
+      const finalEarned = stars >= 3 ? (basePrice + tip) : Math.round(basePrice * 0.55);
       state.money += finalEarned;
       state.todayRevenue += finalEarned;
       state.totalSold += 1;
       state.todaySold += 1;
 
-      if (stars === 5) state.reputation = Math.min(100, state.reputation + 2);
-      else if (stars <= 2) state.reputation = Math.max(0, state.reputation - 3);
+      if (stars === 5) state.reputation = Math.min(100, state.reputation + (currentCustomer.picky ? 4 : 2));
+      else if (stars <= 2) state.reputation = Math.max(0, state.reputation - (currentCustomer.picky ? 6 : 3));
 
-      addXP(stars * 7);
+      // Tính XP (Cộng thêm % từ Loa Kẹo Kéo Chill)
+      const speakerBonus = 1 + (state.equipLevels.decor_speaker || 0) * 0.10;
+      const earnedXp = Math.round(stars * 8 * speakerBonus);
+      addXP(earnedXp);
 
-      // Hiển thị hộp thoại Giao Bánh
+      // Lưu vào Sổ Đánh Giá (Review Log) để Chủ quán trả lời
+      const reviewComment = notes.length === 0
+        ? (currentCustomer.picky
+            ? `"Tôi rất khó tính mà phải công nhận món ${dishObj.name} của quán trộn quá chuẩn, 10 điểm!"`
+            : `"Món ${dishObj.name} ngon xuất sắc, thấm vị đúng ý mình luôn dì Tư ơi!"`)
+        : `"Chưa ưng ý lắm: ${notes.join(", ")}."`;
+
+      const reviewItem = {
+        id: "rev_" + Date.now(),
+        custName: currentCustomer.name,
+        custAvatar: currentCustomer.avatar,
+        picky: currentCustomer.picky,
+        dishName: dishObj.name,
+        stars,
+        comment: reviewComment,
+        replied: false,
+        replyText: ""
+      };
+      state.reviews.unshift(reviewItem);
+      if (state.reviews.length > 25) state.reviews.pop();
+      currentServeReviewId = reviewItem.id;
+
+      // Hiển thị hộp thoại Giao Bánh & Phản hồi Review
       document.getElementById("serve-result-stars").textContent = "⭐".repeat(stars);
       document.getElementById("serve-result-title").textContent =
-        stars === 5 ? "Tuyệt Hảo 10 Điểm!" : stars >= 3 ? "Khách Hài Lòng!" : "Khách Hơi Phàn Nàn!";
-      document.getElementById("serve-result-comment").textContent =
-        notes.length === 0
-          ? `"Món ${dishObj.name} ngon xuất sắc, thấm vị đúng ý con luôn dì Tư ơi!"`
-          : `"Lưu ý: ${notes.join(", ")}."`;
+        stars === 5 ? (currentCustomer.picky ? "Khách Khó Tính Tâm Phục Khẩu Phục!" : "Tuyệt Hảo 10 Điểm!") : stars >= 3 ? "Khách Hài Lòng!" : "Khách Phàn Nàn!";
+      document.getElementById("serve-result-comment").textContent = reviewComment;
 
       document.getElementById("serve-result-breakdown").innerHTML = `
-        <div class="flex justify-between"><span>Món đã bán:</span><b class="text-amber-950">${dishObj.icon} ${dishObj.name}</b></div>
-        <div class="flex justify-between"><span>Giá gốc:</span><b>${formatVND(basePrice)}</b></div>
+        <div class="flex justify-between"><span>Món đã bán:</span><b class="text-amber-950">${dishObj.icon} ${dishObj.name} (★${state.dishStars[bowl.selectedDish] || 1})</b></div>
+        <div class="flex justify-between"><span>Giá bán:</span><b>${formatVND(basePrice)}</b></div>
         <div class="flex justify-between text-emerald-700"><span>Tiền thưởng Tip:</span><b>+${formatVND(tip)}</b></div>
         <div class="flex justify-between border-t border-amber-300 pt-1 text-sm font-black text-emerald-800">
-          <span>Tổng thu về:</span><span>+${formatVND(finalEarned)}</span>
+          <span>Tổng thu về:</span><span>+${formatVND(finalEarned)} (+${earnedXp} XP)</span>
         </div>
       `;
+
+      document.getElementById("reply-done-badge").classList.add("hidden");
+      document.getElementById("serve-reply-buttons").classList.remove("hidden");
 
       if (patienceTimer) clearInterval(patienceTimer);
       document.getElementById("modal-serve-result").classList.remove("hidden");
@@ -2030,9 +2783,88 @@
       saveGameEverywhere();
     }
 
+    function replyCurrentReview(mode, targetReviewId = null) {
+      const revId = targetReviewId || currentServeReviewId;
+      const rev = state.reviews.find(r => r.id === revId);
+      if (!rev || rev.replied) return;
+
+      if (mode === "voucher") {
+        if (state.money < 5000) {
+          showToast("❌ Không đủ 5.000đ để tặng phiếu bù Topping!");
+          return;
+        }
+        state.money -= 5000;
+        state.reputation = Math.min(100, state.reputation + 5);
+        addXP(10);
+        rev.replyText = "🎁 Chủ quán: Dì Tư gửi tặng con phiếu thêm Topping miễn phí lần sau nha!";
+        showToast("🎁 Đã tặng phiếu bù Topping (+5 Uy tín & +10 XP)!");
+      } else if (mode === "apology") {
+        state.reputation = Math.min(100, state.reputation + 2);
+        rev.replyText = "🙏 Chủ quán: Dì Tư xin lỗi con nhiều nghen, lần sau dì sẽ canh kỹ hơn!";
+        showToast("🙏 Đã gửi lời xin lỗi chân thành (+2 Uy tín)!");
+      } else {
+        addXP(5);
+        state.nextCustomerTipBonus = 3000;
+        rev.replyText = "💖 Chủ quán: Cảm ơn con nhiều nghen, nhớ giới thiệu bạn bè ghé xe dì Tư nha!";
+        showToast("💖 Đã thả tim cảm ơn (+5 XP & Khách kế tiếp +3.000đ Tip)!");
+      }
+
+      rev.replied = true;
+      playSFX("cash");
+
+      if (!targetReviewId) {
+        document.getElementById("reply-done-badge").classList.remove("hidden");
+        document.getElementById("serve-reply-buttons").classList.add("hidden");
+      } else {
+        renderReviewsModalList();
+      }
+      updateAllUI();
+      saveGameEverywhere();
+    }
+
     function closeServeResultModal() {
       document.getElementById("modal-serve-result").classList.add("hidden");
       spawnCustomer();
+    }
+
+    function openReviewsModal() {
+      renderReviewsModalList();
+      document.getElementById("modal-reviews").classList.remove("hidden");
+    }
+
+    function closeReviewsModal() {
+      document.getElementById("modal-reviews").classList.add("hidden");
+    }
+
+    function renderReviewsModalList() {
+      const container = document.getElementById("reviews-list-container");
+      if (!container) return;
+      if (!state.reviews || state.reviews.length === 0) {
+        container.innerHTML = `<div class="p-4 text-center text-xs text-amber-800 bg-amber-50 rounded-xl">Chưa có đánh giá nào. Hãy bán những bịch bánh tráng đầu tiên để nhận Review của khách nhé!</div>`;
+        return;
+      }
+      container.innerHTML = state.reviews.map(r => `
+        <div class="p-3 rounded-2xl bg-white border-2 ${r.stars >= 4 ? 'border-amber-200' : 'border-rose-300'} space-y-1.5 text-xs">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span class="text-lg">${r.custAvatar}</span>
+              <span class="font-black text-amber-950">${escapeHtml(r.custName)}</span>
+              ${r.picky ? `<span class="text-[9px] font-black px-1.5 py-0.5 rounded bg-red-600 text-white">KHÓ TÍNH</span>` : ''}
+            </div>
+            <span>${"⭐".repeat(r.stars)}</span>
+          </div>
+          <div class="text-[11px] font-bold text-orange-800">Món đã mua: ${escapeHtml(r.dishName)}</div>
+          <p class="text-amber-900 italic">${escapeHtml(r.comment)}</p>
+          ${r.replied
+            ? `<div class="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-900">${escapeHtml(r.replyText)}</div>`
+            : `<div class="flex flex-wrap gap-1 pt-1">
+                <button onclick="replyCurrentReview('thanks', '${r.id}')" class="soft-btn px-2 py-1 rounded-lg bg-pink-600 text-white font-bold text-[10px]">💖 Cảm ơn (+5 XP)</button>
+                <button onclick="replyCurrentReview('apology', '${r.id}')" class="soft-btn px-2 py-1 rounded-lg bg-amber-600 text-white font-bold text-[10px]">🙏 Xin lỗi (+2 Uy tín)</button>
+                <button onclick="replyCurrentReview('voucher', '${r.id}')" class="soft-btn px-2 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[10px]">🎁 Đền bù -5k (+5 Uy tín)</button>
+              </div>`
+          }
+        </div>
+      `).join("");
     }
 
     function triggerNextStepSmart() {
@@ -2043,17 +2875,28 @@
       else doStep4Serve();
     }
 
-    // SỰ KIỆN NGẪU NHIÊN SÀI GÒN (MƯA RÀO / ĐÔ THỊ)
+    // SỰ KIỆN KHẨN CẤP (MƯA RÀO CÓ HIỆU ỨNG HẠT MƯA / ĐÔ THỊ)
     function triggerRandomEmergency() {
-      const isRain = Math.random() < 0.6 || state.upgrades.rent;
+      const isRain = Math.random() < 0.65 || state.licenses.lic_sidewalk;
       activeEmergency = isRain ? "rain" : "urban";
+      playSFX("whistle");
+
+      // Nếu đã thuê Chú Bảo Vệ Tư Nghĩa -> Tự động xử lý ngay lập tức!
+      if (state.staff.tunghia) {
+        activeEmergency = null;
+        addXP(12);
+        showToast("🐕 Chú Bảo Vệ Tư Nghĩa đã tự động căng bạt & xếp gọn xe giúp quán (+12 XP)!");
+        return;
+      }
+
       const banner = document.getElementById("emergency-banner");
       banner.classList.remove("hidden");
 
       if (activeEmergency === "rain") {
+        document.getElementById("rain-visual-layer").classList.remove("hidden");
         document.getElementById("emergency-icon").textContent = "🌧️";
         document.getElementById("emergency-title").textContent = "Mưa rào Sài Gòn ập tới!";
-        document.getElementById("emergency-desc").textContent = "Bấm Căng Bạt ngay để che tủ bánh tráng!";
+        document.getElementById("emergency-desc").textContent = "Bấm Căng Bạt ngay để che tủ bánh tráng phơi sương!";
         document.getElementById("emergency-btn").textContent = "☂️ Căng Bạt Che Mưa";
       } else {
         document.getElementById("emergency-icon").textContent = "🚨";
@@ -2066,91 +2909,336 @@
     function resolveEmergency() {
       activeEmergency = null;
       document.getElementById("emergency-banner").classList.add("hidden");
-      addXP(10);
+      document.getElementById("rain-visual-layer").classList.add("hidden");
+      addXP(12);
       showToast("👏 Phản xạ thần tốc! Xe bánh tráng an toàn tuyệt đối!");
     }
 
-    // ================= HỆ THỐNG CẤP ĐỘ, NÂNG CẤP & CỐT TRUYỆN =================
+    // HỘP THOẠI TÌNH HUỐNG ĐỜI THỰC SÀI GÒN (7 NHÓM BIẾN CỐ)
+    let activeDilemmaObj = null;
+    function triggerRandomDilemmaEvent() {
+      const ev = DILEMMA_EVENTS[Math.floor(Math.random() * DILEMMA_EVENTS.length)];
+      activeDilemmaObj = ev;
+      document.getElementById("dilemma-icon").textContent = ev.icon;
+      document.getElementById("dilemma-category").textContent = ev.category;
+      document.getElementById("dilemma-title").textContent = ev.title;
+      document.getElementById("dilemma-desc").textContent = ev.desc;
+
+      document.getElementById("dilemma-choices").innerHTML = `
+        <button onclick="chooseDilemmaOption('A')" class="soft-btn w-full p-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-xs text-left shadow">
+          👉 ${ev.choiceA.label}
+        </button>
+        <button onclick="chooseDilemmaOption('B')" class="soft-btn w-full p-3 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 font-extrabold text-xs text-left">
+          👉 ${ev.choiceB.label}
+        </button>
+      `;
+      document.getElementById("modal-dilemma").classList.remove("hidden");
+    }
+
+    function chooseDilemmaOption(opt) {
+      if (!activeDilemmaObj) return;
+      const handler = opt === "A" ? activeDilemmaObj.choiceA : activeDilemmaObj.choiceB;
+      const resultMsg = handler.effect(state);
+      document.getElementById("modal-dilemma").classList.add("hidden");
+      activeDilemmaObj = null;
+      playSFX("cash");
+      updateAllUI();
+      saveGameEverywhere();
+      showToast(resultMsg);
+    }
+
+    // ================= TAB 3: HỆ THỐNG 50 CẤP ĐỘ & CHI TIÊU NÂNG CẤP BẰNG TIỀN =================
     function addXP(amount) {
       state.xp += amount;
       let currentLvlObj = LEVEL_DATA.find(l => l.level === state.level);
-      while (currentLvlObj && state.level < 10 && state.xp >= currentLvlObj.xpNeed) {
+      while (currentLvlObj && state.level < 50 && state.xp >= currentLvlObj.xpNeed) {
         state.xp -= currentLvlObj.xpNeed;
         state.level += 1;
-        showToast(`🎉 LÊN CẤP ${state.level}! Vào Tab 3 (Nâng Cấp) để nhận tiền thưởng lên cấp nhé!`);
+        showToast(`🎉 THĂNG CẤP ${state.level}/50! Vào Tab 3 dùng tiền mở khóa món & dụng cụ mới nhé!`);
         currentLvlObj = LEVEL_DATA.find(l => l.level === state.level);
       }
       updateAllUI();
     }
 
+    function switchUpgradeSubTab(sub) {
+      currentUpgradeSubTab = sub;
+      ["dishes", "staff", "tools", "licenses"].forEach(k => {
+        const btn = document.getElementById(`upg-sub-${k}`);
+        if (!btn) return;
+        if (k === sub) {
+          btn.className = "soft-btn flex-1 py-1.5 px-2 rounded-xl font-black text-[11px] bg-orange-600 text-white shadow";
+        } else {
+          btn.className = "soft-btn flex-1 py-1.5 px-2 rounded-xl font-black text-[11px] text-amber-900 bg-white";
+        }
+      });
+      renderUpgradesTab();
+    }
+
     function renderUpgradesTab() {
-      document.getElementById("upgrade-current-lvl").textContent = `Cấp ${state.level}/10`;
-      const lvlContainer = document.getElementById("level-rewards-list");
-      if (lvlContainer) {
-        lvlContainer.innerHTML = LEVEL_DATA.map(l => {
-          const isReached = state.level >= l.level;
-          const isClaimed = state.claimedLevels.includes(l.level);
-          const canClaim = isReached && !isClaimed && l.reward > 0;
+      document.getElementById("upgrade-current-lvl").textContent = `Cấp ${state.level}/50`;
 
+      // Render 5 chặng độ khó
+      const stages = [
+        { range: "Cấp 1-10", name: "Gánh Hàng Khởi Nghiệp", spot: "Vùng xanh 24%", minLv: 1 },
+        { range: "Cấp 11-20", name: "Xe Đẩy Đầu Hẻm", spot: "Vùng xanh 20%", minLv: 11 },
+        { range: "Cấp 21-30", name: "Tiệm Sáng Đèn Phố Đêm", spot: "Vùng xanh 16%", minLv: 21 },
+        { range: "Cấp 31-40", name: "Đặc Sản Quận Nhất", spot: "Vùng xanh 12%", minLv: 31 },
+        { range: "Cấp 41-50", name: "Vua Bánh Tráng 30 Năm", spot: "Vùng xanh 9%", minLv: 41 }
+      ];
+      const stageEl = document.getElementById("stage-progress-badges");
+      if (stageEl) {
+        stageEl.innerHTML = stages.map(st => {
+          const active = state.level >= st.minLv;
           return `
-            <div class="p-2 rounded-xl border text-center flex flex-col justify-between ${isReached ? 'bg-white border-orange-400' : 'bg-amber-50/50 border-amber-200 opacity-65'}">
-              <div class="font-black text-xs text-amber-950">Cấp ${l.level}</div>
-              <div class="text-[10px] font-semibold text-amber-800 truncate">${l.title}</div>
-              <div class="text-[11px] font-black text-emerald-700 my-1">${l.reward > 0 ? '+' + formatVND(l.reward) : 'Khởi đầu'}</div>
-              ${canClaim
-                ? `<button onclick="claimLevelReward(${l.level})" class="soft-btn py-1 px-2 rounded-lg bg-orange-600 text-white font-black text-[10px] shadow">Nhận thưởng</button>`
-                : `<span class="text-[10px] font-bold ${isClaimed ? 'text-emerald-700' : 'text-amber-700'}">${isClaimed ? '✅ Đã nhận' : '🔒 Chưa đạt'}</span>`
-              }
+            <div class="p-2 rounded-xl border text-center ${active ? 'bg-white border-orange-500 shadow-sm' : 'bg-amber-50/50 border-amber-200 opacity-60'}">
+              <div class="font-black text-[11px] text-orange-700">${st.range}</div>
+              <div class="font-extrabold text-[10px] text-amber-950 truncate">${st.name}</div>
+              <div class="text-[9px] font-bold text-emerald-800 mt-0.5">${st.spot}</div>
             </div>
           `;
         }).join("");
       }
 
-      const upgContainer = document.getElementById("upgrade-list");
-      if (upgContainer) {
-        upgContainer.innerHTML = UPGRADES.map(u => {
-          const owned = state.upgrades[u.id];
-          return `
-            <div class="p-3 rounded-2xl bg-white border-2 ${owned ? 'border-emerald-400 bg-emerald-50/40' : 'border-amber-200'} flex flex-col justify-between gap-2">
-              <div>
-                <div class="font-black text-xs sm:text-sm text-amber-950">${u.name}</div>
-                <p class="text-[11px] text-amber-800 mt-0.5">${u.desc}</p>
-              </div>
-              <div class="flex items-center justify-between pt-2 border-t border-amber-100">
-                <span class="font-black text-xs text-emerald-800">${formatVND(u.cost)}</span>
-                ${owned
-                  ? `<span class="px-2.5 py-1 rounded-xl bg-emerald-600 text-white font-black text-[11px]">✅ Đã Trang Bị</span>`
-                  : `<button onclick="buyUpgrade('${u.id}')" class="soft-btn px-3 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-black text-xs shadow">Mua Ngay</button>`
+      const container = document.getElementById("upgrade-sub-content");
+      if (!container) return;
+
+      if (currentUpgradeSubTab === "dishes") {
+        // Nhánh 1: Mở khóa 10 món & Nâng cấp Bậc Sao (1 -> 5 Sao) bằng tiền
+        container.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            ${Object.values(DISH_MENU).map(d => {
+              const isUnlocked = state.unlockedDishes.includes(d.id);
+              const isLevelReached = state.level >= d.reqLevel;
+              const star = state.dishStars[d.id] || 1;
+              const effPrice = getDishEffectivePrice(d.id);
+              const starCost = getDishStarUpgradeCost(d.id);
+
+              let actionBtn = "";
+              if (!isUnlocked) {
+                if (isLevelReached) {
+                  actionBtn = `<button onclick="buyDishRecipe('${d.id}')" class="soft-btn px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow">🔓 Mua Công Thức (${formatVND(d.unlockCost)})</button>`;
+                } else {
+                  actionBtn = `<span class="px-2.5 py-1 rounded-xl bg-gray-200 text-gray-700 font-bold text-[11px]">🔒 Yêu cầu Cấp ${d.reqLevel} (${formatVND(d.unlockCost)})</span>`;
                 }
-              </div>
-            </div>
-          `;
-        }).join("");
+              } else if (star < 5) {
+                actionBtn = `<button onclick="upgradeDishStar('${d.id}')" class="soft-btn px-3 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-black text-xs shadow">⬆️ Nâng lên ${star + 1}⭐ (${formatVND(starCost)})</button>`;
+              } else {
+                actionBtn = `<span class="px-2.5 py-1 rounded-xl bg-amber-400 text-amber-950 font-black text-[11px]">👑 Đạt Tối Đa 5⭐</span>`;
+              }
+
+              return `
+                <div class="p-3 rounded-2xl bg-white border-2 ${isUnlocked ? 'border-amber-300' : 'border-gray-200 opacity-85'} flex flex-col justify-between gap-2">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                      <span class="text-2xl">${d.icon}</span>
+                      <div>
+                        <div class="font-black text-xs sm:text-sm text-amber-950">${d.name}</div>
+                        <div class="text-[11px] font-bold text-emerald-700">Giá bán: ${formatVND(effPrice)} • Mở ở Cấp ${d.reqLevel}</div>
+                      </div>
+                    </div>
+                    <span class="text-xs font-black text-orange-600">${isUnlocked ? "⭐".repeat(star) : "Chưa mở"}</span>
+                  </div>
+                  <div class="flex items-center justify-between pt-2 border-t border-amber-100">
+                    <span class="text-[10px] font-bold text-amber-800">+15% giá bán mỗi bậc sao</span>
+                    ${actionBtn}
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        `;
+      } else if (currentUpgradeSubTab === "staff") {
+        // Nhánh 2: Thuê 3 nhân viên phụ việc
+        container.innerHTML = `
+          <div class="grid grid-cols-1 gap-2">
+            ${STAFF_CATALOG.map(st => {
+              const hired = state.staff[st.id];
+              const lvlOk = state.level >= st.reqLevel;
+              return `
+                <div class="p-3 rounded-2xl bg-white border-2 ${hired ? 'border-emerald-400 bg-emerald-50/40' : 'border-amber-300'} flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div class="flex items-center gap-2.5">
+                    <span class="text-3xl bg-amber-100 w-12 h-12 rounded-2xl flex items-center justify-center border border-amber-300">${st.avatar}</span>
+                    <div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="font-black text-sm text-amber-950">${st.name}</span>
+                        <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">Mở Cấp ${st.reqLevel}</span>
+                      </div>
+                      <p class="text-xs text-amber-800 mt-0.5">${st.role}</p>
+                      <div class="text-[11px] font-black text-red-700 mt-0.5">Phí thuê: ${formatVND(st.hireCost)} • Lương: ${formatVND(st.dailyWage)}/ngày</div>
+                    </div>
+                  </div>
+                  <div class="shrink-0">
+                    ${hired
+                      ? `<span class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-black text-xs inline-block">✅ Đang Làm Việc</span>`
+                      : lvlOk
+                        ? `<button onclick="hireStaffMember('${st.id}')" class="soft-btn px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-black text-xs shadow">🤝 Thuê Ngay (${formatVND(st.hireCost)})</button>`
+                        : `<span class="px-3 py-1.5 rounded-xl bg-gray-200 text-gray-600 font-bold text-xs inline-block">🔒 Cần Cấp ${st.reqLevel}</span>`
+                    }
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        `;
+      } else if (currentUpgradeSubTab === "tools") {
+        // Nhánh 3: Vật liệu trang trí & Dụng cụ làm bánh (5 cấp/món)
+        container.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            ${EQUIP_UPGRADES.map(eq => {
+              const curLvl = state.equipLevels[eq.id] || 0;
+              const cost = getEquipCost(eq);
+              const isMax = curLvl >= eq.maxLvl;
+              return `
+                <div class="p-3 rounded-2xl bg-white border-2 ${curLvl > 0 ? 'border-amber-400' : 'border-amber-200'} flex flex-col justify-between gap-2">
+                  <div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] font-black px-2 py-0.5 rounded-full ${eq.branch === 'Trang Trí' ? 'bg-pink-100 text-pink-800' : 'bg-blue-100 text-blue-800'}">${eq.branch}</span>
+                      <span class="text-xs font-black text-orange-600">Cấp ${curLvl}/${eq.maxLvl}</span>
+                    </div>
+                    <div class="font-black text-xs sm:text-sm text-amber-950 mt-1">${eq.icon} ${eq.name}</div>
+                    <p class="text-[11px] text-amber-800 mt-0.5">${eq.desc}</p>
+                  </div>
+                  <div class="flex items-center justify-between pt-2 border-t border-amber-100">
+                    <span class="font-black text-xs text-emerald-800">${isMax ? 'Tối đa' : formatVND(cost)}</span>
+                    ${isMax
+                      ? `<span class="px-2.5 py-1 rounded-xl bg-emerald-600 text-white font-black text-[11px]">✅ Đã Tối Đa</span>`
+                      : `<button onclick="buyEquipUpgrade('${eq.id}')" class="soft-btn px-3 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-black text-xs shadow">⬆️ Nâng Cấp</button>`
+                    }
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        `;
+      } else {
+        // Nhánh 4: Giấy phép pháp lý & Hợp đồng mặt bằng
+        container.innerHTML = `
+          <div class="grid grid-cols-1 gap-2">
+            ${LICENSES_CATALOG.map(lic => {
+              const owned = state.licenses[lic.id];
+              const lvlOk = state.level >= lic.reqLevel;
+              return `
+                <div class="p-3 rounded-2xl bg-white border-2 ${owned ? 'border-emerald-400 bg-emerald-50/40' : 'border-amber-300'} flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div class="flex items-center gap-2.5">
+                    <span class="text-3xl bg-amber-100 w-12 h-12 rounded-2xl flex items-center justify-center border border-amber-300">${lic.icon}</span>
+                    <div>
+                      <div class="flex items-center gap-1.5">
+                        <span class="font-black text-sm text-amber-950">${lic.name}</span>
+                        <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">Mở Cấp ${lic.reqLevel}</span>
+                      </div>
+                      <p class="text-xs text-amber-800 mt-0.5">${lic.desc}</p>
+                      <div class="text-[11px] font-black text-emerald-800 mt-0.5">Lệ phí cấp: ${formatVND(lic.cost)} ${lic.dailyFee > 0 ? `• Phí duy trì: ${formatVND(lic.dailyFee)}/ngày` : ''}</div>
+                    </div>
+                  </div>
+                  <div class="shrink-0">
+                    ${owned
+                      ? `<span class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-black text-xs inline-block">✅ Đã Đăng Ký</span>`
+                      : lvlOk
+                        ? `<button onclick="buyLicenseItem('${lic.id}')" class="soft-btn px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-black text-xs shadow">📜 Đăng Ký (${formatVND(lic.cost)})</button>`
+                        : `<span class="px-3 py-1.5 rounded-xl bg-gray-200 text-gray-600 font-bold text-xs inline-block">🔒 Cần Cấp ${lic.reqLevel}</span>`
+                    }
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        `;
       }
     }
 
-    function claimLevelReward(lvl) {
-      const obj = LEVEL_DATA.find(l => l.level === lvl);
-      if (!obj || state.claimedLevels.includes(lvl) || state.level < lvl) return;
-      state.claimedLevels.push(lvl);
-      state.money += obj.reward;
-      updateAllUI();
-      saveGameEverywhere();
-      showToast(`🎁 Đã nhận thưởng Cấp ${lvl}: +${formatVND(obj.reward)}!`);
-    }
-
-    function buyUpgrade(id) {
-      const u = UPGRADES.find(x => x.id === id);
-      if (!u || state.upgrades[id]) return;
-      if (state.money < u.cost) {
-        showToast("❌ Chưa đủ tiền mặt để mua nâng cấp này!");
+    function buyDishRecipe(dishId) {
+      const d = DISH_MENU[dishId];
+      if (!d || state.unlockedDishes.includes(dishId)) return;
+      if (state.level < d.reqLevel) {
+        showToast(`🔒 Cần đạt Cấp ${d.reqLevel} mới được mua công thức món này!`);
         return;
       }
-      state.money -= u.cost;
-      state.upgrades[id] = true;
+      if (state.money < d.unlockCost) {
+        showToast(`❌ Chưa đủ ${formatVND(d.unlockCost)} để mua công thức món ${d.name}!`);
+        return;
+      }
+      state.money -= d.unlockCost;
+      state.unlockedDishes.push(dishId);
+      playSFX("cash");
       updateAllUI();
       saveGameEverywhere();
-      showToast(`⚡ Đã nâng cấp "${u.name}" thành công!`);
+      showToast(`🎉 Đã mở khóa món "${d.name}" vào Thực Đơn Đứng Bán!`);
+    }
+
+    function upgradeDishStar(dishId) {
+      if (!state.unlockedDishes.includes(dishId)) return;
+      const curStar = state.dishStars[dishId] || 1;
+      if (curStar >= 5) return;
+      const cost = getDishStarUpgradeCost(dishId);
+      if (state.money < cost) {
+        showToast(`❌ Cần ${formatVND(cost)} để nâng cấp bậc sao cho món này!`);
+        return;
+      }
+      state.money -= cost;
+      state.dishStars[dishId] = curStar + 1;
+      playSFX("cash");
+      updateAllUI();
+      saveGameEverywhere();
+      showToast(`⭐ Đã nâng "${DISH_MENU[dishId].name}" lên ${curStar + 1} Sao (+15% Giá bán)!`);
+    }
+
+    function hireStaffMember(staffId) {
+      const st = STAFF_CATALOG.find(x => x.id === staffId);
+      if (!st || state.staff[staffId]) return;
+      if (state.level < st.reqLevel) {
+        showToast(`🔒 Cần đạt Cấp ${st.reqLevel} để thuê ${st.name}!`);
+        return;
+      }
+      if (state.money < st.hireCost) {
+        showToast(`❌ Không đủ ${formatVND(st.hireCost)} phí thuê ${st.name}!`);
+        return;
+      }
+      state.money -= st.hireCost;
+      state.staff[staffId] = true;
+      if (staffId === "mylan") {
+        state.prepDone = { sate: true, hanhphi: true, trungcut: true };
+      }
+      playSFX("cash");
+      updateAllUI();
+      saveGameEverywhere();
+      showToast(`🧑‍🍳 Đã thuê "${st.name}" về phụ quán!`);
+    }
+
+    function buyEquipUpgrade(eqId) {
+      const eq = EQUIP_UPGRADES.find(x => x.id === eqId);
+      if (!eq) return;
+      const curLvl = state.equipLevels[eqId] || 0;
+      if (curLvl >= eq.maxLvl) return;
+      const cost = getEquipCost(eq);
+      if (state.money < cost) {
+        showToast(`❌ Chưa đủ ${formatVND(cost)} để nâng cấp "${eq.name}"!`);
+        return;
+      }
+      state.money -= cost;
+      state.equipLevels[eqId] = curLvl + 1;
+      playSFX("cash");
+      updateAllUI();
+      saveGameEverywhere();
+      showToast(`⚡ Đã nâng cấp "${eq.name}" lên Cấp ${curLvl + 1}/${eq.maxLvl}!`);
+    }
+
+    function buyLicenseItem(licId) {
+      const lic = LICENSES_CATALOG.find(x => x.id === licId);
+      if (!lic || state.licenses[licId]) return;
+      if (state.level < lic.reqLevel) {
+        showToast(`🔒 Cần đạt Cấp ${lic.reqLevel} để đăng ký ${lic.name}!`);
+        return;
+      }
+      if (state.money < lic.cost) {
+        showToast(`❌ Chưa đủ ${formatVND(lic.cost)} để đăng ký ${lic.name}!`);
+        return;
+      }
+      state.money -= lic.cost;
+      state.licenses[licId] = true;
+      playSFX("cash");
+      updateAllUI();
+      saveGameEverywhere();
+      showToast(`📜 Đã đăng ký thành công "${lic.name}"!`);
     }
 
     // CỐT TRUYỆN 4 CHƯƠNG
@@ -2186,6 +3274,7 @@
       if (!ch || state.claimedChapters.includes(id) || !ch.check(state)) return;
       state.claimedChapters.push(id);
       state.money += ch.reward;
+      playSFX("cash");
       openStoryModal();
       updateAllUI();
       saveGameEverywhere();
@@ -2200,11 +3289,10 @@
     function startDayClock() {
       if (clockTimer) clearInterval(clockTimer);
       clockTimer = setInterval(() => {
-        // Chỉ chạy đồng hồ khi đã đăng nhập và đang ở tab Đứng Bán
         const loginHidden = document.getElementById("login-screen").classList.contains("hidden");
         if (!loginHidden || currentTab !== "sell") return;
 
-        state.clockMinutes += 2; // Thời gian trôi thong thả
+        state.clockMinutes += 2;
         const h = Math.floor(state.clockMinutes / 60);
         const m = state.clockMinutes % 60;
         const timeStr = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
@@ -2217,18 +3305,26 @@
     }
 
     function endDaySummary() {
-      const depCost = 7300; // Khấu hao thiết bị chuẩn 30 năm Dì Tư
-      const utilCost = 20000; // Điện, nước, gas
-      const rentCost = state.upgrades.rent ? 50000 : 0;
-      const totalFixed = depCost + utilCost + rentCost;
+      const depCost = 7300;
+      const utilCost = 20000;
+      const rentCost = state.licenses.lic_sidewalk ? 35000 : 0;
+      const staffWages = getDailyStaffWages();
+      const totalFixed = depCost + utilCost + rentCost + staffWages;
 
-      // Kiểm kê đồ tươi tồn kho bị hỏng cuối ngày
-      const spoiledXoai = state.stock.xoai || 0;
-      const spoiledTrung = state.stock.trungcut || 0;
+      // Tính tỷ lệ giữ tươi nguyên liệu từ Thùng Đá & Tủ Kính (20% mỗi cấp, cấp 5 giữ 100%)
+      const coolerLvl = state.equipLevels.tool_cooler || 0;
+      const keepRate = Math.min(1, coolerLvl * 0.2);
+
+      const totalXoai = state.stock.xoai || 0;
+      const totalTrung = state.stock.trungcut || 0;
+      const keptXoai = Math.round(totalXoai * keepRate);
+      const keptTrung = Math.round(totalTrung * keepRate);
+      const spoiledXoai = totalXoai - keptXoai;
+      const spoiledTrung = totalTrung - keptTrung;
       const spoiledValue = (spoiledXoai * 1500) + (spoiledTrung * 2000);
 
-      state.stock.xoai = 0;
-      state.stock.trungcut = 0;
+      state.stock.xoai = keptXoai;
+      state.stock.trungcut = keptTrung;
       state.money = Math.max(0, state.money - totalFixed);
 
       const netProfit = state.todayRevenue - state.todayCogsSpent - totalFixed;
@@ -2248,9 +3344,9 @@
         <div class="flex justify-between"><span>Số phần bánh đã bán:</span><b>${state.todaySold} phần</b></div>
         <div class="flex justify-between text-emerald-700"><span>Tổng doanh thu bán hàng:</span><b>+${formatVND(state.todayRevenue)}</b></div>
         <div class="flex justify-between text-amber-800"><span>Tiền nhập nguyên liệu hôm nay:</span><b>-${formatVND(state.todayCogsSpent)}</b></div>
-        <div class="flex justify-between text-red-700"><span>Khấu hao xe đẩy & dụng cụ:</span><b>-7.300đ</b></div>
-        <div class="flex justify-between text-red-700"><span>Điện, nước, gas & mặt bằng:</span><b>-${formatVND(utilCost + rentCost)}</b></div>
-        <div class="flex justify-between text-orange-700"><span>Đồ tươi tồn kho phải hủy (Xoài: ${spoiledXoai}, Trứng: ${spoiledTrung}):</span><b>Hao hụt ${formatVND(spoiledValue)}</b></div>
+        <div class="flex justify-between text-red-700"><span>Khấu hao xe đẩy & Điện nước gas:</span><b>-27.300đ</b></div>
+        <div class="flex justify-between text-red-700"><span>Phí vỉa hè & Lương nhân viên:</span><b>-${formatVND(rentCost + staffWages)}</b></div>
+        <div class="flex justify-between text-orange-700"><span>Đồ tươi hỏng (Xoài: ${spoiledXoai}, Trứng: ${spoiledTrung}) [Tủ đá giữ ${keptXoai + keptTrung}]:</span><b>Hao hụt ${formatVND(spoiledValue)}</b></div>
         <div class="flex justify-between border-t border-amber-300 pt-1.5 text-sm font-black ${netProfit >= 0 ? 'text-emerald-800' : 'text-red-700'}">
           <span>Lãi ròng trong ngày:</span><span>${netProfit >= 0 ? '+' : ''}${formatVND(netProfit)}</span>
         </div>
@@ -2267,14 +3363,18 @@
       state.todaySold = 0;
       state.todayRevenue = 0;
       state.todayCogsSpent = 0;
-      state.prepDone = { sate: false, hanhphi: false, trungcut: false };
+      // Nếu đã thuê Chị Mỹ Lan -> tự động hoàn tất 3/3 món sơ chế mỗi sáng!
+      if (state.staff.mylan) {
+        state.prepDone = { sate: true, hanhphi: true, trungcut: true };
+      } else {
+        state.prepDone = { sate: false, hanhphi: false, trungcut: false };
+      }
 
-      // Biến động giá chợ sỉ nhẹ mỗi sáng (0.9x -> 1.15x)
-      const factors = [0.9, 1.0, 1.0, 1.1, 1.15];
+      const factors = [0.85, 0.95, 1.0, 1.1, 1.2, 1.25];
       state.marketPriceMultiplier = factors[Math.floor(Math.random() * factors.length)];
       const badge = document.getElementById("market-price-badge");
       if (badge) {
-        if (state.marketPriceMultiplier < 1) badge.textContent = "📉 Giá chợ hôm nay giảm 10%";
+        if (state.marketPriceMultiplier < 1) badge.textContent = `📉 Giá chợ giảm -${Math.round((1 - state.marketPriceMultiplier) * 100)}%`;
         else if (state.marketPriceMultiplier > 1) badge.textContent = `📈 Giá chợ tăng +${Math.round((state.marketPriceMultiplier - 1) * 100)}%`;
         else badge.textContent = "⚖️ Giá chợ ổn định";
       }
@@ -2283,13 +3383,19 @@
       updateAllUI();
       switchTab("market");
       saveGameEverywhere();
-      showToast(`☀️ Chào buổi sáng Ngày ${state.day}! Hãy nhập thêm Đồ Tươi và Sơ Chế trước khi bán nhé!`);
+      showToast(state.staff.mylan
+        ? `☀️ Ngày ${state.day}! Chị Mỹ Lan đã sơ chế sẵn 3/3 món cho quán rồi!`
+        : `☀️ Chào buổi sáng Ngày ${state.day}! Hãy nhập Đồ Tươi và Sơ Chế trước khi bán nhé!`);
     }
 
     function renderLedgerTab() {
       const rentEl = document.getElementById("ledger-rent-cost");
       if (rentEl) {
-        rentEl.textContent = state.upgrades.rent ? "50.000đ / ngày (Cố định)" : "0đ / ngày (Đứng vỉa hè)";
+        rentEl.textContent = state.licenses.lic_sidewalk ? "35.000đ / ngày" : "0đ / ngày (Đứng lụi)";
+      }
+      const staffEl = document.getElementById("ledger-staff-cost");
+      if (staffEl) {
+        staffEl.textContent = formatVND(getDailyStaffWages()) + " / ngày";
       }
       const list = document.getElementById("ledger-history-list");
       if (!list) return;
@@ -2329,7 +3435,6 @@
       const mergedMap = new Map();
       cloudLeaderboardCache.forEach(item => mergedMap.set(item.shopKey, item));
 
-      // Đảm bảo quán của người chơi hiện tại luôn cập nhật tức thì
       if (state.shopName) {
         const myKey = state.shopKey || sanitizeShopKey(state.shopName);
         mergedMap.set(myKey, {
@@ -2365,7 +3470,7 @@
                   ${isMe ? `<span class="text-[10px] font-black px-1.5 py-0.5 rounded bg-orange-600 text-white">Quán của bạn</span>` : ''}
                 </div>
                 <div class="text-[10px] font-bold text-amber-800">
-                  Cấp ${item.level || 1} • Ngày ${item.day || 1} • Đã bán: <b>${item.totalSold || 0} bịch</b>
+                  Cấp ${item.level || 1}/50 • Ngày ${item.day || 1} • Đã bán: <b>${item.totalSold || 0} bịch</b>
                 </div>
               </div>
             </div>
@@ -2413,7 +3518,7 @@
       toastTimeout = setTimeout(() => {
         box.classList.add("opacity-0", "translate-y-4");
         box.classList.remove("opacity-100", "translate-y-0");
-      }, 2600);
+      }, 2800);
     }
   </script>
 </body>
