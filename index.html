@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Bánh Tráng Trộn Sài Gòn V2 - Bí Kíp 30 Năm Dì Tư</title>
+  <title>Bánh Tráng Trộn Sài Gòn V3 - Bí Kíp 30 Năm Dì Tư</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -21,6 +21,7 @@
       overflow-x: hidden;
       background-color: #1e112a;
       color: #2d1606;
+      font-size: 14px;
     }
 
     .saigon-bg {
@@ -60,7 +61,7 @@
       inset: 0;
       pointer-events: none;
       z-index: 40;
-      background-image: linear-gradient(105deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 45%, rgba(191,219,254,0.45) 50%, rgba(255,255,255,0) 55%);
+      background-image: linear-gradient(105deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 45%, rgba(191,219,254,0.5) 50%, rgba(255,255,255,0) 55%);
       background-size: 28px 90px;
       animation: rainFall 0.35s linear infinite;
     }
@@ -70,11 +71,11 @@
     }
 
     .soft-card {
-      background: rgba(255, 251, 244, 0.96);
+      background: rgba(255, 251, 244, 0.97);
       backdrop-filter: blur(12px);
-      border-radius: 20px;
+      border-radius: 22px;
       border: 2px solid rgba(253, 224, 171, 0.9);
-      box-shadow: 0 10px 25px -5px rgba(45, 14, 4, 0.3), inset 0 2px 0 0 rgba(255, 255, 255, 0.9);
+      box-shadow: 0 12px 30px -5px rgba(45, 14, 4, 0.35), inset 0 2px 0 0 rgba(255, 255, 255, 0.9);
     }
 
     .soft-btn {
@@ -90,7 +91,7 @@
 
     @keyframes floatUpFade {
       0% { opacity: 1; transform: translateY(0) scale(0.9); }
-      100% { opacity: 0; transform: translateY(-38px) scale(1.1); }
+      100% { opacity: 0; transform: translateY(-42px) scale(1.1); }
     }
     .floating-badge {
       animation: floatUpFade 1.1s ease-out forwards;
@@ -107,21 +108,12 @@
       background-color: #fff7ed !important;
     }
 
-    @keyframes bowlShake {
-      0%, 100% { transform: translateX(0) rotate(0deg); }
-      25% { transform: translateX(-4px) rotate(-6deg); }
-      75% { transform: translateX(4px) rotate(6deg); }
-    }
-    .bowl-shake-anim {
-      animation: bowlShake 0.22s ease-in-out;
-    }
-
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: rgba(254, 243, 199, 0.3); border-radius: 8px; }
     ::-webkit-scrollbar-thumb { background: #f59e0b; border-radius: 8px; }
   </style>
 </head>
-<body class="flex flex-col items-center justify-start min-h-screen p-1.5 sm:p-3">
+<body class="flex flex-col items-center justify-start min-h-screen p-2 sm:p-3">
 
   <input id="hidden-avatar-upload" type="file" accept="image/*" class="hidden" onchange="handleAvatarFileSelected(event)" />
   <div id="rain-visual-layer" class="rain-overlay hidden"></div>
@@ -130,8 +122,7 @@
   <div id="saigon-sky-bg" class="saigon-bg">
     <div class="bokeh-light w-48 h-48 bg-amber-400 top-10 left-10"></div>
     <div class="bokeh-light w-64 h-64 bg-rose-500 top-1/3 right-8" style="animation-delay: 1.5s"></div>
-    <div class="bokeh-light w-56 h-56 bg-orange-400 bottom-20 left-1/4" style="animation-delay: 3s"></div>
-    <svg id="lantern-svg-strip" class="w-full h-20 sm:h-28 opacity-90 transition-opacity duration-700" viewBox="0 0 1200 120" preserveAspectRatio="none">
+    <svg id="lantern-svg-strip" class="w-full h-24 sm:h-28 opacity-90 transition-opacity duration-700" viewBox="0 0 1200 120" preserveAspectRatio="none">
       <path d="M0,15 Q300,75 600,25 Q900,80 1200,15" fill="none" stroke="#fef08a" stroke-width="2" stroke-dasharray="4,4" opacity="0.6"/>
       <g class="lantern-sway" style="transform-origin: 150px 42px">
         <line x1="150" y1="42" x2="150" y2="58" stroke="#fde047" stroke-width="2"/>
@@ -152,28 +143,28 @@
   </div>
 
   <!-- MÀN HÌNH ĐĂNG NHẬP -->
-  <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-3 overflow-y-auto bg-black/55 backdrop-blur-md">
-    <div class="w-full max-w-md soft-card p-4 sm:p-6 border-4 border-amber-400 shadow-2xl relative my-auto">
+  <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-3 overflow-y-auto bg-black/60 backdrop-blur-md">
+    <div class="w-full max-w-md soft-card p-5 sm:p-6 border-4 border-amber-400 shadow-2xl relative my-auto">
       <div class="flex flex-col items-center text-center">
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-red-600 to-orange-500 text-white text-xs font-extrabold shadow-md mb-2">
-          <span>🔥 BẢN NÂNG CẤP V2</span>
+        <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-red-600 to-orange-500 text-white text-xs font-extrabold shadow-md mb-2">
+          <span>🔥 BẢN HOÀN THIỆN V3</span>
           <span>•</span>
-          <span>5.0 SAO & BIẾN CỐ ĐỘNG</span>
+          <span>5.0 SAO & NGÂN HÀNG</span>
         </div>
-        <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-100 to-orange-200 border-2 border-amber-400 shadow-inner flex items-center justify-center mb-2 relative">
+        <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-amber-100 to-orange-200 border-2 border-amber-400 shadow-inner flex items-center justify-center mb-2 relative">
           <span class="text-3xl">🛒</span>
           <div id="login-selected-avatar-badge" class="absolute -bottom-2 -right-2 bg-white rounded-full w-10 h-10 flex items-center justify-center border-2 border-amber-500 shadow overflow-hidden">
             👩‍🍳
           </div>
         </div>
         <h1 class="text-2xl sm:text-3xl font-black text-amber-950 tracking-tight">VUA BÁNH TRÁNG SÀI GÒN</h1>
-        <p class="text-xs text-amber-800 font-semibold mt-0.5">Tải ảnh Avatar, đặt Bảng Hiệu, giữ chuẩn 5.0 ⭐ & Chinh phục 50 Cấp Độ!</p>
+        <p class="text-xs text-amber-800 font-semibold mt-0.5">Tải ảnh chủ quán, giữ chuẩn 5.0 ⭐, Chinh phục 50 Cấp & Vay vốn khởi nghiệp!</p>
       </div>
 
       <div id="quick-resume-box" class="hidden mt-3 p-3 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-400">
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-2.5 min-w-0">
-            <div id="quick-resume-avatar" class="w-10 h-10 rounded-xl bg-white border border-emerald-300 flex items-center justify-center text-2xl overflow-hidden shrink-0">👩‍🍳</div>
+            <div id="quick-resume-avatar" class="w-11 h-11 rounded-xl bg-white border border-emerald-300 flex items-center justify-center text-2xl overflow-hidden shrink-0">👩‍🍳</div>
             <div class="truncate">
               <div class="text-[10px] font-bold text-emerald-700 uppercase">Quán đang lưu trên máy:</div>
               <div id="quick-resume-name" class="text-xs font-black text-emerald-950 truncate">Bánh Tráng Dì Tư</div>
@@ -186,32 +177,32 @@
         </div>
       </div>
 
-      <div class="mt-3 space-y-2.5 bg-amber-50/90 p-3 rounded-2xl border border-amber-200">
+      <div class="mt-3 space-y-3 bg-amber-50/90 p-3.5 rounded-2xl border border-amber-200 text-xs">
         <div>
           <div class="flex items-center justify-between mb-1">
-            <label class="block text-xs font-extrabold text-amber-900">1. Ảnh Đại Diện Chủ Quán:</label>
+            <label class="font-extrabold text-amber-900">1. Ảnh Đại Diện Chủ Quán:</label>
             <button type="button" onclick="triggerAvatarUpload('login')" class="soft-btn px-2.5 py-1 rounded-lg bg-orange-600 text-white font-black text-[10px] shadow">📷 Tải Ảnh Từ Máy</button>
           </div>
           <div id="login-avatar-grid" class="grid grid-cols-8 gap-1"></div>
         </div>
         <div>
-          <label class="block text-xs font-extrabold text-amber-900 mb-1">2. Tên Bảng Hiệu Quán:</label>
-          <input id="login-shop-name" type="text" maxlength="24" placeholder="VD: Bánh Tráng Vỹ Khang..." class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 focus:border-orange-500 focus:outline-none text-xs font-extrabold text-amber-950 bg-white" />
+          <label class="block font-extrabold text-amber-900 mb-1">2. Tên Bảng Hiệu Quán:</label>
+          <input id="login-shop-name" type="text" maxlength="24" placeholder="VD: Bánh Tráng Vỹ Khang..." class="w-full px-3.5 py-2.5 rounded-xl border-2 border-amber-300 focus:border-orange-500 focus:outline-none font-extrabold text-amber-950 bg-white" />
         </div>
         <div>
-          <label class="block text-xs font-extrabold text-amber-900 mb-1">3. Mã PIN Bảo Vệ (4 chữ số):</label>
-          <input id="login-shop-pin" type="password" inputmode="numeric" maxlength="4" placeholder="VD: 1234" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 focus:border-orange-500 focus:outline-none text-xs font-black tracking-widest text-amber-950 bg-white" />
+          <label class="block font-extrabold text-amber-900 mb-1">3. Mã PIN Bảo Vệ (4 chữ số):</label>
+          <input id="login-shop-pin" type="password" inputmode="numeric" maxlength="4" placeholder="VD: 1234" class="w-full px-3.5 py-2.5 rounded-xl border-2 border-amber-300 focus:border-orange-500 focus:outline-none font-black tracking-widest text-amber-950 bg-white" />
         </div>
-        <div id="login-status-msg" class="hidden text-xs font-bold text-center py-1.5 px-2 rounded-lg"></div>
-        <button id="btn-login-submit" onclick="handleLoginOrRegister()" class="soft-btn w-full py-2.5 rounded-xl bg-gradient-to-r from-orange-600 via-red-600 to-amber-600 text-white font-black text-sm shadow-lg border-b-4 border-red-800">
+        <div id="login-status-msg" class="hidden font-bold text-center py-1.5 px-2 rounded-lg"></div>
+        <button id="btn-login-submit" onclick="handleLoginOrRegister()" class="soft-btn w-full py-3 rounded-2xl bg-gradient-to-r from-orange-600 via-red-600 to-amber-600 text-white font-black text-sm shadow-lg border-b-4 border-red-800">
           🚀 MỞ XE BÁNH TRÁNG & VÀO CHƠI
         </button>
       </div>
 
-      <div class="mt-2.5 bg-white/80 rounded-2xl p-2 border border-amber-200">
+      <div class="mt-3 bg-white/80 rounded-2xl p-2.5 border border-amber-200">
         <div class="flex items-center justify-between mb-1">
           <span class="text-[10px] font-black text-amber-900 uppercase">🏆 Top Đại Gia Sài Gòn</span>
-          <span id="login-cloud-badge" class="text-[9px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">☁️ Đang kết nối...</span>
+          <span id="login-cloud-badge" class="text-[9px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">☁️ Đang kết nối...</span>
         </div>
         <div id="login-top3-list" class="space-y-1 text-xs">
           <div class="text-center text-amber-700 py-1 text-[10px]">Đang tải bảng xếp hạng...</div>
@@ -221,193 +212,196 @@
   </div>
 
   <!-- KHUNG GIAO DIỆN CHÍNH -->
-  <div id="game-app" class="w-full max-w-2xl flex flex-col gap-1.5 pb-8">
+  <div id="game-app" class="w-full max-w-2xl flex flex-col gap-2 pb-10">
 
-    <!-- THANH HEADER TRẠNG THÁI -->
-    <header class="soft-card p-2 sm:p-2.5 border-2 border-amber-400">
-      <div class="flex flex-wrap items-center justify-between gap-1.5">
+    <!-- THANH HEADER TRẠNG THÁI (LINH HOẠT THU GỌN KHI RA PHỐ) -->
+    <header id="main-header-card" class="soft-card p-2.5 sm:p-3 border-2 border-amber-400">
+      <div id="header-top-shop-row" class="flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center gap-2">
-          <button onclick="openProfileEditModal()" title="Đổi Tên Quán & Tải Ảnh" class="soft-btn w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow border-2 border-white relative overflow-hidden shrink-0">
-            <div id="header-avatar" class="w-full h-full flex items-center justify-center text-xl">👩‍🍳</div>
-            <span class="absolute bottom-0 right-0 bg-amber-950/80 text-white text-[7px] px-1 rounded-tl font-bold">Sửa</span>
+          <button onclick="openProfileEditModal()" title="Đổi Tên & Tải Ảnh" class="soft-btn w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow border-2 border-white relative overflow-hidden shrink-0">
+            <div id="header-avatar" class="w-full h-full flex items-center justify-center text-2xl">👩‍🍳</div>
+            <span class="absolute bottom-0 right-0 bg-amber-950/80 text-white text-[8px] px-1 rounded-tl font-bold">Sửa</span>
           </button>
           <div>
-            <div class="flex items-center gap-1 flex-wrap">
-              <span id="header-shop-name" onclick="openProfileEditModal()" class="cursor-pointer hover:underline font-black text-xs sm:text-sm text-amber-950 truncate max-w-[120px] sm:max-w-[160px]">Quán Dì Tư</span>
-              <span id="header-level-badge" class="px-1.5 py-0.2 rounded-full bg-amber-500 text-white font-black text-[10px]">Cấp 1</span>
-              <span id="header-stage-title" class="hidden sm:inline-block text-[9px] font-extrabold text-orange-800 bg-orange-100 px-1.5 py-0.2 rounded-full border border-orange-300">Khởi Nghiệp</span>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span id="header-shop-name" onclick="openProfileEditModal()" class="cursor-pointer hover:underline font-black text-sm sm:text-base text-amber-950 truncate max-w-[140px] sm:max-w-[180px]">Quán Dì Tư</span>
+              <span id="header-level-badge" class="px-2 py-0.5 rounded-full bg-amber-500 text-white font-black text-[11px]">Cấp 1</span>
+              <span id="header-stage-title" class="hidden sm:inline-block text-[10px] font-extrabold text-orange-800 bg-orange-100 px-2 py-0.5 rounded-full border border-orange-300">Khởi Nghiệp</span>
             </div>
-            <div class="flex items-center gap-1 mt-0.5">
-              <div class="w-20 sm:w-28 h-1.5 bg-amber-200 rounded-full overflow-hidden border border-amber-300">
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <div class="w-24 sm:w-32 h-2 bg-amber-200 rounded-full overflow-hidden border border-amber-300">
                 <div id="header-xp-bar" class="h-full bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-300" style="width: 0%"></div>
               </div>
-              <span id="header-xp-text" class="text-[9px] font-bold text-amber-800">0 XP</span>
+              <span id="header-xp-text" class="text-[10px] font-bold text-amber-800">0 XP</span>
             </div>
           </div>
         </div>
 
-        <div class="flex items-center gap-1 sm:gap-1.5 flex-wrap justify-end">
-          <div class="px-2 py-0.5 rounded-lg bg-emerald-100 border border-emerald-300 flex items-center gap-0.5">
-            <span class="text-xs">💵</span>
-            <span id="header-money" class="font-black text-xs text-emerald-900">500.000đ</span>
+        <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-end">
+          <div class="px-2.5 py-1 rounded-xl bg-emerald-100 border border-emerald-300 flex items-center gap-1">
+            <span class="text-sm">💵</span>
+            <span id="header-money" class="font-black text-xs sm:text-sm text-emerald-900">500.000đ</span>
           </div>
-          <button onclick="openReviewsModal()" id="header-rating-box" class="soft-btn px-2 py-0.5 rounded-lg bg-amber-100 border border-amber-400 flex items-center gap-0.5 shadow-sm">
-            <span class="text-xs">⭐</span>
-            <span id="header-rating" class="font-black text-xs text-amber-950">5.0</span>
-            <span id="header-rating-tier" class="text-[8px] font-extrabold px-1 rounded bg-emerald-600 text-white">Đỉnh Nóc</span>
+          <button onclick="openReviewsModal()" id="header-rating-box" class="soft-btn px-2.5 py-1 rounded-xl bg-amber-100 border border-amber-400 flex items-center gap-1 shadow-sm">
+            <span class="text-sm">⭐</span>
+            <span id="header-rating" class="font-black text-xs sm:text-sm text-amber-950">5.0</span>
+            <span id="header-rating-tier" class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-emerald-600 text-white">Đỉnh Nóc</span>
           </button>
-          <div class="px-2 py-0.5 rounded-lg bg-purple-100 border border-purple-300 flex items-center gap-0.5">
-            <span class="text-xs">🕒</span>
+          <div class="px-2.5 py-1 rounded-xl bg-purple-100 border border-purple-300 flex items-center gap-1">
+            <span class="text-sm">🕒</span>
             <span id="header-day-clock" class="font-black text-xs text-purple-900">N.1 • 14:00</span>
           </div>
         </div>
       </div>
 
-      <div class="flex flex-wrap items-center justify-between gap-1 mt-1.5 pt-1 border-t border-amber-200/80 text-[10px]">
-        <div class="flex flex-wrap items-center gap-1">
-          <button onclick="openReviewsModal()" class="soft-btn px-2 py-0.5 rounded-md bg-gradient-to-r from-rose-600 to-pink-600 text-white font-black flex items-center gap-0.5 relative">
+      <div class="flex flex-wrap items-center justify-between gap-1.5 mt-2 pt-1.5 border-t border-amber-200/80 text-xs">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button onclick="openReviewsModal()" class="soft-btn px-2.5 py-1 rounded-lg bg-gradient-to-r from-rose-600 to-pink-600 text-white font-black flex items-center gap-1 shadow-sm relative">
             <span>📱</span><span>MXH Review (<span id="header-review-count">0</span>)</span>
-            <span id="badge-unreplied-reviews" class="hidden ml-0.5 px-1 py-0.2 rounded-full bg-yellow-300 text-rose-950 font-black text-[8px] animate-bounce">0 mới</span>
+            <span id="badge-unreplied-reviews" class="hidden absolute -top-1 -right-1 px-1.5 py-0.2 rounded-full bg-yellow-300 text-rose-950 font-black text-[9px] animate-bounce">0 mới</span>
           </button>
-          <button onclick="openProfileEditModal()" class="soft-btn px-2 py-0.5 rounded-md bg-amber-100 text-amber-950 border border-amber-300 font-extrabold">⚙️ Tên/Avatar</button>
-          <button onclick="openStoryModal()" class="soft-btn px-2 py-0.5 rounded-md bg-amber-600 text-white font-bold">📖 Hồi Ký</button>
-          <button onclick="toggleAudioSystem()" id="btn-audio-toggle" class="soft-btn px-2 py-0.5 rounded-md bg-purple-100 text-purple-900 border border-purple-300 font-extrabold"><span id="audio-icon">🎵</span> <span id="audio-label">Chill</span></button>
+          <button onclick="openAchievementsModal()" class="soft-btn px-2.5 py-1 rounded-lg bg-amber-500 text-white font-black flex items-center gap-1 shadow-sm">
+            <span>🎖️</span><span>Thành Tựu</span>
+          </button>
+          <button id="header-extra-tools-btn1" onclick="openProfileEditModal()" class="soft-btn px-2 py-1 rounded-lg bg-amber-100 text-amber-950 border border-amber-300 font-extrabold">⚙️ Tên/Avatar</button>
+          <button id="header-extra-tools-btn2" onclick="openStoryModal()" class="soft-btn px-2 py-1 rounded-lg bg-amber-600 text-white font-bold">📖 Hồi Ký</button>
+          <button onclick="toggleAudioSystem()" id="btn-audio-toggle" class="soft-btn px-2 py-1 rounded-lg bg-purple-100 text-purple-900 border border-purple-300 font-extrabold"><span id="audio-icon">🎵</span> <span id="audio-label">Chill</span></button>
         </div>
-        <div class="flex items-center gap-1">
-          <button onclick="manualSyncCloud()" class="soft-btn px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-300 font-bold">☁️ Cloud</button>
-          <button onclick="openLoginModalForSwitch()" class="soft-btn px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 font-bold">🔑 Đổi Quán</button>
+        <div class="flex items-center gap-1.5">
+          <button onclick="manualSyncCloud()" class="soft-btn px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-300 font-bold">☁️ Cloud</button>
+          <button id="header-extra-tools-btn3" onclick="openLoginModalForSwitch()" class="soft-btn px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 font-bold">🔑 Đổi Quán</button>
         </div>
       </div>
     </header>
 
-    <!-- THANH ĐIỀU HƯỚNG 5 TAB -->
-    <nav class="grid grid-cols-5 gap-1 soft-card p-1 border-2 border-amber-300">
-      <button onclick="switchTab('market')" id="tab-btn-market" class="soft-btn py-1.5 px-0.5 rounded-lg font-extrabold text-[10px] sm:text-xs flex flex-col items-center gap-0.2 bg-orange-600 text-white shadow"><span>🛒</span><span>1. Đi Chợ</span></button>
-      <button onclick="switchTab('sell')" id="tab-btn-sell" class="soft-btn py-1.5 px-0.5 rounded-lg font-extrabold text-[10px] sm:text-xs flex flex-col items-center gap-0.2 text-amber-900 hover:bg-amber-100"><span>🥣</span><span>2. Đứng Bán</span></button>
-      <button onclick="switchTab('upgrade')" id="tab-btn-upgrade" class="soft-btn py-1.5 px-0.5 rounded-lg font-extrabold text-[10px] sm:text-xs flex flex-col items-center gap-0.2 text-amber-900 hover:bg-amber-100 relative"><span>⚡</span><span>3. Nâng Cấp</span><span id="badge-upgrade-notify" class="hidden absolute top-1 right-2 w-2 h-2 rounded-full bg-red-600 animate-ping"></span></button>
-      <button onclick="switchTab('ledger')" id="tab-btn-ledger" class="soft-btn py-1.5 px-0.5 rounded-lg font-extrabold text-[10px] sm:text-xs flex flex-col items-center gap-0.2 text-amber-900 hover:bg-amber-100"><span>📊</span><span>4. Sổ Sách</span></button>
-      <button onclick="switchTab('leaderboard')" id="tab-btn-leaderboard" class="soft-btn py-1.5 px-0.5 rounded-lg font-extrabold text-[10px] sm:text-xs flex flex-col items-center gap-0.2 text-amber-900 hover:bg-amber-100"><span>🏆</span><span>5. Đua Top</span></button>
+    <!-- THANH ĐIỀU HƯỚNG TAB (Tab 1 sẽ tự ẩn khi đẩy xe ra phố) -->
+    <nav id="main-nav-tabs" class="grid grid-cols-5 gap-1.5 soft-card p-1.5 border-2 border-amber-300">
+      <button onclick="switchTab('market')" id="tab-btn-market" class="soft-btn py-2 px-1 rounded-xl font-extrabold text-xs flex flex-col items-center gap-0.5 bg-orange-600 text-white shadow"><span>🛒</span><span>1. Đi Chợ</span></button>
+      <button onclick="switchTab('sell')" id="tab-btn-sell" class="soft-btn py-2 px-1 rounded-xl font-extrabold text-xs flex flex-col items-center gap-0.5 text-amber-900 hover:bg-amber-100"><span>🥣</span><span>2. Đứng Bán</span></button>
+      <button onclick="switchTab('upgrade')" id="tab-btn-upgrade" class="soft-btn py-2 px-1 rounded-xl font-extrabold text-xs flex flex-col items-center gap-0.5 text-amber-900 hover:bg-amber-100 relative"><span>⚡</span><span>3. Nâng Cấp</span></button>
+      <button onclick="switchTab('ledger')" id="tab-btn-ledger" class="soft-btn py-2 px-1 rounded-xl font-extrabold text-xs flex flex-col items-center gap-0.5 text-amber-900 hover:bg-amber-100"><span>📊</span><span>4. Sổ Sách</span></button>
+      <button onclick="switchTab('leaderboard')" id="tab-btn-leaderboard" class="soft-btn py-2 px-1 rounded-xl font-extrabold text-xs flex flex-col items-center gap-0.5 text-amber-900 hover:bg-amber-100"><span>🏆</span><span>5. Đua Top</span></button>
     </nav>
 
-    <!-- TAB 1: ĐI CHỢ -->
-    <section id="tab-market" class="soft-card p-3 space-y-2.5">
-      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-amber-200 pb-1.5">
+    <!-- TAB 1: ĐI CHỢ & SƠ CHẾ (Ở NHÀ TRƯỚC 14:00) -->
+    <section id="tab-market" class="soft-card p-3.5 sm:p-4 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-amber-200 pb-2">
         <div>
-          <h2 class="text-xs sm:text-sm font-black text-amber-950">🏪 Chợ Sỉ Bình Tây & Sơ Chế</h2>
-          <p class="text-[10px] text-amber-800">Mua sỉ đầu ngày tiết kiệm. Đứt hàng giữa ca sẽ phải mua lẻ tạp hóa giá đắt!</p>
+          <h2 class="text-sm sm:text-base font-black text-amber-950">🏪 Chợ Sỉ Bình Tây & Sơ Chế</h2>
+          <p class="text-xs text-amber-800">Mua sỉ lúc 13:00 ở nhà. Khi bấm đẩy xe ra phố, chợ sỉ sẽ khóa lại!</p>
         </div>
-        <button onclick="fillSuggestedOrder()" class="soft-btn px-2 py-1 rounded-lg bg-amber-100 text-amber-900 font-extrabold text-[10px] border border-amber-300">✨ Gợi ý 15 phần</button>
+        <button onclick="fillSuggestedOrder()" class="soft-btn px-2.5 py-1.5 rounded-xl bg-amber-100 text-amber-900 font-extrabold text-xs border border-amber-300">✨ Gợi ý 15 phần</button>
       </div>
-      <div id="market-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5"></div>
-      <div class="p-2.5 rounded-xl bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border border-amber-400 flex flex-wrap items-center justify-between gap-2">
+      <div id="market-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+      <div class="p-3 rounded-2xl bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-2 border-amber-400 flex flex-wrap items-center justify-between gap-2">
         <div>
-          <div class="text-[10px] font-bold text-amber-900">Tổng đơn hàng:</div>
-          <div id="market-Order-total" class="text-sm font-black text-red-700">0đ (0 phần)</div>
+          <div class="text-xs font-bold text-amber-900">Tổng đơn hàng:</div>
+          <div id="market-Order-total" class="text-base font-black text-red-700">0đ (0 phần)</div>
         </div>
-        <div class="flex items-center gap-1.5">
-          <button onclick="clearMarketInputs()" class="soft-btn px-2.5 py-1.5 rounded-lg bg-white text-amber-900 font-bold text-[10px] border border-amber-300">Xóa</button>
-          <button onclick="confirmMarketPurchase()" class="soft-btn px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-black text-[10px] shadow">✅ XÁC NHẬN NHẬP KHO</button>
-        </div>
-      </div>
-      <div class="pt-1.5 border-t border-amber-200">
-        <div class="flex items-center justify-between mb-1.5">
-          <div class="text-[11px] font-black text-amber-950">🔥 Sơ Chế (Cộng +3k Tip/bịch):</div>
-          <span id="prep-bonus-status" class="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-100 text-amber-900">0/3</span>
-        </div>
-        <div class="grid grid-cols-3 gap-1.5">
-          <button onclick="openPrepModal('sate')" id="prep-btn-sate" class="soft-btn p-2 rounded-xl bg-white border border-amber-300 flex flex-col items-center text-center gap-0.5">
-            <span class="text-lg">🌶️</span><span class="font-extrabold text-[10px]">Sa Tế</span><span id="prep-status-sate" class="text-[9px] text-orange-600">Chưa làm</span>
-          </button>
-          <button onclick="openPrepModal('hanhphi')" id="prep-btn-hanhphi" class="soft-btn p-2 rounded-xl bg-white border border-amber-300 flex flex-col items-center text-center gap-0.5">
-            <span class="text-lg">🧅</span><span class="font-extrabold text-[10px]">Hành Phi</span><span id="prep-status-hanhphi" class="text-[9px] text-orange-600">Chưa làm</span>
-          </button>
-          <button onclick="openPrepModal('trungcut')" id="prep-btn-trungcut" class="soft-btn p-2 rounded-xl bg-white border border-amber-300 flex flex-col items-center text-center gap-0.5">
-            <span class="text-lg">🥚</span><span class="font-extrabold text-[10px]">Trứng Cút</span><span id="prep-status-trungcut" class="text-[9px] text-orange-600">Chưa làm</span>
-          </button>
+        <div class="flex items-center gap-2">
+          <button onclick="clearMarketInputs()" class="soft-btn px-3 py-2 rounded-xl bg-white text-amber-900 font-bold text-xs border border-amber-300">Xóa</button>
+          <button onclick="confirmMarketPurchase()" class="soft-btn px-4 py-2.5 rounded-xl bg-emerald-600 text-white font-black text-xs shadow">✅ XÁC NHẬN NHẬP KHO</button>
         </div>
       </div>
-      <button onclick="switchTab('sell')" class="soft-btn w-full py-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-black text-xs shadow-lg">🚲 ĐẨY XE RA GÓC ĐƯỜNG BÁN HÀNG NGAY!</button>
+      <div class="pt-2 border-t border-amber-200">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-xs sm:text-sm font-black text-amber-950">🔥 Sơ Chế (+3k Tip/bịch):</div>
+          <span id="prep-bonus-status" class="text-xs font-black px-2.5 py-1 rounded-full bg-amber-100 text-amber-900">0/3</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="openPrepModal('sate')" id="prep-btn-sate" class="soft-btn p-2.5 rounded-2xl bg-white border-2 border-amber-300 flex flex-col items-center text-center gap-1">
+            <span class="text-2xl">🌶️</span><span class="font-extrabold text-xs">Sa Tế</span><span id="prep-status-sate" class="text-[10px] text-orange-600">Chưa làm</span>
+          </button>
+          <button onclick="openPrepModal('hanhphi')" id="prep-btn-hanhphi" class="soft-btn p-2.5 rounded-2xl bg-white border-2 border-amber-300 flex flex-col items-center text-center gap-1">
+            <span class="text-2xl">🧅</span><span class="font-extrabold text-xs">Hành Phi</span><span id="prep-status-hanhphi" class="text-[10px] text-orange-600">Chưa làm</span>
+          </button>
+          <button onclick="openPrepModal('trungcut')" id="prep-btn-trungcut" class="soft-btn p-2.5 rounded-2xl bg-white border-2 border-amber-300 flex flex-col items-center text-center gap-1">
+            <span class="text-2xl">🥚</span><span class="font-extrabold text-xs">Trứng Cút</span><span id="prep-status-trungcut" class="text-[10px] text-orange-600">Chưa làm</span>
+          </button>
+        </div>
+      </div>
+      <button onclick="pushCartToStreet()" class="soft-btn w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-black text-sm shadow-lg">🚲 ĐẨY XE RA PHỐ BÁN HÀNG NGAY!</button>
     </section>
 
-    <!-- TAB 2: ĐỨNG BÁN (TỐI ƯU 1 MÀN HÌNH ĐIỆN THOẠI KHÔNG CUỘN) -->
-    <section id="tab-sell" class="hidden soft-card p-2 sm:p-3 space-y-1.5">
-      <div id="staff-active-strip" class="flex flex-wrap items-center justify-between gap-1 px-2 py-1 rounded-xl bg-amber-100/90 border border-amber-300 text-[10px]"></div>
+    <!-- TAB 2: ĐỨNG BÁN (TO RÕ, THOÁNG ĐÃNG) -->
+    <section id="tab-sell" class="hidden soft-card p-3 sm:p-4 space-y-2.5">
+      <div id="staff-active-strip" class="flex flex-wrap items-center justify-between gap-1.5 px-3 py-1.5 rounded-2xl bg-amber-100/90 border border-amber-300 text-xs"></div>
 
-      <!-- Khách hàng ngang gọn -->
-      <div id="customer-card-box" class="p-2 rounded-xl bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-2 border-amber-300 flex items-center justify-between gap-2">
-        <div class="flex items-center gap-2 min-w-0 flex-1">
-          <div class="flex flex-col items-center gap-0.5 shrink-0">
-            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-orange-200 to-amber-300 border-2 border-amber-500 flex items-center justify-center text-2xl relative shadow-inner">
+      <!-- Khách hàng -->
+      <div id="customer-card-box" class="p-3 rounded-2xl bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-2 border-amber-300 flex items-center justify-between gap-2.5">
+        <div class="flex items-center gap-3 min-w-0 flex-1">
+          <div class="flex flex-col items-center gap-1 shrink-0">
+            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-orange-200 to-amber-300 border-2 border-amber-500 flex items-center justify-center text-3xl relative shadow-inner">
               <span id="cust-avatar">👧</span>
-              <span id="cust-vip-badge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[7px] font-black px-1 rounded-full">VIP</span>
+              <span id="cust-vip-badge" class="hidden absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full">VIP</span>
             </div>
-            <div class="w-11 h-1.5 bg-amber-200 rounded-full overflow-hidden border border-amber-400">
+            <div class="w-14 h-2 bg-amber-200 rounded-full overflow-hidden border border-amber-400">
               <div id="cust-patience-bar" class="h-full bg-emerald-500 transition-all duration-300" style="width: 100%"></div>
             </div>
           </div>
           <div class="min-w-0 flex-1">
-            <div class="flex items-center justify-between gap-1">
-              <div class="flex items-center gap-1 truncate">
-                <span id="cust-name" class="font-black text-xs text-amber-950">Bé Na</span>
-                <span id="cust-meta" class="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-amber-200 text-amber-900">16t</span>
-                <span id="cust-picky-badge" class="hidden text-[9px] font-black px-1.5 py-0.2 rounded-full bg-red-600 text-white animate-pulse">KHÓ TÍNH</span>
+            <div class="flex items-center justify-between gap-1.5">
+              <div class="flex items-center gap-1.5 truncate">
+                <span id="cust-name" class="font-black text-sm sm:text-base text-amber-950">Bé Na</span>
+                <span id="cust-meta" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">16t</span>
+                <span id="cust-picky-badge" class="hidden text-[10px] font-black px-2 py-0.5 rounded-full bg-red-600 text-white animate-pulse">KHÓ TÍNH</span>
               </div>
-              <div class="flex items-center gap-1 shrink-0">
-                <button onclick="triggerRandomDilemmaEvent(true)" class="px-1.5 py-0.2 rounded bg-orange-100 border border-orange-300 text-[9px] font-black text-orange-800">🎭 Biến cố</button>
-                <button onclick="nextCustomer(true)" class="px-1.5 py-0.2 rounded bg-red-50 border border-red-200 text-[9px] font-bold text-red-700">Đổi</button>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button onclick="triggerRandomDilemmaEvent(true)" class="px-2 py-0.5 rounded-lg bg-orange-100 border border-orange-300 text-[10px] font-black text-orange-800">🎭 Biến Cố</button>
+                <button onclick="nextCustomer(true)" class="px-2 py-0.5 rounded-lg bg-red-50 border border-red-200 text-[10px] font-bold text-red-700">Đổi Khách</button>
               </div>
             </div>
-            <p id="cust-dialogue" class="text-[10px] font-semibold text-amber-900 italic truncate mt-0.5">"Dì Tư ơi làm cho con phần bánh tráng thiệt ngon nha!"</p>
-            <div class="flex flex-wrap items-center gap-1 mt-0.5">
-              <span id="req-tag-dish" class="text-[9px] font-black px-1 py-0.2 rounded bg-amber-100 border border-amber-400 text-amber-950">🥣 Thập Cẩm</span>
-              <span id="req-tag-spice" class="text-[9px] font-bold px-1 py-0.2 rounded bg-white border border-amber-300 text-amber-900">🌶️ Vừa</span>
-              <span id="req-tag-rau" class="text-[9px] font-bold px-1 py-0.2 rounded bg-white border border-amber-300 text-amber-900">🌿 Rau</span>
-              <span id="req-tag-hanh" class="text-[9px] font-bold px-1 py-0.2 rounded bg-white border border-amber-300 text-amber-900">🧅 Hành</span>
-              <span id="req-tag-tratac" class="hidden text-[9px] font-bold px-1 py-0.2 rounded bg-white border border-amber-300 text-amber-900">🧋 Trà Tắc</span>
+            <p id="cust-dialogue" class="text-xs font-semibold text-amber-900 italic truncate mt-0.5">"Dì Tư ơi làm cho con phần bánh tráng thiệt ngon nha!"</p>
+            <div class="flex flex-wrap items-center gap-1 mt-1">
+              <span id="req-tag-dish" class="text-[10px] font-black px-2 py-0.5 rounded-lg bg-amber-100 border border-amber-400 text-amber-950">🥣 Thập Cẩm</span>
+              <span id="req-tag-spice" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-white border border-amber-300 text-amber-900">🌶️ Vừa</span>
+              <span id="req-tag-rau" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-white border border-amber-300 text-amber-900">🌿 Rau</span>
+              <span id="req-tag-hanh" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-white border border-amber-300 text-amber-900">🧅 Hành</span>
+              <span id="req-tag-tratac" class="hidden text-[10px] font-bold px-2 py-0.5 rounded-lg bg-white border border-amber-300 text-amber-900">🧋 Trà Tắc</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Thanh trượt món ăn ngang -->
+      <!-- Thanh trượt chọn món -->
       <div>
-        <div class="flex items-center justify-between mb-0.5">
-          <span class="text-[10px] font-black text-amber-900 uppercase">1. Chọn Món (<span id="unlocked-dish-count">1</span>/10):</span>
-          <span id="selected-dish-price" class="text-[10px] font-black text-emerald-700">25.000đ</span>
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-black text-amber-900 uppercase">1. Chọn Món (<span id="unlocked-dish-count">1</span>/10):</span>
+          <span id="selected-dish-price" class="text-xs font-black text-emerald-700">25.000đ</span>
         </div>
-        <div id="sell-dish-grid" class="flex gap-1 overflow-x-auto pb-0.5"></div>
+        <div id="sell-dish-grid" class="flex gap-2 overflow-x-auto pb-1"></div>
       </div>
 
-      <!-- Gia giảm 2 cột -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-1 bg-amber-50/90 p-1 rounded-xl border border-amber-200 text-[10px]">
+      <!-- Gia giảm -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-amber-50/90 p-2 rounded-2xl border border-amber-200 text-xs">
         <div class="flex items-center gap-1">
           <span class="font-extrabold text-amber-900">🌿:</span>
-          <button onclick="setOption('rau', true)" id="opt-rau-yes" class="soft-btn flex-1 py-0.5 px-1 rounded font-black bg-emerald-600 text-white">Có</button>
-          <button onclick="setOption('rau', false)" id="opt-rau-no" class="soft-btn flex-1 py-0.5 px-1 rounded font-bold bg-white text-amber-900 border">Ko</button>
+          <button onclick="setOption('rau', true)" id="opt-rau-yes" class="soft-btn flex-1 py-1 px-1.5 rounded-lg font-black bg-emerald-600 text-white">Có</button>
+          <button onclick="setOption('rau', false)" id="opt-rau-no" class="soft-btn flex-1 py-1 px-1.5 rounded-lg font-bold bg-white text-amber-900 border">Ko</button>
         </div>
         <div class="flex items-center gap-1">
           <span class="font-extrabold text-amber-900">🧅:</span>
-          <button onclick="setOption('hanh', true)" id="opt-hanh-yes" class="soft-btn flex-1 py-0.5 px-1 rounded font-black bg-emerald-600 text-white">Có</button>
-          <button onclick="setOption('hanh', false)" id="opt-hanh-no" class="soft-btn flex-1 py-0.5 px-1 rounded font-bold bg-white text-amber-900 border">Ko</button>
+          <button onclick="setOption('hanh', true)" id="opt-hanh-yes" class="soft-btn flex-1 py-1 px-1.5 rounded-lg font-black bg-emerald-600 text-white">Có</button>
+          <button onclick="setOption('hanh', false)" id="opt-hanh-no" class="soft-btn flex-1 py-1.5 px-1.5 rounded-lg font-bold bg-white text-amber-900 border">Ko</button>
         </div>
         <div class="flex items-center gap-1">
           <span class="font-extrabold text-amber-900">🌶️:</span>
-          <button onclick="setOption('spice', 0)" id="opt-spice-0" class="soft-btn flex-1 py-0.5 px-0.5 rounded font-bold bg-white border">Ko</button>
-          <button onclick="setOption('spice', 1)" id="opt-spice-1" class="soft-btn flex-1 py-0.5 px-0.5 rounded font-black bg-orange-600 text-white">Vừa</button>
-          <button onclick="setOption('spice', 2)" id="opt-spice-2" class="soft-btn flex-1 py-0.5 px-0.5 rounded font-bold bg-white border">Cay</button>
+          <button onclick="setOption('spice', 0)" id="opt-spice-0" class="soft-btn flex-1 py-1 px-1 rounded font-bold bg-white border">Ko</button>
+          <button onclick="setOption('spice', 1)" id="opt-spice-1" class="soft-btn flex-1 py-1 px-1 rounded font-black bg-orange-600 text-white">Vừa</button>
+          <button onclick="setOption('spice', 2)" id="opt-spice-2" class="soft-btn flex-1 py-1 px-1 rounded font-bold bg-white border">Cay</button>
         </div>
         <div>
-          <button onclick="toggleTraTacOption()" id="opt-tratac-btn" class="soft-btn w-full py-0.5 px-1 rounded font-bold bg-white text-amber-900 border flex items-center justify-center">🧋 Trà Tắc (+8k)</button>
+          <button onclick="toggleTraTacOption()" id="opt-tratac-btn" class="soft-btn w-full py-1 px-1.5 rounded-lg font-bold bg-white text-amber-900 border flex items-center justify-center">🧋 Trà Tắc (+8k)</button>
         </div>
       </div>
 
-      <!-- Thau trộn & 4 bước ngang nhau -->
-      <div class="grid grid-cols-12 gap-1.5 items-stretch">
-        <div class="col-span-5 flex flex-col items-center justify-between p-1.5 rounded-xl bg-gradient-to-b from-amber-100 to-orange-100 border-2 border-amber-300 relative">
+      <!-- Thau trộn & 4 bước (To rõ) -->
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-stretch">
+        <div class="sm:col-span-5 flex flex-col items-center justify-between p-2 rounded-2xl bg-gradient-to-b from-amber-100 to-orange-100 border-2 border-amber-300 relative min-h-[175px]">
           <div id="floating-fx-container" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20"></div>
-          <div id="vessel-mode-label" class="text-[8px] font-black uppercase px-1.5 py-0.2 rounded-full bg-amber-800 text-amber-100 text-center truncate max-w-full">🥣 Thau Inox 304</div>
-          <div onclick="triggerNextStepSmart()" class="cursor-pointer group relative flex flex-col items-center my-0.5">
-            <svg id="bowl-svg" class="w-20 h-20 sm:w-24 sm:h-24 transition-transform duration-200 group-active:scale-95" viewBox="0 0 160 160">
+          <div id="vessel-mode-label" class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-800 text-amber-100 text-center truncate max-w-full">🥣 Thau Inox 304</div>
+          <div onclick="triggerNextStepSmart()" class="cursor-pointer group relative flex flex-col items-center my-1">
+            <svg id="bowl-svg" class="w-24 h-24 sm:w-28 sm:h-28 transition-transform duration-200 group-active:scale-95" viewBox="0 0 160 160">
               <defs>
                 <radialGradient id="inoxGrad" cx="50%" cy="45%" r="55%"><stop offset="0%" stop-color="#f8fafc"/><stop offset="70%" stop-color="#cbd5e1"/><stop offset="100%" stop-color="#64748b"/></radialGradient>
                 <radialGradient id="grillGrad" cx="50%" cy="50%" r="55%"><stop offset="0%" stop-color="#ef4444"/><stop offset="65%" stop-color="#7f1d1d"/><stop offset="100%" stop-color="#1f2937"/></radialGradient>
@@ -421,224 +415,278 @@
               <g id="svg-layer-herbs" class="hidden"><circle cx="62" cy="64" r="5" fill="#16a34a"/><circle cx="92" cy="88" r="5" fill="#16a34a"/><circle cx="78" cy="60" r="4" fill="#15803d"/></g>
               <g id="svg-layer-topping" class="hidden"><rect x="58" y="68" width="14" height="9" rx="3" fill="#451a03"/><rect x="85" y="75" width="15" height="9" rx="3" fill="#7c2d12"/><ellipse cx="68" cy="88" rx="9" ry="7" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/></g>
             </svg>
-            <span id="bowl-instruction" class="text-[8px] font-black text-amber-950 bg-white/95 px-1 py-0.5 rounded-full border border-amber-300 shadow-sm -mt-1 text-center">Bấm Bước 1</span>
+            <span id="bowl-instruction" class="text-[10px] font-black text-amber-950 bg-white/95 px-2 py-0.5 rounded-full border border-amber-300 shadow-sm -mt-2 text-center">Bấm Bước 1</span>
           </div>
           <div class="w-full">
-            <div class="flex justify-between text-[8px] font-extrabold text-amber-900 mb-0.5"><span>Lực: <b id="mix-progress-label">0%</b></span><span id="sweet-spot-label" class="text-emerald-700">68-92%</span></div>
-            <div class="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden border border-amber-400 relative">
+            <div class="flex justify-between text-[10px] font-extrabold text-amber-900 mb-0.5"><span>Lực: <b id="mix-progress-label">0%</b></span><span id="sweet-spot-label" class="text-emerald-700">68-92%</span></div>
+            <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden border border-amber-400 relative">
               <div id="sweet-spot-zone" class="absolute top-0 bottom-0 bg-emerald-300/70 border-x border-emerald-600" style="left: 68%; width: 24%"></div>
               <div id="mix-bar-fill" class="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-emerald-600 transition-all duration-150" style="width: 0%"></div>
             </div>
           </div>
         </div>
 
-        <div class="col-span-7 grid grid-cols-2 gap-1">
-          <button onclick="doStep1Base()" id="step-btn-1" class="soft-btn step-highlight p-1.5 rounded-xl border-2 border-amber-300 bg-white text-left flex flex-col justify-between min-h-[62px]">
-            <div class="flex items-center justify-between"><span class="text-sm">🌾</span><span id="step-check-1" class="text-[8px] font-black px-1 rounded bg-amber-100 text-amber-900">B1</span></div>
-            <div><div class="font-black text-[10px] text-amber-950 leading-tight">1. Bánh & Xoài</div><div id="stock-step-1" class="text-[8px] font-bold text-amber-700 truncate">Bánh 15 • Xoài 12</div></div>
+        <div class="sm:col-span-7 grid grid-cols-2 gap-1.5">
+          <button onclick="doStep1Base()" id="step-btn-1" class="soft-btn step-highlight p-2 rounded-2xl border-2 border-amber-300 bg-white text-left flex flex-col justify-between min-h-[78px]">
+            <div class="flex items-center justify-between"><span class="text-xl">🌾</span><span id="step-check-1" class="text-[10px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-900">B1</span></div>
+            <div><div class="font-black text-xs text-amber-950 leading-tight">1. Bánh & Xoài</div><div id="stock-step-1" class="text-[10px] font-bold text-amber-700 truncate">Bánh 15 • Xoài 12</div></div>
           </button>
-          <button onclick="doStep2Sauce()" id="step-btn-2" class="soft-btn p-1.5 rounded-xl border-2 border-amber-300 bg-white text-left flex flex-col justify-between min-h-[62px]">
-            <div class="flex items-center justify-between"><span class="text-sm">🥣</span><span id="step-check-2" class="text-[8px] font-black px-1 rounded bg-amber-100 text-amber-900">B2</span></div>
-            <div><div class="font-black text-[10px] text-amber-950 leading-tight">2. Rưới Sốt</div><div id="stock-step-2" class="text-[8px] font-bold text-amber-700 truncate">Muối 15 • Bơ 12</div></div>
+          <button onclick="doStep2Sauce()" id="step-btn-2" class="soft-btn p-2 rounded-2xl border-2 border-amber-300 bg-white text-left flex flex-col justify-between min-h-[78px]">
+            <div class="flex items-center justify-between"><span class="text-xl">🥣</span><span id="step-check-2" class="text-[10px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-900">B2</span></div>
+            <div><div class="font-black text-xs text-amber-950 leading-tight">2. Rưới Sốt</div><div id="stock-step-2" class="text-[10px] font-bold text-amber-700 truncate">Muối 15 • Bơ 12</div></div>
           </button>
-          <button onclick="doStep3Mix()" id="step-btn-3" class="soft-btn p-1.5 rounded-xl border-2 border-amber-300 bg-white text-left flex flex-col justify-between min-h-[62px]">
-            <div class="flex items-center justify-between"><span class="text-sm">🧤</span><span id="step-check-3" class="text-[8px] font-black px-1 rounded bg-amber-100 text-amber-900">B3</span></div>
-            <div><div class="font-black text-[10px] text-amber-950 leading-tight">3. Trộn/Nướng</div><div class="text-[8px] font-bold text-emerald-700 truncate">Vùng xanh!</div></div>
+          <button onclick="doStep3Mix()" id="step-btn-3" class="soft-btn p-2 rounded-2xl border-2 border-amber-300 bg-white text-left flex flex-col justify-between min-h-[78px]">
+            <div class="flex items-center justify-between"><span class="text-xl">🧤</span><span id="step-check-3" class="text-[10px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-900">B3</span></div>
+            <div><div class="font-black text-xs text-amber-950 leading-tight">3. Trộn/Nướng</div><div class="text-[10px] font-bold text-emerald-700 truncate">Vùng xanh!</div></div>
           </button>
-          <button onclick="doStep4Serve()" id="step-btn-4" class="soft-btn p-1.5 rounded-xl border-2 border-amber-300 bg-white text-left flex flex-col justify-between min-h-[62px]">
-            <div class="flex items-center justify-between"><span class="text-sm">🛍️</span><span id="step-check-4" class="text-[8px] font-black px-1 rounded bg-amber-100 text-amber-900">B4</span></div>
-            <div><div class="font-black text-[10px] text-amber-950 leading-tight">4. Giao Khách</div><div id="stock-step-4" class="text-[8px] font-bold text-amber-700 truncate">Bò 15 • Trứng 12</div></div>
+          <button onclick="doStep4Serve()" id="step-btn-4" class="soft-btn p-2 rounded-2xl border-2 border-amber-300 bg-white text-left flex flex-col justify-between min-h-[78px]">
+            <div class="flex items-center justify-between"><span class="text-xl">🛍️</span><span id="step-check-4" class="text-[10px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-900">B4</span></div>
+            <div><div class="font-black text-xs text-amber-950 leading-tight">4. Giao Khách</div><div id="stock-step-4" class="text-[10px] font-bold text-amber-700 truncate">Bò 15 • Trứng 12</div></div>
           </button>
         </div>
       </div>
 
-      <div class="pt-1 border-t border-amber-200 flex items-center justify-between gap-1">
-        <div id="quick-stock-bar" class="flex items-center gap-1 overflow-x-auto text-[9px] font-bold text-amber-900"></div>
-        <div class="flex items-center gap-1 shrink-0">
-          <button onclick="resetBowl(true)" class="soft-btn px-2 py-0.5 rounded-lg bg-gray-200 text-gray-800 font-bold text-[9px]">🗑️ Đổ thau</button>
-          <button onclick="endDaySummary()" class="soft-btn px-2.5 py-0.5 rounded-lg bg-purple-700 text-white font-extrabold text-[9px] shadow">🌙 Chốt Sổ</button>
+      <div class="pt-2 border-t border-amber-200 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5">
+          <div id="quick-stock-bar" class="flex items-center gap-1 overflow-x-auto text-xs font-bold text-amber-900"></div>
+          <button onclick="shoutOutForCustomers()" class="soft-btn px-2 py-1 rounded-lg bg-orange-600 text-white font-black text-[10px] shadow animate-pulse">📣 Rao Hàng</button>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button onclick="resetBowl(true)" class="soft-btn px-2.5 py-1.5 rounded-xl bg-gray-200 text-gray-800 font-bold text-xs">🗑️ Đổ thau</button>
+          <button onclick="endDaySummary()" class="soft-btn px-3 py-1.5 rounded-xl bg-purple-700 text-white font-extrabold text-xs shadow">🌙 Chốt Sổ</button>
         </div>
       </div>
     </section>
 
     <!-- TAB 3: NÂNG CẤP -->
-    <section id="tab-upgrade" class="hidden soft-card p-3 space-y-2.5">
-      <div class="p-2.5 rounded-2xl bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border border-amber-400">
-        <h3 class="text-xs font-black text-amber-950 flex items-center justify-between">
+    <section id="tab-upgrade" class="hidden soft-card p-3 sm:p-4 space-y-3">
+      <div class="p-3 rounded-2xl bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-2 border-amber-400">
+        <h3 class="text-xs sm:text-sm font-black text-amber-950 flex items-center justify-between">
           <span>🔥 Lộ Trình 50 Cấp Độ Truyền Nghề</span>
-          <span id="upgrade-current-lvl" class="px-2 py-0.5 rounded-full bg-orange-600 text-white text-[10px]">Cấp 1</span>
+          <span id="upgrade-current-lvl" class="px-2.5 py-1 rounded-full bg-orange-600 text-white text-xs">Cấp 1</span>
         </h3>
-        <div id="stage-progress-badges" class="grid grid-cols-2 sm:grid-cols-5 gap-1 mt-1.5"></div>
+        <div id="stage-progress-badges" class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 mt-2"></div>
       </div>
-      <div class="flex gap-1 bg-amber-100/70 p-1 rounded-xl border border-amber-300">
-        <button onclick="switchUpgradeSubTab('dishes')" id="upg-sub-dishes" class="soft-btn flex-1 py-1 px-1 rounded-lg font-black text-[10px] bg-orange-600 text-white shadow">🥙 Thực Đơn</button>
-        <button onclick="switchUpgradeSubTab('staff')" id="upg-sub-staff" class="soft-btn flex-1 py-1 px-1 rounded-lg font-black text-[10px] text-amber-900 bg-white">🧑‍🍳 Nhân Viên</button>
-        <button onclick="switchUpgradeSubTab('tools')" id="upg-sub-tools" class="soft-btn flex-1 py-1 px-1 rounded-lg font-black text-[10px] text-amber-900 bg-white">🛠️ Dụng Cụ</button>
-        <button onclick="switchUpgradeSubTab('licenses')" id="upg-sub-licenses" class="soft-btn flex-1 py-1 px-1 rounded-lg font-black text-[10px] text-amber-900 bg-white">📜 Pháp Lý</button>
+      <div class="flex gap-1.5 bg-amber-100/70 p-1.5 rounded-2xl border border-amber-300">
+        <button onclick="switchUpgradeSubTab('dishes')" id="upg-sub-dishes" class="soft-btn flex-1 py-2 px-1 rounded-xl font-black text-xs bg-orange-600 text-white shadow">🥙 Thực Đơn</button>
+        <button onclick="switchUpgradeSubTab('staff')" id="upg-sub-staff" class="soft-btn flex-1 py-2 px-1 rounded-xl font-black text-xs text-amber-900 bg-white">🧑‍🍳 Nhân Viên</button>
+        <button onclick="switchUpgradeSubTab('tools')" id="upg-sub-tools" class="soft-btn flex-1 py-2 px-1 rounded-xl font-black text-xs text-amber-900 bg-white">🛠️ Dụng Cụ</button>
+        <button onclick="switchUpgradeSubTab('licenses')" id="upg-sub-licenses" class="soft-btn flex-1 py-2 px-1 rounded-xl font-black text-xs text-amber-900 bg-white">📜 Pháp Lý</button>
       </div>
-      <div id="upgrade-sub-content" class="space-y-2"></div>
+      <div id="upgrade-sub-content" class="space-y-2.5"></div>
     </section>
 
-    <!-- TAB 4: SỔ SÁCH -->
-    <section id="tab-ledger" class="hidden soft-card p-3 space-y-2.5">
-      <div class="flex items-center justify-between border-b border-amber-200 pb-1.5">
-        <h2 class="text-xs font-black text-amber-950">📊 Sổ Sách & Khấu Hao</h2>
-        <button onclick="endDaySummary()" class="soft-btn px-2.5 py-1 rounded-lg bg-purple-700 text-white font-black text-[10px]">Chốt Sổ</button>
+    <!-- TAB 4: SỔ SÁCH & VAY VỐN NGÂN HÀNG -->
+    <section id="tab-ledger" class="hidden soft-card p-3 sm:p-4 space-y-3">
+      <div class="flex items-center justify-between border-b border-amber-200 pb-2">
+        <h2 class="text-sm font-black text-amber-950">📊 Sổ Sách & Vay Vốn Ngân Hàng</h2>
+        <button onclick="endDaySummary()" class="soft-btn px-3 py-1.5 rounded-xl bg-purple-700 text-white font-black text-xs">Chốt Sổ</button>
       </div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
-        <div class="p-2 rounded-xl bg-amber-50 border"><div>Xe đẩy:</div><div class="font-black text-red-700">7.300đ</div></div>
-        <div class="p-2 rounded-xl bg-amber-50 border"><div>Điện nước gas:</div><div class="font-black text-red-700">20.000đ</div></div>
-        <div class="p-2 rounded-xl bg-amber-50 border"><div>Vỉa hè:</div><div id="ledger-rent-cost" class="font-black text-red-700">0đ</div></div>
-        <div class="p-2 rounded-xl bg-amber-50 border"><div>Lương NV:</div><div id="ledger-staff-cost" class="font-black text-red-700">0đ</div></div>
+
+      <!-- Khu vực Ngân hàng chính sách -->
+      <div id="bank-loan-box" class="p-3 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-400 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-black text-emerald-950 text-xs">🏦 Ngân Hàng Chính Sách Khởi Nghiệp</span>
+          <span id="bank-loan-status" class="px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900 text-[10px] font-bold">Chưa vay nợ</span>
+        </div>
+        <div id="bank-loan-details" class="text-xs text-emerald-900">Bạn có thể vay vốn khởi nghiệp tối đa 2 lần khi gặp khó khăn tài chính.</div>
+        <div id="bank-loan-buttons" class="flex gap-2 pt-1">
+          <button onclick="applyBankLoan()" id="btn-apply-loan" class="soft-btn py-1.5 px-3 bg-emerald-600 text-white font-black text-xs rounded-xl shadow">📜 Xin Vay Gói Cứu Trợ</button>
+        </div>
       </div>
-      <div id="ledger-history-list" class="space-y-1 max-h-52 overflow-y-auto"></div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+        <div class="p-2.5 rounded-xl bg-amber-50 border"><div>Xe đẩy:</div><div class="font-black text-red-700">7.300đ</div></div>
+        <div class="p-2.5 rounded-xl bg-amber-50 border"><div>Điện nước gas:</div><div class="font-black text-red-700">20.000đ</div></div>
+        <div class="p-2.5 rounded-xl bg-amber-50 border"><div>Vỉa hè:</div><div id="ledger-rent-cost" class="font-black text-red-700">0đ</div></div>
+        <div class="p-2.5 rounded-xl bg-amber-50 border"><div>Lương NV:</div><div id="ledger-staff-cost" class="font-black text-red-700">0đ</div></div>
+      </div>
+      <div id="ledger-history-list" class="space-y-1.5 max-h-56 overflow-y-auto"></div>
     </section>
 
     <!-- TAB 5: ĐUA TOP -->
-    <section id="tab-leaderboard" class="hidden soft-card p-3 space-y-2.5">
-      <div class="flex items-center justify-between border-b border-amber-200 pb-1.5">
-        <h2 class="text-xs font-black text-amber-950">🏆 Bảng Phong Thần Trực Tuyến</h2>
-        <button onclick="fetchCloudLeaderboard(true)" class="soft-btn px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-extrabold text-[10px]">🔄 Làm Mới</button>
+    <section id="tab-leaderboard" class="hidden soft-card p-3 sm:p-4 space-y-3">
+      <div class="flex items-center justify-between border-b border-amber-200 pb-2">
+        <h2 class="text-sm sm:text-base font-black text-amber-950">🏆 Bảng Phong Thần Trực Tuyến</h2>
+        <button onclick="fetchCloudLeaderboard(true)" class="soft-btn px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-extrabold text-xs">🔄 Làm Mới</button>
       </div>
-      <div class="flex gap-1.5">
-        <button onclick="setLeaderboardSort('money')" id="lb-sort-money" class="soft-btn flex-1 py-1.5 rounded-xl font-black text-[10px] bg-amber-500 text-white shadow">💰 Top Tài Sản</button>
-        <button onclick="setLeaderboardSort('sold')" id="lb-sort-sold" class="soft-btn flex-1 py-1.5 rounded-xl font-black text-[10px] bg-white text-amber-900 border">🛍️ Top Đắt Hàng</button>
+      <div class="flex gap-2">
+        <button onclick="setLeaderboardSort('money')" id="lb-sort-money" class="soft-btn flex-1 py-2 rounded-xl font-black text-xs bg-amber-500 text-white shadow">💰 Top Tài Sản</button>
+        <button onclick="setLeaderboardSort('sold')" id="lb-sort-sold" class="soft-btn flex-1 py-2 rounded-xl font-black text-xs bg-white text-amber-900 border">🛍️ Top Đắt Hàng</button>
       </div>
-      <div id="leaderboard-container" class="space-y-1 max-h-72 overflow-y-auto"></div>
+      <div id="leaderboard-container" class="space-y-1.5 max-h-80 overflow-y-auto"></div>
     </section>
 
   </div>
 
   <!-- POP-UP SƠ CHẾ -->
-  <div id="modal-prep" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3">
-    <div class="w-full max-w-sm soft-card p-4 text-center border-4 border-amber-400">
-      <div id="prep-modal-icon" class="text-4xl mb-1">🌶️</div>
-      <h3 id="prep-modal-title" class="text-base font-black text-amber-950">Thắng Sa Tế</h3>
-      <p id="prep-modal-desc" class="text-[11px] text-amber-800 my-1">Đảo đều tay cho dậy mùi thơm!</p>
-      <div class="w-full h-3 bg-amber-200 rounded-full overflow-hidden border mb-2.5"><div id="prep-modal-bar" class="h-full bg-gradient-to-r from-orange-500 to-red-600" style="width: 0%"></div></div>
+  <div id="modal-prep" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-sm soft-card p-5 text-center border-4 border-amber-400">
+      <div id="prep-modal-icon" class="text-5xl mb-2">🌶️</div>
+      <h3 id="prep-modal-title" class="text-lg font-black text-amber-950">Thắng Sa Tế</h3>
+      <p id="prep-modal-desc" class="text-xs text-amber-800 mt-1 mb-3">Đảo đều tay cho dậy mùi!</p>
+      <div class="w-full h-4 bg-amber-200 rounded-full overflow-hidden border mb-3"><div id="prep-modal-bar" class="h-full bg-gradient-to-r from-orange-500 to-red-600" style="width: 0%"></div></div>
       <div class="flex gap-2">
-        <button onclick="closePrepModal()" class="soft-btn flex-1 py-2 rounded-xl bg-gray-200 text-xs font-bold">Đóng</button>
-        <button onclick="tapPrepAction()" id="prep-modal-action-btn" class="soft-btn flex-[2] py-2 rounded-xl bg-orange-600 text-white text-xs font-black shadow">🔥 Đảo Đều Tay</button>
+        <button onclick="closePrepModal()" class="soft-btn flex-1 py-2.5 rounded-xl bg-gray-200 text-xs font-bold">Đóng</button>
+        <button onclick="tapPrepAction()" id="prep-modal-action-btn" class="soft-btn flex-[2] py-2.5 rounded-xl bg-orange-600 text-white text-sm font-black shadow">🔥 Đảo Đều Tay</button>
       </div>
     </div>
   </div>
 
   <!-- POP-UP KẾT QUẢ GIAO BÁNH -->
-  <div id="modal-serve-result" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3">
-    <div class="w-full max-w-sm soft-card p-4 text-center border-4 border-amber-400">
-      <div id="serve-result-stars" class="text-lg mb-0.5">⭐⭐⭐⭐⭐</div>
-      <h3 id="serve-result-title" class="text-sm font-black text-amber-950">Tuyệt Hảo!</h3>
-      <p id="serve-result-comment" class="text-[11px] text-amber-800 italic my-0.5"></p>
-      <div id="serve-result-breakdown" class="my-2 p-2 rounded-xl bg-amber-50 border text-[11px] space-y-0.5 text-left"></div>
-      <button onclick="closeServeResultModal()" class="soft-btn w-full py-2 rounded-xl bg-emerald-600 text-white font-black text-xs shadow">👍 Bán Tiếp Ngay!</button>
+  <div id="modal-serve-result" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-sm soft-card p-5 text-center border-4 border-amber-400">
+      <div id="serve-result-stars" class="text-xl mb-1">⭐⭐⭐⭐⭐</div>
+      <h3 id="serve-result-title" class="text-base font-black text-amber-950">Tuyệt Hảo!</h3>
+      <p id="serve-result-comment" class="text-xs text-amber-800 italic my-1"></p>
+      <div id="serve-result-breakdown" class="my-3 p-2.5 rounded-xl bg-amber-50 border text-xs space-y-1 text-left"></div>
+      <button onclick="closeServeResultModal()" class="soft-btn w-full py-2.5 rounded-xl bg-emerald-600 text-white font-black text-sm shadow">👍 Bán Tiếp Ngay!</button>
     </div>
   </div>
 
-  <!-- POP-UP MXH REVIEW -->
+  <!-- POP-UP MXH REVIEW & PHẢN HỒI ĐA DẠNG -->
   <div id="modal-reviews" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
-    <div class="w-full max-w-md soft-card p-4 border-4 border-rose-400 max-h-[90vh] flex flex-col">
-      <div class="flex items-center justify-between border-b border-amber-200 pb-2 mb-2">
-        <div class="text-xs font-black text-amber-950">📱 Tóp Tóp & Foody Sài Gòn</div>
-        <button onclick="closeReviewsModal()" class="text-xs font-black px-2 py-0.5 bg-amber-100 rounded">✕</button>
+    <div class="w-full max-w-md soft-card p-4 sm:p-5 border-4 border-rose-400 max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-amber-200 pb-2 mb-2.5">
+        <div class="text-sm font-black text-amber-950">📱 Tóp Tóp & Foody Sài Gòn</div>
+        <button onclick="closeReviewsModal()" class="text-xs font-black px-2.5 py-1 bg-amber-100 rounded-lg">✕</button>
       </div>
-      <div class="p-2 rounded-xl bg-amber-100 border flex items-center justify-between mb-2 text-xs font-bold">
-        <span>Điểm Đánh Giá: <b id="social-modal-rating">5.0 ⭐</b></span>
-        <span id="social-modal-tier" class="px-2 py-0.2 rounded bg-emerald-600 text-white text-[9px]">Đỉnh Nóc</span>
+      <div class="p-3 rounded-2xl bg-gradient-to-r from-pink-100 to-rose-100 border border-rose-300 mb-3 space-y-1">
+        <div class="flex items-center justify-between text-xs font-black text-rose-950">
+          <span>Điểm Đánh Giá: <b id="social-modal-rating" class="text-emerald-700">5.0 ⭐</b></span>
+          <span id="social-modal-tier" class="px-2 py-0.5 rounded bg-emerald-600 text-white text-[10px]">Đỉnh Nóc</span>
+        </div>
+        <div>
+          <div class="flex justify-between text-[10px] font-bold text-rose-900 mb-0.5"><span>🔥 Độ Viral Xu Hướng: <b id="viral-pct-label">0%</b></span><span id="viral-status-text">Bình thường</span></div>
+          <div class="w-full h-2.5 bg-white rounded-full overflow-hidden border border-rose-300"><div id="viral-bar-fill" class="h-full bg-gradient-to-r from-pink-500 to-rose-600 transition-all duration-300" style="width: 0%"></div></div>
+        </div>
       </div>
-      <div id="reviews-list-container" class="space-y-2 overflow-y-auto flex-1 pr-1 text-xs"></div>
+      <div id="reviews-list-container" class="space-y-2.5 overflow-y-auto flex-1 pr-1 text-xs"></div>
+    </div>
+  </div>
+
+  <!-- POP-UP CHỌN CÂU TRẢ LỜI MXH -->
+  <div id="modal-reply-options" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-sm soft-card p-4 sm:p-5 border-4 border-pink-400 space-y-3">
+      <div class="text-sm font-black text-amber-950 text-center">💬 Chọn Phong Cách Trả Lời Bình Luận</div>
+      <div id="reply-options-list" class="space-y-2"></div>
+      <button onclick="document.getElementById('modal-reply-options').classList.add('hidden')" class="soft-btn w-full py-2 rounded-xl bg-gray-200 text-xs font-bold">Đóng</button>
+    </div>
+  </div>
+
+  <!-- POP-UP THÀNH TỰU -->
+  <div id="modal-achievements" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="w-full max-w-md soft-card p-4 sm:p-5 border-4 border-amber-500 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b pb-2 mb-2.5 text-sm font-black text-amber-950">
+        <span>🎖️ Sảnh Vinh Danh Thành Tựu</span>
+        <button onclick="closeAchievementsModal()" class="px-2.5 py-1 bg-amber-100 rounded-lg">✕</button>
+      </div>
+      <div id="achievements-list-container" class="space-y-2 overflow-y-auto flex-1 pr-1 text-xs"></div>
     </div>
   </div>
 
   <!-- POP-UP ĐỨT HÀNG -->
-  <div id="modal-out-of-stock" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
-    <div class="w-full max-w-md soft-card p-4 border-4 border-red-500 shadow-2xl space-y-2.5">
-      <h3 class="text-sm font-black text-red-950">🚨 Đứt Hàng Giữa Ca Bán!</h3>
-      <p id="oos-desc" class="text-[11px] text-amber-950 bg-red-50 p-2.5 rounded-xl border border-red-200"></p>
-      <div id="oos-minigame-box" class="hidden p-2.5 rounded-xl bg-orange-100 border text-center space-y-1.5">
-        <div class="text-[11px] font-black text-orange-950">🔪 Sơ Chế Cấp Tốc (Bấm 3 lần)!</div>
-        <div class="w-full h-3 bg-white rounded-full overflow-hidden border"><div id="oos-minigame-bar" class="h-full bg-orange-600" style="width: 0%"></div></div>
-        <button onclick="tapOosMinigame()" class="soft-btn w-full py-1.5 rounded-lg bg-orange-600 text-white text-xs font-black">⚡ Băm/Lột Nhanh</button>
+  <div id="modal-out-of-stock" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md soft-card p-5 border-4 border-red-500 shadow-2xl space-y-3">
+      <h3 class="text-base font-black text-red-950">🚨 Đứt Hàng Giữa Ca Bán!</h3>
+      <p id="oos-desc" class="text-xs text-amber-950 bg-red-50 p-3 rounded-xl border border-red-200"></p>
+      <div id="oos-minigame-box" class="hidden p-3 rounded-xl bg-orange-100 border text-center space-y-2">
+        <div class="text-xs font-black text-orange-950">🔪 Sơ Chế Cấp Tốc (Bấm 3 lần)!</div>
+        <div class="w-full h-3.5 bg-white rounded-full overflow-hidden border"><div id="oos-minigame-bar" class="h-full bg-orange-600" style="width: 0%"></div></div>
+        <button onclick="tapOosMinigame()" class="soft-btn w-full py-2 rounded-xl bg-orange-600 text-white text-xs font-black shadow">⚡ Băm/Lột Nhanh</button>
       </div>
-      <div id="oos-choices-box" class="space-y-1.5 text-xs">
-        <button onclick="handleOosOption1SelfBuy(5)" class="soft-btn w-full p-2 rounded-xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-black text-left flex justify-between"><span>🛵 Mua lẻ 5 phần & sơ chế</span><span id="oos-cost-self-5">-0đ</span></button>
-        <button onclick="handleOosOption2StaffBuy()" id="oos-btn-staff" class="soft-btn w-full p-2 rounded-xl bg-emerald-600 text-white font-black text-left flex justify-between"><span id="oos-staff-label">👦 Sai NV đi mua giùm</span><span id="oos-cost-staff">-0đ</span></button>
-        <button onclick="handleOosOption3Apologize()" class="soft-btn w-full p-2 rounded-xl bg-gray-200 text-gray-900 font-bold text-left flex justify-between"><span>🙇 Xin lỗi khách & hẹn hôm sau</span><span class="text-red-700">-0.10⭐</span></button>
+      <div id="oos-choices-box" class="space-y-2 text-xs">
+        <button onclick="handleOosOption1SelfBuy(5)" class="soft-btn w-full p-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-black text-left flex justify-between shadow"><span>🛵 Mua lẻ 5 phần & sơ chế</span><span id="oos-cost-self-5">-0đ</span></button>
+        <button onclick="handleOosOption2StaffBuy()" id="oos-btn-staff" class="soft-btn w-full p-2.5 rounded-xl bg-emerald-600 text-white font-black text-left flex justify-between shadow"><span id="oos-staff-label">👦 Sai NV đi mua giùm</span><span id="oos-cost-staff">-0đ</span></button>
+        <button onclick="handleOosOption3Apologize()" class="soft-btn w-full p-2.5 rounded-xl bg-gray-200 text-gray-900 font-bold text-left flex justify-between"><span>🙇 Xin lỗi khách & hẹn hôm sau</span><span class="text-red-700">-0.10⭐</span></button>
       </div>
     </div>
   </div>
 
   <!-- POP-UP BIẾN CỐ -->
-  <div id="modal-dilemma" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
-    <div class="w-full max-w-md soft-card p-4 border-4 border-orange-500 space-y-2.5">
-      <div class="flex items-center gap-2">
-        <div id="dilemma-icon" class="text-2xl">🎭</div>
+  <div id="modal-dilemma" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md soft-card p-5 border-4 border-orange-500 space-y-3">
+      <div class="flex items-center gap-2.5">
+        <div id="dilemma-icon" class="text-3xl">🎭</div>
         <div>
-          <span id="dilemma-category" class="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-orange-600 text-white">Biến cố</span>
-          <h3 id="dilemma-title" class="text-xs sm:text-sm font-black text-amber-950">Sự Cố Tại Quầy!</h3>
+          <span id="dilemma-category" class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-orange-600 text-white">Biến cố</span>
+          <h3 id="dilemma-title" class="text-sm sm:text-base font-black text-amber-950">Sự Cố Tại Quầy!</h3>
         </div>
       </div>
-      <p id="dilemma-desc" class="text-[11px] text-amber-950 bg-amber-50 p-2.5 rounded-xl border italic"></p>
-      <div id="dilemma-choices" class="space-y-1.5 text-xs"></div>
+      <div id="dilemma-speaker" class="text-xs font-extrabold text-amber-900 bg-amber-100 px-3 py-1 rounded-xl border">🗣️ Thực khách</div>
+      <p id="dilemma-desc" class="text-xs text-amber-950 bg-amber-50 p-3 rounded-xl border italic"></p>
+      <div id="dilemma-choices" class="space-y-2 text-xs"></div>
     </div>
   </div>
 
   <!-- POP-UP HỒ SƠ & ĐỔI TÊN / AVATAR -->
-  <div id="modal-profile-edit" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
-    <div class="w-full max-w-md soft-card p-4 border-4 border-amber-400 space-y-2.5">
-      <div class="flex items-center justify-between border-b pb-1.5 text-xs font-black text-amber-950">
+  <div id="modal-profile-edit" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md soft-card p-5 border-4 border-amber-400 space-y-3 text-xs">
+      <div class="flex items-center justify-between border-b pb-2 font-black text-sm text-amber-950">
         <span>⚙️ Hồ Sơ Chủ Quán</span>
-        <button onclick="closeProfileEditModal()" class="px-2 py-0.5 bg-amber-100 rounded">✕</button>
+        <button onclick="closeProfileEditModal()" class="px-2.5 py-1 bg-amber-100 rounded-lg">✕</button>
       </div>
-      <div class="flex items-center gap-2.5 bg-amber-50 p-2.5 rounded-xl border">
-        <div id="profile-edit-preview" class="w-14 h-14 rounded-xl bg-white border-2 border-amber-400 flex items-center justify-center text-2xl overflow-hidden shrink-0">👩‍🍳</div>
-        <div class="space-y-1">
-          <div class="text-xs font-extrabold text-amber-950">Ảnh Đại Diện:</div>
-          <button type="button" onclick="triggerAvatarUpload('profile')" class="soft-btn px-2.5 py-1 rounded-lg bg-orange-600 text-white font-black text-[10px]">📷 Tải Ảnh Từ Máy</button>
+      <div class="flex items-center gap-3 bg-amber-50 p-3 rounded-2xl border">
+        <div id="profile-edit-preview" class="w-16 h-16 rounded-2xl bg-white border-2 border-amber-400 flex items-center justify-center text-3xl overflow-hidden shrink-0">👩‍🍳</div>
+        <div class="space-y-1.5">
+          <div class="font-extrabold text-amber-950">Ảnh Đại Diện Chủ Quán:</div>
+          <button type="button" onclick="triggerAvatarUpload('profile')" class="soft-btn px-3 py-1.5 rounded-xl bg-orange-600 text-white font-black text-[10px]">📷 Tải Ảnh Từ Máy</button>
         </div>
       </div>
       <div>
-        <label class="block text-[10px] font-extrabold text-amber-900 mb-1">Hoặc chọn Chibi:</label>
+        <label class="block font-extrabold text-amber-900 mb-1">Hoặc chọn Chibi:</label>
         <div id="profile-avatar-grid" class="grid grid-cols-8 gap-1"></div>
       </div>
       <div>
-        <label class="block text-[10px] font-extrabold text-amber-900 mb-1">Tên Bảng Hiệu:</label>
-        <input id="profile-edit-name" type="text" maxlength="24" class="w-full px-2.5 py-2 rounded-xl border-2 border-amber-300 text-xs font-black bg-white" />
+        <label class="block font-extrabold text-amber-900 mb-1">Tên Bảng Hiệu:</label>
+        <input id="profile-edit-name" type="text" maxlength="24" class="w-full px-3.5 py-2.5 rounded-xl border-2 border-amber-300 font-black bg-white" />
       </div>
       <div class="flex gap-2">
-        <button onclick="closeProfileEditModal()" class="soft-btn flex-1 py-2 rounded-xl bg-gray-200 text-xs font-bold">Hủy</button>
-        <button onclick="saveProfileChanges()" class="soft-btn flex-[2] py-2 rounded-xl bg-emerald-600 text-white text-xs font-black shadow">✅ Lưu Thay Đổi</button>
+        <button onclick="closeProfileEditModal()" class="soft-btn flex-1 py-2.5 rounded-xl bg-gray-200 font-bold">Hủy</button>
+        <button onclick="saveProfileChanges()" class="soft-btn flex-[2] py-2.5 rounded-xl bg-emerald-600 text-white font-black shadow">✅ Lưu Thay Đổi</button>
       </div>
     </div>
   </div>
 
   <!-- POP-UP HỒI KÝ -->
-  <div id="modal-story" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3">
-    <div class="w-full max-w-md soft-card p-4 border-4 border-amber-400 max-h-[85vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b pb-1.5 mb-2 text-xs font-black text-amber-950"><span>📖 Hồi Ký Dì Tư</span><button onclick="closeStoryModal()" class="px-2 py-0.5 bg-amber-100 rounded">✕</button></div>
-      <div id="story-chapters-container" class="space-y-2 text-xs"></div>
+  <div id="modal-story" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md soft-card p-5 border-4 border-amber-400 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b pb-2 mb-3 text-sm font-black text-amber-950"><span>📖 Hồi Ký Dì Tư</span><button onclick="closeStoryModal()" class="px-2.5 py-1 bg-amber-100 rounded-lg">✕</button></div>
+      <div id="story-chapters-container" class="space-y-2.5 text-xs"></div>
     </div>
   </div>
 
   <!-- POP-UP CHỐT SỔ -->
-  <div id="modal-end-day" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
-    <div class="w-full max-w-md soft-card p-4 border-4 border-purple-400 text-xs">
-      <h3 id="end-day-title" class="text-sm font-black text-amber-950 text-center mb-1">🌙 Chốt Sổ Cuối Ngày</h3>
-      <div id="end-day-details" class="space-y-1 bg-amber-50 p-2.5 rounded-xl border mb-2.5"></div>
-      <button onclick="startNextDay()" class="soft-btn w-full py-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-black text-xs shadow">☀️ SANG NGÀY MỚI & ĐI CHỢ SỚM</button>
+  <div id="modal-end-day" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md soft-card p-5 border-4 border-purple-400 text-xs space-y-3">
+      <h3 id="end-day-title" class="text-base font-black text-amber-950 text-center">🌙 Chốt Sổ Cuối Ngày</h3>
+      <div id="end-day-details" class="space-y-1.5 bg-amber-50 p-3 rounded-2xl border"></div>
+      <button onclick="startNextDay()" class="soft-btn w-full py-3 rounded-2xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-black text-sm shadow">☀️ SANG NGÀY MỚI & ĐI CHỢ SỚM</button>
+    </div>
+  </div>
+
+  <!-- POP-UP PHÁ SẢN / GAME OVER -->
+  <div id="modal-bankruptcy" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="w-full max-w-md soft-card p-6 border-4 border-red-600 text-center space-y-3 shadow-2xl">
+      <div class="text-5xl">💔</div>
+      <h3 class="text-xl font-black text-red-950">XE BÁNH TRÁNG PHẢI ĐÓNG CỬA!</h3>
+      <p class="text-xs text-amber-900 leading-relaxed">Doanh thu không đủ bù chi phí, đã dùng hết 2 lần vay ngân hàng và điểm đánh giá sụt giảm nghiêm trọng. Quán đành phải tuyên bố phá sản...</p>
+      <div id="bankruptcy-stats" class="p-3 rounded-2xl bg-red-50 border border-red-200 text-xs text-left space-y-1"></div>
+      <button onclick="restartGameFresh()" class="soft-btn w-full py-3 rounded-2xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-black text-sm shadow-lg">🔄 Khởi Nghiệp Lại Từ Đầu (Giữ Tên & Avatar)</button>
     </div>
   </div>
 
   <div id="toast-box" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 translate-y-4">
-    <div id="toast-content" class="px-3 py-1.5 rounded-xl bg-amber-950/95 text-amber-100 font-extrabold text-xs shadow-xl border border-amber-400 text-center">Thông báo</div>
+    <div id="toast-content" class="px-4 py-2 rounded-2xl bg-amber-950/95 text-amber-100 font-extrabold text-xs shadow-xl border border-amber-400 text-center">Thông báo</div>
   </div>
 
-  <!-- SCRIPT LOGIC -->
+  <!-- SCRIPT LOGIC TOÀN BỘ GAME V3 -->
   <script>
     const FIREBASE_DB_URL = "https://banh-trang-tron-sai-gon-default-rtdb.asia-southeast1.firebasedatabase.app";
-    const LOCAL_STORAGE_KEY = "banh_trang_tron_saigon_v6_save";
+    const LOCAL_STORAGE_KEY = "banh_trang_tron_saigon_v7_save";
     const AVATAR_LIST = ["👩‍🍳", "🧑‍🍳", "👨‍🍳", "👵", "👧", "👦", "🦊", "🐼"];
 
-    function renderAvatarContent(avatarVal, imgClass = "w-full h-full object-cover rounded-xl") {
+    function renderAvatarContent(avatarVal, imgClass = "w-full h-full object-cover rounded-2xl") {
       if (typeof avatarVal === "string" && avatarVal.startsWith("data:image")) {
         return `<img src="${avatarVal}" alt="Avatar" class="${imgClass}" />`;
       }
@@ -686,7 +734,7 @@
     function toggleAudioSystem() {
       audioEnabled = !audioEnabled;
       const label = document.getElementById("audio-label"), icon = document.getElementById("audio-icon");
-      if (audioEnabled) { initAudio(); startChillBGM(); if(icon)icon.textContent="🎵"; if(label)label.textContent="BẬT"; showToast("🎵 Đã bật nhạc Lo-fi!"); }
+      if (audioEnabled) { initAudio(); startChillBGM(); if(icon)icon.textContent="🎵"; if(label)label.textContent="Chill"; showToast("🎵 Đã bật nhạc Lo-fi!"); }
       else { stopChillBGM(); if(icon)icon.textContent="🔇"; if(label)label.textContent="TẮT"; showToast("🔇 Đã tắt âm thanh."); }
     }
     const LOFI_CHORDS = [[174.61, 220, 261.63, 329.63],[164.81, 196, 246.94, 293.66],[146.83, 174.61, 220, 261.63],[130.81, 164.81, 196, 246.94]];
@@ -781,7 +829,7 @@
     const STAFF_CATALOG = [
       { id: "beti", name: "Phụ Bếp Bé Tí", avatar: "👦", reqLevel: 6, hireCost: 150000, dailyWage: 15000, role: "Tự động làm Bước 1 & đi mua hàng khi đứt kho!" },
       { id: "mylan", name: "Chị Mỹ Lan", avatar: "👧", reqLevel: 15, hireCost: 300000, dailyWage: 25000, role: "Tự sơ chế mỗi sáng & phụ Bước 2!" },
-      { id: "tunghia", name: "Chú Tư Nghĩa", avatar: "🐕", reqLevel: 22, hireCost: 450000, dailyWage: 30000, role: "Tăng +25% kiên nhẫn & xử lý biến cố vỉa hè!" }
+      { id: "tunghia", name: "Chú Tư Nghĩa", avatar: "👮‍♂️", reqLevel: 22, hireCost: 450000, dailyWage: 30000, role: "Tăng +25% kiên nhẫn & xử lý biến cố vỉa hè!" }
     ];
 
     const EQUIP_UPGRADES = [
@@ -800,46 +848,61 @@
       { id: "lic_brand", icon: "📜", name: "Đăng Ký Thương Hiệu Độc Quyền", reqLevel: 30, cost: 650000, dailyFee: 0, desc: "Nhận đơn sỉ Công ty Quận 1 (+200.000đ)." }
     ];
 
+    const ACHIEVEMENTS_DATA = [
+      { id: "gold_hands", name: "🥇 Đôi Tay Vàng Làng Trộn", desc: "Trộn chuẩn Vùng Xanh (5⭐) 10 bịch liên tiếp", check: (s) => (s.consecutiveFiveStars||0) >= 10, reward: 50000, xp: 50 },
+      { id: "master_prep", name: "🌶️ Bậc Thầy Sơ Chế", desc: "Hoàn thành đủ 3 món Sơ Chế trong 5 ngày", check: (s) => (s.daysPrepDoneCount||0) >= 5, reward: 60000, xp: 60 },
+      { id: "king_menu", name: "👑 Bá Chủ Thực Đơn", desc: "Mở khóa trọn bộ 10/10 món đặc sản", check: (s) => (s.unlockedDishes||[]).length >= 10, reward: 200000, xp: 150 },
+      { id: "picky_killer", name: "🕵️‍♂️ Khắc Tinh Khách Khó Tính", desc: "Phục vụ 5⭐ cho 10 vị Khách Khó Tính", check: (s) => (s.pickyFiveStarsCount||0) >= 10, reward: 80000, xp: 70 },
+      { id: "top_tiktok", name: "📱 Ngôi Sao Tóp Tóp", desc: "Đạt 100% Độ Viral & trả lời 15 bình luận MXH", check: (s) => (s.viralProgress||0) >= 100 && (s.repliedReviewsCount||0) >= 15, reward: 100000, xp: 80 },
+      { id: "sold_100", name: "🛍️ Trăm Bịch Như Một", desc: "Tổng số phần bánh đã bán đạt 100 bịch", check: (s) => s.totalSold >= 100, reward: 150000, xp: 120 },
+      { id: "millionaire", name: "💼 Triệu Phú Vỉa Hè", desc: "Cán mốc tài sản 2.000.000đ", check: (s) => s.money >= 2000000, reward: 100000, xp: 100 },
+      { id: "full_staff", name: "🏢 Ông/Bà Chủ Đích Thực", desc: "Thuê đủ cả 3 nhân viên (Bé Tí, Mỹ Lan, Tư Nghĩa)", check: (s) => s.staff.beti && s.staff.mylan && s.staff.tunghia, reward: 120000, xp: 100 },
+      { id: "legal_pro", name: "📜 Chuẩn Chỉnh Pháp Lý", desc: "Sở hữu đủ 3 Giấy Phép Pháp Lý", check: (s) => s.licenses.lic_vsattp && s.licenses.lic_sidewalk && s.licenses.lic_brand, reward: 180000, xp: 150 },
+      { id: "storm_survivor", name: "🌧️ Vượt Bão Đêm Mưa", desc: "Xử lý êm đẹp 8 tình huống Biến Cố Đời Thực", check: (s) => (s.resolvedDilemmasCount||0) >= 8, reward: 70000, xp: 70 },
+      { id: "phoenix_rise", name: "🦅 Phượng Hoàng Tái Sinh", desc: "Từng vay ngân hàng và Trả sạch hết nợ", check: (s) => s.everBorrowed && s.loanDebt <= 0, reward: 150000, xp: 120 },
+      { id: "legend_30y", name: "🏆 Huyền Thoại 30 Năm", desc: "Đạt Cấp độ 30 & giữ vững đánh giá 5.0 ⭐", check: (s) => s.level >= 30 && (s.rating||5.0) >= 5.0, reward: 500000, xp: 300 }
+    ];
+
     const DILEMMA_EVENTS = [
       {
         id: "cust_tiktok_live", category: "📸 Truyền Thông", icon: "🤳", speaker: "Food TikToker Triệu View",
         title: "Food TikToker Livestream Cận Cảnh Quán!",
         desc: "\"Hello cả nhà! Mình đang ở xe bánh tráng 30 năm này. Dì ơi cho tụi con quay khay nguyên liệu và làm 1 phần siêu đầy đặn nha!\"",
         canTrigger: (s) => s.totalSold >= 2,
-        choiceA: { label: "🌟 Tặng thêm gấp đôi Topping (-1 Khô bò, -1 Trứng)", effect: (s) => { if (s.stock.khobo>0)s.stock.khobo--; if (s.stock.trungcut>0)s.stock.trungcut--; adjustRating(0.25); s.money+=50000; addXP(35); return "📹 Clip lên xu hướng! Khách kéo tới tấp (+50k, +0.25⭐)!"; } },
-        choiceB: { label: "😅 Từ chối khéo vì đang đông khách", effect: (s) => { adjustRating(-0.05); return "TikToker hơi hụt hẫng (-0.05⭐)."; } }
+        choiceA: { label: "🌟 Tặng thêm gấp đôi Topping (-1 Khô bò, -1 Trứng)", effect: (s) => { if (s.stock.khobo>0)s.stock.khobo--; if (s.stock.trungcut>0)s.stock.trungcut--; adjustRating(0.25); s.money+=50000; addXP(35); recordDilemmaResolved(); return "📹 Clip lên xu hướng! Khách kéo tới tấp (+50k, +0.25⭐)!"; } },
+        choiceB: { label: "😅 Từ chối khéo vì đang đông khách", effect: (s) => { adjustRating(-0.05); recordDilemmaResolved(); return "TikToker hơi hụt hẫng (-0.05⭐)."; } }
       },
       {
         id: "cust_500k_note", category: "💸 Thu Ngân", icon: "💵", speaker: "Khách Vội Vàng",
         title: "Khách Đưa Tờ 500k Chẵn Lúc Vừa Cạn Tiền Lẻ!",
         desc: "Khách nhận bịch bánh 25k rồi rút tờ 500k: \"Dì ơi con không có tiền lẻ cũng không mang điện thoại quét QR!\"",
         canTrigger: (s) => true,
-        choiceA: { label: "😊 Giảm 5k & chạy sang tạp hóa đổi tiền lẻ giùm khách", effect: (s) => { s.money=Math.max(0,s.money-5000); adjustRating(0.10); addXP(15); return "Khách cảm kích sự xởi lởi (+0.10⭐)!"; } },
-        choiceB: { label: "🏃 Bắt khách tự đi đổi tiền lẻ", effect: (s) => { adjustRating(-0.08); return "Khách bực mình (-0.08⭐)."; } }
+        choiceA: { label: "😊 Giảm 5k & chạy sang tạp hóa đổi tiền lẻ giùm khách", effect: (s) => { s.money=Math.max(0,s.money-5000); adjustRating(0.10); addXP(15); recordDilemmaResolved(); return "Khách cảm kích sự xởi lởi (+0.10⭐)!"; } },
+        choiceB: { label: "🏃 Bắt khách tự đi đổi tiền lẻ", effect: (s) => { adjustRating(-0.08); recordDilemmaResolved(); return "Khách bực mình (-0.08⭐)."; } }
       },
       {
         id: "env_blackout", category: "⚡ Phố Đêm", icon: "🔦", speaker: "Bà Con Khu Phố",
         title: "Cúp Điện Đột Xuất Cả Khu Phố Đêm!",
         desc: "Đang giờ cao điểm bán tối thì đèn đường phụt tắt tối om! Khách đứng mua bánh nháo nhác...",
         canTrigger: (s) => s.clockMinutes >= 17 * 60 || s.day >= 2,
-        choiceA: { label: "🏮 Bật Đèn Lồng LED Ắc Quy của xe", effect: (s) => { if ((s.equipLevels.decor_lantern||0)>=1) { s.money+=65000; adjustRating(0.15); addXP(30); return "🌟 Xe bánh tráng sáng nhất phố, khách đổ về mua nườm nượp (+65k)!"; } else { s.money=Math.max(0,s.money-15000); adjustRating(0.05); return "Đã chi 15k mua đèn sạc chữa cháy!"; } } },
-        choiceB: { label: "🕯️ Dùng đèn flash điện thoại mò mẫm", effect: (s) => { adjustRating(-0.10); return "Bốc nhầm nguyên liệu làm khách phàn nàn (-0.10⭐)."; } }
+        choiceA: { label: "🏮 Bật Đèn Lồng LED Ắc Quy của xe", effect: (s) => { if ((s.equipLevels.decor_lantern||0)>=1) { s.money+=65000; adjustRating(0.15); addXP(30); recordDilemmaResolved(); return "🌟 Xe bánh tráng sáng nhất phố, khách đổ về mua nườm nượp (+65k)!"; } else { s.money=Math.max(0,s.money-15000); adjustRating(0.05); recordDilemmaResolved(); return "Đã chi 15k mua đèn sạc chữa cháy!"; } } },
+        choiceB: { label: "🕯️ Dùng đèn flash điện thoại mò mẫm", effect: (s) => { adjustRating(-0.10); recordDilemmaResolved(); return "Bốc nhầm nguyên liệu làm khách phàn nàn (-0.10⭐)."; } }
       },
       {
         id: "urban_check", category: "🚓 Trật Tự Đô Thị", icon: "🚓", speaker: "Tổ Trật Tự Phường",
         title: "Đoàn Trật Tự Đô Thị Kiểm Tra Vỉa Hè!",
         desc: "Xe loa phát thông báo kiểm tra trật tự lòng lề đường đang dừng ngay trước xe của con!",
         canTrigger: (s) => s.level >= 4,
-        choiceA: { label: "📋 Xuất trình Hợp đồng vỉa hè / Xếp gọn xe", effect: (s) => { if (s.licenses.lic_sidewalk || s.staff.tunghia) { adjustRating(0.10); addXP(25); return "Được đoàn biểu dương chấp hành tốt (+0.10⭐)!"; } else { s.money=Math.max(0,s.money-40000); return "Chưa có Hợp đồng vỉa hè, bị phạt -40.000đ!"; } } },
-        choiceB: { label: "🏃 Đẩy xe vào hẻm tạm lánh 30 phút", effect: (s) => { s.clockMinutes+=30; adjustRating(-0.05); return "Mất 30 phút giờ vàng bán hàng."; } }
+        choiceA: { label: "📋 Xuất trình Hợp đồng vỉa hè / Xếp gọn xe", effect: (s) => { if (s.licenses.lic_sidewalk || s.staff.tunghia) { adjustRating(0.10); addXP(25); recordDilemmaResolved(); return "Được đoàn biểu dương chấp hành tốt (+0.10⭐)!"; } else { s.money=Math.max(0,s.money-40000); recordDilemmaResolved(); return "Chưa có Hợp đồng vỉa hè, bị phạt -40.000đ!"; } } },
+        choiceB: { label: "🏃 Đẩy xe vào hẻm tạm lánh 30 phút", effect: (s) => { s.clockMinutes+=30; adjustRating(-0.05); recordDilemmaResolved(); return "Mất 30 phút giờ vàng bán hàng."; } }
       },
       {
-        id: "staff_tunghia_event", category: "🐕 Nhân Viên", icon: "🐕", speaker: "Chú Bảo Vệ Tư Nghĩa",
+        id: "staff_tunghia_event", category: "🐕 Nhân Viên", icon: "👮‍♂️", speaker: "Chú Bảo Vệ Tư Nghĩa",
         title: "Chú Tư Nghĩa Tóm Gọn Kẻ Gian Định Móc Túi!",
         desc: "Đang đông khách, Chú Tư Nghĩa tinh mắt phát hiện kẻ gian áp sát định móc túi vị khách VIP nên lập tức giữ chặt tay hắn!",
         canTrigger: (s) => Boolean(s.staff && s.staff.tunghia === true),
-        choiceA: { label: "🏅 Thưởng nóng 40k tuyên dương tinh thần hiệp nghĩa", effect: (s) => { s.money=Math.max(0,s.money-40000); s.money+=100000; adjustRating(0.25); addXP(45); return "Khách VIP cảm kích biếu lại 100k & khen ngợi (+0.25⭐)!"; } },
-        choiceB: { label: "👏 Vỗ tay khen ngợi & mời ly trà tắc", effect: (s) => { adjustRating(0.10); addXP(20); return "Cả khu phố nể phục an ninh quán (+0.10⭐)!"; } }
+        choiceA: { label: "🏅 Thưởng nóng 40k tuyên dương tinh thần hiệp nghĩa", effect: (s) => { s.money=Math.max(0,s.money-40000); s.money+=100000; adjustRating(0.25); addXP(45); recordDilemmaResolved(); return "Khách VIP cảm kích biếu lại 100k & khen ngợi (+0.25⭐)!"; } },
+        choiceB: { label: "👏 Vỗ tay khen ngợi & mời ly trà tắc", effect: (s) => { adjustRating(0.10); addXP(20); recordDilemmaResolved(); return "Cả khu phố nể phục an ninh quán (+0.10⭐)!"; } }
       }
     ];
 
@@ -851,8 +914,9 @@
 
     let state = {
       shopKey: "", shopName: "", pin: "", avatar: "👩‍🍳", money: 500000, rating: 5.0, reputation: 100,
-      level: 1, xp: 0, day: 1, clockMinutes: 14 * 60, totalSold: 0, todaySold: 0, todayRevenue: 0, todayCogsSpent: 0,
-      marketPriceMultiplier: 1.0,
+      level: 1, xp: 0, day: 1, clockMinutes: 13 * 60, isSellingPhase: false, totalSold: 0, todaySold: 0, todayRevenue: 0, todayCogsSpent: 0,
+      marketPriceMultiplier: 1.0, viralProgress: 0, consecutiveFiveStars: 0, daysPrepDoneCount: 0, pickyFiveStarsCount: 0,
+      repliedReviewsCount: 0, resolvedDilemmasCount: 0, everBorrowed: false, loanDebt: 0, loanTimesUsed: 0, loanDailyPayment: 0,
       stock: { banhtrang: 15, xoai: 12, muoitom: 15, sotbo: 12, dauphong: 15, khobo: 15, tepmo: 12, trungcut: 12 },
       prepDone: { sate: false, hanhphi: false, trungcut: false },
       unlockedDishes: ["tron"],
@@ -860,7 +924,7 @@
       staff: { beti: false, mylan: false, tunghia: false },
       equipLevels: { decor_lantern: 0, decor_sign: 0, decor_stool: 0, decor_speaker: 0, tool_bowl: 0, tool_bottle: 0, tool_cooler: 0 },
       licenses: { lic_vsattp: false, lic_sidewalk: false, lic_brand: false },
-      reviews: [], nextCustomerTipBonus: 0, claimedChapters: [], ledgerHistory: []
+      reviews: [], claimedAchievements: [], claimedChapters: [], ledgerHistory: []
     };
 
     let currentTab = "market", currentUpgradeSubTab = "dishes", loginSelectedAvatar = "👩‍🍳";
@@ -868,7 +932,7 @@
     let lbSortBy = "money", cloudLeaderboardCache = [];
     let bowl = { selectedDish: "tron", rau: true, hanh: true, spice: 1, tratac: false, step1Done: false, step2Done: false, mixProgress: 0, step3Done: false };
     let activePrepKey = null, activePrepProgress = 0, pendingOosMissingList = [], pendingOosTargetStep = 1, oosMinigameProgress = 0, pendingOosBoughtQty = 0;
-    let customersSinceLastDilemma = 0, lastDilemmaId = "", pendingCustomerDilemmaStage = null;
+    let customersSinceLastDilemma = 0, lastDilemmaId = "", pendingCustomerDilemmaStage = null, activeDilemmaObj = null;
 
     window.addEventListener("DOMContentLoaded", () => {
       renderLoginAvatarGrid();
@@ -892,24 +956,29 @@
       catch (e) { clearTimeout(timer); throw e; }
     }
 
+    function recordDilemmaResolved() { state.resolvedDilemmasCount = (state.resolvedDilemmasCount||0)+1; checkAchievements(); }
+
     function adjustRating(delta) {
       const current = typeof state.rating === "number" ? state.rating : 5.0;
       state.rating = Math.max(1.0, Math.min(5.0, Math.round((current + delta) * 100) / 100));
       state.reputation = Math.round(state.rating * 20);
+      if (state.rating <= 1.0 && state.loanTimesUsed >= 2) {
+        triggerBankruptcyGameOver();
+      }
     }
 
     function getRatingTierInfo(r) {
-      if (r >= 4.8) return { text: "Đỉnh Nóc", full: "Quán Đỉnh Nóc Kịch Trần", color: "bg-emerald-600 text-white", effect: "Khách VIP & Tip +25%" };
-      if (r >= 4.2) return { text: "Đông Khách", full: "Quán Ngon Đông Khách", color: "bg-amber-500 text-white", effect: "Lượng khách ổn định" };
-      if (r >= 3.5) return { text: "Tạm Ổn", full: "Cần Cải Thiện Tay Nghề", color: "bg-orange-600 text-white", effect: "Khách hơi dè dặt" };
-      return { text: "Báo Động", full: "Nguy Cơ Mất Khách!", color: "bg-red-600 text-white", effect: "Hãy trả lời MXH để gỡ sao!" };
+      if (r >= 4.8) return { text: "Đỉnh Nóc", full: "Quán Đỉnh Nóc Kịch Trần", color: "bg-emerald-600 text-white" };
+      if (r >= 4.2) return { text: "Đông Khách", full: "Quán Ngon Đông Khách", color: "bg-amber-500 text-white" };
+      if (r >= 3.5) return { text: "Tạm Ổn", full: "Cần Cải Thiện Tay Nghề", color: "bg-orange-600 text-white" };
+      return { text: "Báo Động", full: "Nguy Cơ Mất Khách!", color: "bg-red-600 text-white" };
     }
 
     function renderLoginAvatarGrid() {
       const grid = document.getElementById("login-avatar-grid");
       if (grid) {
         grid.innerHTML = AVATAR_LIST.map(av => `
-          <button type="button" onclick="selectLoginAvatar('${av}')" class="soft-btn py-1 rounded-lg text-lg flex items-center justify-center border ${loginSelectedAvatar === av ? 'border-orange-600 bg-orange-100 scale-105 shadow' : 'border-amber-200 bg-white'}">${av}</button>
+          <button type="button" onclick="selectLoginAvatar('${av}')" class="soft-btn py-1.5 rounded-xl text-xl flex items-center justify-center border ${loginSelectedAvatar === av ? 'border-orange-600 bg-orange-100 scale-105 shadow' : 'border-amber-200 bg-white'}">${av}</button>
         `).join("");
       }
       const badge = document.getElementById("login-selected-avatar-badge");
@@ -919,7 +988,7 @@
 
     function checkExistingLocalSaveForLoginScreen() {
       try {
-        const raw = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem("banh_trang_tron_saigon_v5_save");
+        const raw = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem("banh_trang_tron_saigon_v6_save");
         if (!raw) return;
         const saved = JSON.parse(raw);
         if (saved && saved.shopName) {
@@ -938,11 +1007,11 @@
     async function quickResumeGame() {
       initAudio(); startChillBGM();
       try {
-        const raw = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem("banh_trang_tron_saigon_v5_save");
+        const raw = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem("banh_trang_tron_saigon_v6_save");
         if (raw) mergeLoadedState(JSON.parse(raw));
       } catch(e){}
       document.getElementById("login-screen").classList.add("hidden");
-      updateAllUI(); if (!currentCustomer) spawnCustomer();
+      updateAllUI(); if (!currentCustomer && state.isSellingPhase) spawnCustomer();
       showToast(`🎉 Chào mừng chủ quán ${state.shopName} quay trở lại!`);
       saveGameEverywhere();
     }
@@ -971,7 +1040,7 @@
       state.shopKey = key; state.shopName = nameInput; state.pin = pinInput; state.avatar = loginSelectedAvatar;
       saveGameEverywhere();
       document.getElementById("login-screen").classList.add("hidden");
-      btn.disabled = false; updateAllUI(); if (!currentCustomer) spawnCustomer();
+      btn.disabled = false; updateAllUI();
       showToast(`🚀 Khai trương thành công: "${state.shopName}"!`);
     }
 
@@ -995,9 +1064,9 @@
     }
     function closeProfileEditModal() { document.getElementById("modal-profile-edit").classList.add("hidden"); }
     function renderProfileAvatarGrid() {
-      document.getElementById("profile-edit-preview").innerHTML = renderAvatarContent(profileTempAvatar, "w-full h-full object-cover rounded-xl");
+      document.getElementById("profile-edit-preview").innerHTML = renderAvatarContent(profileTempAvatar, "w-full h-full object-cover rounded-2xl");
       document.getElementById("profile-avatar-grid").innerHTML = AVATAR_LIST.map(av => `
-        <button type="button" onclick="selectProfileAvatar('${av}')" class="soft-btn py-1 rounded-lg text-lg flex items-center justify-center border ${profileTempAvatar === av ? 'border-orange-600 bg-orange-100 scale-105 shadow' : 'border-amber-200 bg-white'}">${av}</button>
+        <button type="button" onclick="selectProfileAvatar('${av}')" class="soft-btn py-1.5 rounded-xl text-xl flex items-center justify-center border ${profileTempAvatar === av ? 'border-orange-600 bg-orange-100 scale-105 shadow' : 'border-amber-200 bg-white'}">${av}</button>
       `).join("");
     }
     function selectProfileAvatar(av) { profileTempAvatar = av; renderProfileAvatarGrid(); }
@@ -1022,6 +1091,7 @@
         equipLevels: { ...state.equipLevels, ...(loaded.equipLevels || {}) },
         licenses: { ...state.licenses, ...(loaded.licenses || {}) },
         reviews: Array.isArray(loaded.reviews) ? loaded.reviews : [],
+        claimedAchievements: Array.isArray(loaded.claimedAchievements) ? loaded.claimedAchievements : [],
         claimedChapters: Array.isArray(loaded.claimedChapters) ? loaded.claimedChapters : [],
         ledgerHistory: Array.isArray(loaded.ledgerHistory) ? loaded.ledgerHistory : []
       };
@@ -1056,11 +1126,11 @@
         ];
         npcLegends.forEach(npc => { if (!list.some(x => x.shopKey === npc.shopKey)) list.push(npc); });
         cloudLeaderboardCache = list;
-        if (badge) { badge.textContent = `🟢 Online (${list.length})`; badge.className = "text-[9px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full"; }
+        if (badge) { badge.textContent = `🟢 Online (${list.length})`; badge.className = "text-[9px] font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full"; }
         renderLoginTop3Preview(); renderLeaderboardTab();
         if (showFeedback) showToast("🏆 Đã làm mới Bảng Xếp Hạng!");
       } catch(e) {
-        if (badge) { badge.textContent = "🟠 Offline"; badge.className = "text-[9px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full"; }
+        if (badge) { badge.textContent = "🟠 Offline"; badge.className = "text-[9px] font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full"; }
         renderLeaderboardTab();
       }
     }
@@ -1071,10 +1141,10 @@
       const sorted = [...cloudLeaderboardCache].sort((a, b) => b.money - a.money).slice(0, 3);
       const medals = ["🥇", "🥈", "🥉"];
       container.innerHTML = sorted.map((item, idx) => `
-        <div class="flex items-center justify-between px-2 py-0.5 rounded-lg bg-amber-50 border border-amber-200">
-          <div class="flex items-center gap-1 truncate">
+        <div class="flex items-center justify-between px-2 py-1 rounded-xl bg-amber-50 border border-amber-200">
+          <div class="flex items-center gap-1.5 truncate">
             <span>${medals[idx]}</span>
-            <div class="w-4 h-4 rounded-full overflow-hidden flex items-center justify-center shrink-0">${renderAvatarContent(item.avatar, "w-full h-full object-cover")}</div>
+            <div class="w-5 h-5 rounded-full overflow-hidden flex items-center justify-center shrink-0">${renderAvatarContent(item.avatar, "w-full h-full object-cover")}</div>
             <span class="font-bold text-amber-950 truncate">${escapeHtml(item.shopName)}</span>
           </div>
           <span class="font-black text-emerald-700 shrink-0">${formatVND(item.money)}</span>
@@ -1107,7 +1177,7 @@
       const r = typeof state.rating === "number" ? state.rating : 5.0, tier = getRatingTierInfo(r);
       document.getElementById("header-rating").textContent = r.toFixed(1);
       const tierEl = document.getElementById("header-rating-tier");
-      if (tierEl) { tierEl.textContent = tier.text; tierEl.className = `text-[8px] font-extrabold px-1 rounded ${tier.color}`; }
+      if (tierEl) { tierEl.textContent = tier.text; tierEl.className = `text-[9px] font-extrabold px-1.5 py-0.5 rounded ${tier.color}`; }
 
       const unrepliedCount = (state.reviews || []).filter(rv => !rv.replied).length;
       document.getElementById("header-review-count").textContent = (state.reviews || []).length;
@@ -1123,25 +1193,50 @@
       document.getElementById("header-xp-bar").style.width = `${pct}%`;
       document.getElementById("header-xp-text").textContent = `${state.xp} XP`;
 
+      // CƠ CHẾ THU GỌN HEADER KHI ĐỨNG BÁN
+      const topShopRow = document.getElementById("header-top-shop-row"), navTabs = document.getElementById("main-nav-tabs");
+      const btn1 = document.getElementById("header-extra-tools-btn1"), btn2 = document.getElementById("header-extra-tools-btn2"), btn3 = document.getElementById("header-extra-tools-btn3");
+      const btnMarket = document.getElementById("tab-btn-market");
+
+      if (state.isSellingPhase) {
+        if (topShopRow) topShopRow.classList.add("hidden");
+        if (btn1) btn1.classList.add("hidden"); if (btn2) btn2.classList.add("hidden"); if (btn3) btn3.classList.add("hidden");
+        if (btnMarket) btnMarket.classList.add("hidden");
+      } else {
+        if (topShopRow) topShopRow.classList.remove("hidden");
+        if (btn1) btn1.classList.remove("hidden"); if (btn2) btn2.classList.remove("hidden"); if (btn3) btn3.classList.remove("hidden");
+        if (btnMarket) btnMarket.classList.remove("hidden");
+      }
+
       renderMarketGrid(); renderPrepStatus(); renderSellDishGrid();
       renderStaffActiveStrip(); renderQuickStockBar(); updateStepStockLabels();
-      updateSweetSpotUI(); updateVesselVisualByDish(); renderUpgradesTab(); renderLedgerTab();
+      updateSweetSpotUI(); updateVesselVisualByDish(); renderUpgradesTab(); renderLedgerTab(); checkAchievements();
     }
 
     function switchTab(tab) {
+      if (tab === "market" && state.isSellingPhase) { showToast("🔒 Đã đẩy xe ra phố, không thể quay lại chợ sỉ!"); return; }
       currentTab = tab;
       ["market", "sell", "upgrade", "ledger", "leaderboard"].forEach(t => {
         const sec = document.getElementById(`tab-${t}`), btn = document.getElementById(`tab-btn-${t}`);
+        if (!btn) return;
         if (t === tab) {
           sec.classList.remove("hidden");
-          btn.className = "soft-btn py-1.5 px-0.5 rounded-lg font-extrabold text-[10px] sm:text-xs flex flex-col items-center gap-0.2 bg-orange-600 text-white shadow relative";
+          btn.className = "soft-btn py-2 px-1 rounded-xl font-extrabold text-xs flex flex-col items-center gap-0.5 bg-orange-600 text-white shadow relative";
         } else {
           sec.classList.add("hidden");
-          btn.className = "soft-btn py-1.5 px-0.5 rounded-lg font-extrabold text-[10px] sm:text-xs flex flex-col items-center gap-0.2 text-amber-900 hover:bg-amber-100 relative";
+          btn.className = "soft-btn py-2 px-1 rounded-xl font-extrabold text-xs flex flex-col items-center gap-0.5 text-amber-900 hover:bg-amber-100 relative";
         }
       });
-      if (tab === "sell" && !currentCustomer) spawnCustomer();
+      if (tab === "sell" && !currentCustomer && state.isSellingPhase) spawnCustomer();
       if (tab === "leaderboard") fetchCloudLeaderboard(false);
+    }
+
+    function pushCartToStreet() {
+      state.isSellingPhase = true;
+      switchTab("sell");
+      updateAllUI();
+      if (!currentCustomer) spawnCustomer();
+      showToast("🚲 Đã đẩy xe ra phố! Bắt đầu ca bán hàng!");
     }
 
     function getIngredientCost(ing) { return Math.round((ing.baseCost * state.marketPriceMultiplier) / 100) * 100; }
@@ -1154,15 +1249,15 @@
       grid.innerHTML = INGREDIENTS.map(ing => {
         const unitCost = getIngredientCost(ing), stockCount = state.stock[ing.id] || 0, val = currentInputs[ing.id] !== undefined ? currentInputs[ing.id] : "";
         return `
-          <div class="p-2 rounded-xl bg-white border border-amber-200 flex items-center justify-between gap-1 shadow-sm text-xs">
-            <div class="flex items-center gap-1.5 min-w-0">
-              <span class="text-xl shrink-0">${ing.icon}</span>
+          <div class="p-2.5 rounded-2xl bg-white border border-amber-200 flex items-center justify-between gap-2 shadow-sm text-xs">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="text-2xl shrink-0">${ing.icon}</span>
               <div class="min-w-0">
                 <div class="font-extrabold text-amber-950 truncate">${ing.name}</div>
-                <div class="text-[10px] font-black text-emerald-700">${formatVND(unitCost)} • Kho: <b>${stockCount}</b></div>
+                <div class="text-[11px] font-black text-emerald-700">${formatVND(unitCost)} • Kho: <b>${stockCount}</b></div>
               </div>
             </div>
-            <input id="buy-qty-${ing.id}" type="number" min="0" max="999" value="${val}" placeholder="0" oninput="recalcMarketOrderTotal()" class="w-16 py-1 rounded-lg border border-amber-300 text-center font-black text-xs bg-amber-50/50" />
+            <input id="buy-qty-${ing.id}" type="number" min="0" max="999" value="${val}" placeholder="0" oninput="recalcMarketOrderTotal()" class="w-16 py-1.5 rounded-xl border border-amber-300 text-center font-black text-xs bg-amber-50/50" />
           </div>
         `;
       }).join("");
@@ -1195,7 +1290,7 @@
       INGREDIENTS.forEach(ing => {
         const el = document.getElementById(`buy-qty-${ing.id}`);
         const qty = Math.max(0, parseInt(el?.value || "0", 10) || 0);
-        if (qty > 0) state.stock[ing.id] = (state.stock[ing.id] || 0) + qty;
+        if (qty > 0) state.stock[ing.id] = (state.stock[ing.id]||0) + qty;
         if (el) el.value = "";
       });
       playSFX("cash"); updateAllUI(); saveGameEverywhere();
@@ -1209,12 +1304,13 @@
         const sEl = document.getElementById(`prep-status-${k}`), bEl = document.getElementById(`prep-btn-${k}`);
         if (sEl && bEl) {
           sEl.textContent = isDone ? "✅ Xong" : "Chưa làm";
-          sEl.className = isDone ? "text-[9px] font-black text-emerald-700" : "text-[9px] text-orange-600";
-          bEl.className = isDone ? "soft-btn p-1.5 rounded-xl bg-emerald-50 border border-emerald-400 flex flex-col items-center text-center gap-0.5" : "soft-btn p-1.5 rounded-xl bg-white border border-amber-300 flex flex-col items-center text-center gap-0.5";
+          sEl.className = isDone ? "text-[10px] font-black text-emerald-700" : "text-[10px] text-orange-600";
+          bEl.className = isDone ? "soft-btn p-2.5 rounded-2xl bg-emerald-50 border-2 border-emerald-400 flex flex-col items-center text-center gap-1" : "soft-btn p-2.5 rounded-2xl bg-white border-2 border-amber-300 flex flex-col items-center text-center gap-1";
         }
       });
       const badge = document.getElementById("prep-bonus-status");
       if (badge) badge.textContent = `${doneCount}/3 món`;
+      if (doneCount === 3) checkAchievements();
     }
 
     function openPrepModal(key) {
@@ -1244,10 +1340,10 @@
       const names = [];
       if (state.staff.beti) names.push("👦 Bé Tí");
       if (state.staff.mylan) names.push("👧 Chị Lan");
-      if (state.staff.tunghia) names.push("🐕 Chú Tư Nghĩa");
+      if (state.staff.tunghia) names.push("👮‍♂️ Chú Tư Nghĩa");
       const sweet = getSweetSpotBounds();
       strip.innerHTML = `
-        <div class="flex items-center gap-1 flex-wrap"><span class="font-black text-amber-950">🧑‍🍳 NV:</span>${names.length ? names.map(n=>`<span class="px-1.5 py-0.2 rounded-full bg-emerald-600 text-white font-bold text-[9px]">${n}</span>`).join("") : `<span class="text-amber-800">Chưa thuê</span>`}</div>
+        <div class="flex items-center gap-1.5 flex-wrap"><span class="font-black text-amber-950">🧑‍🍳 NV:</span>${names.length ? names.map(n=>`<span class="px-2 py-0.5 rounded-full bg-emerald-600 text-white font-bold text-[10px]">${n}</span>`).join("") : `<span class="text-amber-800">Chưa thuê</span>`}</div>
         <div class="font-extrabold text-orange-800">🎯 Vùng chuẩn: <b>${sweet.min}%-${sweet.max}%</b></div>
       `;
     }
@@ -1261,12 +1357,12 @@
         const isUnlocked = state.unlockedDishes.includes(d.id), isSelected = bowl.selectedDish === d.id, isWanted = currentCustomer && currentCustomer.wantedDish === d.id;
         const effPrice = getDishEffectivePrice(d.id), stars = state.dishStars[d.id] || 1;
         if (!isUnlocked) {
-          return `<button onclick="switchTab('upgrade'); switchUpgradeSubTab('dishes');" class="soft-btn shrink-0 w-24 p-1 rounded-lg border border-dashed border-amber-300 bg-gray-50 opacity-60 text-left"><div class="text-xs grayscale">${d.icon}</div><div class="font-black text-[9px] text-amber-800">Cấp ${d.reqLevel}</div></button>`;
+          return `<button onclick="switchTab('upgrade'); switchUpgradeSubTab('dishes');" class="soft-btn shrink-0 w-28 p-1.5 rounded-xl border border-dashed border-amber-300 bg-gray-50 opacity-60 text-left"><div class="text-sm grayscale">${d.icon}</div><div class="font-black text-[10px] text-amber-800">Cấp ${d.reqLevel}</div></button>`;
         }
         return `
-          <button onclick="selectDish('${d.id}')" class="soft-btn shrink-0 w-28 p-1 rounded-xl border-2 ${isSelected ? 'border-orange-600 bg-orange-100 shadow-sm' : isWanted ? 'border-emerald-500 bg-emerald-50/70' : 'border-amber-200 bg-white'} text-left">
-            <div class="flex items-center gap-1"><span class="text-sm">${d.icon}</span><span class="font-black text-[10px] text-amber-950 truncate">${d.name}</span></div>
-            <div class="text-[9px] font-bold text-emerald-700">${formatVND(effPrice)} <span class="text-orange-600">★${stars}</span></div>
+          <button onclick="selectDish('${d.id}')" class="soft-btn shrink-0 w-32 p-2 rounded-2xl border-2 ${isSelected ? 'border-orange-600 bg-orange-100 shadow-sm' : isWanted ? 'border-emerald-500 bg-emerald-50/80' : 'border-amber-200 bg-white'} text-left">
+            <div class="flex items-center gap-1.5"><span class="text-base">${d.icon}</span><span class="font-black text-xs text-amber-950 truncate">${d.name}</span></div>
+            <div class="text-[10px] font-bold text-emerald-700 mt-0.5">${formatVND(effPrice)} <span class="text-orange-600">★${stars}</span></div>
           </button>
         `;
       }).join("");
@@ -1278,20 +1374,20 @@
       const label = document.getElementById("vessel-mode-label"), inner = document.getElementById("svg-vessel-inner"), grillLines = document.getElementById("svg-grill-lines");
       if (!inner || !label || !grillLines) return;
       if (dish.vessel === "grill") {
-        label.textContent = "🔥 Vỉ Nướng"; label.className = "text-[8px] font-black uppercase px-1.5 py-0.2 rounded-full bg-red-700 text-yellow-200 text-center truncate max-w-full";
+        label.textContent = "🔥 Vỉ Nướng"; label.className = "text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-red-700 text-yellow-200 text-center truncate max-w-full";
         inner.setAttribute("fill", "url(#grillGrad)"); grillLines.classList.remove("hidden");
       } else if (dish.vessel === "bamboo") {
-        label.textContent = "🌿 Mẹt Tre"; label.className = "text-[8px] font-black uppercase px-1.5 py-0.2 rounded-full bg-emerald-800 text-emerald-100 text-center truncate max-w-full";
+        label.textContent = "🌿 Mẹt Tre"; label.className = "text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-800 text-emerald-100 text-center truncate max-w-full";
         inner.setAttribute("fill", "url(#bambooGrad)"); grillLines.classList.add("hidden");
       } else {
-        label.textContent = "🥣 Thau Inox"; label.className = "text-[8px] font-black uppercase px-1.5 py-0.2 rounded-full bg-amber-800 text-amber-100 text-center truncate max-w-full";
-        inner.setAttribute("fill", "url(#inoxGrad5)"); grillLines.classList.add("hidden");
+        label.textContent = "🥣 Thau Inox"; label.className = "text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-800 text-amber-100 text-center truncate max-w-full";
+        inner.setAttribute("fill", "url(#inoxGrad)"); grillLines.classList.add("hidden");
       }
     }
 
     function spawnCustomer() {
       const pickyChance = state.level < 5 ? 0 : Math.min(0.5, 0.15 + state.level * 0.007);
-      const vipChance = 0.12 + (state.equipLevels.decor_sign || 0) * 0.07 + (state.rating >= 4.8 ? 0.1 : 0);
+      const vipChance = 0.12 + (state.equipLevels.decor_sign || 0) * 0.07 + (state.rating >= 4.8 ? 0.1 : 0) + ((state.viralProgress||0)>=80 ? 0.15 : 0);
       const normalPool = CUSTOMERS.filter(c => !c.picky), pickyPool = CUSTOMERS.filter(c => c.picky);
       const chosenTemplate = (Math.random() < pickyChance && pickyPool.length) ? pickyPool[Math.floor(Math.random() * pickyPool.length)] : normalPool[Math.floor(Math.random() * normalPool.length)];
 
@@ -1307,9 +1403,8 @@
 
       currentPatience = 100; resetBowl(false); renderCustomerOrderUI(); renderSellDishGrid(); startPatienceTimer();
 
-      // KÍCH HOẠT BIẾN CỐ NGẪU NHIÊN TÙY KHÁCH
       customersSinceLastDilemma++; pendingCustomerDilemmaStage = null;
-      let eventChance = 0.30 + (currentCustomer.vip ? 0.15 : 0) + (currentCustomer.picky ? 0.15 : 0);
+      let eventChance = 0.25 + (currentCustomer.vip ? 0.12 : 0) + (currentCustomer.picky ? 0.12 : 0);
       if (customersSinceLastDilemma >= 3) eventChance = 1.0;
 
       if (state.totalSold >= 1 && Math.random() < eventChance) {
@@ -1326,15 +1421,23 @@
       }
     }
 
+    function shoutOutForCustomers() {
+      if (!state.isSellingPhase) return;
+      playSFX("snip");
+      currentPatience = Math.min(100, currentPatience + 15);
+      showToast("📣 Dì lớn tiếng rao hàng: 'Bánh tráng trộn Sài Gòn 30 năm điiii!' Khách tấp vào đông hơn!");
+      spawnCustomer();
+    }
+
     function startPatienceTimer() {
       if (patienceTimer) clearInterval(patienceTimer);
       patienceTimer = setInterval(() => {
-        if (currentTab !== "sell" || !currentCustomer) return;
+        if (currentTab !== "sell" || !currentCustomer || !state.isSellingPhase) return;
         const anyModal = !document.getElementById("modal-out-of-stock").classList.contains("hidden") || !document.getElementById("modal-dilemma").classList.contains("hidden") || !document.getElementById("modal-serve-result").classList.contains("hidden");
         if (anyModal) return;
 
-        let decay = 1.1 + (state.level * 0.06);
-        if (currentCustomer.picky) decay *= 1.4;
+        let decay = 1.1 + (state.level * 0.05);
+        if (currentCustomer.picky) decay *= 1.35;
         const slow = Math.max(0.4, 1 - ((state.equipLevels.decor_stool || 0) * 0.08) - (state.staff.tunghia ? 0.25 : 0));
         currentPatience = Math.max(0, currentPatience - decay * slow);
 
@@ -1372,13 +1475,13 @@
       const matchD = bowl.selectedDish === currentCustomer.wantedDish, matchS = bowl.spice === currentCustomer.wantedSpice, matchR = bowl.rau === currentCustomer.wantedRau, matchH = bowl.hanh === currentCustomer.wantedHanh;
 
       const tD = document.getElementById("req-tag-dish"), tS = document.getElementById("req-tag-spice"), tR = document.getElementById("req-tag-rau"), tH = document.getElementById("req-tag-hanh"), tT = document.getElementById("req-tag-tratac");
-      tD.textContent = `${dishObj.icon} ${dishObj.name} ${matchD?'✓':''}`; tD.className = `text-[9px] font-black px-1 py-0.2 rounded border ${matchD?'bg-emerald-600 text-white border-emerald-700':'bg-amber-100 border-amber-300 text-amber-950'}`;
-      tS.textContent = `${spiceLabels[currentCustomer.wantedSpice]} ${matchS?'✓':''}`; tS.className = `text-[9px] font-bold px-1 py-0.2 rounded border ${matchS?'bg-emerald-600 text-white border-emerald-700':'bg-white border-amber-300 text-amber-900'}`;
-      tR.textContent = `${currentCustomer.wantedRau?'🌿 Rau': '🚫 Ko rau'} ${matchR?'✓':''}`; tR.className = `text-[9px] font-bold px-1 py-0.2 rounded border ${matchR?'bg-emerald-600 text-white border-emerald-700':'bg-white border-amber-300 text-amber-900'}`;
-      tH.textContent = `${currentCustomer.wantedHanh?'🧅 Hành': '🚫 Ko hành'} ${matchH?'✓':''}`; tH.className = `text-[9px] font-bold px-1 py-0.2 rounded border ${matchH?'bg-emerald-600 text-white border-emerald-700':'bg-white border-amber-300 text-amber-900'}`;
+      tD.textContent = `${dishObj.icon} ${dishObj.name} ${matchD?'✓':''}`; tD.className = `text-[10px] font-black px-2 py-0.5 rounded-lg border ${matchD?'bg-emerald-600 text-white border-emerald-700':'bg-amber-100 border-amber-400 text-amber-950'}`;
+      tS.textContent = `${spiceLabels[currentCustomer.wantedSpice]} ${matchS?'✓':''}`; tS.className = `text-[10px] font-bold px-2 py-0.5 rounded-lg border ${matchS?'bg-emerald-600 text-white border-emerald-700':'bg-white border-amber-300 text-amber-900'}`;
+      tR.textContent = `${currentCustomer.wantedRau?'🌿 Rau': '🚫 Ko rau'} ${matchR?'✓':''}`; tR.className = `text-[10px] font-bold px-2 py-0.5 rounded-lg border ${matchR?'bg-emerald-600 text-white border-emerald-700':'bg-white border-amber-300 text-amber-900'}`;
+      tH.textContent = `${currentCustomer.wantedHanh?'🧅 Hành': '🚫 Ko hành'} ${matchH?'✓':''}`; tH.className = `text-[10px] font-bold px-2 py-0.5 rounded-lg border ${matchH?'bg-emerald-600 text-white border-emerald-700':'bg-white border-amber-300 text-amber-900'}`;
 
       if (currentCustomer.wantedTraTac) {
-        tT.classList.remove("hidden"); tT.textContent = `🧋 Tắc ${bowl.tratac?'✓':''}`; tT.className = `text-[9px] font-bold px-1 py-0.2 rounded border ${bowl.tratac?'bg-emerald-600 text-white border-emerald-700':'bg-amber-100 border-amber-300 text-amber-950'}`;
+        tT.classList.remove("hidden"); tT.textContent = `🧋 Tắc ${bowl.tratac?'✓':''}`; tT.className = `text-[10px] font-bold px-2 py-0.5 rounded-lg border ${bowl.tratac?'bg-emerald-600 text-white border-emerald-700':'bg-amber-100 border-amber-300 text-amber-950'}`;
       } else { tT.classList.add("hidden"); }
     }
 
@@ -1394,15 +1497,15 @@
     function setOption(type, val) {
       if (type === "rau") {
         bowl.rau = val;
-        document.getElementById("opt-rau-yes").className = val ? "soft-btn flex-1 py-0.5 px-1 rounded font-black bg-emerald-600 text-white" : "soft-btn flex-1 py-0.5 px-1 rounded font-bold bg-white text-amber-900 border";
-        document.getElementById("opt-rau-no").className = !val ? "soft-btn flex-1 py-0.5 px-1 rounded font-black bg-rose-600 text-white" : "soft-btn flex-1 py-0.5 px-1 rounded font-bold bg-white text-amber-900 border";
+        document.getElementById("opt-rau-yes").className = val ? "soft-btn flex-1 py-1 px-1.5 rounded-lg font-black bg-emerald-600 text-white" : "soft-btn flex-1 py-1 px-1.5 rounded-lg font-bold bg-white text-amber-900 border";
+        document.getElementById("opt-rau-no").className = !val ? "soft-btn flex-1 py-1 px-1.5 rounded-lg font-black bg-rose-600 text-white" : "soft-btn flex-1 py-1 px-1.5 rounded-lg font-bold bg-white text-amber-900 border";
       } else if (type === "hanh") {
         bowl.hanh = val;
-        document.getElementById("opt-hanh-yes").className = val ? "soft-btn flex-1 py-0.5 px-1 rounded font-black bg-emerald-600 text-white" : "soft-btn flex-1 py-0.5 px-1 rounded font-bold bg-white text-amber-900 border";
-        document.getElementById("opt-hanh-no").className = !val ? "soft-btn flex-1 py-0.5 px-1 rounded font-black bg-rose-600 text-white" : "soft-btn flex-1 py-0.5 px-1 rounded font-bold bg-white text-amber-900 border";
+        document.getElementById("opt-hanh-yes").className = val ? "soft-btn flex-1 py-1 px-1.5 rounded-lg font-black bg-emerald-600 text-white" : "soft-btn flex-1 py-1 px-1.5 rounded-lg font-bold bg-white text-amber-900 border";
+        document.getElementById("opt-hanh-no").className = !val ? "soft-btn flex-1 py-1 px-1.5 rounded-lg font-black bg-rose-600 text-white" : "soft-btn flex-1 py-1 px-1.5 rounded-lg font-bold bg-white text-amber-900 border";
       } else if (type === "spice") {
         bowl.spice = val;
-        [0, 1, 2].forEach(s => { document.getElementById(`opt-spice-${s}`).className = s === val ? "soft-btn flex-1 py-0.5 px-0.5 rounded font-black bg-orange-600 text-white" : "soft-btn flex-1 py-0.5 px-0.5 rounded font-bold bg-white border"; });
+        [0, 1, 2].forEach(s => { document.getElementById(`opt-spice-${s}`).className = s === val ? "soft-btn flex-1 py-1 px-1 rounded font-black bg-orange-600 text-white" : "soft-btn flex-1 py-1 px-1 rounded font-bold bg-white border"; });
       }
       updateOrderMatchTags();
     }
@@ -1412,7 +1515,7 @@
       const btn = document.getElementById("opt-tratac-btn");
       if (btn) {
         btn.innerHTML = bowl.tratac ? `🧋 Tắc (+8k): CÓ ✓` : `🧋 Tắc (+8k)`;
-        btn.className = bowl.tratac ? "soft-btn w-full py-0.5 px-1 rounded font-black bg-emerald-600 text-white flex items-center justify-center" : "soft-btn w-full py-0.5 px-1 rounded font-bold bg-white text-amber-900 border flex items-center justify-center";
+        btn.className = bowl.tratac ? "soft-btn w-full py-1 px-1.5 rounded-lg font-black bg-emerald-600 text-white flex items-center justify-center" : "soft-btn w-full py-1 px-1.5 rounded-lg font-bold bg-white text-amber-900 border flex items-center justify-center";
       }
       updateOrderMatchTags();
     }
@@ -1433,7 +1536,7 @@
     function resetBowl(manual = false) {
       if (manual && (bowl.step1Done || bowl.step2Done)) showToast("🗑️ Đã đổ thau làm lại!");
       bowl.step1Done = false; bowl.step2Done = false; bowl.mixProgress = 0; bowl.step3Done = false; bowl.tratac = false;
-      const tt = document.getElementById("opt-tratac-btn"); if(tt){tt.innerHTML="🧋 Tắc (+8k)"; tt.className="soft-btn w-full py-0.5 px-1 rounded font-bold bg-white text-amber-900 border flex items-center justify-center";}
+      const tt = document.getElementById("opt-tratac-btn"); if(tt){tt.innerHTML="🧋 Tắc (+8k)"; tt.className="soft-btn w-full py-1 px-1.5 rounded-lg font-bold bg-white text-amber-900 border flex items-center justify-center";}
       ["svg-layer-base", "svg-layer-sauce", "svg-layer-herbs", "svg-layer-topping"].forEach(id => { const el = document.getElementById(id); if (el) el.classList.add("hidden"); });
       document.getElementById("mix-progress-label").textContent = "0%";
       document.getElementById("mix-bar-fill").style.width = "0%";
@@ -1461,7 +1564,7 @@
     function renderQuickStockBar() {
       const bar = document.getElementById("quick-stock-bar");
       if (!bar) return;
-      bar.innerHTML = INGREDIENTS.map(ing => `<span class="px-1.5 py-0.5 rounded border ${(state.stock[ing.id]||0)<=3?'bg-red-100 border-red-400 text-red-800':'bg-amber-50 border-amber-200 text-amber-900'}">${ing.icon} ${state.stock[ing.id]||0}</span>`).join("");
+      bar.innerHTML = INGREDIENTS.map(ing => `<span class="px-2 py-0.5 rounded border ${(state.stock[ing.id]||0)<=3?'bg-red-100 border-red-400 text-red-800':'bg-amber-50 border-amber-200 text-amber-900'}">${ing.icon} ${state.stock[ing.id]||0}</span>`).join("");
     }
 
     function checkStepIngredientsOrShowOos(group) {
@@ -1576,13 +1679,22 @@
       if (bowl.mixProgress < min || bowl.mixProgress > max) { stars -= mult; notes.push("Lực trộn chưa chuẩn"); }
       stars = Math.max(1, stars);
 
-      if (stars === 5) adjustRating(currentCustomer.picky ? 0.08 : 0.04);
-      else if (stars === 4) adjustRating(0.01);
-      else if (stars === 3) adjustRating(-0.04);
-      else adjustRating(currentCustomer.picky ? -0.18 : -0.10);
+      if (stars === 5) {
+        adjustRating(currentCustomer.picky ? 0.08 : 0.04);
+        state.consecutiveFiveStars = (state.consecutiveFiveStars||0) + 1;
+        if (currentCustomer.picky) state.pickyFiveStarsCount = (state.pickyFiveStarsCount||0) + 1;
+      } else {
+        state.consecutiveFiveStars = 0;
+        if (stars === 4) adjustRating(0.01);
+        else if (stars === 3) adjustRating(-0.04);
+        else adjustRating(currentCustomer.picky ? -0.18 : -0.10);
+      }
 
       const basePrice = getDishEffectivePrice(bowl.selectedDish), traTacRev = bowl.tratac ? 8000 : 0;
-      let tip = (stars === 5) ? 3000 + (state.prepDone.sate&&state.prepDone.hanhphi&&state.prepDone.trungcut?3000:0) + ((state.equipLevels.decor_lantern||0)*1500) + (currentCustomer.vip?10000:0) + (currentCustomer.picky?15000:0) + (state.rating>=4.8?3000:0) : 0;
+      let viralTipBonus = (state.viralProgress||0)>=80 ? 0.20 : 0;
+      let tip = (stars === 5) ? Math.round((3000 + (state.prepDone.sate&&state.prepDone.hanhphi&&state.prepDone.trungcut?3000:0) + ((state.equipLevels.decor_lantern||0)*1500) + (currentCustomer.vip?10000:0) + (currentCustomer.picky?15000:0) + (state.rating>=4.8?3000:0) + (state.nextCustomerTipBonus||0)) * (1 + viralTipBonus)) : 0;
+      state.nextCustomerTipBonus = 0;
+
       const finalEarned = (stars >= 3 ? basePrice + tip : Math.round(basePrice * 0.6)) + traTacRev;
       state.money += finalEarned; state.todayRevenue += finalEarned; state.totalSold += 1; state.todaySold += 1;
       addXP(Math.round(stars * 8 * (1 + (state.equipLevels.decor_speaker||0)*0.10)));
@@ -1617,27 +1729,100 @@
       const r = typeof state.rating === "number" ? state.rating : 5.0, tier = getRatingTierInfo(r);
       document.getElementById("social-modal-rating").textContent = `${r.toFixed(1)} ⭐`;
       document.getElementById("social-modal-tier").textContent = tier.full;
+
+      const vp = Math.min(100, state.viralProgress || 0);
+      document.getElementById("viral-pct-label").textContent = `${vp}%`;
+      document.getElementById("viral-bar-fill").style.width = `${vp}%`;
+      document.getElementById("viral-status-text").textContent = vp >= 80 ? "🔥 Quán Đang Viral Khắp Tóp Tóp!" : vp >= 40 ? "📈 Đang Có Hướng Tăng Trưởng" : "🌱 Cần Tương Tác Thêm";
+
       document.getElementById("reviews-list-container").innerHTML = (state.reviews||[]).map(rv => `
-        <div class="p-2.5 rounded-xl bg-white border ${rv.stars>=4?'border-amber-200':'border-rose-300'} space-y-1">
-          <div class="flex items-center justify-between"><div class="flex items-center gap-1"><span class="text-base">${rv.custAvatar}</span><b>${escapeHtml(rv.custName)}</b></div><span>${"⭐".repeat(rv.stars)}</span></div>
-          <p class="text-amber-950 italic bg-amber-50 p-1.5 rounded">${escapeHtml(rv.comment)}</p>
-          ${rv.replied ? `<div class="p-1.5 bg-emerald-50 text-emerald-900 font-bold rounded">${escapeHtml(rv.replyText)}</div>` : `
-            <div class="flex gap-1 pt-0.5">
-              <button onclick="replySocialReview('thanks','${rv.id}')" class="soft-btn py-1 px-1.5 bg-pink-600 text-white font-black text-[9px] rounded">💖 Cảm ơn</button>
-              <button onclick="replySocialReview('apology','${rv.id}')" class="soft-btn py-1 px-1.5 bg-amber-600 text-white font-black text-[9px] rounded">🙏 Xin lỗi</button>
-              <button onclick="replySocialReview('voucher','${rv.id}')" class="soft-btn py-1 px-1.5 bg-emerald-600 text-white font-black text-[9px] rounded">🎁 Đền bù -5k</button>
-            </div>
+        <div class="p-3 rounded-2xl bg-white border ${rv.stars>=4?'border-amber-200':'border-rose-300'} space-y-1.5 shadow-sm">
+          <div class="flex items-center justify-between"><div class="flex items-center gap-1.5 font-black text-amber-950"><span class="text-base">${rv.custAvatar}</span><span>${escapeHtml(rv.custName)}</span></div><span>${"⭐".repeat(rv.stars)}</span></div>
+          <p class="text-amber-950 italic bg-amber-50 p-2 rounded-xl">${escapeHtml(rv.comment)}</p>
+          ${rv.replied ? `<div class="p-2 bg-emerald-50 text-emerald-900 font-bold rounded-xl text-xs">💬 Phản hồi: ${escapeHtml(rv.replyText)}</div>` : `
+            <button onclick="openReplyOptionsModal('${rv.id}')" class="soft-btn w-full py-2 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black text-xs rounded-xl shadow">💬 Phản Hồi Bình Luận Này</button>
           `}
         </div>
-      `).join("") || `<div class="text-center text-xs py-4 text-amber-800">Chưa có bài review nào.</div>`;
+      `).join("") || `<div class="text-center text-xs py-6 text-amber-800">Chưa có bài review nào.</div>`;
     }
 
-    function replySocialReview(mode, revId) {
-      const rv = state.reviews.find(x => x.id === revId); if (!rv || rv.replied) return;
-      if (mode === "voucher") { if (state.money < 5000) { showToast("❌ Không đủ 5k!"); return; } state.money -= 5000; adjustRating(0.15); addXP(12); rv.replyText = `🎁 Dì tặng con Voucher đền bù nha!`; showToast("🎁 Đã tặng Voucher (+0.15⭐)!"); }
-      else if (mode === "apology") { adjustRating(0.06); rv.replyText = `🙏 Dì cảm ơn con, quán sẽ rút kinh nghiệm ạ!`; showToast("🙏 Đã phản hồi (+0.06⭐)!"); }
-      else { adjustRating(0.03); addXP(5); state.nextCustomerTipBonus = 3000; rv.replyText = `💖 Cảm ơn review có tâm của con!`; showToast("💖 Đã thả tim (+0.03⭐ & Tip khách sau)!"); }
-      rv.replied = true; playSFX("cash"); renderReviewsModalList(); updateAllUI(); saveGameEverywhere();
+    let activeReviewToReplyId = null;
+    function openReplyOptionsModal(revId) {
+      activeReviewToReplyId = revId;
+      const rv = (state.reviews||[]).find(x => x.id === revId); if (!rv) return;
+      const list = document.getElementById("reply-options-list");
+      list.innerHTML = `
+        <button onclick="executeSocialReply('friendly')" class="soft-btn w-full p-2.5 rounded-xl bg-pink-100 hover:bg-pink-200 text-pink-950 font-extrabold text-left text-xs border border-pink-300">💖 Thân Thiện: "Dì cảm ơn con nhiều nghen, lần sau ghé Dì bỏ thêm hành phi giòn rụm nha!"</button>
+        <button onclick="executeSocialReply('trend')" class="soft-btn w-full p-2.5 rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-950 font-extrabold text-left text-xs border border-orange-300">😂 Bắt Trend: "Bánh tráng trộn bằng cả tính mạng, ngon nhức cái nách luôn phải hôn con! 🔥"</button>
+        <button onclick="executeSocialReply('apology')" class="soft-btn w-full p-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 font-extrabold text-left text-xs border border-amber-300">🙏 Cầu Thị: "Thiệt tình xin lỗi con, Dì đã nhắc nhở khâu pha sốt rồi, mong con cho quán cơ hội phục vụ lại!"</button>
+        <button onclick="executeSocialReply('voucher')" class="soft-btn w-full p-2.5 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-950 font-extrabold text-left text-xs border border-emerald-300">🎁 Tặng Voucher (-5.000đ): "Dì gửi tặng con voucher 5k đền bù nha!"</button>
+      `;
+      document.getElementById("modal-reply-options").classList.remove("hidden");
+    }
+
+    function executeSocialReply(style) {
+      const rv = (state.reviews||[]).find(x => x.id === activeReviewToReplyId); if (!rv || rv.replied) return;
+      let text = "";
+      if (style === "voucher") {
+        if (state.money < 5000) { showToast("❌ Không đủ 5k làm voucher!"); return; }
+        state.money -= 5000; adjustRating(0.15); addXP(15);
+        state.viralProgress = Math.min(100, (state.viralProgress||0) + 25);
+        text = "🎁 Tặng Voucher đền bù 5k (-0.15⭐, +25% Viral)";
+        showToast("🎁 Tặng Voucher thành công (+0.15⭐)!");
+      } else if (style === "apology") {
+        adjustRating(0.08); addXP(8);
+        state.viralProgress = Math.min(100, (state.viralProgress||0) + 12);
+        text = "🙏 Xin lỗi cầu thị (+0.08⭐, +12% Viral)";
+        showToast("🙏 Phản hồi cầu thị thành công!");
+      } else if (style === "trend") {
+        adjustRating(0.05); addXP(10);
+        state.viralProgress = Math.min(100, (state.viralProgress||0) + 20);
+        text = "😂 Trả lời bắt trend Tóp Tóp (+20% Viral)";
+        showToast("😂 Bình luận bắt trend cực gắt (+20% Viral)!");
+      } else {
+        adjustRating(0.03); addXP(5); state.nextCustomerTipBonus = 3000;
+        state.viralProgress = Math.min(100, (state.viralProgress||0) + 10);
+        text = "💖 Thân thiện dễ thương (+3k Tip khách sau)";
+        showToast("💖 Đã phản hồi thân thiện!");
+      }
+
+      rv.replied = true; rv.replyText = text;
+      state.repliedReviewsCount = (state.repliedReviewsCount||0) + 1;
+      document.getElementById("modal-reply-options").classList.add("hidden");
+      playSFX("cash"); renderReviewsModalList(); updateAllUI(); saveGameEverywhere();
+    }
+
+    function openAchievementsModal() { renderAchievementsModalList(); document.getElementById("modal-achievements").classList.remove("hidden"); }
+    function closeAchievementsModal() { document.getElementById("modal-achievements").classList.add("hidden"); }
+
+    function renderAchievementsModalList() {
+      const container = document.getElementById("achievements-list-container"); if (!container) return;
+      container.innerHTML = ACHIEVEMENTS_DATA.map(ach => {
+        const isClaimed = state.claimedAchievements.includes(ach.id), canClaim = !isClaimed && ach.check(state);
+        return `
+          <div class="p-3 rounded-2xl border ${isClaimed?'bg-emerald-50 border-emerald-400':'bg-white border-amber-300'} space-y-1.5 shadow-sm">
+            <div class="flex items-center justify-between font-black text-amber-950"><span>${ach.name}</span><span class="text-emerald-700">+${formatVND(ach.reward)} • +${ach.xp} XP</span></div>
+            <p class="text-[11px] text-amber-900">${ach.desc}</p>
+            <div class="flex items-center justify-between pt-1 border-t text-[10px]">
+              <span class="font-bold text-amber-800">Trạng thái:</span>
+              ${isClaimed ? `<span class="font-black text-emerald-700">✅ Đã hoàn thành</span>` : canClaim ? `<button onclick="claimAchievement('${ach.id}')" class="soft-btn px-3 py-1 bg-orange-600 text-white font-black rounded-xl shadow">Nhận Thưởng</button>` : `<span class="font-bold text-amber-600">Đang thực hiện</span>`}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+    function claimAchievement(id) {
+      const ach = ACHIEVEMENTS_DATA.find(a => a.id === id); if (!ach || state.claimedAchievements.includes(id) || !ach.check(state)) return;
+      state.claimedAchievements.push(id); state.money += ach.reward; addXP(ach.xp);
+      playSFX("cash"); renderAchievementsModalList(); updateAllUI(); saveGameEverywhere();
+      showToast(`🏆 Hoàn thành thành tựu "${ach.name}": +${formatVND(ach.reward)}!`);
+    }
+    function checkAchievements() {
+      ACHIEVEMENTS_DATA.forEach(ach => {
+        if (!state.claimedAchievements.includes(ach.id) && ach.check(state)) {
+          showToast(`🎖️ Đạt thành tựu mới: "${ach.name}"! Vào sảnh xem thưởng nhé!`);
+        }
+      });
     }
 
     function triggerRandomDilemmaEvent(manual = false, stageContext = "any") {
@@ -1681,7 +1866,7 @@
       currentUpgradeSubTab = sub;
       ["dishes", "staff", "tools", "licenses"].forEach(k => {
         const btn = document.getElementById(`upg-sub-${k}`);
-        if (btn) btn.className = k === sub ? "soft-btn flex-1 py-1 px-1 rounded-lg font-black text-[10px] bg-orange-600 text-white shadow" : "soft-btn flex-1 py-1 px-1 rounded-lg font-black text-[10px] text-amber-900 bg-white";
+        if (btn) btn.className = k === sub ? "soft-btn flex-1 py-2 px-1 rounded-xl font-black text-xs bg-orange-600 text-white shadow" : "soft-btn flex-1 py-2 px-1 rounded-xl font-black text-xs text-amber-900 bg-white";
       });
       renderUpgradesTab();
     }
@@ -1689,31 +1874,31 @@
     function renderUpgradesTab() {
       document.getElementById("upgrade-current-lvl").textContent = `Cấp ${state.level}/50`;
       const stages = [{r:"Cấp 1-10",n:"Khởi Nghiệp"},{r:"Cấp 11-20",n:"Xe Đẩy"},{r:"Cấp 21-30",n:"Phố Đêm"},{r:"Cấp 31-40",n:"Quận Nhất"},{r:"Cấp 41-50",n:"Huyền Thoại"}];
-      document.getElementById("stage-progress-badges").innerHTML = stages.map((st,i) => `<div class="p-1.5 rounded-lg border text-center bg-white"><div class="font-black text-[9px] text-orange-700">${st.r}</div><div class="font-bold text-[9px] truncate">${st.n}</div></div>`).join("");
+      document.getElementById("stage-progress-badges").innerHTML = stages.map((st,i) => `<div class="p-2 rounded-xl border text-center bg-white"><div class="font-black text-[10px] text-orange-700">${st.r}</div><div class="font-bold text-[10px] truncate">${st.n}</div></div>`).join("");
 
       const container = document.getElementById("upgrade-sub-content");
       if (!container) return;
 
       if (currentUpgradeSubTab === "dishes") {
-        container.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">${Object.values(DISH_MENU).map(d => {
+        container.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">${Object.values(DISH_MENU).map(d => {
           const unlocked = state.unlockedDishes.includes(d.id), star = state.dishStars[d.id]||1, effPrice = getDishEffectivePrice(d.id), cost = getDishStarUpgradeCost(d.id);
-          let btn = !unlocked ? (state.level >= d.reqLevel ? `<button onclick="buyDishRecipe('${d.id}')" class="soft-btn px-2 py-1 rounded bg-emerald-600 text-white font-black text-[10px]">Mua (${formatVND(d.unlockCost)})</button>` : `<span class="text-[9px] text-gray-500 font-bold">Cấp ${d.reqLevel}</span>`) : (star < 5 ? `<button onclick="upgradeDishStar('${d.id}')" class="soft-btn px-2 py-1 rounded bg-orange-600 text-white font-black text-[10px]">Nâng ${star+1}⭐</button>` : `<span class="text-[9px] font-black text-amber-600">Max 5⭐</span>`);
-          return `<div class="p-2.5 rounded-xl bg-white border flex items-center justify-between text-xs"><div class="flex items-center gap-1.5"><span class="text-xl">${d.icon}</span><div><div class="font-black">${d.name}</div><div class="text-[10px] text-emerald-700 font-bold">${formatVND(effPrice)}</div></div></div><div>${btn}</div></div>`;
+          let btn = !unlocked ? (state.level >= d.reqLevel ? `<button onclick="buyDishRecipe('${d.id}')" class="soft-btn px-2.5 py-1.5 rounded-xl bg-emerald-600 text-white font-black text-xs">Mua (${formatVND(d.unlockCost)})</button>` : `<span class="text-[11px] text-gray-500 font-bold">Cấp ${d.reqLevel}</span>`) : (star < 5 ? `<button onclick="upgradeDishStar('${d.id}')" class="soft-btn px-2.5 py-1.5 rounded-xl bg-orange-600 text-white font-black text-xs">Nâng ${star+1}⭐</button>` : `<span class="text-[11px] font-black text-amber-600">Max 5⭐</span>`);
+          return `<div class="p-3 rounded-2xl bg-white border flex items-center justify-between text-xs shadow-sm"><div class="flex items-center gap-2"><span class="text-2xl">${d.icon}</span><div><div class="font-black">${d.name}</div><div class="text-[11px] text-emerald-700 font-bold">${formatVND(effPrice)}</div></div></div><div>${btn}</div></div>`;
         }).join("")}</div>`;
       } else if (currentUpgradeSubTab === "staff") {
-        container.innerHTML = `<div class="space-y-1.5">${STAFF_CATALOG.map(st => {
+        container.innerHTML = `<div class="space-y-2">${STAFF_CATALOG.map(st => {
           const hired = state.staff[st.id], ok = state.level >= st.reqLevel;
-          return `<div class="p-2.5 rounded-xl bg-white border flex items-center justify-between text-xs"><div class="flex items-center gap-2"><span class="text-2xl">${st.avatar}</span><div><div class="font-black">${st.name}</div><div class="text-[10px] text-amber-800">${st.role}</div></div></div><div>${hired?`<span class="px-2 py-1 bg-emerald-600 text-white font-black text-[10px] rounded">Đã thuê</span>`:ok?`<button onclick="hireStaffMember('${st.id}')" class="soft-btn px-2 py-1 bg-orange-600 text-white font-black text-[10px] rounded">Thuê (${formatVND(st.hireCost)})</button>`:`<span class="text-[9px] text-gray-500 font-bold">Cấp ${st.reqLevel}</span>`}</div></div>`;
+          return `<div class="p-3 rounded-2xl bg-white border flex items-center justify-between text-xs shadow-sm"><div class="flex items-center gap-2.5"><span class="text-3xl">${st.avatar}</span><div><div class="font-black">${st.name}</div><div class="text-[11px] text-amber-800">${st.role}</div></div></div><div>${hired?`<span class="px-3 py-1.5 bg-emerald-600 text-white font-black text-xs rounded-xl">Đã thuê</span>`:ok?`<button onclick="hireStaffMember('${st.id}')" class="soft-btn px-3 py-1.5 bg-orange-600 text-white font-black text-xs rounded-xl shadow">Thuê (${formatVND(st.hireCost)})</button>`:`<span class="text-[11px] text-gray-500 font-bold">Cấp ${st.reqLevel}</span>`}</div></div>`;
         }).join("")}</div>`;
       } else if (currentUpgradeSubTab === "tools") {
-        container.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">${EQUIP_UPGRADES.map(eq => {
+        container.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">${EQUIP_UPGRADES.map(eq => {
           const cur = state.equipLevels[eq.id]||0, cost = getEquipCost(eq), isMax = cur >= eq.maxLvl;
-          return `<div class="p-2.5 rounded-xl bg-white border flex items-center justify-between text-xs"><div><div class="font-black">${eq.icon} ${eq.name} (${cur}/${eq.maxLvl})</div><div class="text-[10px] text-amber-800">${eq.desc}</div></div><div>${isMax?`<span class="text-[9px] font-black text-emerald-700">Tối đa</span>`:`<button onclick="buyEquipUpgrade('${eq.id}')" class="soft-btn px-2 py-1 bg-orange-600 text-white font-black text-[10px] rounded">${formatVND(cost)}</button>`}</div></div>`;
+          return `<div class="p-3 rounded-2xl bg-white border flex items-center justify-between text-xs shadow-sm"><div><div class="font-black">${eq.icon} ${eq.name} (${cur}/${eq.maxLvl})</div><div class="text-[11px] text-amber-800">${eq.desc}</div></div><div>${isMax?`<span class="text-[11px] font-black text-emerald-700">Tối đa</span>`:`<button onclick="buyEquipUpgrade('${eq.id}')" class="soft-btn px-2.5 py-1.5 bg-orange-600 text-white font-black text-xs rounded-xl shadow">${formatVND(cost)}</button>`}</div></div>`;
         }).join("")}</div>`;
       } else {
-        container.innerHTML = `<div class="space-y-1.5">${LICENSES_CATALOG.map(lic => {
+        container.innerHTML = `<div class="space-y-2">${LICENSES_CATALOG.map(lic => {
           const owned = state.licenses[lic.id], ok = state.level >= lic.reqLevel;
-          return `<div class="p-2.5 rounded-xl bg-white border flex items-center justify-between text-xs"><div class="flex items-center gap-2"><span class="text-2xl">${lic.icon}</span><div><div class="font-black">${lic.name}</div><div class="text-[10px] text-amber-800">${lic.desc}</div></div></div><div>${owned?`<span class="px-2 py-1 bg-emerald-600 text-white font-black text-[10px] rounded">Đã đăng ký</span>`:ok?`<button onclick="buyLicenseItem('${lic.id}')" class="soft-btn px-2 py-1 bg-orange-600 text-white font-black text-[10px] rounded">Đăng ký (${formatVND(lic.cost)})</button>`:`<span class="text-[9px] text-gray-500 font-bold">Cấp ${lic.reqLevel}</span>`}</div></div>`;
+          return `<div class="p-3 rounded-2xl bg-white border flex items-center justify-between text-xs shadow-sm"><div class="flex items-center gap-2.5"><span class="text-3xl">${lic.icon}</span><div><div class="font-black">${lic.name}</div><div class="text-[11px] text-amber-800">${lic.desc}</div></div></div><div>${owned?`<span class="px-3 py-1.5 bg-emerald-600 text-white font-black text-xs rounded-xl">Đã đăng ký</span>`:ok?`<button onclick="buyLicenseItem('${lic.id}')" class="soft-btn px-3 py-1.5 bg-orange-600 text-white font-black text-xs rounded-xl shadow">Đăng ký (${formatVND(lic.cost)})</button>`:`<span class="text-[11px] text-gray-500 font-bold">Cấp ${lic.reqLevel}</span>`}</div></div>`;
         }).join("")}</div>`;
       }
     }
@@ -1726,10 +1911,10 @@
 
     function openStoryModal() {
       document.getElementById("story-chapters-container").innerHTML = STORY_CHAPTERS.map(ch => `
-        <div class="p-2.5 rounded-xl border ${state.claimedChapters.includes(ch.id)?'bg-emerald-50 border-emerald-400':'bg-white border-amber-300'} space-y-1">
+        <div class="p-3 rounded-2xl border ${state.claimedChapters.includes(ch.id)?'bg-emerald-50 border-emerald-400':'bg-white border-amber-300'} space-y-1">
           <div class="flex justify-between font-black"><span>${ch.title}</span><span class="text-emerald-700">+${formatVND(ch.reward)}</span></div>
-          <p class="text-[11px] text-amber-900 italic">"${ch.story}"</p>
-          <div class="flex justify-between items-center text-[10px] pt-1 border-t"><span>🎯 ${ch.goalDesc}</span>${state.claimedChapters.includes(ch.id)?`<span>✅ Đã nhận</span>`:ch.check(state)?`<button onclick="claimStoryChapter('${ch.id}')" class="px-2.5 py-0.5 bg-orange-600 text-white font-black rounded">Nhận Thưởng</button>`:`<span>Đang làm</span>`}</div>
+          <p class="text-xs text-amber-900 italic">"${ch.story}"</p>
+          <div class="flex justify-between items-center text-[11px] pt-1 border-t"><span>🎯 ${ch.goalDesc}</span>${state.claimedChapters.includes(ch.id)?`<span>✅ Đã nhận</span>`:ch.check(state)?`<button onclick="claimStoryChapter('${ch.id}')" class="px-3 py-1 bg-orange-600 text-white font-black rounded-xl shadow">Nhận Thưởng</button>`:`<span>Đang làm</span>`}</div>
         </div>
       `).join("");
       document.getElementById("modal-story").classList.remove("hidden");
@@ -1740,10 +1925,77 @@
     }
     function closeStoryModal() { document.getElementById("modal-story").classList.add("hidden"); }
 
+    // HỆ THỐNG VAY VỐN NGÂN HÀNG & PHÁ SẢN
+    function applyBankLoan() {
+      if ((state.loanTimesUsed || 0) >= 2) { showToast("❌ Bạn đã dùng hết tối đa 2 lần vay ngân hàng!"); return; }
+      state.everBorrowed = true;
+      state.loanTimesUsed = (state.loanTimesUsed || 0) + 1;
+      const amount = state.loanTimesUsed === 1 ? 250000 : 350000;
+      const interestRate = state.loanTimesUsed === 1 ? 1.10 : 1.12;
+      const totalDebt = Math.round(amount * interestRate);
+
+      state.money += amount;
+      state.loanDebt = (state.loanDebt || 0) + totalDebt;
+      state.loanDailyPayment = Math.round(state.loanDebt / 7);
+      playSFX("cash"); updateAllUI(); saveGameEverywhere();
+      showToast(`🏦 Giải ngân gói vay lần ${state.loanTimesUsed}: +${formatVND(amount)}! (Tổng nợ: ${formatVND(state.loanDebt)})`);
+    }
+
+    function renderBankLoanBox() {
+      const statusEl = document.getElementById("bank-loan-status"), detailsEl = document.getElementById("bank-loan-details"), btn = document.getElementById("btn-apply-loan");
+      if (!statusEl) return;
+      const debt = state.loanDebt || 0, times = state.loanTimesUsed || 0;
+      if (debt > 0) {
+        statusEl.textContent = `Đang nợ: ${formatVND(debt)}`; statusEl.className = "px-2 py-0.5 rounded-full bg-red-200 text-red-900 text-[10px] font-bold";
+        detailsEl.innerHTML = `Đã vay ${times}/2 lần. Mỗi tối chốt sổ tự động trả góp <b>${formatVND(state.loanDailyPayment || 35000)}</b> cho đến khi hết nợ.`;
+        btn.textContent = times < 2 ? "📜 Vay Thêm Gói 2" : "🔒 Hết Lượt Vay";
+        btn.disabled = times >= 2;
+      } else {
+        statusEl.textContent = times === 0 ? "Chưa vay nợ" : "Đã trả sạch nợ (Phượng Hoàng)";
+        statusEl.className = "px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900 text-[10px] font-bold";
+        detailsEl.innerHTML = times === 0 ? "Gặp khó khăn tài chính? Ngân hàng chính sách hỗ trợ vay đến 2 lần khởi nghiệp." : "Tuyệt vời! Bạn đã trả sạch nợ ngân hàng.";
+        btn.textContent = times === 0 ? "📜 Xin Vay 250k (Lần 1)" : "📜 Vay 350k (Lần 2)";
+        btn.disabled = false;
+      }
+    }
+
+    function triggerBankruptcyGameOver() {
+      if (clockTimer) clearInterval(clockTimer);
+      if (patienceTimer) clearInterval(patienceTimer);
+      document.getElementById("bankruptcy-stats").innerHTML = `
+        <div><b>Tên Quán:</b> ${escapeHtml(state.shopName)}</div>
+        <div><b>Cấp độ đạt được:</b> Cấp ${state.level}/50</div>
+        <div><b>Tổng số bịch đã bán:</b> ${state.totalSold} bịch</div>
+        <div><b>Số ngày trụ vững:</b> Ngày ${state.day}</div>
+      `;
+      document.getElementById("modal-bankruptcy").classList.remove("hidden");
+    }
+
+    function restartGameFresh() {
+      document.getElementById("modal-bankruptcy").classList.add("hidden");
+      const name = state.shopName, pin = state.pin, avatar = state.avatar, key = state.shopKey;
+      state = {
+        shopKey: key, shopName: name, pin: pin, avatar: avatar, money: 350000, rating: 5.0, reputation: 100,
+        level: 1, xp: 0, day: 1, clockMinutes: 13 * 60, isSellingPhase: false, totalSold: 0, todaySold: 0, todayRevenue: 0, todayCogsSpent: 0,
+        marketPriceMultiplier: 1.0, viralProgress: 0, consecutiveFiveStars: 0, daysPrepDoneCount: 0, pickyFiveStarsCount: 0,
+        repliedReviewsCount: 0, resolvedDilemmasCount: 0, everBorrowed: false, loanDebt: 0, loanTimesUsed: 0, loanDailyPayment: 0,
+        stock: { banhtrang: 12, xoai: 10, muoitom: 12, sotbo: 10, dauphong: 12, khobo: 10, tepmo: 10, trungcut: 10 },
+        prepDone: { sate: false, hanhphi: false, trungcut: false },
+        unlockedDishes: ["tron"],
+        dishStars: { tron: 1, chamme: 1, cuon: 1, phoisuong: 1, bo: 1, nuong: 1, xoainon: 1, lacphomai: 1, mamruoc: 1, metditu: 1 },
+        staff: { beti: false, mylan: false, tunghia: false },
+        equipLevels: { decor_lantern: 0, decor_sign: 0, decor_stool: 0, decor_speaker: 0, tool_bowl: 0, tool_bottle: 0, tool_cooler: 0 },
+        licenses: { lic_vsattp: false, lic_sidewalk: false, lic_brand: false },
+        reviews: [], claimedAchievements: [], claimedChapters: [], ledgerHistory: []
+      };
+      updateAllUI(); switchTab("market"); saveGameEverywhere();
+      showToast("🔄 Đã khởi nghiệp lại từ đầu! Chúc quán vạn sự hanh thông!");
+    }
+
     function startDayClock() {
       if (clockTimer) clearInterval(clockTimer);
       clockTimer = setInterval(() => {
-        if (!document.getElementById("login-screen").classList.contains("hidden") || currentTab !== "sell") return;
+        if (!document.getElementById("login-screen").classList.contains("hidden") || !state.isSellingPhase) return;
         state.clockMinutes += 2;
         const h = Math.floor(state.clockMinutes / 60), m = state.clockMinutes % 60;
         document.getElementById("header-day-clock").textContent = `N.${state.day} • ${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
@@ -1761,15 +2013,36 @@
       const fixed = 7300 + 20000 + (state.licenses.lic_sidewalk?35000:0) + getDailyStaffWages();
       const keepRate = Math.min(1, (state.equipLevels.tool_cooler||0)*0.2);
       const keptX = Math.round((state.stock.xoai||0)*keepRate), keptT = Math.round((state.stock.trungcut||0)*keepRate);
-      state.stock.xoai = keptX; state.stock.trungcut = keptT; state.money = Math.max(0, state.money - fixed);
-      const net = state.todayRevenue - state.todayCogsSpent - fixed;
+      state.stock.xoai = keptX; state.stock.trungcut = keptT;
+
+      let loanDeduction = 0;
+      if ((state.loanDebt || 0) > 0) {
+        loanDeduction = Math.min(state.loanDebt, state.loanDailyPayment || 35000);
+        state.loanDebt -= loanDeduction;
+      }
+
+      state.money = Math.max(0, state.money - fixed - loanDeduction);
+      const net = state.todayRevenue - state.todayCogsSpent - fixed - loanDeduction;
       state.ledgerHistory.unshift({ day: state.day, sold: state.todaySold, revenue: state.todayRevenue, netProfit: net });
+
+      if (state.prepDone.sate && state.prepDone.hanhphi && state.prepDone.trungcut) {
+        state.daysPrepDoneCount = (state.daysPrepDoneCount || 0) + 1;
+      }
+      checkAchievements();
+
+      // Kiểm tra phá sản
+      if (state.money <= 0 && state.loanDebt > 0 && state.loanTimesUsed >= 2) {
+        document.getElementById("modal-end-day").classList.add("hidden");
+        triggerBankruptcyGameOver();
+        return;
+      }
 
       document.getElementById("end-day-title").textContent = `🌙 Chốt Sổ Ngày ${state.day}`;
       document.getElementById("end-day-details").innerHTML = `
         <div class="flex justify-between"><span>Đã bán:</span><b>${state.todaySold} phần</b></div>
         <div class="flex justify-between text-emerald-700"><span>Doanh thu:</span><b>+${formatVND(state.todayRevenue)}</b></div>
-        <div class="flex justify-between text-red-700"><span>Chi phí & Khấu hao:</span><b>-${formatVND(state.todayCogsSpent + fixed)}</b></div>
+        <div class="flex justify-between text-red-700"><span>Chi phí cố định & Lương NV:</span><b>-${formatVND(state.todayCogsSpent + fixed)}</b></div>
+        ${loanDeduction > 0 ? `<div class="flex justify-between text-orange-700"><span>Trừ nợ ngân hàng:</span><b>-${formatVND(loanDeduction)} (Còn nợ: ${formatVND(state.loanDebt)})</b></div>` : ''}
         <div class="flex justify-between border-t pt-1 font-black ${net>=0?'text-emerald-800':'text-red-700'}"><span>Lãi ròng:</span><span>${net>=0?'+':''}${formatVND(net)}</span></div>
       `;
       document.getElementById("modal-end-day").classList.remove("hidden"); saveGameEverywhere();
@@ -1777,24 +2050,26 @@
 
     function startNextDay() {
       document.getElementById("modal-end-day").classList.add("hidden");
-      state.day += 1; state.clockMinutes = 14*60; state.todaySold = 0; state.todayRevenue = 0; state.todayCogsSpent = 0;
+      state.day += 1; state.clockMinutes = 13*60; state.isSellingPhase = false; state.todaySold = 0; state.todayRevenue = 0; state.todayCogsSpent = 0;
       state.prepDone = state.staff.mylan ? {sate:true,hanhphi:true,trungcut:true} : {sate:false,hanhphi:false,trungcut:false};
       state.marketPriceMultiplier = [0.85, 0.95, 1.0, 1.1, 1.2][Math.floor(Math.random()*5)];
-      updateAllUI(); switchTab("market"); saveGameEverywhere(); showToast(`☀️ Sang Ngày ${state.day}!`);
+      updateAllUI(); switchTab("market"); saveGameEverywhere();
+      showToast(`☀️ Sang Ngày ${state.day}! Bây giờ là 13:00 trưa ở nhà, mời con Đi Chợ & Sơ Chế!`);
     }
 
     function renderLedgerTab() {
       document.getElementById("ledger-rent-cost").textContent = state.licenses.lic_sidewalk ? "35.000đ" : "0đ";
       document.getElementById("ledger-staff-cost").textContent = formatVND(getDailyStaffWages());
+      renderBankLoanBox();
       document.getElementById("ledger-history-list").innerHTML = state.ledgerHistory.map(item => `
-        <div class="p-2 rounded-xl bg-white border flex justify-between text-xs"><span>Ngày ${item.day} (${item.sold} bịch)</span><b class="${item.netProfit>=0?'text-emerald-700':'text-red-700'}">${item.netProfit>=0?'+':''}${formatVND(item.netProfit)}</b></div>
-      `).join("") || `<div class="text-center text-xs py-2 text-amber-800">Chưa có dữ liệu chốt ngày.</div>`;
+        <div class="p-2.5 rounded-xl bg-white border flex justify-between text-xs"><span>Ngày ${item.day} (${item.sold} bịch)</span><b class="${item.netProfit>=0?'text-emerald-700':'text-red-700'}">${item.netProfit>=0?'+':''}${formatVND(item.netProfit)}</b></div>
+      `).join("") || `<div class="text-center text-xs py-3 text-amber-800">Chưa có dữ liệu chốt ngày.</div>`;
     }
 
     function setLeaderboardSort(mode) {
       lbSortBy = mode;
-      document.getElementById("lb-sort-money").className = mode==="money" ? "soft-btn flex-1 py-1.5 rounded-xl font-black text-[10px] bg-amber-500 text-white shadow" : "soft-btn flex-1 py-1.5 rounded-xl font-black text-[10px] bg-white text-amber-900 border";
-      document.getElementById("lb-sort-sold").className = mode==="sold" ? "soft-btn flex-1 py-1.5 rounded-xl font-black text-[10px] bg-amber-500 text-white shadow" : "soft-btn flex-1 py-1.5 rounded-xl font-black text-[10px] bg-white text-amber-900 border";
+      document.getElementById("lb-sort-money").className = mode==="money" ? "soft-btn flex-1 py-2 rounded-xl font-black text-xs bg-amber-500 text-white shadow" : "soft-btn flex-1 py-2 rounded-xl font-black text-xs bg-white text-amber-900 border";
+      document.getElementById("lb-sort-sold").className = mode==="sold" ? "soft-btn flex-1 py-2 rounded-xl font-black text-xs bg-amber-500 text-white shadow" : "soft-btn flex-1 py-2 rounded-xl font-black text-xs bg-white text-amber-900 border";
       renderLeaderboardTab();
     }
     function renderLeaderboardTab() {
@@ -1804,11 +2079,11 @@
       const arr = Array.from(mergedMap.values()).sort((a,b) => lbSortBy==="sold" ? (b.totalSold - a.totalSold)||(b.money - a.money) : (b.money - a.money)||(b.totalSold - a.totalSold));
       const medals = ["🥇", "🥈", "🥉"], myKey = state.shopKey || sanitizeShopKey(state.shopName||"");
       container.innerHTML = arr.map((item, idx) => `
-        <div class="p-2 rounded-xl border flex items-center justify-between text-xs ${item.shopKey===myKey?'bg-amber-100 border-orange-500':'bg-white border-amber-200'}">
-          <div class="flex items-center gap-1.5 truncate">
+        <div class="p-2.5 rounded-2xl border flex items-center justify-between text-xs ${item.shopKey===myKey?'bg-amber-100 border-orange-500':'bg-white border-amber-200'}">
+          <div class="flex items-center gap-2 truncate">
             <span>${idx<3?medals[idx]:`#${idx+1}`}</span>
-            <div class="w-7 h-7 rounded-lg bg-amber-50 overflow-hidden flex items-center justify-center shrink-0">${renderAvatarContent(item.avatar||'👩‍🍳', "w-full h-full object-cover")}</div>
-            <div class="truncate"><div class="font-black truncate">${escapeHtml(item.shopName)}</div><div class="text-[9px] text-amber-800">Cấp ${item.level} • ${(item.rating||5.0).toFixed(1)}⭐</div></div>
+            <div class="w-8 h-8 rounded-xl bg-amber-50 overflow-hidden flex items-center justify-center shrink-0">${renderAvatarContent(item.avatar||'👩‍🍳', "w-full h-full object-cover")}</div>
+            <div class="truncate"><div class="font-black truncate">${escapeHtml(item.shopName)}</div><div class="text-[10px] text-amber-800">Cấp ${item.level} • ${(item.rating||5.0).toFixed(1)}⭐</div></div>
           </div>
           <span class="font-black text-emerald-700 shrink-0">${formatVND(item.money)}</span>
         </div>
@@ -1819,7 +2094,7 @@
     function escapeHtml(str) { return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
     function spawnFloatingFX(text) {
       const c = document.getElementById("floating-fx-container"); if (!c) return;
-      const el = document.createElement("div"); el.className = "floating-badge px-2 py-0.5 rounded-full bg-orange-600 text-white font-black text-[10px] shadow-lg"; el.textContent = text;
+      const el = document.createElement("div"); el.className = "floating-badge px-2.5 py-1 rounded-full bg-orange-600 text-white font-black text-xs shadow-lg"; el.textContent = text;
       c.appendChild(el); setTimeout(() => el.remove(), 1000);
     }
     let toastTimeout = null;
