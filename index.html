@@ -190,17 +190,14 @@
 
   <!-- ================= BẦU TRỜI NGÀY & ĐÊM SÀI GÒN ================= -->
   <div id="saigon-sky-bg" class="saigon-bg">
-    <!-- Mặt Trời & Mặt Trăng -->
     <div id="celestial-sun" class="celestial-body top-8 right-10 text-5xl sm:text-6xl drop-shadow-lg">☀️</div>
     <div id="celestial-moon" class="celestial-body top-28 right-10 text-4xl sm:text-5xl opacity-0 scale-50">🌙</div>
 
-    <!-- Mây Trôi Ban Ngày -->
     <div id="clouds-layer">
       <div class="cloud-item top-14 text-4xl" style="animation-duration: 42s;">☁️</div>
       <div class="cloud-item top-24 text-3xl" style="animation-duration: 55s; animation-delay: -18s;">⛅</div>
     </div>
 
-    <!-- Sao Đêm Lấp Lánh -->
     <div id="stars-layer" class="fixed inset-0 pointer-events-none opacity-0 transition-opacity duration-1000">
       <span class="absolute top-12 left-1/4 text-xs animate-ping">✨</span>
       <span class="absolute top-20 right-1/3 text-sm animate-pulse">⭐</span>
@@ -211,7 +208,6 @@
     <div class="bokeh-light w-48 h-48 bg-amber-400 top-10 left-10"></div>
     <div class="bokeh-light w-64 h-64 bg-rose-500 top-1/3 right-8" style="animation-delay: 1.5s"></div>
 
-    <!-- Dây Đèn Lồng Sài Gòn -->
     <svg id="lantern-svg-strip" class="w-full h-16 sm:h-24 opacity-85 transition-all duration-700" viewBox="0 0 1200 120" preserveAspectRatio="none">
       <path d="M0,15 Q300,75 600,25 Q900,80 1200,15" fill="none" stroke="#fef08a" stroke-width="2" stroke-dasharray="4,4" opacity="0.6"/>
       <g class="lantern-sway" style="transform-origin: 180px 42px">
@@ -231,7 +227,6 @@
       </g>
     </svg>
 
-    <!-- Đường Chân Trời Sài Gòn -->
     <svg class="fixed bottom-0 left-0 w-full h-40 sm:h-52 opacity-35 pointer-events-none" viewBox="0 0 1440 320" preserveAspectRatio="none">
       <path fill="#12061c" d="M0,320 L0,210 L60,210 L60,170 L130,170 L130,220 L190,220 L215,90 L245,140 L235,230 L310,230 L310,160 L390,160 L390,215 L480,215 L480,140 L550,140 L550,225 L640,225 L655,40 L670,25 L685,40 L700,225 L790,225 L790,165 L870,165 L870,215 L960,215 L960,150 L1050,150 L1050,220 L1140,220 L1140,175 L1230,175 L1230,210 L1330,210 L1330,160 L1440,160 L1440,320 Z"></path>
     </svg>
@@ -309,10 +304,8 @@
   <!-- ================= KHUNG GIAO DIỆN CHÍNH ================= -->
   <div id="game-app" class="w-full max-w-2xl flex flex-col gap-1.5 pb-6">
 
-    <!-- HEADER THÔNG MINH: TỰ ĐỘNG THU GỌN KHI ĐỨNG BÁN NGOÀI PHỐ -->
     <header class="soft-card p-2 sm:p-3 border-2 border-amber-400">
       
-      <!-- Chế độ 1: Header Đầy Đủ Khi Ở Nhà (Đi Chợ / Nâng Cấp / Sổ Sách / Đua Top) -->
       <div id="header-home-full">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center gap-2.5">
@@ -351,7 +344,6 @@
           </div>
         </div>
 
-        <!-- Hàng nút phụ khi ở nhà -->
         <div class="flex flex-wrap items-center justify-between gap-1.5 mt-2 pt-1.5 border-t border-amber-200/80 text-xs">
           <div class="flex flex-wrap items-center gap-1.5">
             <button onclick="openReviewsModal()" class="soft-btn px-2.5 py-1 rounded-lg bg-gradient-to-r from-rose-600 to-pink-600 text-white font-black flex items-center gap-1 shadow-sm">
@@ -373,7 +365,6 @@
         </div>
       </div>
 
-      <!-- Chế độ 2: Thanh HUD Siêu Gọn Khi Đứng Bán Ngoài Phố (Ẩn Tên Quán Lớn, Nhường Chỗ Cho Thau Trộn) -->
       <div id="header-street-hud" class="hidden flex flex-wrap items-center justify-between gap-1.5">
         <div class="flex items-center gap-1.5 flex-wrap">
           <div class="px-2.5 py-1 rounded-xl bg-emerald-100 border border-emerald-300 flex items-center gap-1">
@@ -405,7 +396,6 @@
 
     </header>
 
-    <!-- THANH ĐIỀU HƯỚNG (TỰ ẨN TAB ĐI CHỢ KHI ĐÃ ĐẨY XE RA PHỐ) -->
     <nav id="main-nav" class="grid grid-cols-5 gap-1.5 soft-card p-1.5 border-2 border-amber-300">
       <button onclick="switchTab('market')" id="tab-btn-market" class="soft-btn py-2 px-1 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1 bg-orange-600 text-white shadow">
         <span>🛒</span><span>1. Đi Chợ</span>
@@ -425,9 +415,7 @@
       </button>
     </nav>
 
-    <!-- ================= TAB 1: ĐI CHỢ & SƠ CHẾ TẠI NHÀ (13:00 TRƯA) ================= -->
     <section id="tab-market" class="soft-card p-3 sm:p-4 space-y-3">
-      <!-- Bản Tin Dự Báo Đài Sài Gòn 13:00 -->
       <div id="daily-forecast-banner" class="p-3 rounded-2xl bg-gradient-to-r from-sky-100 via-amber-50 to-orange-100 border-2 border-sky-300 flex items-center justify-between gap-2.5">
         <div class="flex items-center gap-2.5">
           <span id="forecast-icon" class="text-3xl">📻</span>
@@ -467,7 +455,6 @@
         </div>
       </div>
 
-      <!-- Bàn Sơ Chế Gia Truyền -->
       <div class="pt-2 border-t border-amber-200">
         <div class="flex items-center justify-between mb-2">
           <div>
@@ -493,15 +480,12 @@
       </button>
     </section>
 
-    <!-- ================= TAB 2: ĐỨNG BÁN NGOÀI PHỐ (TO RÕ & GỌN 1 MÀN HÌNH) ================= -->
     <section id="tab-sell" class="hidden soft-card p-2.5 sm:p-3.5 space-y-2">
       
       <div id="staff-active-strip" class="flex flex-wrap items-center justify-between gap-1 px-2.5 py-1 rounded-xl bg-amber-100/90 border border-amber-300 text-xs"></div>
 
-      <!-- KHUNG KHÁCH HÀNG HOẶC TRẠNG THÁI ĐỢI KHÁCH ĐẾN -->
       <div id="customer-stage-wrapper" class="relative min-h-[96px]">
         
-        <!-- Trạng thái 1: Quầy Đang Đợi Khách Bước Tới (Khi mới mở hàng 14:00 hoặc giữa 2 lượt khách) -->
         <div id="street-waiting-box" class="hidden p-3 rounded-2xl bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-2 border-dashed border-amber-400 flex flex-col sm:flex-row items-center justify-between gap-2.5">
           <div class="flex items-center gap-2.5">
             <span id="waiting-anim-icon" class="text-3xl animate-bounce">🍃</span>
@@ -520,10 +504,8 @@
           </div>
         </div>
 
-        <!-- Trạng thái 2: Khách Hàng Đã Bước Tới Trước Xe -->
         <div id="customer-card-box" class="p-2.5 rounded-2xl bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-2 border-amber-300 flex items-center justify-between gap-2.5">
           <div class="flex items-center gap-2.5 min-w-0 flex-1">
-            <!-- Avatar To Rõ + Thanh Kiên Nhẫn -->
             <div class="flex flex-col items-center gap-1 shrink-0">
               <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-200 to-amber-300 border-2 border-amber-500 flex items-center justify-center text-3xl relative shadow-inner">
                 <span id="cust-avatar">👧</span>
@@ -534,7 +516,6 @@
               </div>
             </div>
 
-            <!-- Thông Tin Khách + Yêu Cầu Món Chữ To Rõ -->
             <div class="min-w-0 flex-1">
               <div class="flex items-center justify-between gap-1">
                 <div class="flex items-center gap-1.5 flex-wrap">
@@ -553,7 +534,6 @@
                 "Dì Tư ơi làm cho con phần bánh tráng thiệt ngon nha!"
               </p>
 
-              <!-- Các Tag Yêu Cầu Của Khách (Cỡ chữ 12px rõ nét) -->
               <div class="flex flex-wrap items-center gap-1.5 mt-1">
                 <span id="req-tag-dish" class="text-xs font-black px-2 py-0.5 rounded-lg border bg-amber-100 border-amber-400 text-amber-950">🥣 Trộn Thập Cẩm</span>
                 <span id="req-tag-spice" class="text-xs font-extrabold px-2 py-0.5 rounded-lg border bg-white border-amber-300 text-amber-900">🌶️ Cay vừa</span>
@@ -566,7 +546,6 @@
         </div>
       </div>
 
-      <!-- Hàng 2: Thanh Chọn Món Bánh Tráng (Nút To Rõ) -->
       <div>
         <div class="flex items-center justify-between mb-1">
           <span class="text-xs font-black text-amber-900 uppercase">1. Chọn Món Khách Gọi (Mở <span id="unlocked-dish-count">1</span>/10):</span>
@@ -575,7 +554,6 @@
         <div id="sell-dish-grid" class="flex gap-1.5 overflow-x-auto pb-1"></div>
       </div>
 
-      <!-- Hàng 3: Tùy Chỉnh Gia Giảm & Trà Tắc (Cỡ Chữ To 12px - 13px) -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-amber-50/95 p-2 rounded-2xl border border-amber-200 text-xs">
         <div class="flex items-center gap-1">
           <span class="font-extrabold text-amber-900">🌿:</span>
@@ -600,10 +578,8 @@
         </div>
       </div>
 
-      <!-- Hàng 4: Thau Trộn SVG Lớn (Trái) & 4 Nút Thao Tác To Rõ (Phải) -->
       <div class="grid grid-cols-12 gap-2 items-stretch">
         
-        <!-- Cột Trái (5/12): Thau Trộn Inox / Vỉ Nướng / Mẹt Tre -->
         <div id="bowl-container-box" class="col-span-5 flex flex-col items-center justify-between p-2 rounded-2xl bg-gradient-to-b from-amber-100/90 to-orange-100/90 border-2 border-amber-300 relative">
           <div id="floating-fx-container" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20"></div>
           <div id="vessel-mode-label" class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-800 text-amber-100 text-center truncate max-w-full">
@@ -658,7 +634,6 @@
             </span>
           </div>
 
-          <!-- Thanh Canh Lực Vùng Xanh Dày Rõ -->
           <div class="w-full mt-1">
             <div class="flex justify-between text-[11px] font-extrabold text-amber-900 mb-0.5">
               <span>Lực: <b id="mix-progress-label">0%</b></span>
@@ -671,7 +646,6 @@
           </div>
         </div>
 
-        <!-- Cột Phải (7/12): 4 Nút Thao Tác Chế Biến To Rõ -->
         <div class="col-span-7 grid grid-cols-2 gap-1.5">
           <button onclick="doStep1Base()" id="step-btn-1" class="soft-btn step-highlight p-2.5 rounded-2xl border-2 border-amber-300 bg-white text-left flex flex-col justify-between min-h-[74px]">
             <div class="flex items-center justify-between">
@@ -720,7 +694,6 @@
 
       </div>
 
-      <!-- Hàng 5: Thanh Kho Nhanh & Nút Đóng Quầy -->
       <div class="pt-1.5 border-t border-amber-200 flex items-center justify-between gap-2">
         <div id="quick-stock-bar" class="flex items-center gap-1 overflow-x-auto text-xs font-bold text-amber-900"></div>
         <div class="flex items-center gap-1.5 shrink-0">
@@ -730,7 +703,6 @@
       </div>
     </section>
 
-    <!-- ================= TAB 3: NÂNG CẤP (50 CẤP ĐỘ) ================= -->
     <section id="tab-upgrade" class="hidden soft-card p-3 sm:p-4 space-y-3">
       <div class="p-3 rounded-2xl bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-2 border-amber-400">
         <h3 class="text-sm font-black text-amber-950 flex items-center justify-between">
@@ -748,7 +720,6 @@
       <div id="upgrade-sub-content" class="space-y-2"></div>
     </section>
 
-    <!-- ================= TAB 4: SỔ SÁCH, BẢO TRÌ XE & NGÂN HÀNG CHÍNH SÁCH ================= -->
     <section id="tab-ledger" class="hidden soft-card p-3 sm:p-4 space-y-3">
       <div class="flex items-center justify-between border-b border-amber-200 pb-2">
         <div>
@@ -758,7 +729,6 @@
         <button onclick="endDaySummary()" class="soft-btn px-3 py-1.5 rounded-xl bg-purple-700 text-white font-black text-xs">🌙 Chốt Sổ Ngày</button>
       </div>
 
-      <!-- Khung Bảo Trì Độ Bền Xe Đẩy & Ngân Hàng Chính Sách -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         <div class="p-3 rounded-2xl bg-amber-50 border-2 border-amber-300 space-y-2">
           <div class="flex items-center justify-between">
@@ -803,7 +773,6 @@
       <div id="ledger-history-list" class="space-y-1.5 max-h-52 overflow-y-auto"></div>
     </section>
 
-    <!-- ================= TAB 5: ĐUA TOP ================= -->
     <section id="tab-leaderboard" class="hidden soft-card p-3 sm:p-4 space-y-3">
       <div class="flex items-center justify-between border-b border-amber-200 pb-2">
         <h2 class="text-sm sm:text-base font-black text-amber-950">🏆 Bảng Phong Thần Vua Bánh Tráng</h2>
@@ -818,9 +787,6 @@
 
   </div>
 
-  <!-- ================= 10 POP-UP CHỨC NĂNG V3 ================= -->
-
-  <!-- 1. POP-UP SƠ CHẾ -->
   <div id="modal-prep" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-sm soft-card p-5 text-center border-4 border-amber-400">
       <div id="prep-modal-icon" class="text-5xl mb-1">🌶️</div>
@@ -834,7 +800,6 @@
     </div>
   </div>
 
-  <!-- 2. POP-UP KẾT QUẢ GIAO BÁNH -->
   <div id="modal-serve-result" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-sm soft-card p-5 text-center border-4 border-amber-400">
       <div id="serve-result-stars" class="text-xl mb-0.5">⭐⭐⭐⭐⭐</div>
@@ -845,7 +810,6 @@
     </div>
   </div>
 
-  <!-- 3. POP-UP MXH TÓP TÓP & FOODY SÀI GÒN (4 PHONG CÁCH TRẢ LỜI + THANH VIRAL) -->
   <div id="modal-reviews" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md soft-card p-4 sm:p-5 border-4 border-rose-400 max-h-[90vh] flex flex-col">
       <div class="flex items-center justify-between border-b border-amber-200 pb-2 mb-2">
@@ -871,7 +835,6 @@
     </div>
   </div>
 
-  <!-- 4. POP-UP ĐỨT HÀNG GIỮA CA -->
   <div id="modal-out-of-stock" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md soft-card p-5 border-4 border-red-500 shadow-2xl space-y-3">
       <h3 class="text-base font-black text-red-950">🚨 Đứt Hàng Nguyên Liệu Giữa Ca!</h3>
@@ -889,7 +852,6 @@
     </div>
   </div>
 
-  <!-- 5. POP-UP BIẾN CỐ ĐỜI THỰC -->
   <div id="modal-dilemma" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md soft-card p-5 border-4 border-orange-500 space-y-3">
       <div class="flex items-center gap-2.5">
@@ -905,7 +867,6 @@
     </div>
   </div>
 
-  <!-- 6. POP-UP HỒ SƠ CHỦ QUÁN -->
   <div id="modal-profile-edit" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md soft-card p-5 border-4 border-amber-400 space-y-3">
       <div class="flex items-center justify-between border-b pb-2 text-sm font-black text-amber-950">
@@ -925,7 +886,6 @@
     </div>
   </div>
 
-  <!-- 7. POP-UP HỒI KÝ -->
   <div id="modal-story" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md soft-card p-5 border-4 border-amber-400 max-h-[85vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b pb-2 mb-2.5 text-sm font-black text-amber-950"><span>📖 Hồi Ký 30 Năm Dì Tư</span><button onclick="closeStoryModal()" class="px-2.5 py-0.5 bg-amber-100 rounded-lg">✕</button></div>
@@ -933,7 +893,6 @@
     </div>
   </div>
 
-  <!-- 8. POP-UP 12 THÀNH TỰU & HUY HIỆU VINH DANH -->
   <div id="modal-achievements" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md soft-card p-4 sm:p-5 border-4 border-amber-400 max-h-[90vh] flex flex-col">
       <div class="flex items-center justify-between border-b border-amber-200 pb-2 mb-2">
@@ -947,7 +906,6 @@
     </div>
   </div>
 
-  <!-- 9. POP-UP CHỐT SỔ CUỐI NGÀY -->
   <div id="modal-end-day" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md soft-card p-5 border-4 border-purple-400 text-xs">
       <h3 id="end-day-title" class="text-base font-black text-amber-950 text-center mb-2">🌙 Chốt Sổ Cuối Ngày</h3>
@@ -956,7 +914,6 @@
     </div>
   </div>
 
-  <!-- 10. POP-UP CỨU NGUY NGÂN HÀNG HOẶC PHÁ SẢN THẬT SỰ -->
   <div id="modal-bankruptcy" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3">
     <div class="w-full max-w-md soft-card p-5 border-4 border-red-600 text-center space-y-3">
       <div id="bankruptcy-icon" class="text-5xl">🏦</div>
@@ -966,11 +923,10 @@
     </div>
   </div>
 
-  <!-- TOAST THÔNG BÁO -->
   <div id="toast-box" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 translate-y-4">
     <div id="toast-content" class="px-4 py-2 rounded-2xl bg-amber-950/95 text-amber-100 font-extrabold text-xs shadow-xl border border-amber-400 text-center">Thông báo</div>
   </div>
-  <!-- ================= SCRIPT PHẦN 2 / 3: CỐT LÕI, ĐI CHỢ 13H, NGÀY ĐÊM & KHÁCH ĐẾN/ĐI ================= -->
+
   <script>
     const FIREBASE_DB_URL = "https://banh-trang-tron-sai-gon-default-rtdb.asia-southeast1.firebasedatabase.app";
     const LOCAL_STORAGE_KEY = "banh_trang_tron_saigon_v3_full_save";
@@ -1014,7 +970,6 @@
       reader.readAsDataURL(file);
     }
 
-    // ================= 1. ÂM THANH LO-FI CHILL & HIỆU ỨNG ĐỜI THỰC =================
     let audioCtx = null, audioEnabled = true, bgmInterval = null, bgmStep = 0;
     function initAudio() {
       if (!audioCtx) { const AC = window.AudioContext || window.webkitAudioContext; if (AC) audioCtx = new AC(); }
@@ -1097,7 +1052,6 @@
       } catch(e){}
     }
 
-    // ================= 2. DỮ LIỆU THỰC ĐƠN, DỰ BÁO 13:00, NHÂN VIÊN & THÀNH TỰU =================
     const DAILY_FORECASTS = [
       { id: "sunny", icon: "☀️", title: "Trưa Chiều Nắng Gắt 38°C!", desc: "Khách khát nước cực mạnh: Tỷ lệ gọi kèm Trà Tắc (+8.000đ) tăng gấp đôi!", traTacChance: 0.78, lullFactor: 1.0 },
       { id: "school", icon: "🎒", title: "Trường Học Quanh Phường Tan Ca Sớm!", desc: "Học sinh & sinh viên ghé mua nườm nượp, thời gian chờ giữa 2 khách rút ngắn!", traTacChance: 0.45, lullFactor: 0.6 },
@@ -1152,7 +1106,6 @@
       return { level: lvl, xpNeed, title };
     });
 
-    // ĐÃ SỬA ĐÚNG AVATAR CHÚ BẢO VỆ TƯ NGHĨA (👮‍♂️)
     const STAFF_CATALOG = [
       { id: "beti", name: "Phụ Bếp Bé Tí", avatar: "👦", reqLevel: 6, hireCost: 150000, dailyWage: 15000, role: "Tự động làm Bước 1 (Bốc Bánh & Xoài) & chạy đi mua hàng khi đứt kho!" },
       { id: "mylan", name: "Chị Phụ Việc Mỹ Lan", avatar: "👧", reqLevel: 15, hireCost: 300000, dailyWage: 25000, role: "Mỗi sáng tự động hoàn thành 3/3 món Sơ Chế & phụ rưới sốt Bước 2!" },
@@ -1197,12 +1150,11 @@
       { id: 4, title: "Chương 4: Huyền Thoại Vua Bánh Tráng", story: "Sau bao ngày thức dậy từ sớm thắng sa tế, phi hành giòn, bảng hiệu của con đã trở thành biểu tượng ẩm thực đường phố!", goalDesc: "Đạt Cấp 20 và bán 50 phần bánh", check: (s) => s.level >= 20 && s.totalSold >= 50, reward: 450000 }
     ];
 
-    // ================= 3. TRẠNG THÁI GAME V3 =================
     let state = {
       shopKey: "", shopName: "", pin: "", avatar: "👩‍🍳",
       money: 500000, rating: 5.0, reputation: 100,
       level: 1, xp: 0, day: 1,
-      clockMinutes: 13 * 60, // 13:00 Ở nhà chuẩn bị
+      clockMinutes: 13 * 60,
       isStreetSelling: false,
       forecastIndex: 0,
       totalSold: 0, todaySold: 0, todayRevenue: 0, todayCogsSpent: 0,
@@ -1232,7 +1184,10 @@
     let customersSinceLastDilemma = 0, lastDilemmaId = "", pendingCustomerDilemmaStage = null;
     let isWaitingForNextCustomer = false, currentComboStreak = 0;
 
-    // ================= 4. ĐĂNG NHẬP, LƯU CLOUD & CẬP NHẬT GIAO DIỆN THÔNG MINH =================
+    // ✅ FIX #7 (Bonus): Expose globals explicitly for inline onclick handlers (an toàn 100% mọi trình duyệt)
+    window.bowl = bowl;
+    window.state = state;
+
     function sanitizeShopKey(name) {
       return String(name || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/[^a-z0-9]/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "");
     }
@@ -1431,6 +1386,14 @@
         if (showFeedback) showToast("🏆 Đã cập nhật Bảng Phong Thần!");
       } catch(e) {
         if (badge) { badge.textContent = "🟠 Chế độ Offline"; badge.className = "text-[10px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full"; }
+        // ✅ FIX #3: Nạp NPC mặc định để Top 3 Login không bị kẹt "Đang tải..." khi Offline
+        if (!cloudLeaderboardCache.length) {
+          cloudLeaderboardCache = [
+            { shopKey: "npc_ditu", shopName: "Bánh Tráng Dì Tư Gốc", avatar: "👵", money: 3850000, rating: 5.0, level: 42, totalSold: 215, day: 25 },
+            { shopKey: "npc_nth", shopName: "Trộn Nguyễn Thượng Hiền", avatar: "👩‍🍳", money: 1920000, rating: 4.9, level: 24, totalSold: 118, day: 14 }
+          ];
+        }
+        renderLoginTop3Preview();
         renderLeaderboardTab();
       }
     }
@@ -1467,14 +1430,12 @@
       let sum = 0; STAFF_CATALOG.forEach(st => { if (state.staff[st.id]) sum += st.dailyWage; }); return sum;
     }
 
-    // ================= 5. CHUYỂN ĐỔI HEADER THÔNG MINH & BẦU TRỜI NGÀY - ĐÊM =================
     function updateAllUI() {
       const r = typeof state.rating === "number" ? state.rating : 5.0;
       const unrepliedCount = (state.reviews || []).filter(rv => !rv.replied).length;
       const h = Math.floor(state.clockMinutes / 60), m = state.clockMinutes % 60;
       const timeStr = `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
 
-      // Tự động ẩn/hiện Header lớn và khóa Tab Đi Chợ khi đang đứng bán ngoài phố
       const headerFull = document.getElementById("header-home-full");
       const headerHud = document.getElementById("header-street-hud");
       const mainNav = document.getElementById("main-nav");
@@ -1496,7 +1457,6 @@
         if (headerHud) headerHud.classList.add("hidden");
       }
 
-      // Cập nhật Header đầy đủ
       const headerAv = document.getElementById("header-avatar");
       if (headerAv) headerAv.innerHTML = renderAvatarContent(state.avatar, "w-full h-full object-cover");
       document.getElementById("header-shop-name").textContent = state.shopName || "Quán Dì Tư";
@@ -1518,7 +1478,6 @@
         else unrepBadge.classList.add("hidden");
       }
 
-      // Cập nhật Thanh HUD mảnh khi đứng bán
       document.getElementById("hud-money").textContent = formatVND(state.money);
       document.getElementById("hud-rating").textContent = r.toFixed(1);
       const viralBadge = document.getElementById("hud-viral-badge");
@@ -1532,10 +1491,25 @@
       document.getElementById("hud-durability-badge").textContent = `🔧 ${Math.round(state.cartDurability)}%`;
       document.getElementById("hud-unreplied-dot").classList.toggle("hidden", unrepliedCount === 0);
 
-      // Chấm đỏ báo có Thành tựu chưa nhận
       const hasClaimableAch = ACHIEVEMENTS_DATA.some(a => !state.claimedAchievements.includes(a.id) && a.check(state));
       const achDot = document.getElementById("badge-ach-notify");
       if (achDot) achDot.classList.toggle("hidden", !hasClaimableAch);
+
+      // ✅ FIX #6: Cập nhật badge giá sỉ theo state hiện tại (không chỉ khi startNextDay)
+      const priceBadge = document.getElementById("market-price-badge");
+      if (priceBadge) {
+        const mult = state.marketPriceMultiplier || 1.0;
+        if (mult < 1) {
+          priceBadge.textContent = `📉 Giá sỉ -${Math.round((1-mult)*100)}%`;
+          priceBadge.className = "shrink-0 text-xs px-2.5 py-1 rounded-xl bg-emerald-100 text-emerald-900 border border-emerald-300 font-black";
+        } else if (mult > 1) {
+          priceBadge.textContent = `📈 Giá sỉ +${Math.round((mult-1)*100)}%`;
+          priceBadge.className = "shrink-0 text-xs px-2.5 py-1 rounded-xl bg-red-100 text-red-900 border border-red-300 font-black";
+        } else {
+          priceBadge.textContent = "⚖️ Giá ổn định";
+          priceBadge.className = "shrink-0 text-xs px-2.5 py-1 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 font-black";
+        }
+      }
 
       renderForecastBanner();
       renderMarketGrid();
@@ -1564,7 +1538,6 @@
       if (!sky) return;
 
       if (h < 14) {
-        // 13:00 Ở nhà chuẩn bị
         sky.style.background = "linear-gradient(180deg, #0284c7 0%, #38bdf8 50%, #fef08a 100%)";
         if (sun) { sun.style.top = "28px"; sun.style.opacity = "1"; sun.textContent = "☀️"; }
         if (moon) moon.style.opacity = "0";
@@ -1572,7 +1545,6 @@
         if (stars) stars.style.opacity = "0";
         if (lanternStrip) lanternStrip.classList.remove("lantern-glow");
       } else if (h < 16) {
-        // 14:00 - 16:00 Nắng chiều Sài Gòn
         sky.style.background = "linear-gradient(180deg, #0369a1 0%, #f59e0b 65%, #fef08a 100%)";
         if (sun) { sun.style.top = "45px"; sun.style.opacity = "1"; sun.textContent = "🌤️"; }
         if (moon) moon.style.opacity = "0";
@@ -1582,7 +1554,6 @@
         if (timeIcon) timeIcon.textContent = "🌤️";
         if (rhythmBadge) { rhythmBadge.textContent = "Thư thả"; rhythmBadge.className = "text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-sky-200 text-sky-900"; }
       } else if (h < 18.5) {
-        // 16:00 - 18:30 Hoàng hôn tan tầm (Giờ Cao Điểm!)
         sky.style.background = "linear-gradient(180deg, #4c1d95 0%, #be123c 45%, #ea580c 80%, #facc15 100%)";
         if (sun) { sun.style.top = "120px"; sun.style.opacity = "0.85"; sun.textContent = "🌇"; }
         if (moon) moon.style.opacity = "0.2";
@@ -1592,7 +1563,6 @@
         if (timeIcon) timeIcon.textContent = "🌇";
         if (rhythmBadge) { rhythmBadge.textContent = "🔥 Cao Điểm (+15% Tip)"; rhythmBadge.className = "text-[10px] font-black px-1.5 py-0.2 rounded bg-orange-600 text-white animate-pulse"; }
       } else {
-        // 18:30 - 22:00 Phố Đêm Lên Đèn Lung Linh
         sky.style.background = "linear-gradient(180deg, #090414 0%, #1e112a 38%, #3b1240 75%, #7c2348 100%)";
         if (sun) { sun.style.top = "220px"; sun.style.opacity = "0"; }
         if (moon) { moon.style.top = "32px"; moon.style.opacity = "1"; moon.style.transform = "scale(1)"; }
@@ -1631,10 +1601,16 @@
       });
 
       updateAllUI();
+
+      // ✅ FIX #2: Nếu vào Tab Bán mà chưa có khách & chưa ở trạng thái chờ → khôi phục trạng thái chờ
+      // (Sửa lỗi kẹt game khi Resume từ save đang isStreetSelling = true)
+      if (tab === "sell" && state.isStreetSelling && !currentCustomer && !isWaitingForNextCustomer) {
+        enterStreetWaitingLull();
+      }
+
       if (tab === "leaderboard") fetchCloudLeaderboard(false);
     }
 
-    // ================= 6. GIAI ĐOẠN 1 (13:00 Ở NHÀ ĐI CHỢ) ➔ GIAI ĐOẠN 2 (14:00 MỞ HÀNG) =================
     function getActiveForecast() {
       return DAILY_FORECASTS[(state.forecastIndex || 0) % DAILY_FORECASTS.length];
     }
@@ -1752,9 +1728,7 @@
     }
     function closePrepModal() { document.getElementById("modal-prep").classList.add("hidden"); activePrepKey = null; }
 
-    // NGHI THỨC ĐẨY XE RA PHỐ MỞ HÀNG (CHUYỂN TỪ 13:00 -> 14:00 & ĐỢI KHÁCH ĐẦU TIÊN BƯỚC TỚI)
     function startStreetSellingPhase() {
-      // Kiểm tra nguy cơ kiệt quệ vốn trước khi mở hàng
       if (state.money < 15000 && (state.stock.banhtrang || 0) < 1) {
         checkBankruptcyOrRescueLoan();
         return;
@@ -1767,11 +1741,9 @@
       switchTab("sell");
       showToast("🚲 Đã đẩy xe ra góc phố mở hàng (14:00)! Chợ Sỉ đã đóng cửa.");
 
-      // Khoảng lặng 2.2 giây vừa dọn xe ra phố đợi vị khách đầu tiên bước tới
       enterStreetWaitingLull(2200, "🍃 14:00 – Vừa dọn xe ra góc phố, đang đợi vị khách mở hàng đầu tiên...");
     }
 
-    // ================= 7. HIỆU ỨNG KHÁCH ĐẾN, KHÁCH ĐI & KHOẢNG NGHỈ VẮNG KHÁCH =================
     function enterStreetWaitingLull(customWaitMs = null, customMsg = null) {
       isWaitingForNextCustomer = true;
       currentCustomer = null;
@@ -1787,7 +1759,6 @@
       const fc = getActiveForecast();
       let delayMs = customWaitMs;
       if (!delayMs) {
-        // Nhịp khách theo khung giờ: 16:00-18:30 và 19:30-21:30 khách ra liên tục (1.2s), đầu giờ chiều thư thả (3.2s)
         if ((h >= 16 && h <= 18.5) || (h >= 19.5 && h <= 21.5)) delayMs = 1100;
         else delayMs = Math.round(3000 * (fc.lullFactor || 1.0));
       }
@@ -1841,9 +1812,8 @@
       }, 420);
     }
   </script>
-  <!-- ================= SCRIPT PHẦN 3 / 3: LÀM BÁNH, MXH VIRAL, 7 NHÓM BIẾN CỐ, THÀNH TỰU & NGÂN HÀNG ================= -->
+
   <script>
-    // KHO 18+ MẪU CÂU PHẢN HỒI BÌNH LUẬN MXH ĐẬM CHẤT SÀI GÒN (4 PHONG CÁCH)
     const SOCIAL_REPLY_TEMPLATES = {
       friendly: [
         "Dạ Dì cảm ơn con nhiều nghen! Lần sau ghé Dì bỏ thêm hành phi giòn rụm cho con nha! 🥰",
@@ -1872,9 +1842,7 @@
       ]
     };
 
-    // 7 NHÓM BIẾN CỐ ĐỜI THỰC SÀI GÒN (ĐÃ KHÓA ĐIỀU KIỆN LOGIC CHẶT CHẼ)
     const DILEMMA_EVENTS = [
-      // Nhóm 1: Khách hàng oái oăm
       {
         id: "cust_tiktok_live", category: "1. Khách Hàng & Truyền Thông", icon: "🤳", speaker: "Food TikToker Triệu View",
         title: "TikToker Đột Ngột Bật Livestream Quay Cận Cảnh!",
@@ -1922,8 +1890,6 @@
           effect: (s) => { s.money += 15000; adjustRating(-0.12); return "Thu thêm 15.000đ nhưng khách buồn lòng (-0.12⭐)."; }
         }
       },
-
-      // Nhóm 2: Thời tiết Sài Gòn
       {
         id: "env_sudden_rain", category: "2. Thời Tiết Sài Gòn", icon: "⛈️", speaker: "Cơn Mưa Rào Chiều Sài Gòn",
         title: "Mưa Rào Sài Gòn Trút Nước Bất Chợt!",
@@ -1970,8 +1936,6 @@
           effect: (s) => { adjustRating(-0.10); return "Trời tối bốc nhầm nguyên liệu làm khách phàn nàn (-0.10⭐)."; }
         }
       },
-
-      // Nhóm 3: Trật tự đô thị
       {
         id: "urban_check", category: "3. Trật Tự Đô Thị & Vỉa Hè", icon: "🚓", speaker: "Tổ Kiểm Tra Trật Tự Phường",
         title: "Đoàn Trật Tự Đô Thị Kiểm Tra Lòng Lề Đường!",
@@ -1994,8 +1958,6 @@
           effect: (s) => { s.clockMinutes += 30; adjustRating(-0.05); return "Không mất tiền phạt nhưng mất 30 phút giờ vàng bán hàng (-0.05⭐)."; }
         }
       },
-
-      // Nhóm 4: Vệ sinh an toàn thực phẩm
       {
         id: "vsattp_check", category: "4. Vệ Sinh An Toàn Thực Phẩm", icon: "🧼", speaker: "Đoàn Kiểm Tra Y Tế Phường",
         title: "Kiểm Tra Đột Xuất Vệ Sinh An Toàn Thực Phẩm!",
@@ -2018,8 +1980,6 @@
           effect: (s) => { s.money = Math.max(0, s.money - 25000); return "Đóng phí cam kết vệ sinh -25.000đ. Nhớ sắm Tủ kính & Giấy phép ở Tab 3 nhé!"; }
         }
       },
-
-      // Nhóm 5: Đơn đặt hàng lớn & Thương hiệu
       {
         id: "brand_copycat", category: "5. Bảo Vệ Thương Hiệu & Đơn Sỉ", icon: "🏢", speaker: "Trưởng Phòng Hành Chính Công Ty Q.1",
         title: "Công Ty Quận 1 Đặt Đơn Sỉ Liên Hoan 40 Phần!",
@@ -2042,8 +2002,6 @@
           effect: (s) => { adjustRating(0.08); s.money += 45000; return "Khách khen ngon và mua ủng hộ +45.000đ (+0.08⭐)!"; }
         }
       },
-
-      // Nhóm 6: Mặt bằng & Hàng xóm
       {
         id: "neighbor_parking", category: "6. Mặt Bằng & Tình Làng Nghĩa Xóm", icon: "🏘️", speaker: "Bác Ba Chủ Nhà Kế Bên",
         title: "Xe Máy Của Khách Mua Bánh Chắn Lối Đi Nhà Kế Bên!",
@@ -2067,8 +2025,6 @@
           effect: (s) => { adjustRating(-0.18); return "Hàng xóm bức xúc la lối làm khách đứng mua ngại ngùng bỏ về (-0.18⭐)."; }
         }
       },
-
-      // Nhóm 7: Đời sống nhân viên (KHÓA ĐIỀU KIỆN BẮT BUỘC ĐÃ THUÊ) & Hao mòn xe đẩy
       {
         id: "cart_tire_flat", category: "7. Sự Cố Thiết Bị & Xe Đẩy", icon: "🔧", speaker: "Sự Cố Kỹ Thuật Tại Quầy",
         title: "Bánh Xe Đẩy Bị Xẹp Lốp & Kéo Cắt Bánh Tráng Bị Lục!",
@@ -2150,7 +2106,6 @@
       }
     ];
 
-    // ================= 8. ĐỨNG BÁN, KHÁCH ĐẾN & ĐI, 4 BƯỚC CHẾ BIẾN & COMBO FEVER =================
     function renderStaffActiveStrip() {
       const strip = document.getElementById("staff-active-strip");
       if (!strip) return;
@@ -2245,7 +2200,6 @@
         wantedTraTac: Math.random() < traTacProb
       };
 
-      // Hiệu ứng khách đi bộ hoặc đi xe máy tới quầy
       if (custBox) {
         custBox.classList.remove("cust-arrive-walk", "cust-arrive-bike", "cust-leave-happy", "cust-leave-angry");
         void custBox.offsetWidth;
@@ -2264,7 +2218,6 @@
       renderSellDishGrid();
       startPatienceTimer();
 
-      // Biến cố ngẫu nhiên tùy khách
       customersSinceLastDilemma++;
       pendingCustomerDilemmaStage = null;
       let eventChance = 0.28 + (currentCustomer.vip ? 0.12 : 0) + (currentCustomer.picky ? 0.12 : 0);
@@ -2439,6 +2392,9 @@
       document.getElementById("mix-progress-label").textContent = "0%";
       document.getElementById("mix-bar-fill").style.width = "0%";
       document.getElementById("bowl-instruction").textContent = "Bấm Bước 1";
+      // ✅ FIX #4: Reset xoay SVG thau trộn về 0° (chống lệch góc tích lũy sau mỗi lượt)
+      const svgEl = document.getElementById("bowl-svg");
+      if (svgEl) svgEl.style.transform = "rotate(0deg)";
       updateStepButtonsHighlight(); updateStepStockLabels(); updateOrderMatchTags();
     }
 
@@ -2465,7 +2421,6 @@
       bar.innerHTML = INGREDIENTS.map(ing => `<span class="px-2 py-0.5 rounded-lg border ${(state.stock[ing.id]||0)<=3?'bg-red-100 border-red-400 text-red-800':'bg-amber-50 border-amber-200 text-amber-900'}">${ing.icon} ${state.stock[ing.id]||0}</span>`).join("");
     }
 
-    // POP-UP ĐỨT HÀNG GIỮA CA
     function checkStepIngredientsOrShowOos(group) {
       const recipe = DISH_MENU[bowl.selectedDish].recipe, missing = [];
       INGREDIENTS.filter(i => i.stepGroup === group).forEach(ing => {
@@ -2604,7 +2559,6 @@
       if (bowl.mixProgress < min || bowl.mixProgress > max) { stars -= mult; notes.push("Lực trộn chưa chuẩn Vùng Xanh"); }
       stars = Math.max(1, stars);
 
-      // Tính chuỗi Combo 5 Sao & Thành tựu
       if (stars === 5) {
         currentComboStreak += 1;
         state.maxStreak5Star = Math.max(state.maxStreak5Star || 0, currentComboStreak);
@@ -2619,7 +2573,6 @@
       }
       updateComboVisuals();
 
-      // Tính doanh thu + Tip Giờ Cao Điểm + Tip Viral Tóp Tóp + Tip Combo + Mối Ruột
       const h = state.clockMinutes / 60;
       const isRushHour = h >= 16 && h <= 18.5;
       const isViralActive = (state.viralPct || 0) >= 80;
@@ -2677,7 +2630,6 @@
       if (!bowl.step1Done) doStep1Base(); else if (!bowl.step2Done) doStep2Sauce(); else if (bowl.mixProgress < min) doStep3Mix(); else doStep4Serve();
     }
 
-    // ================= 9. MXH TÓP TÓP & FOODY SÀI GÒN (4 PHONG CÁCH TRẢ LỜI + ĐỘ VIRAL) =================
     function openReviewsModal() { renderReviewsModalList(); document.getElementById("modal-reviews").classList.remove("hidden"); }
     function closeReviewsModal() { document.getElementById("modal-reviews").classList.add("hidden"); }
 
@@ -2734,7 +2686,6 @@
       showToast(state.viralPct >= 80 ? "🔥 QUÁN ĐANG VIRAL TÓP TÓP! Khách VIP x2 & Tip +20%!" : "💬 Đã đăng phản hồi lên Tóp Tóp Sài Gòn!");
     }
 
-    // ================= 10. KÍCH HOẠT BIẾN CỐ, NÂNG CẤP & 12 THÀNH TỰU =================
     let activeDilemmaObj = null;
     function triggerRandomDilemmaEvent(manual = false, stageContext = "any") {
       if (!manual && (!document.getElementById("modal-out-of-stock").classList.contains("hidden") || !document.getElementById("modal-serve-result").classList.contains("hidden") || !document.getElementById("modal-dilemma").classList.contains("hidden"))) return;
@@ -2879,7 +2830,6 @@
     }
     function closeStoryModal() { document.getElementById("modal-story").classList.add("hidden"); }
 
-    // ================= 11. BẢO TRÌ XE, THUẾ LŨY TIẾN, NGÂN HÀNG CHÍNH SÁCH & PHÁ SẢN =================
     function getRepairCost() {
       const missing = Math.max(0, 100 - Math.round(state.cartDurability || 100));
       if (missing <= 0) return 0;
@@ -2909,7 +2859,7 @@
         return;
       }
       state.money += 200000;
-      state.loanDebt = 220000; // Lãi ưu đãi 10%
+      state.loanDebt = 220000;
       playSFX("cash");
       updateAllUI(); saveGameEverywhere();
       showToast("🏦 Ngân hàng đã giải ngân +200.000đ vốn đầu tư (Dư nợ 220.000đ)!");
@@ -3013,7 +2963,6 @@
       showToast("🌅 Đã khởi nghiệp lại từ Ngày 1 với 500.000đ vốn gốc!");
     }
 
-    // ================= 12. ĐỒNG HỒ TRONG NGÀY & CHỐT SỔ CUỐI NGÀY (22:00) =================
     function startDayClock() {
       if (clockTimer) clearInterval(clockTimer);
       clockTimer = setInterval(() => {
@@ -3033,7 +2982,18 @@
       }, 1400);
     }
 
+    // ✅ FIX #1: endDaySummary - Chống gọi trùng lặp + Tắt bán hàng ngay để Clock không trừ tiền lặp
     function endDaySummary() {
+      // 🛑 GUARD: Nếu modal Chốt Sổ đang mở rồi (do clock vừa gọi trước đó) → không chạy lại
+      const modalEl = document.getElementById("modal-end-day");
+      if (!modalEl) return;
+      if (!modalEl.classList.contains("hidden")) return;
+
+      // 🛑 Tắt chế độ bán hàng NGAY để startDayClock ngừng cộng giờ & không gọi lại endDaySummary
+      state.isStreetSelling = false;
+      currentCustomer = null;
+      isWaitingForNextCustomer = false;
+
       if (patienceTimer) clearInterval(patienceTimer);
       if (lullTimer) clearTimeout(lullTimer);
 
@@ -3041,14 +3001,12 @@
       const rentCost = state.licenses.lic_sidewalk ? 35000 : 0;
       const staffWages = getDailyStaffWages();
 
-      // Thuế Hộ Kinh Doanh & Phí Vệ Sinh Lũy Tiến từ Cấp 11+
       let progressiveTax = 0;
       if (state.level >= 11) {
         const taxRate = Math.min(0.12, 0.03 + (state.level - 10) * 0.0025);
         progressiveTax = Math.round((state.todayRevenue * taxRate) / 500) * 500 + 10000;
       }
 
-      // Khấu trừ trả góp nợ Ngân hàng 35.000đ/tối
       let bankInstallment = 0;
       if ((state.loanDebt || 0) > 0) {
         bankInstallment = Math.min(state.loanDebt, 35000);
@@ -3093,25 +3051,28 @@
       updateAllUI(); saveGameEverywhere();
     }
 
+    // ✅ FIX #5: Reset combo & trạng thái khách khi qua ngày mới
     function startNextDay() {
       document.getElementById("modal-end-day").classList.add("hidden");
       state.day += 1;
-      state.clockMinutes = 13 * 60; // Quay về 13:00 ở nhà chuẩn bị
+      state.clockMinutes = 13 * 60;
       state.isStreetSelling = false;
+      // 🛑 Reset combo & trạng thái khách để đồng bộ UI
+      currentComboStreak = 0;
+      currentCustomer = null;
+      isWaitingForNextCustomer = false;
+      updateComboVisuals();
+
       state.todaySold = 0; state.todayRevenue = 0; state.todayCogsSpent = 0;
       state.forecastIndex = Math.floor(Math.random() * DAILY_FORECASTS.length);
       state.prepDone = state.staff.mylan ? { sate: true, hanhphi: true, trungcut: true } : { sate: false, hanhphi: false, trungcut: false };
       if (state.staff.mylan) state.totalPrepDays = (state.totalPrepDays || 0) + 1;
 
-      // Độ Viral giảm nhẹ qua đêm (Trừ khi Phương Linh TikToker đã thành Mối Ruột 5❤️)
       const isLinhRegular = (state.customerHearts?.phuonglinh || 0) >= 5;
       adjustViral(isLinhRegular ? -3 : -10);
 
       state.marketPriceMultiplier = [0.85, 0.95, 1.0, 1.1, 1.2][Math.floor(Math.random() * 5)];
-      const badge = document.getElementById("market-price-badge");
-      if (badge) {
-        badge.textContent = state.marketPriceMultiplier < 1 ? `📉 Giá sỉ -${Math.round((1-state.marketPriceMultiplier)*100)}%` : state.marketPriceMultiplier > 1 ? `📈 Giá sỉ +${Math.round((state.marketPriceMultiplier-1)*100)}%` : "⚖️ Giá ổn định";
-      }
+      // Badge giá sỉ đã được updateAllUI tự động xử lý (Fix #6)
 
       updateSkyAndTimeUI();
       updateAllUI();
@@ -3206,7 +3167,6 @@
       toastTimeout = setTimeout(() => { box.classList.add("opacity-0", "translate-y-4"); box.classList.remove("opacity-100", "translate-y-0"); }, 2800);
     }
 
-    // KHỞI CHẠY TOÀN BỘ GAME V3
     window.addEventListener("DOMContentLoaded", () => {
       renderLoginAvatarGrid();
       checkExistingLocalSaveForLoginScreen();
