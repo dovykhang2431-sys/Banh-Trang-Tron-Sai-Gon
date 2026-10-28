@@ -3335,7 +3335,15 @@
       }
       document.getElementById("ledger-loan-count").textContent = `Cứu trợ: ${state.rescueLoanCount || 0}/2`;
       document.getElementById("ledger-debt-amount").textContent = formatVND(state.loanDebt || 0);
-
+// Lọc bỏ các bản ghi trùng lặp ngày trong lịch sử sổ sách
+if (Array.isArray(state.ledgerHistory)) {
+  const seenDays = new Set();
+  state.ledgerHistory = state.ledgerHistory.filter(item => {
+    if (seenDays.has(item.day)) return false;
+    seenDays.add(item.day);
+    return true;
+  });
+}
       // 1. Render Thanh Đo Điểm Hòa Vốn & Hao Hụt Đồ Tươi
       const fixedToday = getDailyOperatingFixedCost() + (state.licenses.lic_sidewalk ? 35000 : 0) + getDailyStaffWages();
       const avgProfitPerBag = 16000;
@@ -3895,7 +3903,13 @@
 
       state.money -= totalFixed;
       const netProfit = state.todayRevenue - state.todayCogsSpent - totalFixed;
-      state.ledgerHistory.unshift({ day: state.day, sold: state.todaySold, revenue: state.todayRevenue, netProfit });
+      // Kiểm tra nếu ngày hiện tại đã có trong lịch sử thì cập nhật, ngược lại mới thêm mới để tránh bị lặp
+const existingDayIdx = state.ledgerHistory.findIndex(item => item.day === state.day);
+if (existingDayIdx !== -1) {
+  state.ledgerHistory[existingDayIdx] = { day: state.day, sold: state.todaySold, revenue: state.todayRevenue, netProfit };
+} else {
+  state.ledgerHistory.unshift({ day: state.day, sold: state.todaySold, revenue: state.todayRevenue, netProfit });
+}
 
       document.getElementById("end-day-title").textContent = `🌙 Chốt Sổ Cuối Ngày ${state.day}`;
       document.getElementById("end-day-details").innerHTML = `
