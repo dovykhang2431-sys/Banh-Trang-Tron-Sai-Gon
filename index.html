@@ -1591,6 +1591,15 @@
         claimedAchievements: Array.isArray(loaded.claimedAchievements) ? loaded.claimedAchievements : []
       };
       if (state.staff.mylan) state.prepDone = { sate: true, hanhphi: true, trungcut: true };
+        // 👇 THÊM ĐOẠN NÀY ĐỂ TỰ ĐỘNG XÓA SẠCH CÁC NGÀY BỊ LẶP CŨ
+      if (Array.isArray(state.ledgerHistory)) {
+        const seenDays = new Set();
+        state.ledgerHistory = state.ledgerHistory.filter(item => {
+          if (seenDays.has(item.day)) return false;
+          seenDays.add(item.day);
+          return true;
+        });
+      }
     }
 
     function saveToLocalOnly() { try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state)); } catch(e){} }
@@ -3335,15 +3344,7 @@
       }
       document.getElementById("ledger-loan-count").textContent = `Cứu trợ: ${state.rescueLoanCount || 0}/2`;
       document.getElementById("ledger-debt-amount").textContent = formatVND(state.loanDebt || 0);
-// Lọc bỏ các bản ghi trùng lặp ngày trong lịch sử sổ sách
-if (Array.isArray(state.ledgerHistory)) {
-  const seenDays = new Set();
-  state.ledgerHistory = state.ledgerHistory.filter(item => {
-    if (seenDays.has(item.day)) return false;
-    seenDays.add(item.day);
-    return true;
-  });
-}
+l
       // 1. Render Thanh Đo Điểm Hòa Vốn & Hao Hụt Đồ Tươi
       const fixedToday = getDailyOperatingFixedCost() + (state.licenses.lic_sidewalk ? 35000 : 0) + getDailyStaffWages();
       const avgProfitPerBag = 16000;
