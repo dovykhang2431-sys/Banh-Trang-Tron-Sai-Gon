@@ -1346,6 +1346,43 @@
       maxStreak5Star: 0, totalPrepDays: 0, servedPickyCount: 0, repliedReviewsCount: 0, resolvedDilemmasCount: 0,
       claimedAchievements: []
     };
+    function getInitialDefaultState() {
+      return {
+        shopKey: "", recoveryCode: "", shopName: "", pin: "", avatar: "👩‍🍳",
+        money: 150000, rating: 5.0, reputation: 100,
+        level: 1, xp: 0, day: 1,
+        clockMinutes: 13 * 60,
+        isStreetSelling: false,
+        forecastIndex: 0,
+        featuredDishKey: "tron",
+        featuredSoldToday: 0,
+        featuredRewardClaimed: false,
+        coHaiDiscountPct: 9,
+        tomorrowFreshSurge: false,
+        tomorrowCopycatMode: null,
+        staffMood: "normal",
+        totalSold: 0, todaySold: 0, todayRevenue: 0, todayCogsSpent: 0,
+        marketPriceMultiplier: 0.91,
+        stock: { banhtrang: 5, xoai: 5, muoitom: 5, sotbo: 5, dauphong: 5, khobo: 5, tepmo: 5, trungcut: 5, tratac: 5 },
+        prepDone: { sate: false, hanhphi: false, trungcut: false },
+        unlockedDishes: ["tron"],
+        dishStars: { tron: 1, chamme: 1, cuon: 1, phoisuong: 1, bo: 1, nuong: 1, xoainon: 1, lacphomai: 1, mamruoc: 1, metditu: 1 },
+        dishSalesRevenue: { tron: 0, chamme: 0, cuon: 0, phoisuong: 0, bo: 0, nuong: 0, xoainon: 0, lacphomai: 0, mamruoc: 0, metditu: 0 },
+        cumulativeCosts: { cogs: 0, fixed: 0, wages: 0, tax: 0, spoiled: 0 },
+        priceOffsets: { tron: 0, chamme: 0, cuon: 0, phoisuong: 0, bo: 0, nuong: 0, xoainon: 0, lacphomai: 0, mamruoc: 0, metditu: 0 },
+        staff: { beti: false, mylan: false, tunghia: false, anhba: false },
+        equipLevels: { decor_lantern: 0, decor_sign: 0, decor_stool: 0, decor_speaker: 0, tool_bowl: 0, tool_bottle: 0, tool_cooler: 0 },
+        licenses: { lic_vsattp: false, lic_sidewalk: false, lic_brand: false },
+        customerHearts: {},
+        reviews: [], nextCustomerTipBonus: 0,
+        claimedChapters: [], ledgerHistory: [],
+        cartDurability: 100,
+        loanDebt: 0, rescueLoanCount: 0, hasRepaidAllDebt: false,
+        viralPct: 20,
+        maxStreak5Star: 0, totalPrepDays: 0, servedPickyCount: 0, repliedReviewsCount: 0, resolvedDilemmasCount: 0,
+        claimedAchievements: []
+      };
+    }
 
     // BIẾN QUẢN LÝ 4 Ô KHÁCH, BUFF TRÊN NÓC XE & ĐƠN SỈ ĐẾM NGƯỢC 25S
     let customerSlots = [null, null, null, null];
@@ -1441,7 +1478,7 @@
       renderDiTuSmartTip();
     }
 
-    async function handleLoginOrRegister() {
+        async function handleLoginOrRegister() {
       initAudio(); startChillBGM();
       const nameInput = document.getElementById("login-shop-name").value.trim();
       const pinInput = document.getElementById("login-shop-pin").value.trim();
@@ -1452,30 +1489,47 @@
       const key = sanitizeShopKey(nameInput);
       if (!key) { showLoginMessage("⚠️ Tên quán không hợp lệ!", "error"); return; }
 
-      btn.disabled = true; showLoginMessage("☁️ Đang kết nối dữ liệu quán...", "info");
+      btn.disabled = true;
+      showLoginMessage("☁️ Đang kết nối dữ liệu quán...", "info");
+
+      let isExistingCloudShop = false;
       try {
         const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 2500);
         const cloudShop = res.ok ? await res.json() : null;
-           if (cloudShop && cloudShop.pin) {
+        if (cloudShop && cloudShop.pin) {
           if (String(cloudShop.pin) !== String(pinInput)) {
             showLoginMessage("❌ Tên quán đã có chủ! Hãy nhập đúng PIN hoặc đặt Tên khác.", "error");
-            btn.disabled = false; return;
+            btn.disabled = false;
+            return;
           }
+          isExistingCloudShop = true;
+          state = getInitialDefaultState();
           if (cloudShop.fullState) mergeLoadedState(cloudShop.fullState);
           if (cloudShop.recoveryCode) state.recoveryCode = cloudShop.recoveryCode;
-        } else if (state.shopKey && state.shopKey !== key) {
-          // Nếu người chơi đổi sang tạo một quán mới hoàn toàn thì xóa mã cũ để cấp Mã Khóa mới
-          state.recoveryCode = "";
+          if (cloudShop.avatar && loginSelectedAvatar === "👩‍🍳") {
+            loginSelectedAvatar = cloudShop.avatar;
+          }
         }
-      } catch(e){}
+      } catch (e) {}
 
-      state.shopKey = key; state.shopName = nameInput; state.pin = pinInput; state.avatar = loginSelectedAvatar;
-      ensureRecoveryCode();  
-      saveGameEverywhere();
+      // Nếu là tạo quán mới khác với quán đang lưu trên máy -> Reset sạch state
+      if (!isExistingCloudShop && state.shopKey !== key) {
+        state = getInitialDefaultState();
+      }
+
+      state.shopKey = key;
+      state.shopName = nameInput;
+      state.pin = pinInput;
+      state.avatar = loginSelectedAvatar || state.avatar || "👩‍🍳";
+
+      await ensureUniqueRecoveryCodeOnCloud();
+      await saveGameEverywhere();
+
       document.getElementById("login-screen").classList.add("hidden");
       btn.disabled = false;
       updateAllUI();
-      showToast(`🚀 Khai trương hồng phát: "${state.shopName}"!`);
+      if (state.isStreetSelling) startStreetSellingPhase(true);
+      showToast(isExistingCloudShop ? `🎉 Chào mừng quay lại quán "${state.shopName}"!` : `🚀 Khai trương hồng phát: "${state.shopName}"!`);
     }
 
     function showLoginMessage(text, type) {
@@ -3053,12 +3107,54 @@
     } // <--- Đóng hàm doStep4Serve() tại đây
 
     // Các hàm Mã Khóa Khôi Phục Cloud đặt độc lập ở ngoài
+        function normalizeRecoveryCodeInput(raw) {
+      const cleaned = String(raw || "").trim().toUpperCase().replace(/\s+/g, "");
+      if (/^\d{6}$/.test(cleaned)) return `BT-${cleaned}`;
+      if (/^BT\d{6}$/.test(cleaned)) return `BT-${cleaned.slice(2)}`;
+      return cleaned;
+    }
+
     function ensureRecoveryCode() {
-      if (!state.recoveryCode || !String(state.recoveryCode).startsWith("BT-")) {
+      if (!state.recoveryCode || !/^BT-\d{6}$/.test(String(state.recoveryCode))) {
         const rand6 = Math.floor(100000 + Math.random() * 900000);
         state.recoveryCode = `BT-${rand6}`;
       }
       return state.recoveryCode;
+    }
+
+    async function ensureUniqueRecoveryCodeOnCloud() {
+      const myKey = state.shopKey || sanitizeShopKey(state.shopName);
+      if (state.recoveryCode && /^BT-\d{6}$/.test(state.recoveryCode)) {
+        try {
+          const checkRes = await fetchWithTimeout(`${FIREBASE_DB_URL}/recoveryCodes/${state.recoveryCode}.json`, {}, 2000);
+          if (checkRes.ok) {
+            const existing = await checkRes.json();
+            if (!existing || !existing.shopKey || existing.shopKey === myKey) {
+              return state.recoveryCode;
+            }
+          } else {
+            return state.recoveryCode;
+          }
+        } catch (e) {
+          return state.recoveryCode;
+        }
+      }
+      // Sinh mã mới và kiểm tra tối đa 3 lần để không trùng với quán của người khác
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const candidate = `BT-${Math.floor(100000 + Math.random() * 900000)}`;
+        try {
+          const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/recoveryCodes/${candidate}.json`, {}, 1800);
+          const data = res.ok ? await res.json() : null;
+          if (!data || !data.shopKey || data.shopKey === myKey) {
+            state.recoveryCode = candidate;
+            return candidate;
+          }
+        } catch (e) {
+          state.recoveryCode = candidate;
+          return candidate;
+        }
+      }
+      return ensureRecoveryCode();
     }
 
     function toggleRecoveryBox() {
@@ -3077,12 +3173,13 @@
 
     async function handleRecoverByCode() {
       initAudio(); startChillBGM();
-      const codeInput = (document.getElementById("recovery-code-input")?.value || "").trim().toUpperCase();
+      const rawCode = document.getElementById("recovery-code-input")?.value || "";
+      const codeInput = normalizeRecoveryCodeInput(rawCode);
       const pinInput = (document.getElementById("recovery-pin-input")?.value || "").trim();
       const btn = document.getElementById("btn-recover-submit");
 
-      if (!codeInput.startsWith("BT-") || codeInput.length < 6) {
-        showLoginMessage("⚠️ Vui lòng nhập đúng Mã Khóa (VD: BT-123456)!", "error");
+      if (!/^BT-\d{6}$/.test(codeInput)) {
+        showLoginMessage("⚠️ Vui lòng nhập đúng Mã Khóa (VD: BT-123456 hoặc 123456)!", "error");
         return;
       }
       if (!/^\d{4}$/.test(pinInput)) {
@@ -3091,7 +3188,7 @@
       }
 
       if (btn) btn.disabled = true;
-      showLoginMessage("☁️ Đang tìm kiếm Mã Khóa trên Cloud...", "info");
+      showLoginMessage(`☁️ Đang tìm kiếm Mã Khóa ${codeInput} trên Cloud...`, "info");
 
       try {
         let targetShopKey = null;
@@ -3105,13 +3202,19 @@
         if (targetShopKey) {
           const shopRes = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${targetShopKey}.json`, {}, 2500);
           if (shopRes.ok) cloudShop = await shopRes.json();
-        } else {
-          const allRes = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops.json`, {}, 3000);
+        }
+
+        // Fallback: Quét danh sách shops nếu bảng chỉ mục chưa đồng bộ
+        if (!cloudShop) {
+          const allRes = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops.json`, {}, 3500);
           if (allRes.ok) {
             const allShops = await allRes.json();
             if (allShops && typeof allShops === "object") {
               const found = Object.values(allShops).find(s =>
-                s && (s.recoveryCode === codeInput || (s.fullState && s.fullState.recoveryCode === codeInput))
+                s && (
+                  normalizeRecoveryCodeInput(s.recoveryCode) === codeInput ||
+                  (s.fullState && normalizeRecoveryCodeInput(s.fullState.recoveryCode) === codeInput)
+                )
               );
               if (found) cloudShop = found;
             }
@@ -3124,15 +3227,26 @@
           return;
         }
 
-        if (String(cloudShop.pin) !== String(pinInput)) {
+        const savedPin = String(cloudShop.pin || cloudShop.fullState.pin || "");
+        if (savedPin !== String(pinInput)) {
           showLoginMessage("❌ Mã PIN 4 số không đúng với Mã Khóa này!", "error");
           if (btn) btn.disabled = false;
           return;
         }
 
+        // Reset sạch state cũ trước khi nạp state từ Cloud
+        state = getInitialDefaultState();
         mergeLoadedState(cloudShop.fullState);
-        ensureRecoveryCode();
-        saveToLocalOnly();
+
+        // Cố định lại các thông tin định danh chuẩn từ bản ghi Cloud
+        state.recoveryCode = codeInput;
+        state.pin = savedPin;
+        state.shopName = cloudShop.shopName || state.shopName;
+        state.shopKey = cloudShop.shopKey || targetShopKey || sanitizeShopKey(state.shopName);
+        state.avatar = cloudShop.avatar || state.avatar || "👩‍🍳";
+        loginSelectedAvatar = state.avatar;
+
+        await saveGameEverywhere();
         document.getElementById("login-screen").classList.add("hidden");
         if (btn) btn.disabled = false;
         updateAllUI();
@@ -3172,10 +3286,15 @@
 
         await fetchWithTimeout(`${FIREBASE_DB_URL}/recoveryCodes/${state.recoveryCode}.json`, {
           method: "PUT", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ shopKey: key, shopName: state.shopName, updatedAt: Date.now() })
+          body: JSON.stringify({
+            shopKey: key,
+            shopName: state.shopName,
+            updatedAt: Date.now()
+          })
         }, 2000);
-      } catch(e){}
+      } catch (e) {}
     }
+
 
     function spawnFlyingBagAndMoneyBadge(earned, tip, stars) {
       const c = document.getElementById("floating-fx-container");
@@ -3697,8 +3816,15 @@
 
         let closingTimeNotified = false;
 
-    function checkAndTriggerClosingIfEmpty() {
+        function checkAndTriggerClosingIfEmpty() {
       if (!state.isStreetSelling || state.clockMinutes < 22 * 60) return;
+      
+      // Chặn nếu đang hiển thị popup biến cố hoặc hết hàng
+      const anyModalOpen = !document.getElementById("modal-out-of-stock").classList.contains("hidden") ||
+                           !document.getElementById("modal-dilemma").classList.contains("hidden") ||
+                           !document.getElementById("modal-prep").classList.contains("hidden");
+      if (anyModalOpen) return;
+
       const remainingCustomers = customerSlots.filter(Boolean).length;
       if (remainingCustomers === 0) {
         closingTimeNotified = false;
