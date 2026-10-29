@@ -345,7 +345,7 @@
         </div>
       </div>
 
-      <!-- 2. THẺ LỊCH TUẦN, NGÀY LỄ & DỰ BÁO ĐỊNH LƯỢNG SỨC MUA (MỤC 8) -->
+      <!-- 2. THẺ LỊCH TUẦN, NGÀY LỄ & DỰ BÁO ĐỊNH LƯỢNG SỨC MUA -->
       <div class="p-3 rounded-2xl bg-[#fdf3d7] border-2 border-[#ebd59d] flex items-start gap-2.5 shadow-sm">
         <span id="prep-calendar-dot" class="w-3 h-3 rounded-full bg-amber-500 shrink-0 mt-1"></span>
         <div class="flex-1">
@@ -392,14 +392,14 @@
         </button>
       </div>
 
-      <!-- Sub-panel A: KHO HÀNG THEO HẠN SỬ DỤNG & CHỢ ĐẦU MỐI (MỤC 1, 8, 9) -->
+      <!-- Sub-panel A: KHO HÀNG THEO HẠN SỬ DỤNG & CHỢ ĐẦU MỐI -->
       <div id="prep-panel-kho" class="space-y-2.5">
         <div class="p-3 rounded-2xl bg-[#fdf5dc] border-2 border-[#ebd8a0] flex items-center justify-between gap-2.5">
           <div class="flex items-center gap-2.5">
             <div class="w-11 h-11 rounded-2xl bg-amber-200 border border-amber-400 flex items-center justify-center text-2xl shrink-0">📦</div>
             <div>
               <div id="wholesale-guide-title" class="font-black text-xs sm:text-sm text-amber-950">Bảng Cân Đo Lượng Hàng Cần Mua Hôm Nay</div>
-              <div id="wholesale-guide-sub" class="text-[11px] text-amber-800">Giá chợ đầu mối niêm yết cố định • Chú ý Hạn Sử Dụng (HSD) từng món!</div>
+              <div id="wholesale-guide-sub" class="text-[11px] text-amber-800">Chỉ gợi ý mua nguyên liệu thuộc các món quán đã mở khóa!</div>
             </div>
           </div>
           <button id="btn-suggested-order" onclick="fillSuggestedOrder()" class="soft-btn shrink-0 px-3 py-2 rounded-xl bg-amber-600 text-white font-black text-xs shadow">
@@ -435,7 +435,7 @@
         </div>
       </div>
 
-      <!-- Sub-panel MỚI: BẢNG ĐỊNH GIÁ BÁN & PHÍ SÀN APP SHIPPER (MỤC 6) -->
+      <!-- Sub-panel MỚI: BẢNG ĐỊNH GIÁ BÁN & PHÍ SÀN APP SHIPPER -->
       <div id="prep-panel-pricing" class="hidden cream-card p-3.5 space-y-3">
         <div class="flex items-center justify-between border-b border-amber-200 pb-2">
           <div>
@@ -549,7 +549,7 @@
         <div id="ledger-history-list" class="space-y-1.5 max-h-44 overflow-y-auto text-xs"></div>
       </div>
 
-      <!-- Sub-panel E: BẢNG XẾP HẠNG NGƯỜI CHƠI THẬT (MỤC 3) -->
+      <!-- Sub-panel E: BẢNG XẾP HẠNG NGƯỜI CHƠI THẬT -->
       <div id="prep-panel-leaderboard" class="hidden cream-card p-3.5 space-y-2.5">
         <div class="flex items-center justify-between">
           <span class="font-black text-sm text-amber-950">🏆 Bảng Xếp Hạng Người Chơi Thật</span>
@@ -567,7 +567,7 @@
           Khấu hao & Điện gas 22k, vỉa hè 0k, lương nhân viên 0k mỗi ngày
         </div>
       </div>
-    </div>
+    </div> <!-- Đóng #screen-home-prep -->
     <!-- ========================================================================= -->
     <!-- MÀN HÌNH 2: SÂN KHẤU XE ĐẨY BÁNH TRÁNG TỦ KÍNH SÀI GÒN (14:00 - 22:00)      -->
     <!-- ========================================================================= -->
@@ -646,7 +646,7 @@
       <!-- 2. DẢI TRẠNG THÁI NHÂN VIÊN & HIỆU ỨNG NHIỀU NGÀY -->
       <div id="staff-active-strip" class="flex items-center gap-1.5 overflow-x-auto px-2.5 py-1 rounded-xl bg-white/95 border border-amber-300 text-[10px] font-bold text-amber-950"></div>
 
-      <!-- 3. BONG BÓNG THOẠI KHÁCH HÀNG (HIỆN XANH TRỰC TIẾP KHI CHỌN ĐÚNG - MỤC 5) -->
+      <!-- 3. BONG BÓNG THOẠI KHÁCH HÀNG (HIỆN XANH TRỰC TIẾP KHI CHỌN ĐÚNG) -->
       <div class="cream-card p-2 flex items-center gap-2 relative">
         <div id="order-bubble-icon" class="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0 p-1"></div>
         <div class="flex-1 min-w-0">
@@ -849,10 +849,13 @@
     </div>
   </div>
 
-  <!-- 3. POP-UP ĐỨT HÀNG GIỮA CA (XỬ LÝ NGAY LẬP TỨC TRƯỚC KHI TRỘN - MỤC 11) -->
+  <!-- 3. POP-UP ĐỨT HÀNG GIỮA CA (ĐÃ THÊM NÚT ĐÓNG TẠM ĐỂ SỬA LỖI 6) -->
   <div id="modal-out-of-stock" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md cream-card p-5 border-4 border-red-500 shadow-2xl space-y-3">
-      <h3 class="text-base font-black text-red-950">🚨 Đứt Hàng Trong Khay Inox (Cần xử lý ngay)!</h3>
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-black text-red-950">🚨 Đứt Hàng Trong Khay Inox!</h3>
+        <button onclick="closeOutOfStockModal()" class="soft-btn px-2.5 py-1 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 font-black text-xs" title="Đóng tạm để chọn khách khác">✕ Đóng tạm</button>
+      </div>
       <p id="oos-desc" class="text-xs text-amber-950 bg-red-50 p-3 rounded-xl border border-red-200"></p>
       <div id="oos-minigame-box" class="hidden p-3 rounded-xl bg-orange-100 border text-center space-y-2">
         <div class="text-xs font-black text-orange-950">🔪 Sơ Chế Cấp Tốc Tại Xe (Bấm 3 lần)!</div>
@@ -868,7 +871,7 @@
     </div>
   </div>
 
-  <!-- 4. POP-UP BIẾN CỐ SÂU RỘNG (MỤC 4) -->
+  <!-- 4. POP-UP BIẾN CỐ SÂU RỘNG -->
   <div id="modal-dilemma" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md cream-card p-5 border-4 border-orange-500 space-y-3">
       <div class="flex items-center gap-2.5">
@@ -955,7 +958,7 @@
     </div>
   </div>
 
-  <!-- 10. POP-UP THĂNG CẤP (CHỈ HIỆN SAU KHI CHỐT SỔ XONG - MỤC 4) -->
+  <!-- 10. POP-UP THĂNG CẤP (CHỈ HIỆN SAU KHI CHỐT SỔ XONG) -->
   <div id="modal-level-up" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-sm cream-card p-5 border-4 border-amber-400 text-center space-y-3 shadow-2xl">
       <div class="text-5xl animate-bounce">🎉</div>
@@ -973,7 +976,6 @@
   <div id="toast-box" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 translate-y-4">
     <div id="toast-content" class="px-4 py-2 rounded-2xl bg-amber-950/95 text-amber-100 font-extrabold text-xs shadow-xl border border-amber-400 text-center">Thông báo</div>
   </div>
-
   <!-- ================= SCRIPT BẮT ĐẦU TẠI ĐÂY ================= -->
   <script>
     const FIREBASE_DB_URL = "https://banh-trang-tron-sai-gon-default-rtdb.asia-southeast1.firebasedatabase.app";
@@ -1045,7 +1047,7 @@
       reader.readAsDataURL(file);
     }
 
-    // ================= 2. HỆ THỐNG NHẠC NỀN ACOUSTIC LO-FI CHILL DỊU ÊM MỚI (MỤC 10) =================
+    // ================= 2. HỆ THỐNG NHẠC NỀN ACOUSTIC LO-FI CHILL DỊU ÊM =================
     let audioCtx = null, audioEnabled = true, bgmInterval = null, bgmStep = 0, masterGainNode = null, bgmFilterNode = null;
 
     function initAudio() {
@@ -1056,7 +1058,6 @@
           masterGainNode = audioCtx.createGain();
           masterGainNode.gain.setValueAtTime(1.8, audioCtx.currentTime);
 
-          // Bộ lọc Low-pass ấm áp giúp nhạc nền êm dịu, không chói tai
           bgmFilterNode = audioCtx.createBiquadFilter();
           bgmFilterNode.type = "lowpass";
           bgmFilterNode.frequency.setValueAtTime(920, audioCtx.currentTime);
@@ -1083,12 +1084,11 @@
       }
     }
 
-    // Hợp âm Jazz/Lo-fi Rhodes ấm áp (Fmaj7 - Em7 - Dm7 - Cmaj7) + Giai điệu Pentatonic nhẹ nhàng
     const CHILL_RHODES_CHORDS = [
-      { pad: [174.61, 220.00, 261.63, 329.63], melody: [523.25, 659.25, 587.33] }, // Fmaj7
-      { pad: [164.81, 196.00, 246.94, 293.66], melody: [493.88, 587.33, 440.00] }, // Em7
-      { pad: [146.83, 174.61, 220.00, 261.63], melody: [440.00, 523.25, 392.00] }, // Dm7
-      { pad: [130.81, 164.81, 196.00, 246.94], melody: [392.00, 440.00, 523.25] }  // Cmaj7
+      { pad: [174.61, 220.00, 261.63, 329.63], melody: [523.25, 659.25, 587.33] },
+      { pad: [164.81, 196.00, 246.94, 293.66], melody: [493.88, 587.33, 440.00] },
+      { pad: [146.83, 174.61, 220.00, 261.63], melody: [440.00, 523.25, 392.00] },
+      { pad: [130.81, 164.81, 196.00, 246.94], melody: [392.00, 440.00, 523.25] }
     ];
 
     function startChillBGM() {
@@ -1104,7 +1104,6 @@
           const currentChord = CHILL_RHODES_CHORDS[barIdx];
           const dest = bgmFilterNode || masterGainNode || audioCtx.destination;
 
-          // Phách 1: Đánh hợp âm nền Rhodes ấm với Attack mềm (không giật cục)
           if (beatInBar === 0) {
             currentChord.pad.forEach((freq, idx) => {
               const osc = audioCtx.createOscillator();
@@ -1121,7 +1120,6 @@
             });
           }
 
-          // Phách 2 hoặc 3: Điểm một nốt chuông/melody rất khẽ
           if (beatInBar === 2 || (beatInBar === 3 && Math.random() < 0.45)) {
             const noteFreq = currentChord.melody[bgmStep % currentChord.melody.length];
             const osc = audioCtx.createOscillator();
@@ -1182,7 +1180,7 @@
       } catch (e) {}
     }
 
-    // ================= 3. HỆ THỐNG LỊCH TUẦN, NGÀY LỄ & DỰ BÁO ĐỊNH LƯỢNG (MỤC 2 & 8) =================
+    // ================= 3. HỆ THỐNG LỊCH TUẦN, NGÀY LỄ & DỰ BÁO ĐỊNH LƯỢNG =================
     const WEEKLY_SCHEDULE = [
       { dow: 1, name: "Thứ Hai", tag: "Đầu tuần vắng khách", estBags: 14, traTacChance: 0.35, spawnMs: 5600, desc: "Đầu tuần học sinh & văn phòng bận rộn, khách ghé thư thả. Chỉ nên nhập đủ ~14 phần đồ tươi!" },
       { dow: 2, name: "Thứ Ba", tag: "Ngày thường êm ả", estBags: 15, traTacChance: 0.38, spawnMs: 5300, desc: "Lượng khách ổn định mức vừa phải. Nhập khoảng 15 phần để tránh tồn nguyên liệu ngắn hạn." },
@@ -1205,7 +1203,6 @@
         return { ...SPECIAL_HOLIDAYS[dayNum], dowName: dowObj.name, isHoliday: true };
       }
       const base = WEEKLY_SCHEDULE[(dayNum - 1) % 7];
-      // Tăng nhẹ sức mua khi cấp độ quán lên cao
       const lvlBonusBags = Math.min(12, Math.floor((state.level - 1) * 0.6));
       return {
         ...base,
@@ -1215,7 +1212,7 @@
       };
     }
 
-    // ================= 4. DANH MỤC 9 NGUYÊN LIỆU KÈM HẠN SỬ DỤNG (MỤC 1 & 9) =================
+    // ================= 4. DANH MỤC 9 NGUYÊN LIỆU KÈM HẠN SỬ DỤNG =================
     const INGREDIENTS = [
       { id: "banhtrang", name: "Bánh tráng phơi sương", short: "B.Tráng", baseCost: 2500, shelfLife: 4, type: "dry", stepGroup: 1 },
       { id: "xoai", name: "Xoài xanh & Tắc tươi", short: "Xoài", baseCost: 1500, shelfLife: 1, type: "fresh", stepGroup: 1 },
@@ -1227,6 +1224,7 @@
       { id: "trungcut", name: "Trứng cút & Rau răm", short: "Trứng", baseCost: 2000, shelfLife: 1, type: "fresh", stepGroup: 4 },
       { id: "tratac", name: "Trà tắc & Đá bi", short: "Trà tắc", baseCost: 3000, shelfLife: 1, type: "fresh", stepGroup: 4 }
     ];
+
     const DISH_MENU = {
       tron: { id: "tron", name: "Trộn Thập Cẩm", short: "Thập cẩm", vessel: "inox", reqLevel: 1, unlockCost: 0, price: 20000, recipe: { banhtrang: 1, xoai: 1, muoitom: 1, khobo: 1, dauphong: 1, trungcut: 1 } },
       chamme: { id: "chamme", name: "Chấm Sốt Me", short: "Chấm me", vessel: "bamboo", reqLevel: 2, unlockCost: 45000, price: 22000, recipe: { banhtrang: 1, sotbo: 1, muoitom: 1, dauphong: 1, trungcut: 1 } },
@@ -1309,11 +1307,17 @@
       { id: 4, title: "Chương 4: Huyền Thoại Vua Bánh Tráng", story: "Sau bao ngày thức dậy từ sớm thắng sa tế, phi hành giòn, xe bánh tráng tủ kính của con đã trở thành huyền thoại Sài Gòn!", goalDesc: "Đạt Cấp 20 và bán 100 phần bánh", check: (s) => s.level >= 20 && s.totalSold >= 100, reward: 100000 }
     ];
 
-    // ================= 5. TRẠNG THÁI GAME V6 (VỐN 350K, LÔ HẠN SỬ DỤNG FIFO, ĐƠN APP) =================
-    function createInitialBatches(qty = 8) {
+    // ================= 5. TRẠNG THÁI GAME V6 (ĐÃ VÁ LỖI 1 & LỖI 2) =================
+    // Sửa Lỗi 2: Khởi đầu Cấp 1 chỉ cấp sẵn nguyên liệu của món Trộn Thập Cẩm + Trà Tắc (sotbo & tepmo = 0 để không bị thối oan)
+    const INITIAL_STARTER_STOCK = {
+      banhtrang: 8, xoai: 8, muoitom: 8, sotbo: 0, dauphong: 8, khobo: 8, tepmo: 0, trungcut: 8, tratac: 8
+    };
+
+    function createInitialBatches() {
       const batches = {};
       INGREDIENTS.forEach(ing => {
-        batches[ing.id] = [{ qty, daysLeft: ing.shelfLife }];
+        const initQty = INITIAL_STARTER_STOCK[ing.id] || 0;
+        batches[ing.id] = initQty > 0 ? [{ qty: initQty, daysLeft: ing.shelfLife }] : [];
       });
       return batches;
     }
@@ -1321,19 +1325,20 @@
     function getInitialDefaultState() {
       return {
         shopKey: "", recoveryCode: "", shopName: "", pin: "", avatar: "👩‍🍳",
-        money: 350000, // Mục 7: Vốn khởi đầu 350.000đ
+        money: 350000,
         rating: 5.0, reputation: 100,
-        level: 1, xp: 0, day: 1,
+        level: 1, levelAtStartOfDay: 1, // Sửa Lỗi 1: Lưu cấp độ đầu ngày để không phạt khách đòi món mới khi vừa lên cấp giữa ca
+        xp: 0, day: 1,
         clockMinutes: 13 * 60,
         isStreetSelling: false,
         featuredDishKey: "tron",
         featuredSoldToday: 0,
         featuredRewardClaimed: false,
-        appPriceMarkup: false, // Mục 6: Bật/tắt phụ thu +10% giá đơn App
-        appCommissionRate: 0.20, // Mặc định phí sàn 20%
+        appPriceMarkup: false,
+        appCommissionRate: 0.20,
         totalSold: 0, todaySold: 0, todayRevenue: 0, todayCogsSpent: 0, todayAppFees: 0,
-        stock: { banhtrang: 8, xoai: 8, muoitom: 8, sotbo: 8, dauphong: 8, khobo: 8, tepmo: 8, trungcut: 8, tratac: 8 },
-        stockBatches: createInitialBatches(8), // Mục 9: Quản lý hạn sử dụng theo lô FIFO
+        stock: { ...INITIAL_STARTER_STOCK },
+        stockBatches: createInitialBatches(),
         prepDone: { sate: false, hanhphi: false, trungcut: false },
         unlockedDishes: ["tron"],
         dishStars: { tron: 1, chamme: 1, cuon: 1, phoisuong: 1, bo: 1, nuong: 1, xoainon: 1, lacphomai: 1, mamruoc: 1, metditu: 1 },
@@ -1343,13 +1348,13 @@
         staff: { beti: false, mylan: false, tunghia: false, anhba: false },
         equipLevels: { decor_lantern: 0, decor_sign: 0, decor_stool: 0, decor_speaker: 0, tool_bowl: 0, tool_bottle: 0, tool_cooler: 0 },
         licenses: { lic_vsattp: false, lic_sidewalk: false, lic_brand: false },
-        usedDilemmaIds: [], // Mục 4: Chống lặp lại biến cố
+        usedDilemmaIds: [],
         dilemmaTriggeredToday: false,
         activeMultiDayEffects: {
-          cheapDryDays: 0,      // Mối sỉ đồ khô rẻ -30% nhưng rủi ro khô bò cứng
-          appPartnerDays: 0,    // Hợp đồng đối tác App phí sàn 10%, Shipper x1.6
-          streetFestDays: 0,    // Lễ hội ẩm thực VIP x2, giá bán +15%
-          freshSurgeDays: 0     // Bão giá đồ tươi tăng +50%
+          cheapDryDays: 0,
+          appPartnerDays: 0,
+          streetFestDays: 0,
+          freshSurgeDays: 0
         },
         reviews: [], nextCustomerTipBonus: 0,
         claimedChapters: [], ledgerHistory: [],
@@ -1363,18 +1368,18 @@
 
     let state = getInitialDefaultState();
 
-    // BIẾN QUẢN LÝ CA BÁN HÀNG & HÀNG ĐỢI LÊN CẤP (MỤC 4)
+    // BIẾN QUẢN LÝ CA BÁN HÀNG & HÀNG ĐỢI LÊN CẤP
     let customerSlots = [null, null, null, null];
     let selectedSlotIndex = 0;
     let slotPatienceTimer = null, slotSpawnerTimer = null, clockTimer = null;
     let activeCartBuff = null;
     let rainTarpCovered = false;
     let bulkOrderChallenge = null;
-    let pendingLevelUpQueue = []; // Hoãn hiển thị bảng Lên Cấp tới khi kết thúc ngày
+    let pendingLevelUpQueue = [];
 
     let currentPrepSubTab = "kho", currentUpgradeSubTab = "dishes", loginSelectedAvatar = "👩‍🍳";
     let cloudLeaderboardCache = [];
-    let bowl = { selectedDish: "tron", rau: true, hanh: true, spice: 1, tratac: false, step1Done: false, step2Done: false, mixProgress: 0, step3Done: false };
+    let bowl = { selectedDish: "tron", rau: true, hanh: true, spice: 1, tratac: false, step1Done: false, step2Done: false, mixProgress: 0, step3Done: false, lockedBagQty: null };
     let activePrepKey = null, activePrepProgress = 0, pendingOosMissingList = [], oosMinigameProgress = 0, pendingOosBoughtQty = 0;
     let currentComboStreak = 0;
 
@@ -1387,7 +1392,19 @@
     function formatVND(num) { return Number(num || 0).toLocaleString("vi-VN") + "đ"; }
     function escapeHtml(str) { return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 
-    // ================= 6. HỆ THỐNG LÔ HẠN SỬ DỤNG FIFO (MỤC 9) =================
+    // Sửa Lỗi 5: Hàm kiểm tra bất kỳ Pop-up nào đang mở để tạm dừng đồng hồ và bộ sinh khách
+    function isAnyBlockingModalOpen() {
+      const modalIds = [
+        "modal-out-of-stock", "modal-dilemma", "modal-prep",
+        "modal-reviews", "modal-end-day", "modal-bankruptcy", "modal-level-up"
+      ];
+      return modalIds.some(id => {
+        const el = document.getElementById(id);
+        return el && !el.classList.contains("hidden");
+      });
+    }
+
+    // ================= 6. HỆ THỐNG LÔ HẠN SỬ DỤNG FIFO =================
     function getEffectiveShelfLife(ing) {
       const coolerLvl = state.equipLevels?.tool_cooler || 0;
       const bonusDays = (coolerLvl >= 2 && (ing.type === "fresh" || ing.type === "sauce")) ? 1 : 0;
@@ -1403,7 +1420,6 @@
         if (!Array.isArray(state.stockBatches[ing.id])) {
           state.stockBatches[ing.id] = currentTotal > 0 ? [{ qty: currentTotal, daysLeft: getEffectiveShelfLife(ing) }] : [];
         } else {
-          // Đồng bộ nếu tổng lô lệch với state.stock
           const sumBatch = state.stockBatches[ing.id].reduce((acc, b) => acc + (b.qty || 0), 0);
           if (sumBatch !== currentTotal) {
             if (currentTotal > sumBatch) {
@@ -1440,7 +1456,6 @@
       const existingSameLife = list.find(b => b.daysLeft === maxLife);
       if (existingSameLife) existingSameLife.qty += qty;
       else list.push({ qty, daysLeft: maxLife });
-      // Sắp xếp lô có hạn sử dụng ngắn nhất lên đầu để dùng trước (FIFO)
       list.sort((a, b) => a.daysLeft - b.daysLeft);
       state.stockBatches[ingId] = list;
       syncTotalStockFromBatches();
@@ -1462,7 +1477,6 @@
       syncTotalStockFromBatches();
     }
 
-    // Lấy thông tin lô hàng sắp hết hạn (daysLeft === 1) để cảnh báo người chơi
     function getExpiringTodayInfo(ingId) {
       ensureValidStockBatches();
       const list = state.stockBatches[ingId] || [];
@@ -1470,8 +1484,7 @@
       const minDays = list.length > 0 ? Math.min(...list.map(b => b.daysLeft)) : null;
       return { expTodayQty, minDays };
     }
-
-    // ================= 7. ĐĂNG NHẬP, LƯU CLOUD & BẢNG XẾP HẠNG THẬT (MỤC 3) =================
+    // ================= 7. ĐĂNG NHẬP, LƯU CLOUD & BẢNG XẾP HẠNG THẬT (ĐÃ VÁ LỖI 9) =================
     function sanitizeShopKey(name) {
       return String(name || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/[^a-z0-9]/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "");
     }
@@ -1584,6 +1597,7 @@
       state.shopName = nameInput;
       state.pin = pinInput;
       state.avatar = loginSelectedAvatar || state.avatar || "👩‍🍳";
+      state.levelAtStartOfDay = state.level || 1;
 
       await ensureUniqueRecoveryCodeOnCloud();
       await saveGameEverywhere();
@@ -1635,6 +1649,7 @@
       const def = getInitialDefaultState();
       state = {
         ...def, ...loaded,
+        levelAtStartOfDay: loaded.levelAtStartOfDay || loaded.level || 1,
         priceOffsets: { ...def.priceOffsets, ...(loaded.priceOffsets || {}) },
         rating: typeof loaded.rating === "number" ? loaded.rating : 5.0,
         cartDurability: typeof loaded.cartDurability === "number" ? loaded.cartDurability : 100,
@@ -1671,13 +1686,20 @@
 
     function saveToLocalOnly() { try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
 
-    // BẢNG XẾP HẠNG 100% NGƯỜI CHƠI THẬT TRÊN CLOUD (MỤC 3 - ĐÃ XÓA SẠCH NPC ẢO)
+    // Sửa Lỗi 9: Ưu tiên tải nhánh /leaderboard nhẹ và bảo mật (không chứa mã PIN), có fallback tương thích dữ liệu cũ
     async function fetchCloudLeaderboard(showFeedback = false) {
       const badge = document.getElementById("login-cloud-badge");
       try {
-        const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops.json`, {}, 2500);
-        if (!res.ok) throw new Error();
-        const data = await res.json();
+        let data = null;
+        const resLb = await fetchWithTimeout(`${FIREBASE_DB_URL}/leaderboard.json`, {}, 2200);
+        if (resLb.ok) data = await resLb.json();
+
+        // Tương thích ngược nếu nhánh /leaderboard chưa có hết các quán cũ
+        if (!data || Object.keys(data).length === 0) {
+          const resShops = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops.json`, {}, 2500);
+          if (resShops.ok) data = await resShops.json();
+        }
+
         const list = [];
         if (data && typeof data === "object") {
           Object.values(data).forEach(item => {
@@ -1732,9 +1754,10 @@
         </div>
       `).join("");
     }
-    // ================= 8. GIÁ VỐN CỐ ĐỊNH, ĐỊNH GIÁ BÁN & PHÍ SÀN APP (MỤC 1 & 6) =================
+
+    // ================= 8. GIÁ VỐN CỐ ĐỊNH, ĐỊNH GIÁ BÁN & PHÍ SÀN APP =================
     function getIngredientCost(ing) {
-      let mult = 1.0; // Mục 1: Giá chợ đầu mối cố định 100%, bỏ giảm giá ngẫu nhiên Cô Hai
+      let mult = 1.0;
       if ((state.activeMultiDayEffects?.freshSurgeDays || 0) > 0 && ing.type === "fresh") mult *= 1.5;
       if ((state.activeMultiDayEffects?.cheapDryDays || 0) > 0 && ing.type === "dry") mult *= 0.7;
       return Math.round((ing.baseCost * mult) / 100) * 100;
@@ -1742,7 +1765,7 @@
 
     function getDishRecipeCost(dishKey) {
       const recipe = DISH_MENU[dishKey]?.recipe || {};
-      let cost = 1000; // 1.000đ tiền bao bì, túi nilon
+      let cost = 1000;
       for (const [ingId, qty] of Object.entries(recipe)) {
         const ingObj = INGREDIENTS.find(x => x.id === ingId);
         if (ingObj) cost += qty * getIngredientCost(ingObj);
@@ -1905,9 +1928,20 @@
       return baseUtilAndWear + streetCleanFee;
     }
 
-    // Kiểm tra các món đã đủ Cấp độ mở khóa nhưng người chơi chưa mua công thức (Mục 7)
-    function getUnpurchasedEligibleDishes() {
-      return Object.values(DISH_MENU).filter(d => d.reqLevel <= state.level && !state.unlockedDishes.includes(d.id));
+    // Sửa Lỗi 1: Khi đang bán ngoài đường (forShiftPenalty = true), chỉ kiểm tra theo cấp độ đầu ngày (levelAtStartOfDay)
+    function getUnpurchasedEligibleDishes(forShiftPenalty = false) {
+      const checkLvl = forShiftPenalty ? (state.levelAtStartOfDay || state.level) : state.level;
+      return Object.values(DISH_MENU).filter(d => d.reqLevel <= checkLvl && !state.unlockedDishes.includes(d.id));
+    }
+
+    // Tập hợp các nguyên liệu thực sự được dùng trong các món đã mở khóa (phục vụ sửa Lỗi 2)
+    function getActiveUsedIngredientSet() {
+      const used = new Set(["tratac"]);
+      (state.unlockedDishes || ["tron"]).forEach(dishKey => {
+        const recipe = DISH_MENU[dishKey]?.recipe || {};
+        Object.keys(recipe).forEach(ingId => used.add(ingId));
+      });
+      return used;
     }
 
     function handleTopLeftButtonClick() {
@@ -1945,7 +1979,6 @@
       document.getElementById("home-xp-bar").style.width = `${xpPct}%`;
       document.getElementById("home-xp-label").textContent = `${state.xp}/${currentLvlObj.xpNeed} XP`;
 
-      // Cập nhật Lịch Tuần & Dự báo định lượng (Mục 8)
       document.getElementById("prep-forecast-title").textContent = sched.isHoliday
         ? `${sched.name} (${sched.dowName})`
         : `📅 ${sched.dowName} (${sched.tag})`;
@@ -1981,8 +2014,7 @@
         else unrepBadge.classList.add("hidden");
       }
 
-      // Cảnh báo nếu có món mới đủ cấp nhưng chưa mở khóa (Mục 7)
-      const unpurchasedDishes = getUnpurchasedEligibleDishes();
+      const unpurchasedDishes = getUnpurchasedEligibleDishes(false);
       const demandBadge = document.getElementById("badge-new-dish-demand");
       if (demandBadge) demandBadge.classList.toggle("hidden", unpurchasedDishes.length === 0);
 
@@ -2057,12 +2089,13 @@
       else if (sub === "leaderboard") fetchCloudLeaderboard(false);
     }
 
-    // ================= 9. CHỢ ĐẦU MỐI & HIỂN THỊ HẠN SỬ DỤNG TRONG KHO (MỤC 1, 8, 9) =================
+    // ================= 9. CHỢ ĐẦU MỐI & HIỂN THỊ HẠN SỬ DỤNG TRONG KHO (ĐÃ VÁ LỖI 2) =================
     function renderMarketGrid() {
       const grid = document.getElementById("market-grid");
       if (!grid) return;
       const currentInputs = {};
       INGREDIENTS.forEach(ing => { const el = document.getElementById(`buy-qty-${ing.id}`); if (el) currentInputs[ing.id] = el.value; });
+      const usedSet = getActiveUsedIngredientSet();
 
       grid.innerHTML = INGREDIENTS.map(ing => {
         const unitCost = getIngredientCost(ing);
@@ -2070,18 +2103,21 @@
         const val = currentInputs[ing.id] !== undefined ? currentInputs[ing.id] : "";
         const maxLife = getEffectiveShelfLife(ing);
         const { expTodayQty } = getExpiringTodayInfo(ing.id);
+        const isUsedNow = usedSet.has(ing.id);
 
-        const expBadge = expTodayQty > 0
-          ? `<span class="text-[10px] font-black text-red-600 bg-red-100 px-1.5 py-0.2 rounded">⚠️ ${expTodayQty} phần hết hạn tối nay</span>`
-          : `<span class="text-[10px] font-bold text-amber-700">HSD: ${maxLife} ngày</span>`;
+        const expBadge = !isUsedNow
+          ? `<span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.2 rounded">🔒 Chưa dùng cho món hiện tại</span>`
+          : expTodayQty > 0
+            ? `<span class="text-[10px] font-black text-red-600 bg-red-100 px-1.5 py-0.2 rounded">⚠️ ${expTodayQty} phần hết hạn tối nay</span>`
+            : `<span class="text-[10px] font-bold text-amber-700">HSD: ${maxLife} ngày</span>`;
 
         return `
-          <div class="p-2.5 rounded-2xl bg-amber-50/50 border border-amber-200 flex items-center justify-between gap-2 text-xs">
+          <div class="p-2.5 rounded-2xl ${isUsedNow ? 'bg-amber-50/50 border-amber-200' : 'bg-slate-50 border-slate-200 opacity-75'} border flex items-center justify-between gap-2 text-xs">
             <div class="flex items-center gap-2 min-w-0">
               <div class="w-9 h-9 rounded-xl bg-white border border-amber-200 flex items-center justify-center shrink-0">${getIngredientSvgIcon(ing.id)}</div>
               <div class="min-w-0">
                 <div class="font-black text-amber-950 truncate">${ing.name}</div>
-                <div class="text-[11px] font-bold text-emerald-700">${formatVND(unitCost)} • Tồn: <b class="${stockCount < 5 ? 'text-red-600' : 'text-amber-950'}">${stockCount}</b></div>
+                <div class="text-[11px] font-bold text-emerald-700">${formatVND(unitCost)} • Tồn: <b class="${isUsedNow && stockCount < 5 ? 'text-red-600' : 'text-amber-950'}">${stockCount}</b></div>
                 <div class="mt-0.5">${expBadge}</div>
               </div>
             </div>
@@ -2104,19 +2140,26 @@
       return { totalCost, totalUnits };
     }
 
+    // Sửa Lỗi 2: Chỉ gợi ý mua những nguyên liệu có nằm trong công thức các món đã mở khóa
     function fillSuggestedOrder() {
       const sched = getTodayScheduleInfo(state.day);
       const targetBags = sched.estBags;
       const targetDrink = Math.max(6, Math.round(targetBags * sched.traTacChance));
+      const usedSet = getActiveUsedIngredientSet();
 
       INGREDIENTS.forEach(ing => {
         const el = document.getElementById(`buy-qty-${ing.id}`);
         if (!el) return;
+        if (!usedSet.has(ing.id)) {
+          el.value = "";
+          return;
+        }
         const needed = ing.id === "tratac" ? targetDrink : targetBags;
-        el.value = Math.max(0, needed - (state.stock[ing.id] || 0));
+        const toBuy = Math.max(0, needed - (state.stock[ing.id] || 0));
+        el.value = toBuy > 0 ? toBuy : "";
       });
       recalcMarketOrderTotal();
-      showToast(`✨ Đã điền gợi ý nhập đủ ${targetBags} phần bánh & ${targetDrink} Trà tắc cho ${sched.dowName}!`);
+      showToast(`✨ Đã điền gợi ý nhập đủ ${targetBags} phần bánh & ${targetDrink} Trà tắc (chỉ tính nguyên liệu đang dùng)!`);
     }
 
     function clearMarketInputs() {
@@ -2188,7 +2231,7 @@
     }
     function closePrepModal() { document.getElementById("modal-prep").classList.add("hidden"); activePrepKey = null; }
 
-    // ================= 10. MỞ CỬA XE ĐẨY, KHÁCH ĐÒI MÓN MỚI (MỤC 7) & HIỆN XANH ORDER (MỤC 5) =================
+    // ================= 10. MỞ CỬA XE ĐẨY, KHÁCH ĐÒI MÓN MỚI & HIỆN XANH ORDER (ĐÃ VÁ LỖI 1 & 5) =================
     function activateCartBuff(id, title, seconds) {
       activeCartBuff = { id, title, seconds };
       const bar = document.getElementById("cart-active-buff-bar");
@@ -2241,6 +2284,9 @@
         checkBankruptcyOrRescueLoan();
         return;
       }
+      if (!isResuming) {
+        state.levelAtStartOfDay = state.level; // Sửa Lỗi 1: Chốt cấp độ lúc bắt đầu đẩy xe ra phố
+      }
       state.isStreetSelling = true;
       if (!isResuming || state.clockMinutes < 14 * 60) state.clockMinutes = 14 * 60;
       customerSlots = [null, null, null, null];
@@ -2249,7 +2295,7 @@
       playSFX("bike");
       updateAllUI();
       startFourSlotQueueEngine();
-      setTimeout(() => { if (state.isStreetSelling) spawnCustomerIntoEmptySlot(); }, 850);
+      setTimeout(() => { if (state.isStreetSelling && !isAnyBlockingModalOpen()) spawnCustomerIntoEmptySlot(); }, 850);
     }
 
     function startFourSlotQueueEngine() {
@@ -2257,10 +2303,7 @@
       if (slotSpawnerTimer) clearInterval(slotSpawnerTimer);
 
       slotPatienceTimer = setInterval(() => {
-        if (!state.isStreetSelling) return;
-        const anyModal = !document.getElementById("modal-out-of-stock").classList.contains("hidden") ||
-                         !document.getElementById("modal-dilemma").classList.contains("hidden");
-        if (anyModal) return;
+        if (!state.isStreetSelling || isAnyBlockingModalOpen()) return;
 
         if (activeCartBuff) {
           activeCartBuff.seconds -= 1;
@@ -2323,13 +2366,13 @@
         }
       }, 1000);
 
-      // Tốc độ khách đến khớp với Lịch Tuần (Mục 2 & 8)
       const sched = getTodayScheduleInfo(state.day);
       const priceImpact = getPricingCustomerImpact();
       const finalSpawnMs = Math.round((sched.spawnMs || 4500) * priceImpact.spawnMult);
 
+      // Sửa Lỗi 5: Không tự sinh khách mới khi đang mở bất kỳ Pop-up nào
       slotSpawnerTimer = setInterval(() => {
-        if (!state.isStreetSelling) return;
+        if (!state.isStreetSelling || isAnyBlockingModalOpen()) return;
         const activeCount = customerSlots.filter(Boolean).length;
         let maxAllowed = state.level <= 3 ? 2 : (state.level <= 7 ? 3 : 4);
         let spawnProb = 0.68;
@@ -2342,7 +2385,7 @@
     }
 
     function spawnCustomerIntoEmptySlot() {
-      if (state.clockMinutes >= 22 * 60) return;
+      if (state.clockMinutes >= 22 * 60 || isAnyBlockingModalOpen()) return;
       const emptyIdx = customerSlots.findIndex(x => x === null);
       if (emptyIdx === -1) return;
 
@@ -2353,14 +2396,14 @@
         return;
       }
 
-      // MỤC 7: KHI LÊN CẤP CÓ MÓN MỚI MÀ CHƯA MỞ KHÓA, KHÁCH ĐÒI MUA MÓN MỚI & BỎ ĐI!
-      const unpurchasedDishes = getUnpurchasedEligibleDishes();
+      // Sửa Lỗi 1: Chỉ phạt nếu món đó đã đủ cấp từ ĐẦU NGÀY mà chủ quán cố tình không mở khóa
+      const unpurchasedDishes = getUnpurchasedEligibleDishes(true);
       if (unpurchasedDishes.length > 0 && Math.random() < 0.28) {
         const demandedDish = unpurchasedDishes[Math.floor(Math.random() * unpurchasedDishes.length)];
         adjustRating(-0.04);
         adjustViral(-3);
         playSFX("whistle");
-        const complainHtml = `<span class="text-red-600 font-black">😤 Khách hỏi: "Quán lên Cấp ${state.level} rồi mà chưa bán món <u>${demandedDish.name}</u> hả? Thôi mình qua quán khác!" (-0.04⭐)</span>`;
+        const complainHtml = `<span class="text-red-600 font-black">😤 Khách hỏi: "Quán lên Cấp ${state.levelAtStartOfDay || state.level} rồi mà chưa bán món <u>${demandedDish.name}</u> hả? Thôi mình qua quán khác!" (-0.04⭐)</span>`;
         renderSelectedOrderBubble(complainHtml);
         showToast(`⚠️ Khách vừa bỏ đi vì quán chưa mở khóa món "${demandedDish.name}" (Cấp ${demandedDish.reqLevel})!`);
         return;
@@ -2443,7 +2486,6 @@
       onCustomerSlotSelected();
     }
 
-    // MỤC 11: KIỂM TRA ĐỨT HÀNG TOÀN BỘ ĐƠN NGAY KHI CHỌN KHÁCH HOẶC BẮT ĐẦU LÀM
     function checkFullOrderIngredientsImmediate(cust, dishKeyToCheck = null) {
       if (!cust) return true;
       const targetDish = dishKeyToCheck || cust.wantedDish || bowl.selectedDish;
@@ -2473,7 +2515,6 @@
       renderSellDishGrid();
 
       if (!c) return;
-      // Kiểm tra ngay lập tức xem kho có đủ nguyên liệu cho đơn của khách này không (Mục 11)
       if (!bowl.step1Done && !checkFullOrderIngredientsImmediate(c, c.wantedDish)) {
         return;
       }
@@ -2541,7 +2582,6 @@
       }).join("");
     }
 
-    // MỤC 5: GIA GIẢM GIA VỊ HIỆN XANH LÁ (✓) TRONG MỤC ORDER KHI CHỌN ĐÚNG
     function renderOrderTag(text, isMatch) {
       if (isMatch) {
         return `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded-md bg-emerald-100 text-emerald-800 border border-emerald-400 font-black">✓ ${text}</span>`;
@@ -2573,7 +2613,6 @@
       const rauWord = c.wantedRau ? "có rau răm" : "không rau răm";
       const hanhWord = c.wantedHanh ? "có hành phi" : "không hành phi";
 
-      // Kiểm tra khớp trực tiếp giữa lựa chọn trên bàn trộn (bowl) và yêu cầu của khách (c)
       const matchDish = (bowl.selectedDish === c.wantedDish);
       const matchRau = (bowl.rau === c.wantedRau);
       const matchHanh = (bowl.hanh === c.wantedHanh);
@@ -2599,6 +2638,7 @@
       barEl.style.width = `${Math.round(c.patience)}%`;
       barEl.className = `h-full transition-all duration-300 ${c.patience > 50 ? 'bg-amber-500' : 'bg-red-600'}`;
     }
+
     const SOCIAL_REPLY_TEMPLATES = {
       friendly: [
         "Dạ Dì cảm ơn con nhiều nghen! Lần sau ghé Dì bỏ thêm hành phi giòn rụm cho con nha! 🥰",
@@ -2623,7 +2663,7 @@
       ]
     };
 
-    // ================= 11. HỆ THỐNG BIẾN CỐ CHIẾN LƯỢC SÂU RỘNG & KHÔNG LẶP LẠI (MỤC 4) =================
+    // ================= 11. HỆ THỐNG BIẾN CỐ CHIẾN LƯỢC SÂU RỘNG & KHÔNG LẶP LẠI =================
     const DILEMMA_EVENTS = [
       {
         id: "wholesale_dry_deal", category: "1. Hợp Đồng Nguồn Hàng (3 Ngày)", icon: "📦", speaker: "Thương Lái Chợ Đầu Mối",
@@ -2765,7 +2805,7 @@
           effect: (s) => {
             s.money -= 45000;
             s.todayCogsSpent += 45000;
-            s.cumulativeCosts.cogs = (s.cumulativeCosts.cogs || 0) + 45000;
+            s.cumulativeCosts.cogs = (state.cumulativeCosts.cogs || 0) + 45000;
             addStockBatch("xoai", 8);
             addStockBatch("trungcut", 8);
             addStockBatch("tratac", 8);
@@ -2782,7 +2822,7 @@
       }
     ];
 
-    // ================= 12. LƯỚI 10 MÓN & THANH KHO 9 NGUYÊN LIỆU BẤM MUA NGAY (MỤC 11) =================
+    // ================= 12. LƯỚI 10 MÓN & THANH KHO 9 NGUYÊN LIỆU BẤM MUA NGAY (ĐÃ VÁ LỖI 8) =================
     function getMaxMakeablePortions(dishKey) {
       const recipe = DISH_MENU[dishKey]?.recipe || {};
       let minPortions = 999;
@@ -2804,7 +2844,7 @@
         const isSelected = bowl.selectedDish === d.id;
         const maxMake = isUnlocked ? getMaxMakeablePortions(d.id) : 0;
         const isFeatured = (d.id === state.featuredDishKey);
-        const isDemandedNow = !isUnlocked && d.reqLevel <= state.level;
+        const isDemandedNow = !isUnlocked && d.reqLevel <= (state.levelAtStartOfDay || state.level);
 
         if (!isUnlocked) {
           return `
@@ -2836,10 +2876,10 @@
       tray.innerHTML = INGREDIENTS.map(ing => {
         const count = state.stock[ing.id] || 0;
         const needed = (currentRecipe[ing.id] || 0) > 0 || (ing.id === "tratac" && bowl.tratac);
-        const isLow = count <= 2;
+        const isLow = count <= 2 && needed;
 
         return `
-          <button onclick="promptQuickRestockSingle('${ing.id}')" title="Chạm để mua bổ sung nhanh nếu sắp cạn" class="soft-btn py-1 px-0.5 rounded-lg ${count <= 0 ? 'bg-red-100 border border-red-500 animate-pulse' : needed ? 'bg-white border border-rose-400' : 'bg-slate-100 border border-slate-300'} flex flex-col items-center justify-center">
+          <button onclick="promptQuickRestockSingle('${ing.id}')" title="Chạm để mua bổ sung nhanh nếu sắp cạn" class="soft-btn py-1 px-0.5 rounded-lg ${count <= 0 && needed ? 'bg-red-100 border border-red-500 animate-pulse' : needed ? 'bg-white border border-rose-400' : 'bg-slate-100 border border-slate-300'} flex flex-col items-center justify-center">
             <span class="font-black text-[10px] leading-none ${isLow ? 'text-red-600' : 'text-slate-900'}">${count}</span>
             <span class="font-bold text-[8px] text-slate-700 truncate max-w-full mt-0.5">${ing.short}</span>
           </button>
@@ -2891,14 +2931,15 @@
       const dish = DISH_MENU[bowl.selectedDish] || DISH_MENU.tron;
       const label = document.getElementById("vessel-mode-label"), inner = document.getElementById("svg-vessel-inner"), grillLines = document.getElementById("svg-grill-lines");
       if (!inner || !label || !grillLines) return;
+      const qtyTag = bowl.lockedBagQty ? ` (${bowl.lockedBagQty} bịch)` : "";
       if (dish.vessel === "grill") {
-        label.textContent = "🔥 Vỉ Nướng Than";
+        label.textContent = `🔥 Vỉ Nướng Than${qtyTag}`;
         inner.setAttribute("fill", "url(#grillGrad)"); grillLines.classList.remove("hidden");
       } else if (dish.vessel === "bamboo") {
-        label.textContent = "🌿 Mẹt Lá Chuối";
+        label.textContent = `🌿 Mẹt Lá Chuối${qtyTag}`;
         inner.setAttribute("fill", "url(#bambooGrad)"); grillLines.classList.add("hidden");
       } else {
-        label.textContent = "🥣 Thau Inox 304";
+        label.textContent = `🥣 Thau Inox 304${qtyTag}`;
         inner.setAttribute("fill", "url(#inoxGrad)"); grillLines.classList.add("hidden");
       }
     }
@@ -2912,12 +2953,11 @@
       bowl.selectedDish = dishKey;
       renderSellDishGrid();
       renderBottomIngredientTray();
-      renderSelectedOrderBubble(); // Cập nhật màu xanh lá trên bong bóng thoại ngay lập tức (Mục 5)
+      renderSelectedOrderBubble();
       updateVesselVisualByDish();
       spawnFloatingFX(`${DISH_MENU[dishKey].name}`);
 
       const c = getActiveCustomer();
-      // Kiểm tra đứt hàng ngay khi chọn món (Mục 11)
       if (c && !bowl.step1Done) {
         if (!checkFullOrderIngredientsImmediate(c, dishKey)) return;
       }
@@ -2938,7 +2978,7 @@
       const btnEl = document.getElementById("spice-bottle-btn");
       if (lblEl) lblEl.textContent = labels[bowl.spice];
       if (btnEl) btnEl.className = btnStyles[bowl.spice];
-      renderSelectedOrderBubble(); // Cập nhật thẻ Xanh lá ngay lập tức (Mục 5)
+      renderSelectedOrderBubble();
       playSFX("snip");
     }
 
@@ -2962,7 +3002,7 @@
             : "soft-btn py-2 px-1 rounded-xl font-black text-[11px] bg-rose-600 text-white border-b-2 border-rose-800 text-center flex-1 flex items-center justify-center";
         }
       }
-      renderSelectedOrderBubble(); // Cập nhật thẻ Xanh lá ngay lập tức (Mục 5)
+      renderSelectedOrderBubble();
       playSFX("snip");
     }
 
@@ -2979,7 +3019,7 @@
         openOutOfStockModal([INGREDIENTS.find(x => x.id === "tratac")]);
       }
       renderBottomIngredientTray();
-      renderSelectedOrderBubble(); // Cập nhật thẻ Xanh lá ngay lập tức (Mục 5)
+      renderSelectedOrderBubble();
       playSFX("snip");
     }
 
@@ -3010,26 +3050,28 @@
       if (rpBody) rpBody.setAttribute("fill", "#fef9c3");
       document.getElementById("mix-bar-fill").style.width = "0%";
       document.getElementById("bowl-instruction").textContent = "🧤 Trộn thau / Bấm B1";
+      updateVesselVisualByDish();
       updateStepButtonsHighlight();
       renderBottomIngredientTray();
       renderSelectedOrderBubble();
     }
 
+    // Sửa Lỗi 8: Luôn cập nhật dấu ✓ độc lập cho Bước 1 và Bước 2 ở đầu hàm
     function updateStepButtonsHighlight() {
       const b1 = document.getElementById("step-btn-1"), b2 = document.getElementById("step-btn-2"), b3 = document.getElementById("step-btn-3");
       [b1, b2, b3].forEach(b => { if (b) b.classList.remove("active-red-ring"); });
       const { min, max } = getSweetSpotBounds();
+
+      document.getElementById("step-check-1").textContent = bowl.step1Done ? "✓" : "B1";
+      document.getElementById("step-check-2").textContent = bowl.step2Done ? "✓" : "B2";
+
       if (!bowl.step1Done) {
         if (b1) b1.classList.add("active-red-ring");
-        document.getElementById("step-check-1").textContent = "B1";
-        document.getElementById("step-check-2").textContent = "B2";
         document.getElementById("step-check-3").textContent = "0%";
       } else if (!bowl.step2Done) {
-        document.getElementById("step-check-1").textContent = "✓";
         if (b2) b2.classList.add("active-red-ring");
-        document.getElementById("step-check-2").textContent = "B2";
+        document.getElementById("step-check-3").textContent = "0%";
       } else if (bowl.mixProgress < min) {
-        document.getElementById("step-check-2").textContent = "✓";
         if (b3) b3.classList.add("active-red-ring");
         document.getElementById("step-check-3").textContent = `${bowl.mixProgress}%`;
       } else {
@@ -3037,9 +3079,17 @@
       }
     }
 
-    // ================= 13. XỬ LÝ ĐỨT HÀNG NGAY LẬP TỨC & DỌN XE NGHỈ SỚM (MỤC 2 & 11) =================
+    // ================= 13. XỬ LÝ ĐỨT HÀNG NGAY LẬP TỨC & DỌN XE NGHỈ SỚM (ĐÃ VÁ LỖI 5 & 6) =================
+    function closeOutOfStockModal() {
+      document.getElementById("modal-out-of-stock").classList.add("hidden");
+    }
+
     function openOutOfStockModal(missingList) {
       if (!missingList || missingList.length === 0) return;
+      const modalEl = document.getElementById("modal-out-of-stock");
+      // Sửa Lỗi 5: Nếu Pop-up đang mở sẵn (người chơi đang bấm minigame sơ chế), không reset lại từ đầu
+      if (modalEl && !modalEl.classList.contains("hidden")) return;
+
       pendingOosMissingList = missingList;
       oosMinigameProgress = 0;
       playSFX("whistle");
@@ -3060,7 +3110,7 @@
       }
       document.getElementById("oos-minigame-box").classList.add("hidden");
       document.getElementById("oos-choices-box").classList.remove("hidden");
-      document.getElementById("modal-out-of-stock").classList.remove("hidden");
+      modalEl.classList.remove("hidden");
     }
 
     function handleOosOption1SelfBuy(qty) {
@@ -3115,7 +3165,6 @@
       showToast("🙇 Đã xin lỗi khách vì hết hàng (-0.10⭐)!");
     }
 
-    // MỤC 2: TREO BẢNG "BÁN ĐẮT CHÁY HÀNG" & DỌN XE NGHỈ SỚM KHÔNG BỊ PHẠT SAO
     function handleOosOption4CloseEarly() {
       document.getElementById("modal-out-of-stock").classList.add("hidden");
       customerSlots = [null, null, null, null];
@@ -3128,13 +3177,11 @@
       endDaySummary();
     }
 
-    // TRỪ TOÀN BỘ NGUYÊN LIỆU CỦA ĐƠN NGAY TẠI BƯỚC 1 THEO LÔ FIFO (MỤC 9 & 11)
     function doStep1Base(byStaff = false) {
       const c = getActiveCustomer();
       if (!c) { showToast("🍃 Hãy chạm vào khách trên quầy hoặc bấm Rao hàng!"); return; }
       if (bowl.step1Done) return;
 
-      // Bắt buộc kiểm tra đủ toàn bộ nguyên liệu của món trước khi cắt bánh (Mục 11)
       if (!checkFullOrderIngredientsImmediate(c, bowl.selectedDish)) return;
 
       bowl.lockedBagQty = c.bagQty || 1;
@@ -3158,6 +3205,7 @@
 
       document.getElementById("bowl-instruction").textContent = "Bấm B2: Vắt tắc & Sốt";
       spawnFloatingFX(byStaff ? "👦 Bé Tí: Cắt bánh!" : "✂️ Cắt bánh & Xoài bào");
+      updateVesselVisualByDish();
       renderSellDishGrid();
       renderBottomIngredientTray();
       updateStepButtonsHighlight();
@@ -3224,18 +3272,16 @@
       updateStepButtonsHighlight();
     }
 
-    // ================= 14. GIAO BÁNH 1 CHẠM & THU PHÍ SÀN ĐƠN APP (MỤC 6) =================
+    // ================= 14. GIAO BÁNH 1 CHẠM & THU PHÍ SÀN ĐƠN APP (ĐÃ VÁ LỖI 3 & LỖI 7) =================
     function doStep4Serve() {
       const c = getActiveCustomer();
       if (!c) { showToast("🍃 Chưa có khách nào để giao món!"); return; }
       if (!bowl.step1Done || !bowl.step2Done || !bowl.step3Done) { showToast("⚠️ Hãy hoàn thành đủ B1 -> B2 -> Trộn thau trước khi giao!"); return; }
 
-      if (bowl.tratac) {
-        if ((state.stock.tratac || 0) < 1) {
-          openOutOfStockModal([INGREDIENTS.find(x => x.id === "tratac")]);
-          return;
-        }
-        consumeStockFIFO("tratac", 1);
+      // Sửa Lỗi 3: Chỉ kiểm tra tồn kho Trà tắc ở đây, CHƯA trừ kho cho tới khi xác nhận đơn không bị lỗi
+      if (bowl.tratac && (state.stock.tratac || 0) < 1) {
+        openOutOfStockModal([INGREDIENTS.find(x => x.id === "tratac")]);
+        return;
       }
 
       document.getElementById("svg-layer-topping").classList.remove("hidden");
@@ -3245,7 +3291,8 @@
       const { min, max } = getSweetSpotBounds();
       const bagQty = c.bagQty || 1;
 
-      if (bowl.lockedBagQty && bowl.lockedBagQty !== bagQty) notes.push(`sai số lượng (${bagQty} bịch)`);
+      // Sửa Lỗi 7: Chỉ báo lỗi nếu số lượng trong thau ÍT HƠN số bịch khách cần (nếu thau có dư do khách trước bỏ đi thì vẫn giao tốt)
+      if (bowl.lockedBagQty && bowl.lockedBagQty < bagQty) notes.push(`thiếu số lượng (khách đặt ${bagQty} bịch, thau chỉ có ${bowl.lockedBagQty} bịch)`);
       if (bowl.selectedDish !== c.wantedDish) notes.push(`nhầm món (khách gọi ${DISH_MENU[c.wantedDish].name})`);
       if (bowl.rau !== c.wantedRau) notes.push(c.wantedRau ? "thiếu Rau răm" : "dư Rau răm");
       if (bowl.hanh !== c.wantedHanh) notes.push(c.wantedHanh ? "thiếu Hành phi" : "dư Hành phi");
@@ -3272,10 +3319,14 @@
         return;
       }
 
+      // Sửa Lỗi 3: Đơn đã hợp lệ 100%, lúc này mới trừ Trà Tắc khỏi kho FIFO
+      if (bowl.tratac) {
+        consumeStockFIFO("tratac", 1);
+      }
+
       let stars = 5;
       playSFX("cash");
 
-      // Kiểm tra rủi ro khi đang dùng lô Đồ Khô giá rẻ -30%
       let dryRiskNote = "";
       if ((state.activeMultiDayEffects?.cheapDryDays || 0) > 0 && Math.random() < 0.20) {
         stars = 4;
@@ -3289,12 +3340,11 @@
         if (c.isShipper) adjustViral(4);
       }
 
-      const usedQty = bowl.lockedBagQty || bagQty;
+      const usedQty = bagQty;
       let grossOrderPrice = getDishEffectivePrice(bowl.selectedDish) * usedQty;
       const traTacRev = (c.wantedTraTac && bowl.tratac) ? 7000 : 0;
       grossOrderPrice += traTacRev;
 
-      // MỤC 6: TÍNH PHÍ SÀN APP CHO ĐƠN SHIPPER
       let appFeeDeducted = 0;
       let tip = 0;
 
@@ -3316,7 +3366,6 @@
         if (state.nextCustomerTipBonus > 0) { tip += state.nextCustomerTipBonus; state.nextCustomerTipBonus = 0; }
       }
 
-      // Chi phí túi nilon, hộp đựng: 1.000đ/bịch
       const packagingCost = usedQty * 1000;
       state.todayCogsSpent += packagingCost;
       state.cumulativeCosts.cogs = (state.cumulativeCosts.cogs || 0) + packagingCost;
@@ -3372,7 +3421,6 @@
       autoSelectFirstAvailableSlot();
       renderSelectedOrderBubble(praiseHtml);
 
-      // MỤC 4: BIẾN CỐ XUẤT HIỆN ÍT LẠI (TỐI ĐA 1 LẦN/NGÀY VÀO GIỮA CA) & KHÔNG LẶP LẠI
       if (!state.dilemmaTriggeredToday && state.todaySold >= 5 && state.clockMinutes >= 16 * 60 && Math.random() < 0.35) {
         state.dilemmaTriggeredToday = true;
         setTimeout(() => triggerRandomDilemmaEvent(false), 500);
@@ -3380,7 +3428,7 @@
         if (state.clockMinutes >= 22 * 60) {
           setTimeout(() => checkAndTriggerClosingIfEmpty(), 650);
         } else {
-          setTimeout(() => { if (state.isStreetSelling) spawnCustomerIntoEmptySlot(); }, 500);
+          setTimeout(() => { if (state.isStreetSelling && !isAnyBlockingModalOpen()) spawnCustomerIntoEmptySlot(); }, 500);
         }
       }
       updateAllUI();
@@ -3412,8 +3460,7 @@
       const { min } = getSweetSpotBounds();
       if (!bowl.step1Done) doStep1Base(); else if (!bowl.step2Done) doStep2Sauce(); else if (bowl.mixProgress < min) doStep3Mix(); else doStep4Serve();
     }
-
-    // ================= 15. MÃ KHÓA KHÔI PHỤC CLOUD =================
+    // ================= 15. MÃ KHÓA KHÔI PHỤC CLOUD & LƯU BẢO MẬT (ĐÃ VÁ LỖI 9) =================
     function normalizeRecoveryCodeInput(raw) {
       const cleaned = String(raw || "").trim().toUpperCase().replace(/\s+/g, "");
       if (/^\d{6}$/.test(cleaned)) return `BT-${cleaned}`;
@@ -3535,6 +3582,7 @@
         state.shopName = cloudShop.shopName || state.shopName;
         state.shopKey = cloudShop.shopKey || targetShopKey || sanitizeShopKey(state.shopName);
         state.avatar = cloudShop.avatar || state.avatar || "👩‍🍳";
+        state.levelAtStartOfDay = state.level || 1;
         loginSelectedAvatar = state.avatar;
 
         await saveGameEverywhere();
@@ -3550,30 +3598,39 @@
       }
     }
 
+    // Sửa Lỗi 9: Tách nhánh /leaderboard chỉ chứa thông tin công khai (không lưu PIN hay fullState ở nhánh xếp hạng)
     async function saveGameEverywhere() {
       ensureRecoveryCode();
       saveToLocalOnly();
       if (!state.shopName) return;
       const key = state.shopKey || sanitizeShopKey(state.shopName);
       state.shopKey = key;
+      const publicSummary = {
+        shopKey: key,
+        shopName: state.shopName,
+        avatar: state.avatar,
+        money: state.money,
+        rating: state.rating || 5.0,
+        level: state.level,
+        totalSold: state.totalSold,
+        day: state.day,
+        updatedAt: Date.now()
+      };
       try {
         await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {
           method: "PUT", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            shopKey: key,
+            ...publicSummary,
             recoveryCode: state.recoveryCode,
-            shopName: state.shopName,
             pin: state.pin,
-            avatar: state.avatar,
-            money: state.money,
-            rating: state.rating || 5.0,
-            level: state.level,
-            totalSold: state.totalSold,
-            day: state.day,
-            updatedAt: Date.now(),
             fullState: state
           })
         }, 2500);
+
+        await fetchWithTimeout(`${FIREBASE_DB_URL}/leaderboard/${key}.json`, {
+          method: "PUT", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(publicSummary)
+        }, 2000);
 
         await fetchWithTimeout(`${FIREBASE_DB_URL}/recoveryCodes/${state.recoveryCode}.json`, {
           method: "PUT", headers: { "Content-Type": "application/json" },
@@ -3582,7 +3639,7 @@
       } catch (e) {}
     }
 
-    // ================= 16. DASHBOARD SỔ SÁCH & 3 BIỂU ĐỒ SVG (ĐÃ SỬA LỖI CÚ PHÁP) =================
+    // ================= 16. DASHBOARD SỔ SÁCH & 3 BIỂU ĐỒ SVG =================
     function renderLedgerTab() {
       const dur = Math.round(state.cartDurability || 100);
       const durText = document.getElementById("ledger-durability-text");
@@ -3730,7 +3787,7 @@
       }
     }
 
-    // ================= 17. MXH, BIẾN CỐ, THÀNH TỰU & HOÃN LÊN CẤP (MỤC 4) =================
+    // ================= 17. MXH, BIẾN CỐ, THÀNH TỰU & HOÃN LÊN CẤP (ĐÃ VÁ LỖI 4) =================
     function openReviewsModal() { renderReviewsModalList(); document.getElementById("modal-reviews").classList.remove("hidden"); }
     function closeReviewsModal() { document.getElementById("modal-reviews").classList.add("hidden"); }
 
@@ -3785,11 +3842,10 @@
 
     let activeDilemmaObj = null;
     function triggerRandomDilemmaEvent(manual = false) {
-      if (!manual && (!document.getElementById("modal-out-of-stock").classList.contains("hidden") || !document.getElementById("modal-dilemma").classList.contains("hidden"))) return;
+      if (!manual && isAnyBlockingModalOpen()) return;
       if (!Array.isArray(state.usedDilemmaIds)) state.usedDilemmaIds = [];
 
       let eligible = DILEMMA_EVENTS.filter(ev => (!ev.canTrigger || ev.canTrigger(state)) && !state.usedDilemmaIds.includes(ev.id));
-      // Nếu đã trải qua hết toàn bộ kho biến cố thì mới làm mới lại danh sách
       if (eligible.length === 0) {
         state.usedDilemmaIds = [];
         eligible = DILEMMA_EVENTS.filter(ev => !ev.canTrigger || ev.canTrigger(state));
@@ -3867,14 +3923,15 @@
       const el = document.getElementById("ditu-smart-tip");
       if (!el) return;
 
-      const unpurchased = getUnpurchasedEligibleDishes();
+      const unpurchased = getUnpurchasedEligibleDishes(false);
       if (unpurchased.length > 0) {
         const d = unpurchased[0];
         el.innerHTML = `🚨 <b>Cảnh báo mất khách:</b> Quán đã đạt Cấp ${state.level}, khách đang hỏi mua món <b>${d.name}</b>! Con vào mục <b>⬆️ Nâng cấp</b> mở khóa ngay kẻo khách bỏ đi nhé!`;
         return;
       }
 
-      const expTodayList = INGREDIENTS.filter(ing => getExpiringTodayInfo(ing.id).expTodayQty > 0);
+      const usedSet = getActiveUsedIngredientSet();
+      const expTodayList = INGREDIENTS.filter(ing => usedSet.has(ing.id) && getExpiringTodayInfo(ing.id).expTodayQty > 0);
       if (expTodayList.length > 0) {
         el.innerHTML = `⚠️ Trong kho có <b>${expTodayList.map(i => i.short).join(", ")}</b> sẽ hết hạn vào tối nay! Con nhớ ưu tiên bán hết hoặc nâng cấp <b>Thùng Đá</b> nhé!`;
         return;
@@ -3884,7 +3941,6 @@
       el.innerHTML = `Hôm nay là <b>${sched.dowName}</b> (${sched.tag}), sức mua khoảng <b>${sched.estBags} phần</b>. Con bấm nút <b>+Đủ ${sched.estBags} phần</b> ở mục Kho & Chợ để nhập vừa khít nhé!`;
     }
 
-    // MỤC 4: KHÔNG HIỆN POP-UP LÊN CẤP LÚC ĐANG BÁN NGOÀI ĐƯỜNG
     function addXP(amount) {
       state.xp += amount;
       let lObj = LEVEL_DATA.find(l => l.level === state.level);
@@ -3898,10 +3954,10 @@
       updateAllUI();
       if (leveledUp) {
         if (state.isStreetSelling) {
-          // Đang bán hàng: Chỉ lưu vào hàng đợi và báo nhỏ góc trên để không làm đứt mạch trộn bánh
           pendingLevelUpQueue.push(state.level);
           spawnFloatingFX(`🎉 LÊN CẤP ${state.level}!`);
         } else {
+          state.levelAtStartOfDay = state.level;
           showLevelUpModal(state.level);
         }
       }
@@ -3930,10 +3986,15 @@
         ? `🔥 Lưu ý: Hãy mở khóa ngay món mới trong mục <b>⬆️ Nâng cấp</b> để khách không bỏ đi vào ngày mai nhé!`
         : `🔥 Hãy tiếp tục nâng sao món ăn và trang trí xe để xưng bá Sài Gòn!`;
       modal.classList.remove("hidden");
+      updateAllUI();
     }
 
+    // Sửa Lỗi 4: Sau khi đóng bảng Lên Cấp, kiểm tra ngay xem két tiền có bị âm hoặc cạn vốn không để kích hoạt Vay Cứu Trợ
     function closeLevelUpModal() {
       document.getElementById("modal-level-up").classList.add("hidden");
+      if (state.money < 0 || (state.money < 15000 && (state.stock.banhtrang || 0) < 1)) {
+        checkBankruptcyOrRescueLoan();
+      }
     }
 
     function switchUpgradeSubTab(sub) {
@@ -3950,7 +4011,7 @@
       const alertBox = document.getElementById("upgrade-demand-alert");
       if (!container) return;
 
-      const unpurchased = getUnpurchasedEligibleDishes();
+      const unpurchased = getUnpurchasedEligibleDishes(false);
       if (alertBox) {
         if (unpurchased.length > 0) {
           alertBox.classList.remove("hidden");
@@ -3987,7 +4048,14 @@
       }
     }
 
-    function buyDishRecipe(id) { const d = DISH_MENU[id]; if (state.money < d.unlockCost) { showToast("❌ Chưa đủ tiền mở công thức!"); return; } state.money -= d.unlockCost; state.unlockedDishes.push(id); playSFX("cash"); updateAllUI(); saveGameEverywhere(); showToast(`🎉 Đã mở khóa món ${d.name}! Khách sẽ rất thích!`); }
+    function buyDishRecipe(id) {
+      const d = DISH_MENU[id];
+      if (state.money < d.unlockCost) { showToast("❌ Chưa đủ tiền mở công thức!"); return; }
+      state.money -= d.unlockCost;
+      if (!state.unlockedDishes.includes(id)) state.unlockedDishes.push(id);
+      playSFX("cash"); updateAllUI(); saveGameEverywhere();
+      showToast(`🎉 Đã mở khóa món ${d.name}! Khách sẽ rất thích!`);
+    }
     function upgradeDishStar(id) { const cost = getDishStarUpgradeCost(id); if (state.money < cost) { showToast("❌ Chưa đủ tiền nâng sao!"); return; } state.money -= cost; state.dishStars[id] = (state.dishStars[id] || 1) + 1; playSFX("cash"); updateAllUI(); saveGameEverywhere(); showToast("⭐ Nâng cấp bậc sao thành công!"); }
     function hireStaffMember(id) { const st = STAFF_CATALOG.find(x => x.id === id); if (state.money < st.hireCost) { showToast("❌ Chưa đủ tiền thuê nhân viên!"); return; } state.money -= st.hireCost; state.staff[id] = true; if (id === "mylan") state.prepDone = { sate: true, hanhphi: true, trungcut: true }; playSFX("cash"); updateAllUI(); saveGameEverywhere(); showToast(`🧑‍🍳 Đã thuê ${st.name}!`); }
     function buyEquipUpgrade(id) { const eq = EQUIP_UPGRADES.find(x => x.id === id), cost = getEquipCost(eq); if (state.money < cost) { showToast("❌ Chưa đủ tiền nâng cấp!"); return; } state.money -= cost; state.equipLevels[id] = (state.equipLevels[id] || 0) + 1; playSFX("cash"); updateAllUI(); saveGameEverywhere(); showToast("⚡ Nâng cấp đồ nghề thành công!"); }
@@ -4081,15 +4149,12 @@
       updateAllUI(); saveGameEverywhere(); showToast("🌅 Đã khởi nghiệp lại từ Ngày 1 với 350,0k!");
     }
 
-    // ================= 18. ĐỒNG HỒ CA BÁN HÀNG & CHỐT SỔ HỦY HÀNG HẾT HSD (MỤC 9) =================
+    // ================= 18. ĐỒNG HỒ CA BÁN HÀNG & CHỐT SỔ HỦY HÀNG HẾT HSD (ĐÃ VÁ LỖI 4 & 5) =================
     let closingTimeNotified = false;
 
     function checkAndTriggerClosingIfEmpty() {
       if (!state.isStreetSelling || state.clockMinutes < 22 * 60) return;
-      const anyModalOpen = !document.getElementById("modal-out-of-stock").classList.contains("hidden") ||
-                           !document.getElementById("modal-dilemma").classList.contains("hidden") ||
-                           !document.getElementById("modal-prep").classList.contains("hidden");
-      if (anyModalOpen) return;
+      if (isAnyBlockingModalOpen()) return;
 
       const remainingCustomers = customerSlots.filter(Boolean).length;
       if (remainingCustomers === 0) {
@@ -4098,11 +4163,12 @@
       }
     }
 
+    // Sửa Lỗi 5: Tạm dừng đồng hồ khi đang mở bất kỳ Pop-up nào (Đứt hàng, Biến cố, MXH...)
     function startDayClock() {
       if (clockTimer) clearInterval(clockTimer);
       clockTimer = setInterval(() => {
         if (!document.getElementById("login-screen").classList.contains("hidden")) return;
-        if (!state.isStreetSelling) return;
+        if (!state.isStreetSelling || isAnyBlockingModalOpen()) return;
 
         if (state.clockMinutes < 22 * 60) {
           state.clockMinutes = Math.min(22 * 60, state.clockMinutes + 3);
@@ -4129,7 +4195,6 @@
       }, 1350);
     }
 
-    // MỤC 9: CHỐT SỔ CUỐI NGÀY & HỦY TẤT CẢ MẶT HÀNG QUÁ HẠN SỬ DỤNG
     function endDaySummary() {
       if (slotPatienceTimer) clearInterval(slotPatienceTimer);
       if (slotSpawnerTimer) clearInterval(slotSpawnerTimer);
@@ -4149,7 +4214,6 @@
 
       const totalFixed = depCost + utilCost + rentCost + staffWages + progressiveTax + bankInstallment;
 
-      // Xử lý giảm 1 ngày Hạn Sử Dụng cho toàn bộ 9 mặt hàng trong kho (Mục 9)
       ensureValidStockBatches();
       const saveRate = Math.min(0.8, (state.equipLevels.tool_cooler || 0) * 0.16);
       let spoiledTotalVal = 0;
@@ -4163,7 +4227,6 @@
         list.forEach(b => {
           const newDays = (b.daysLeft || 1) - 1;
           if (newDays <= 0) {
-            // Quá hạn sử dụng -> Phải hủy bỏ (Thùng đá giúp cứu lại một phần nhỏ nếu là đồ tươi)
             const savedQty = (ing.type === "fresh" && saveRate > 0) ? Math.floor(b.qty * saveRate) : 0;
             const lostQty = b.qty - savedQty;
             expiredQty += lostQty;
@@ -4221,11 +4284,11 @@
       state.day += 1;
       state.clockMinutes = 13 * 60;
       state.isStreetSelling = false;
+      state.levelAtStartOfDay = state.level; // Cập nhật cấp độ đầu ngày mới
       state.todaySold = 0; state.todayRevenue = 0; state.todayCogsSpent = 0; state.todayAppFees = 0;
       state.featuredSoldToday = 0; state.featuredRewardClaimed = false;
       state.dilemmaTriggeredToday = false;
 
-      // Giảm số ngày hiệu lực của các Biến cố nhiều ngày
       if (state.activeMultiDayEffects) {
         if (state.activeMultiDayEffects.cheapDryDays > 0) state.activeMultiDayEffects.cheapDryDays--;
         if (state.activeMultiDayEffects.appPartnerDays > 0) state.activeMultiDayEffects.appPartnerDays--;
@@ -4240,15 +4303,18 @@
       if (state.staff.mylan) state.totalPrepDays = (state.totalPrepDays || 0) + 1;
 
       switchPrepSubTab("kho");
-      updateAllUI(); saveGameEverywhere();
 
-      // MỤC 4: HIỂN THỊ BẢNG CHÚC MỪNG LÊN CẤP ĐÃ HOÃN TRONG CA BÁN HÀNG
       if (pendingLevelUpQueue.length > 0) {
         const highestNewLvl = Math.max(...pendingLevelUpQueue);
         pendingLevelUpQueue = [];
         showLevelUpModal(highestNewLvl);
-        return;
+        updateAllUI();
+        saveGameEverywhere();
+        return; // Khi đóng modal Lên Cấp, closeLevelUpModal() sẽ tự kiểm tra tiếp Phá sản / Vay cứu trợ
       }
+
+      updateAllUI();
+      saveGameEverywhere();
 
       if (state.money < 0 || (state.money < 15000 && (state.stock.banhtrang || 0) < 1)) {
         checkBankruptcyOrRescueLoan();
@@ -4258,7 +4324,6 @@
       }
     }
 
-    // MỤC 3: BẢNG XẾP HẠNG CHỈ HIỆN NGƯỜI CHƠI THẬT
     function renderLeaderboardTab() {
       const container = document.getElementById("leaderboard-container"); if (!container) return;
       const mergedMap = new Map();
