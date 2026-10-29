@@ -1686,51 +1686,80 @@
 
     function saveToLocalOnly() { try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
 
-    // Sửa Lỗi 9: Ưu tiên tải nhánh /leaderboard nhẹ và bảo mật (không chứa mã PIN), có fallback tương thích dữ liệu cũ
+    // BẢN SỬA LỖI MẤT NGƯỜI CHƠI CŨ: Tải gộp cả 2 nhánh /leaderboard và /shops + Tăng thời gian chờ mạng lên 6500ms
     async function fetchCloudLeaderboard(showFeedback = false) {
       const badge = document.getElementById("login-cloud-badge");
       try {
-        let data = null;
-        const resLb = await fetchWithTimeout(`${FIREBASE_DB_URL}/leaderboard.json`, {}, 2200);
-        if (resLb.ok) data = await resLb.json();
+        // Tải song song cả nhánh mới (/leaderboard) và nhánh cũ (/shops) để không bỏ sót bất kỳ người chơi nào
+        const [resLb, resShops] = await Promise.allSettled([
+          fetchWithTimeout(`${FIREBASE_DB_URL}/leaderboard.json`, {}, 6500),
+          fetchWithTimeout(`${FIREBASE_DB_URL}/shops.json`, {}, 6500)
+        ]);
 
-        // Tương thích ngược nếu nhánh /leaderboard chưa có hết các quán cũ
-        if (!data || Object.keys(data).length === 0) {
-          const resShops = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops.json`, {}, 2500);
-          if (resShops.ok) data = await resShops.json();
+        let lbData = null, shopsData = null;
+        if (resLb.status === "fulfilled" && resLb.value.ok) {
+          lbData = await resLb.value.json();
+        }
+        if (resShops.status === "fulfilled" && resShops.value.ok) {
+          shopsData = await resShops.value.json();
         }
 
-        const list = [];
-        if (data && typeof data === "object") {
-          Object.values(data).forEach(item => {
-            if (item && item.shopName && !String(item.shopKey || "").startsWith("npc_")) {
-              list.push({
-                shopKey: item.shopKey || sanitizeShopKey(item.shopName),
-                shopName: item.shopName,
-                avatar: item.avatar || "👩‍🍳",
-                money: Number(item.money) || 0,
-                rating: Number(item.rating) || 5.0,
-                level: Number(item.level) || 1,
-                totalSold: Number(item.totalSold) || 0,
-                day: Number(item.day) || 1
-              });
-            }
-          });
+        if (!lbData && !shopsData) throw new Error("Cloud Offline");
+
+        const mergedShopsMap = new Map();
+
+        // Hàm phụ giúp chuẩn hóa và gộp dữ liệu quán (ưu tiên bản lưu mới hơn hoặc nhiều tiền/bịch bán hơn)
+        const addOrUpdateShop = (item) => {
+          if (!item || !item.shopName) return;
+          const sKey = item.shopKey || sanitizeShopKey(item.shopName);
+          if (!sKey || String(sKey).startsWith("npc_")) return;
+
+          // Nếu dữ liệu nằm trong fullState (ở các bản cũ) thì lấy ra
+          const fs = item.fullState || {};
+          const candidate = {
+            shopKey: sKey,
+            shopName: item.shopName || fs.shopName,
+            avatar: item.avatar || fs.avatar || "👩‍🍳",
+            money: Number(item.money !== undefined ? item.money : fs.money) || 0,
+            rating: Number(item.rating !== undefined ? item.rating : fs.rating) || 5.0,
+            level: Number(item.level !== undefined ? item.level : fs.level) || 1,
+            totalSold: Number(item.totalSold !== undefined ? item.totalSold : fs.totalSold) || 0,
+            day: Number(item.day !== undefined ? item.day : fs.day) || 1,
+            updatedAt: Number(item.updatedAt || 0)
+          };
+
+          const existing = mergedShopsMap.get(sKey);
+          if (!existing || candidate.updatedAt >= existing.updatedAt || candidate.totalSold > existing.totalSold) {
+            mergedShopsMap.set(sKey, candidate);
+          }
+        };
+
+        // 1. Đọc toàn bộ người chơi từ nhánh /shops cũ trước
+        if (shopsData && typeof shopsData === "object") {
+          Object.values(shopsData).forEach(addOrUpdateShop);
         }
-        cloudLeaderboardCache = list;
+
+        // 2. Đọc đè dữ liệu mới nhất từ nhánh /leaderboard lên
+        if (lbData && typeof lbData === "object") {
+          Object.values(lbData).forEach(addOrUpdateShop);
+        }
+
+        cloudLeaderboardCache = Array.from(mergedShopsMap.values());
+
         if (badge) {
-          badge.textContent = `🟢 Online (${list.length} quán thật)`;
+          badge.textContent = `🟢 Online (${cloudLeaderboardCache.length} quán thật)`;
           badge.className = "text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full";
         }
         renderLoginTop3Preview();
         renderLeaderboardTab();
-        if (showFeedback) showToast("🏆 Đã cập nhật Bảng Xếp Hạng người chơi thật!");
+        if (showFeedback) showToast(`🏆 Đã tải đầy đủ ${cloudLeaderboardCache.length} quán trên Bảng Xếp Hạng!`);
       } catch (e) {
         if (badge) {
           badge.textContent = "🟠 Chế độ Offline";
           badge.className = "text-[10px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full";
         }
         renderLeaderboardTab();
+        if (showFeedback) showToast("⚠️ Mạng đang yếu, tạm thời hiển thị dữ liệu trên máy!");
       }
     }
 
