@@ -200,9 +200,9 @@
           <div class="flex items-center gap-2.5 min-w-0">
             <div id="quick-resume-avatar" class="w-11 h-11 rounded-xl bg-white border border-emerald-300 flex items-center justify-center text-2xl overflow-hidden shrink-0">👩‍🍳</div>
             <div class="truncate">
-              <div class="text-[11px] font-bold text-emerald-700 uppercase">Quán đang lưu trên máy:</div>
+              <div id="quick-resume-label" class="text-[11px] font-bold text-emerald-700 uppercase truncate">Quán đang lưu:</div>
               <div id="quick-resume-name" class="text-sm font-black text-emerald-950 truncate">Bánh Tráng Dì Tư</div>
-              <div id="quick-resume-stats" class="text-xs font-semibold text-emerald-800">Cấp 1 • 5.0⭐ • 350.000đ</div>
+              <div id="quick-resume-stats" class="text-xs font-semibold text-emerald-800 truncate">Cấp 1 • 5.0⭐ • 350,0k</div>
             </div>
           </div>
           <button onclick="quickResumeGame()" class="soft-btn shrink-0 px-3.5 py-2 rounded-xl bg-emerald-600 text-white font-extrabold text-xs shadow-md">
@@ -340,7 +340,7 @@
         <div class="flex-1 min-w-0">
           <div class="text-[10px] font-black uppercase tracking-wider text-orange-800">💡 Lời khuyên thực chiến của Dì Tư</div>
           <div id="ditu-smart-tip" class="text-xs font-bold text-amber-950 leading-snug mt-0.5">
-            Con nhớ canh theo Lịch Tuần để nhập lượng đồ tươi vừa đủ bán trong ngày, tránh để quá hạn sử dụng bị hủy mất tiền nhé!
+            Nhớ coi Lịch Tuần mà lấy đồ tươi vừa đủ bán trong ngày thôi nghen con, lấy dư qua đêm hư hết uổng tiền!
           </div>
         </div>
       </div>
@@ -353,7 +353,7 @@
             <div id="prep-forecast-title" class="font-black text-sm text-amber-950">📅 Thứ Hai (Đầu tuần vắng khách)</div>
             <span id="prep-demand-badge" class="px-2 py-0.5 rounded-full bg-amber-600 text-white font-black text-[10px]">Sức mua: ~14 phần</span>
           </div>
-          <div id="prep-forecast-desc" class="text-xs text-amber-800 font-medium mt-0.5">Khách đi học, đi làm đầu tuần rải rác. Chỉ nên nhập khoảng 12 - 15 phần đồ tươi!</div>
+          <div id="prep-forecast-desc" class="text-xs text-amber-800 font-medium mt-0.5">Đầu tuần khách còn vắng, lấy tầm 14 phần đồ tươi là vừa đẹp!</div>
         </div>
       </div>
 
@@ -388,7 +388,7 @@
           <span id="prep-unreplied-badge" class="hidden px-1.5 py-0.2 rounded-full bg-red-600 text-white font-black text-[10px]">0</span>
         </button>
         <button onclick="switchPrepSubTab('ledger')" id="prep-tab-ledger" class="soft-btn py-2.5 px-2 rounded-2xl font-bold text-xs flex items-center justify-center gap-1.5 bg-white border-2 border-amber-100 text-amber-950">
-          <span>📊</span><span>Biểu đồ Sổ</span>
+          <span>📊</span><span>Sổ Thu Chi</span>
         </button>
       </div>
 
@@ -398,8 +398,8 @@
           <div class="flex items-center gap-2.5">
             <div class="w-11 h-11 rounded-2xl bg-amber-200 border border-amber-400 flex items-center justify-center text-2xl shrink-0">📦</div>
             <div>
-              <div id="wholesale-guide-title" class="font-black text-xs sm:text-sm text-amber-950">Bảng Cân Đo Lượng Hàng Cần Mua Hôm Nay</div>
-              <div id="wholesale-guide-sub" class="text-[11px] text-amber-800">Chỉ gợi ý mua nguyên liệu thuộc các món quán đã mở khóa!</div>
+              <div id="wholesale-guide-title" class="font-black text-xs sm:text-sm text-amber-950">Gợi Ý Lấy Hàng Hôm Nay</div>
+              <div id="wholesale-guide-sub" class="text-[11px] text-amber-800">Chỉ tính nguyên liệu của những món quán đang bán.</div>
             </div>
           </div>
           <button id="btn-suggested-order" onclick="fillSuggestedOrder()" class="soft-btn shrink-0 px-3 py-2 rounded-xl bg-amber-600 text-white font-black text-xs shadow">
@@ -422,8 +422,8 @@
 
         <div class="cream-card p-3 space-y-2.5">
           <div class="flex items-center justify-between">
-            <span class="font-black text-xs sm:text-sm text-amber-950">🧺 Kho Nguyên Liệu & Hạn Sử Dụng (FIFO):</span>
-            <span id="market-Order-total" class="font-black text-sm text-rose-600">0đ (0 phần)</span>
+            <span class="font-black text-xs sm:text-sm text-amber-950">🧺 Kho Nguyên Liệu (Dùng đồ cũ trước):</span>
+            <span id="market-order-total" class="font-black text-sm text-rose-600">0đ (0 phần)</span>
           </div>
           <div id="market-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
           <div class="flex justify-end gap-2 pt-1">
@@ -451,7 +451,7 @@
         <div class="p-3 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 flex items-center justify-between gap-2">
           <div class="text-xs">
             <div class="font-black text-blue-950">🛵 Đơn Shipper App (Phí chiết khấu sàn: <span id="app-comm-rate-label" class="text-red-600">20%</span>)</div>
-            <div class="text-[11px] text-blue-800 mt-0.5">Bật phụ thu +10% giá trên App giúp quán bù lại một nửa phí sàn, nhưng Shipper sẽ hối thúc nhanh hơn!</div>
+            <div class="text-[11px] text-blue-800 mt-0.5">Tăng 10% giá trên App để bù lại nửa phí sàn, nhưng Shipper sẽ hối đơn gấp hơn!</div>
           </div>
           <button id="btn-toggle-app-markup" onclick="toggleAppPriceMarkup()" class="soft-btn shrink-0 px-3 py-2 rounded-xl font-black text-xs bg-white border-2 border-blue-400 text-blue-900 shadow-sm">
             Phụ thu App: TẮT
@@ -473,13 +473,13 @@
         </div>
         <div class="grid grid-cols-3 gap-2.5">
           <button onclick="openPrepModal('sate')" id="prep-btn-sate" class="soft-btn p-3 rounded-2xl bg-white border-2 border-amber-300 flex flex-col items-center text-center gap-1">
-            <span class="text-2xl">🌶️</span><span class="font-extrabold text-xs">Thắng Sa Tế</span><span id="prep-status-sate" class="text-[11px] font-bold text-orange-600">Chưa làm</span>
+            <span class="text-2xl">🌶️</span><span class="font-extrabold text-xs">Thắng Sa Tế</span><span id="prep-status-sate" class="text-[11px] font-bold text-orange-600">Làm ngay</span>
           </button>
           <button onclick="openPrepModal('hanhphi')" id="prep-btn-hanhphi" class="soft-btn p-3 rounded-2xl bg-white border-2 border-amber-300 flex flex-col items-center text-center gap-1">
-            <span class="text-2xl">🧅</span><span class="font-extrabold text-xs">Phi Hành Giòn</span><span id="prep-status-hanhphi" class="text-[11px] font-bold text-orange-600">Chưa làm</span>
+            <span class="text-2xl">🧅</span><span class="font-extrabold text-xs">Phi Hành Giòn</span><span id="prep-status-hanhphi" class="text-[11px] font-bold text-orange-600">Làm ngay</span>
           </button>
           <button onclick="openPrepModal('trungcut')" id="prep-btn-trungcut" class="soft-btn p-3 rounded-2xl bg-white border-2 border-amber-300 flex flex-col items-center text-center gap-1">
-            <span class="text-2xl">🥚</span><span class="font-extrabold text-xs">Lột Trứng Cút</span><span id="prep-status-trungcut" class="text-[11px] font-bold text-orange-600">Chưa làm</span>
+            <span class="text-2xl">🥚</span><span class="font-extrabold text-xs">Lột Trứng Cút</span><span id="prep-status-trungcut" class="text-[11px] font-bold text-orange-600">Làm ngay</span>
           </button>
         </div>
       </div>
@@ -496,12 +496,12 @@
         <div id="upgrade-sub-content" class="space-y-2"></div>
       </div>
 
-      <!-- Sub-panel D: BẢNG DASHBOARD SỔ SÁCH 3 BIỂU ĐỒ SVG -->
+      <!-- Sub-panel D: BẢNG SỔ TAY THU CHI & LỜI LỖ -->
       <div id="prep-panel-ledger" class="hidden cream-card p-3.5 space-y-3">
         <div class="flex items-center justify-between border-b border-amber-200 pb-2">
           <div>
-            <h3 class="font-black text-sm text-amber-950">📊 Dashboard Tài Chính & 3 Biểu Đồ Kinh Doanh</h3>
-            <p class="text-[11px] text-amber-800">Phân tích Doanh thu – Chi phí – Phí sàn App & Hủy hàng hết HSD</p>
+            <h3 class="font-black text-sm text-amber-950">📊 Sổ Tay Thu Chi & Lời Lỗ</h3>
+            <p class="text-[11px] text-amber-800">Theo dõi tiền bán bánh, tiền đi chợ, phí App & hàng hư quá hạn</p>
           </div>
         </div>
 
@@ -521,7 +521,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <div class="p-3 rounded-2xl bg-white border border-amber-200 flex flex-col items-center">
-            <div class="font-black text-xs text-amber-950 mb-1">🍩 Tỷ Lệ Cơ Cấu Chi Phí</div>
+            <div class="font-black text-xs text-amber-950 mb-1">🍩 Các Khoản Chi Tiêu</div>
             <div id="svg-donut-costs" class="w-full flex items-center justify-center gap-2"></div>
           </div>
           <div class="p-3 rounded-2xl bg-white border border-amber-200 flex flex-col items-center">
@@ -564,7 +564,7 @@
           Mở cửa ngày 1 (Thứ Hai)
         </button>
         <div id="home-fixed-cost-footer" class="text-[11px] font-bold text-amber-900/75 mt-1.5">
-          Khấu hao & Điện gas 22k, vỉa hè 0k, lương nhân viên 0k mỗi ngày
+          Điện đèn & Hao mòn xe 22k, vỉa hè 0k, lương phụ bếp 0k mỗi ngày
         </div>
       </div>
     </div> <!-- Đóng #screen-home-prep -->
@@ -598,7 +598,7 @@
         <div id="bulk-rush-banner" class="hidden mx-3 mt-1.5 p-2 rounded-xl bg-gradient-to-r from-rose-700 via-red-600 to-orange-600 text-white border-2 border-yellow-300 flex items-center justify-between shadow-xl relative z-20">
           <div>
             <div id="bulk-rush-title" class="font-black text-xs uppercase text-yellow-200">🏢 ĐƠN SỈ QUẬN 1: TRỘN GẤP 4 PHẦN!</div>
-            <div id="bulk-rush-progress" class="text-[11px] font-bold">Đã giao: 0/4 phần • Thưởng nóng: +35.000đ</div>
+            <div id="bulk-rush-progress" class="text-[11px] font-bold">Đã giao: 0/4 phần • Thưởng nóng: +40.000đ</div>
           </div>
           <div id="bulk-rush-timer" class="px-2.5 py-1 rounded-xl bg-yellow-300 text-red-950 font-black text-sm shadow">25s</div>
         </div>
@@ -651,7 +651,7 @@
         <div id="order-bubble-icon" class="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0 p-1"></div>
         <div class="flex-1 min-w-0">
           <div id="order-bubble-text" class="text-xs font-bold text-amber-950 leading-snug">
-            Đang đợi thực khách và Shipper ghé xe...
+            Đang đợi khách với Shipper ghé xe...
           </div>
           <div class="w-full h-1.5 bg-amber-100 rounded-full overflow-hidden mt-1">
             <div id="order-bubble-patience-bar" class="h-full bg-amber-500 transition-all duration-300" style="width: 100%"></div>
@@ -690,7 +690,7 @@
               <span class="text-sm">🧤</span>
               <span id="step-check-3" class="text-[9px] font-black text-emerald-700">0%</span>
             </div>
-            <div class="font-black text-[10px] text-amber-950 leading-tight">3. Trộn thau</div>
+            <div class="font-black text-[10px] text-amber-950 leading-tight">3. Trộn đều</div>
           </button>
         </div>
 
@@ -762,7 +762,7 @@
             </svg>
 
             <span id="bowl-instruction" class="text-[10px] font-black text-amber-950 bg-white/95 px-2.5 py-0.5 rounded-full border border-slate-300 text-center">
-              🧤 Trộn thau / Bấm B1
+              🧤 Chạm thau làm tiếp
             </span>
 
             <div class="w-full mt-0.5">
@@ -849,7 +849,7 @@
     </div>
   </div>
 
-  <!-- 3. POP-UP ĐỨT HÀNG GIỮA CA (ĐÃ THÊM NÚT ĐÓNG TẠM ĐỂ SỬA LỖI 6) -->
+  <!-- 3. POP-UP ĐỨT HÀNG GIỮA CA -->
   <div id="modal-out-of-stock" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md cream-card p-5 border-4 border-red-500 shadow-2xl space-y-3">
       <div class="flex items-center justify-between">
@@ -866,20 +866,20 @@
         <button onclick="handleOosOption1SelfBuy(6)" class="soft-btn w-full p-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-black text-left flex justify-between"><span>🛵 1. Tự chạy ra Tạp Hóa mua lẻ 6 phần</span><span id="oos-cost-self-5">-0đ</span></button>
         <button onclick="handleOosOption2StaffBuy()" id="oos-btn-staff" class="soft-btn w-full p-2.5 rounded-xl bg-emerald-600 text-white font-black text-left flex justify-between"><span id="oos-staff-label">👦 2. Sai Nhân Viên đi mua 10 phần</span><span id="oos-cost-staff">-0đ</span></button>
         <button onclick="handleOosOption3Apologize()" class="soft-btn w-full p-2.5 rounded-xl bg-gray-200 text-gray-900 font-bold text-left flex justify-between"><span>🙇 3. Xin lỗi khách đơn này & hẹn hôm sau</span><span class="text-red-700">-0.10⭐</span></button>
-        <button onclick="handleOosOption4CloseEarly()" class="soft-btn w-full p-2.5 rounded-xl bg-amber-100 border border-amber-400 text-amber-950 font-black text-left flex justify-between"><span>🪧 4. Treo bảng "Bán Đắt Cháy Hàng" & Dọn xe nghỉ sớm</span><span class="text-emerald-700">Chốt sổ</span></button>
+        <button onclick="handleOosOption4CloseEarly()" class="soft-btn w-full p-2.5 rounded-xl bg-amber-100 border border-amber-400 text-amber-950 font-black text-left flex justify-between"><span>🪧 4. Treo bảng "Cháy Hàng" & Dọn xe nghỉ sớm</span><span class="text-emerald-700">Chốt sổ</span></button>
       </div>
     </div>
   </div>
 
-  <!-- 4. POP-UP BIẾN CỐ SÂU RỘNG -->
+  <!-- 4. POP-UP CHUYỆN NGOÀI PHỐ (BIẾN CỐ) -->
   <div id="modal-dilemma" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md cream-card p-5 border-4 border-orange-500 space-y-3">
       <div class="flex items-center gap-2.5">
         <div id="dilemma-icon" class="w-12 h-12 rounded-2xl bg-amber-100 border border-amber-400 flex items-center justify-center text-3xl shrink-0">🎭</div>
         <div>
-          <span id="dilemma-category" class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-orange-600 text-white">Biến cố chiến lược</span>
-          <h3 id="dilemma-title" class="text-sm font-black text-amber-950 mt-0.5">Sự Cố Tại Xe Bánh Tráng!</h3>
-          <div id="dilemma-speaker" class="text-xs font-bold text-orange-800">Thực khách Sài Gòn</div>
+          <span id="dilemma-category" class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-orange-600 text-white">Chuyện Ngoài Phố</span>
+          <h3 id="dilemma-title" class="text-sm font-black text-amber-950 mt-0.5">Chuyện Bất Ngờ Tại Xe Bánh Tráng!</h3>
+          <div id="dilemma-speaker" class="text-xs font-bold text-orange-800">Khách quen Sài Gòn</div>
         </div>
       </div>
       <p id="dilemma-desc" class="text-xs text-amber-950 bg-amber-50 p-3 rounded-xl border italic leading-relaxed"></p>
@@ -958,7 +958,7 @@
     </div>
   </div>
 
-  <!-- 10. POP-UP THĂNG CẤP (CHỈ HIỆN SAU KHI CHỐT SỔ XONG) -->
+  <!-- 10. POP-UP THĂNG CẤP -->
   <div id="modal-level-up" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-sm cream-card p-5 border-4 border-amber-400 text-center space-y-3 shadow-2xl">
       <div class="text-5xl animate-bounce">🎉</div>
@@ -1182,13 +1182,13 @@
 
     // ================= 3. HỆ THỐNG LỊCH TUẦN, NGÀY LỄ & DỰ BÁO ĐỊNH LƯỢNG =================
     const WEEKLY_SCHEDULE = [
-      { dow: 1, name: "Thứ Hai", tag: "Đầu tuần vắng khách", estBags: 14, traTacChance: 0.35, spawnMs: 5600, desc: "Đầu tuần học sinh & văn phòng bận rộn, khách ghé thư thả. Chỉ nên nhập đủ ~14 phần đồ tươi!" },
-      { dow: 2, name: "Thứ Ba", tag: "Ngày thường êm ả", estBags: 15, traTacChance: 0.38, spawnMs: 5300, desc: "Lượng khách ổn định mức vừa phải. Nhập khoảng 15 phần để tránh tồn nguyên liệu ngắn hạn." },
-      { dow: 3, name: "Thứ Tư", tag: "Giữa tuần tan tầm", estBags: 17, traTacChance: 0.45, spawnMs: 4900, desc: "Giữa tuần học sinh tan học hay ghé ăn vặt. Gợi ý chuẩn bị khoảng 17 phần bánh." },
-      { dow: 4, name: "Thứ Năm", tag: "Đơn App tăng tốc", estBags: 20, traTacChance: 0.48, spawnMs: 4400, desc: "Dân văn phòng đặt đơn qua App Shipper nhiều hơn. Dự kiến tiêu thụ khoảng 20 phần!" },
-      { dow: 5, name: "Thứ Sáu", tag: "Tối Thứ Sáu dạo phố", estBags: 25, traTacChance: 0.55, spawnMs: 3800, desc: "Bắt đầu kỳ nghỉ cuối tuần, khách đi chơi tối đông đúc! Nên chuẩn bị 25 phần nguyên liệu." },
-      { dow: 6, name: "Thứ Bảy", tag: "Cuối tuần bùng nổ", estBags: 32, traTacChance: 0.65, spawnMs: 3200, vipBoost: 0.15, desc: "Đỉnh điểm cuối tuần! Khách VIP, các cặp đôi & Shipper ghé dồn dập. Cần chuẩn bị ~32 phần!" },
-      { dow: 7, name: "Chủ Nhật", tag: "Chủ Nhật xả hơi", estBags: 28, traTacChance: 0.60, spawnMs: 3500, vipBoost: 0.12, desc: "Chủ Nhật gia đình và giới trẻ đi dạo nhiều, đơn gom 2-3 bịch xuất hiện thường xuyên!" }
+      { dow: 1, name: "Thứ Hai", tag: "Đầu tuần vắng khách", estBags: 14, traTacChance: 0.35, spawnMs: 5600, desc: "Đầu tuần khách còn vắng, lấy tầm 14 phần đồ tươi là vừa đẹp!" },
+      { dow: 2, name: "Thứ Ba", tag: "Ngày thường êm ả", estBags: 15, traTacChance: 0.38, spawnMs: 5300, desc: "Khách ghé đều đều, lấy khoảng 15 phần để không bị tồn đồ tươi." },
+      { dow: 3, name: "Thứ Tư", tag: "Giữa tuần tan tầm", estBags: 17, traTacChance: 0.45, spawnMs: 4900, desc: "Giữa tuần học sinh tan trường ghé ăn vặt nhiều, nên chuẩn bị tầm 17 phần." },
+      { dow: 4, name: "Thứ Năm", tag: "Đơn App tăng tốc", estBags: 20, traTacChance: 0.48, spawnMs: 4400, desc: "Dân văn phòng đặt App nhiều hơn, chuẩn bị khoảng 20 phần nghen!" },
+      { dow: 5, name: "Thứ Sáu", tag: "Tối Thứ Sáu dạo phố", estBags: 25, traTacChance: 0.55, spawnMs: 3800, desc: "Tối Thứ Sáu khách đi chơi đông, nhớ lấy đủ 25 phần nguyên liệu!" },
+      { dow: 6, name: "Thứ Bảy", tag: "Cuối tuần bùng nổ", estBags: 32, traTacChance: 0.65, spawnMs: 3200, vipBoost: 0.15, desc: "Cuối tuần khách VIP với Shipper ghé dồn dập! Lấy sẵn 32 phần kẻo đứt hàng!" },
+      { dow: 7, name: "Chủ Nhật", tag: "Chủ Nhật xả hơi", estBags: 28, traTacChance: 0.60, spawnMs: 3500, vipBoost: 0.12, desc: "Chủ Nhật khách hay mua một lần 2-3 bịch, chuẩn bị tầm 28 phần nha!" }
     ];
 
     const SPECIAL_HOLIDAYS = {
@@ -1266,7 +1266,7 @@
       { id: "beti", name: "Phụ Bếp Bé Tí", avatar: "👦", reqLevel: 6, hireCost: 120000, dailyWage: 25000, role: "Tự động làm Bước 1 (Cắt Bánh & Xoài) & chạy đi mua hàng khi đứt kho!" },
       { id: "mylan", name: "Chị Phụ Việc Mỹ Lan", avatar: "👧", reqLevel: 12, hireCost: 240000, dailyWage: 40000, role: "Mỗi sáng tự động xong 3/3 món Sơ Chế & tự làm Bước 2 (Vắt tắc, Xịt sốt)!" },
       { id: "tunghia", name: "Chú Bảo Vệ Tư Nghĩa", avatar: "👮‍♂️", reqLevel: 18, hireCost: 350000, dailyWage: 35000, role: "Trông xe & giữ trật tự, giúp tăng +25% kiên nhẫn cho cả 4 ô khách!" },
-      { id: "anhba", name: "Nghệ Nhân Anh Ba", avatar: "🧑‍🍳", reqLevel: 24, hireCost: 500000, dailyWage: 55000, role: "Bậc thầy trộn thau: Tự động làm Bước 3 dừng chuẩn xác 100% giữa Vùng Xanh!" }
+      { id: "anhba", name: "Nghệ Nhân Anh Ba", avatar: "🧑‍🍳", reqLevel: 24, hireCost: 500000, dailyWage: 55000, role: "Bậc thầy trộn bánh: Tự động làm Bước 3 dừng chuẩn xác 100% giữa Vùng Xanh!" }
     ];
 
     const EQUIP_UPGRADES = [
@@ -1295,7 +1295,7 @@
       { id: "ach_money2m", title: "💼 Triệu Phú Vỉa Hè", desc: "Cán mốc tài sản tiền mặt 2.000.000đ", rewardMoney: 50000, rewardXp: 100, check: (s) => s.money >= 2000000 },
       { id: "ach_staff3", title: "🏢 Ông/Bà Chủ Đích Thực", desc: "Thuê đủ cả 4 nhân viên (Bé Tí, Mỹ Lan, Tư Nghĩa, Anh Ba)", rewardMoney: 45000, rewardXp: 90, check: (s) => s.staff.beti && s.staff.mylan && s.staff.tunghia && s.staff.anhba },
       { id: "ach_lic3", title: "📜 Chuẩn Chỉnh Pháp Lý", desc: "Sở hữu đủ 3 Giấy Phép (VSATTP, Vỉa hè, Thương hiệu)", rewardMoney: 50000, rewardXp: 110, check: (s) => s.licenses.lic_vsattp && s.licenses.lic_sidewalk && s.licenses.lic_brand },
-      { id: "ach_dilemma8", title: "🌧️ Vượt Bão Đêm Mưa", desc: "Xử lý êm đẹp 6 tình huống Biến Cố Chiến Lược", rewardMoney: 25000, rewardXp: 60, check: (s) => (s.resolvedDilemmasCount || 0) >= 6 },
+      { id: "ach_dilemma8", title: "🌧️ Vượt Bão Đêm Mưa", desc: "Xử lý êm đẹp 6 tình huống Chuyện Ngoài Phố", rewardMoney: 25000, rewardXp: 60, check: (s) => (s.resolvedDilemmasCount || 0) >= 6 },
       { id: "ach_phoenix", title: "🦅 Phượng Hoàng Tái Sinh", desc: "Từng vay vốn Ngân Hàng và đã tất toán trả sạch hết nợ", rewardMoney: 40000, rewardXp: 90, check: (s) => Boolean(s.hasRepaidAllDebt) },
       { id: "ach_legend30", title: "🏆 Huyền Thoại 30 Năm", desc: "Đạt Cấp độ 30 & giữ vững đánh giá 5.0 ⭐", rewardMoney: 100000, rewardXp: 200, check: (s) => s.level >= 30 && (s.rating || 5.0) >= 5.0 }
     ];
@@ -1307,8 +1307,7 @@
       { id: 4, title: "Chương 4: Huyền Thoại Vua Bánh Tráng", story: "Sau bao ngày thức dậy từ sớm thắng sa tế, phi hành giòn, xe bánh tráng tủ kính của con đã trở thành huyền thoại Sài Gòn!", goalDesc: "Đạt Cấp 20 và bán 100 phần bánh", check: (s) => s.level >= 20 && s.totalSold >= 100, reward: 100000 }
     ];
 
-    // ================= 5. TRẠNG THÁI GAME V6 (ĐÃ VÁ LỖI 1 & LỖI 2) =================
-    // Sửa Lỗi 2: Khởi đầu Cấp 1 chỉ cấp sẵn nguyên liệu của món Trộn Thập Cẩm + Trà Tắc (sotbo & tepmo = 0 để không bị thối oan)
+    // ================= 5. TRẠNG THÁI GAME V6 =================
     const INITIAL_STARTER_STOCK = {
       banhtrang: 8, xoai: 8, muoitom: 8, sotbo: 0, dauphong: 8, khobo: 8, tepmo: 0, trungcut: 8, tratac: 8
     };
@@ -1327,7 +1326,7 @@
         shopKey: "", recoveryCode: "", shopName: "", pin: "", avatar: "👩‍🍳",
         money: 350000,
         rating: 5.0, reputation: 100,
-        level: 1, levelAtStartOfDay: 1, // Sửa Lỗi 1: Lưu cấp độ đầu ngày để không phạt khách đòi món mới khi vừa lên cấp giữa ca
+        level: 1, levelAtStartOfDay: 1,
         xp: 0, day: 1,
         clockMinutes: 13 * 60,
         isStreetSelling: false,
@@ -1362,7 +1361,8 @@
         loanDebt: 0, rescueLoanCount: 0, hasRepaidAllDebt: false,
         viralPct: 20,
         maxStreak5Star: 0, totalPrepDays: 0, servedPickyCount: 0, repliedReviewsCount: 0, resolvedDilemmasCount: 0,
-        claimedAchievements: []
+        claimedAchievements: [],
+        updatedAt: 0
       };
     }
 
@@ -1392,7 +1392,6 @@
     function formatVND(num) { return Number(num || 0).toLocaleString("vi-VN") + "đ"; }
     function escapeHtml(str) { return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 
-    // Sửa Lỗi 5: Hàm kiểm tra bất kỳ Pop-up nào đang mở để tạm dừng đồng hồ và bộ sinh khách
     function isAnyBlockingModalOpen() {
       const modalIds = [
         "modal-out-of-stock", "modal-dilemma", "modal-prep",
@@ -1484,7 +1483,8 @@
       const minDays = list.length > 0 ? Math.min(...list.map(b => b.daysLeft)) : null;
       return { expTodayQty, minDays };
     }
-    // ================= 7. ĐĂNG NHẬP, LƯU CLOUD & BẢNG XẾP HẠNG THẬT (ĐÃ VÁ LỖI 9) =================
+
+    // ================= 7. ĐĂNG NHẬP, TỰ ĐỘNG ĐỒNG BỘ CLOUD GIỮA 2 MÁY & BẢNG XẾP HẠNG =================
     function sanitizeShopKey(name) {
       return String(name || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/[^a-z0-9]/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "");
     }
@@ -1524,20 +1524,56 @@
     }
     function selectLoginAvatar(av) { loginSelectedAvatar = av; renderLoginAvatarGrid(); }
 
-    function checkExistingLocalSaveForLoginScreen() {
+    // Hàm so sánh xem bản lưu trên Cloud có mới hơn hoặc tiến trình cao hơn bản trên máy hay không
+    function isCloudProgressNewer(cloudState, localState) {
+      if (!cloudState) return false;
+      if (!localState) return true;
+      const cLevel = Number(cloudState.level || 1), lLevel = Number(localState.level || 1);
+      if (cLevel !== lLevel) return cLevel > lLevel;
+      const cDay = Number(cloudState.day || 1), lDay = Number(localState.day || 1);
+      if (cDay !== lDay) return cDay > lDay;
+      const cSold = Number(cloudState.totalSold || 0), lSold = Number(localState.totalSold || 0);
+      if (cSold !== lSold) return cSold > lSold;
+      const cTime = Number(cloudState.updatedAt || 0), lTime = Number(localState.updatedAt || 0);
+      return cTime >= lTime;
+    }
+
+    async function checkExistingLocalSaveForLoginScreen() {
       try {
         const raw = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem("banh_trang_tron_saigon_v5_master_save");
         if (!raw) return;
-        const saved = JSON.parse(raw);
-        if (saved && saved.shopName) {
+        let saved = JSON.parse(raw);
+        if (!saved || !saved.shopName) return;
+
+        const renderQuickBox = (data, isSyncedCloud = false) => {
           document.getElementById("quick-resume-box").classList.remove("hidden");
-          document.getElementById("quick-resume-avatar").innerHTML = renderAvatarContent(saved.avatar || "👩‍🍳", "w-full h-full object-cover rounded-xl");
-          document.getElementById("quick-resume-name").textContent = saved.shopName;
-          document.getElementById("quick-resume-stats").textContent = `Cấp ${saved.level || 1} • ${(saved.rating || 5.0).toFixed(1)}⭐ • ${formatVND(saved.money || 350000)}`;
-          document.getElementById("login-shop-name").value = saved.shopName;
-          document.getElementById("login-shop-pin").value = saved.pin || "";
-          loginSelectedAvatar = saved.avatar || "👩‍🍳";
+          const lbl = document.getElementById("quick-resume-label");
+          if (lbl) lbl.textContent = isSyncedCloud ? "☁️ Đã đồng bộ Cloud:" : "Quán đang lưu:";
+          document.getElementById("quick-resume-avatar").innerHTML = renderAvatarContent(data.avatar || "👩‍🍳", "w-full h-full object-cover rounded-xl");
+          document.getElementById("quick-resume-name").textContent = data.shopName;
+          document.getElementById("quick-resume-stats").textContent = `Cấp ${data.level || 1} • ${(data.rating || 5.0).toFixed(1)}⭐ • ${formatShortK(data.money || 350000)}`;
+          document.getElementById("login-shop-name").value = data.shopName;
+          document.getElementById("login-shop-pin").value = data.pin || "";
+          loginSelectedAvatar = data.avatar || "👩‍🍳";
           renderLoginAvatarGrid();
+        };
+
+        renderQuickBox(saved, false);
+
+        // Tự động kiểm tra trên Cloud xem máy kia có cày lên Cấp cao hơn không
+        const key = saved.shopKey || sanitizeShopKey(saved.shopName);
+        if (key) {
+          const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 3500);
+          if (res.ok) {
+            const cloudShop = await res.json();
+            if (cloudShop && cloudShop.fullState && String(cloudShop.pin) === String(saved.pin)) {
+              const cloudState = { ...cloudShop.fullState, updatedAt: cloudShop.updatedAt || cloudShop.fullState.updatedAt || 0 };
+              if (isCloudProgressNewer(cloudState, saved)) {
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cloudState));
+                renderQuickBox(cloudState, true);
+              }
+            }
+          }
         }
       } catch (e) {}
     }
@@ -1546,7 +1582,26 @@
       initAudio(); startChillBGM();
       try {
         const raw = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem("banh_trang_tron_saigon_v5_master_save");
-        if (raw) mergeLoadedState(JSON.parse(raw));
+        if (raw) {
+          let localData = JSON.parse(raw);
+          const key = localData.shopKey || sanitizeShopKey(localData.shopName);
+          // Kiểm tra Cloud lần cuối trước khi vào game để không bao giờ lấy bản cũ đè bản mới
+          if (key) {
+            try {
+              const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 2800);
+              if (res.ok) {
+                const cloudShop = await res.json();
+                if (cloudShop && cloudShop.fullState && String(cloudShop.pin) === String(localData.pin)) {
+                  const cs = { ...cloudShop.fullState, updatedAt: cloudShop.updatedAt || cloudShop.fullState.updatedAt || 0 };
+                  if (isCloudProgressNewer(cs, localData)) {
+                    localData = cs;
+                  }
+                }
+              }
+            } catch (err) {}
+          }
+          mergeLoadedState(localData);
+        }
       } catch (e) {}
       document.getElementById("login-screen").classList.add("hidden");
       updateAllUI();
@@ -1567,11 +1622,11 @@
       if (!key) { showLoginMessage("⚠️ Tên quán không hợp lệ!", "error"); return; }
 
       btn.disabled = true;
-      showLoginMessage("☁️ Đang kết nối dữ liệu quán...", "info");
+      showLoginMessage("☁️ Đang đồng bộ dữ liệu quán...", "info");
 
       let isExistingCloudShop = false;
       try {
-        const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 2500);
+        const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 3000);
         const cloudShop = res.ok ? await res.json() : null;
         if (cloudShop && cloudShop.pin) {
           if (String(cloudShop.pin) !== String(pinInput)) {
@@ -1580,8 +1635,13 @@
             return;
           }
           isExistingCloudShop = true;
-          state = getInitialDefaultState();
-          if (cloudShop.fullState) mergeLoadedState(cloudShop.fullState);
+          const cloudState = cloudShop.fullState ? { ...cloudShop.fullState, updatedAt: cloudShop.updatedAt || cloudShop.fullState.updatedAt || 0 } : null;
+          if (state.shopKey === key && !isCloudProgressNewer(cloudState, state)) {
+            // Giữ bản trên máy nếu máy đang có tiến trình mới hơn
+          } else {
+            state = getInitialDefaultState();
+            if (cloudState) mergeLoadedState(cloudState);
+          }
           if (cloudShop.recoveryCode) state.recoveryCode = cloudShop.recoveryCode;
           if (cloudShop.avatar && loginSelectedAvatar === "👩‍🍳") {
             loginSelectedAvatar = cloudShop.avatar;
@@ -1606,7 +1666,7 @@
       btn.disabled = false;
       updateAllUI();
       if (state.isStreetSelling) startStreetSellingPhase(true);
-      showToast(isExistingCloudShop ? `🎉 Chào mừng quay lại quán "${state.shopName}"!` : `🚀 Khai trương hồng phát với 350.000đ vốn: "${state.shopName}"!`);
+      showToast(isExistingCloudShop ? `🎉 Đã đồng bộ quán "${state.shopName}" (Cấp ${state.level})!` : `🚀 Khai trương hồng phát với 350.000đ vốn: "${state.shopName}"!`);
     }
 
     function showLoginMessage(text, type) {
@@ -1684,13 +1744,16 @@
       }
     }
 
-    function saveToLocalOnly() { try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
+    function saveToLocalOnly() {
+      try {
+        state.updatedAt = Date.now();
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {}
+    }
 
-    // BẢN SỬA LỖI MẤT NGƯỜI CHƠI CŨ: Tải gộp cả 2 nhánh /leaderboard và /shops + Tăng thời gian chờ mạng lên 6500ms
     async function fetchCloudLeaderboard(showFeedback = false) {
       const badge = document.getElementById("login-cloud-badge");
       try {
-        // Tải song song cả nhánh mới (/leaderboard) và nhánh cũ (/shops) để không bỏ sót bất kỳ người chơi nào
         const [resLb, resShops] = await Promise.allSettled([
           fetchWithTimeout(`${FIREBASE_DB_URL}/leaderboard.json`, {}, 6500),
           fetchWithTimeout(`${FIREBASE_DB_URL}/shops.json`, {}, 6500)
@@ -1708,13 +1771,11 @@
 
         const mergedShopsMap = new Map();
 
-        // Hàm phụ giúp chuẩn hóa và gộp dữ liệu quán (ưu tiên bản lưu mới hơn hoặc nhiều tiền/bịch bán hơn)
         const addOrUpdateShop = (item) => {
           if (!item || !item.shopName) return;
           const sKey = item.shopKey || sanitizeShopKey(item.shopName);
           if (!sKey || String(sKey).startsWith("npc_")) return;
 
-          // Nếu dữ liệu nằm trong fullState (ở các bản cũ) thì lấy ra
           const fs = item.fullState || {};
           const candidate = {
             shopKey: sKey,
@@ -1734,12 +1795,9 @@
           }
         };
 
-        // 1. Đọc toàn bộ người chơi từ nhánh /shops cũ trước
         if (shopsData && typeof shopsData === "object") {
           Object.values(shopsData).forEach(addOrUpdateShop);
         }
-
-        // 2. Đọc đè dữ liệu mới nhất từ nhánh /leaderboard lên
         if (lbData && typeof lbData === "object") {
           Object.values(lbData).forEach(addOrUpdateShop);
         }
@@ -1783,7 +1841,6 @@
         </div>
       `).join("");
     }
-
     // ================= 8. GIÁ VỐN CỐ ĐỊNH, ĐỊNH GIÁ BÁN & PHÍ SÀN APP =================
     function getIngredientCost(ing) {
       let mult = 1.0;
@@ -1858,9 +1915,9 @@
       } else {
         return {
           tier: "expensive", avgOffset,
-          badge: "🔴 GIÁ ĐẮT ĐỎ - DỄ MẤT KHÁCH!",
+          badge: "🔴 GIÁ MẮC - DỄ MẤT KHÁCH!",
           colorClass: "bg-red-50 border-red-400 text-red-950",
-          desc: "Cảnh báo: 35% khách nhìn bảng giá sẽ chê đắt bỏ đi ngay! Người ở lại cực kỳ gắt gao và tụt kiên nhẫn nhanh +45%!",
+          desc: "Cảnh báo: 35% khách dòm bảng giá sẽ chê mắc bỏ đi ngay! Người ở lại cực kỳ gắt gao và tụt kiên nhẫn nhanh +45%!",
           spawnMult: 1.35, patienceDecayMult: 1.45, walkAwayChance: 0.35, sweetSpotBonus: -4
         };
       }
@@ -1957,13 +2014,11 @@
       return baseUtilAndWear + streetCleanFee;
     }
 
-    // Sửa Lỗi 1: Khi đang bán ngoài đường (forShiftPenalty = true), chỉ kiểm tra theo cấp độ đầu ngày (levelAtStartOfDay)
     function getUnpurchasedEligibleDishes(forShiftPenalty = false) {
       const checkLvl = forShiftPenalty ? (state.levelAtStartOfDay || state.level) : state.level;
       return Object.values(DISH_MENU).filter(d => d.reqLevel <= checkLvl && !state.unlockedDishes.includes(d.id));
     }
 
-    // Tập hợp các nguyên liệu thực sự được dùng trong các món đã mở khóa (phục vụ sửa Lỗi 2)
     function getActiveUsedIngredientSet() {
       const used = new Set(["tratac"]);
       (state.unlockedDishes || ["tron"]).forEach(dishKey => {
@@ -1975,7 +2030,7 @@
 
     function handleTopLeftButtonClick() {
       if (state.isStreetSelling) endDaySummary();
-      else showToast(`☀️ Ngày ${state.day}: Hãy xem Dự báo sức mua theo Lịch Tuần để nhập hàng vừa đủ nhé!`);
+      else showToast(`☀️ Ngày ${state.day}: Nhớ coi Lịch Tuần để lấy đồ tươi vừa đủ bán nghen!`);
     }
 
     function updateAllUI() {
@@ -2011,7 +2066,7 @@
       document.getElementById("prep-forecast-title").textContent = sched.isHoliday
         ? `${sched.name} (${sched.dowName})`
         : `📅 ${sched.dowName} (${sched.tag})`;
-      document.getElementById("prep-demand-badge").textContent = `Dự báo: ~${sched.estBags} phần`;
+      document.getElementById("prep-demand-badge").textContent = `Sức mua: ~${sched.estBags} phần`;
       document.getElementById("prep-forecast-desc").textContent = sched.desc;
 
       const wholesaleTitle = document.getElementById("wholesale-guide-title");
@@ -2023,11 +2078,11 @@
         } else if ((state.activeMultiDayEffects?.cheapDryDays || 0) > 0) {
           wholesaleTitle.textContent = `📦 Đang hưởng giá Sỉ Đồ Khô -30% (Còn ${state.activeMultiDayEffects.cheapDryDays} ngày)`;
         } else {
-          wholesaleTitle.textContent = `Dự báo ${sched.dowName}: Cần khoảng ${sched.estBags} phần nguyên liệu`;
+          wholesaleTitle.textContent = `Gợi Ý ${sched.dowName}: Lấy tầm ${sched.estBags} phần nguyên liệu`;
         }
       }
       if (wholesaleSub) {
-        wholesaleSub.textContent = `Giá chợ đầu mối cố định • Hạn sử dụng: Đồ tươi ${getEffectiveShelfLife(INGREDIENTS[1])} ngày, Sốt ${getEffectiveShelfLife(INGREDIENTS[3])} ngày, Đồ khô 3-5 ngày`;
+        wholesaleSub.textContent = `Hạn dùng: Đồ tươi ${getEffectiveShelfLife(INGREDIENTS[1])} ngày • Sốt ${getEffectiveShelfLife(INGREDIENTS[3])} ngày • Đồ khô 3-5 ngày`;
       }
       if (btnSuggest) {
         btnSuggest.textContent = `+Đủ ${sched.estBags} phần`;
@@ -2055,7 +2110,7 @@
       const rentK = state.licenses.lic_sidewalk ? "35k" : "0k";
       const wageK = formatShortK(getDailyStaffWages());
       const opK = formatShortK(getDailyOperatingFixedCost());
-      document.getElementById("home-fixed-cost-footer").textContent = `Vận hành & Hao mòn ${opK}, vỉa hè ${rentK}, lương nhân viên ${wageK} mỗi ngày`;
+      document.getElementById("home-fixed-cost-footer").textContent = `Điện đèn & Hao mòn xe ${opK}, vỉa hè ${rentK}, lương phụ bếp ${wageK} mỗi ngày`;
       document.getElementById("stage-shop-name").textContent = (state.shopName || "BÁNH TRÁNG DÌ TƯ").toUpperCase();
       document.getElementById("stage-sub-info").textContent = `MUỐI TÂY NINH • SỐT BƠ ME • 🔥 VIRAL ${state.viralPct || 0}%`;
 
@@ -2118,7 +2173,7 @@
       else if (sub === "leaderboard") fetchCloudLeaderboard(false);
     }
 
-    // ================= 9. CHỢ ĐẦU MỐI & HIỂN THỊ HẠN SỬ DỤNG TRONG KHO (ĐÃ VÁ LỖI 2) =================
+    // ================= 9. CHỢ ĐẦU MỐI & HIỂN THỊ HẠN SỬ DỤNG TRONG KHO =================
     function renderMarketGrid() {
       const grid = document.getElementById("market-grid");
       if (!grid) return;
@@ -2164,12 +2219,11 @@
         const qty = Math.max(0, parseInt(el?.value || "0", 10) || 0);
         if (qty > 0) { totalUnits += qty; totalCost += qty * getIngredientCost(ing); }
       });
-      const totalEl = document.getElementById("market-Order-total");
+      const totalEl = document.getElementById("market-order-total");
       if (totalEl) totalEl.textContent = `${formatVND(totalCost)} (${totalUnits} phần)`;
       return { totalCost, totalUnits };
     }
 
-    // Sửa Lỗi 2: Chỉ gợi ý mua những nguyên liệu có nằm trong công thức các món đã mở khóa
     function fillSuggestedOrder() {
       const sched = getTodayScheduleInfo(state.day);
       const targetBags = sched.estBags;
@@ -2188,7 +2242,7 @@
         el.value = toBuy > 0 ? toBuy : "";
       });
       recalcMarketOrderTotal();
-      showToast(`✨ Đã điền gợi ý nhập đủ ${targetBags} phần bánh & ${targetDrink} Trà tắc (chỉ tính nguyên liệu đang dùng)!`);
+      showToast(`✨ Đã điền gợi ý lấy đủ ${targetBags} phần bánh & ${targetDrink} Trà tắc!`);
     }
 
     function clearMarketInputs() {
@@ -2219,7 +2273,7 @@
         const isDone = state.prepDone[k]; if (isDone) doneCount++;
         const sEl = document.getElementById(`prep-status-${k}`), bEl = document.getElementById(`prep-btn-${k}`);
         if (sEl && bEl) {
-          sEl.textContent = isDone ? "✅ Đã xong" : "Bấm nấu";
+          sEl.textContent = isDone ? "✅ Đã xong" : "Làm ngay";
           sEl.className = isDone ? "text-[11px] font-black text-emerald-700" : "text-[11px] font-bold text-orange-600";
           bEl.className = isDone ? "soft-btn p-3 rounded-2xl bg-emerald-50 border-2 border-emerald-400 flex flex-col items-center text-center gap-1" : "soft-btn p-3 rounded-2xl bg-white border-2 border-amber-300 flex flex-col items-center text-center gap-1";
         }
@@ -2260,7 +2314,7 @@
     }
     function closePrepModal() { document.getElementById("modal-prep").classList.add("hidden"); activePrepKey = null; }
 
-    // ================= 10. MỞ CỬA XE ĐẨY, KHÁCH ĐÒI MÓN MỚI & HIỆN XANH ORDER (ĐÃ VÁ LỖI 1 & 5) =================
+    // ================= 10. MỞ CỬA XE ĐẨY, KHÁCH ĐÒI MÓN MỚI & HIỆN XANH ORDER =================
     function activateCartBuff(id, title, seconds) {
       activeCartBuff = { id, title, seconds };
       const bar = document.getElementById("cart-active-buff-bar");
@@ -2294,7 +2348,7 @@
       for (let i = 0; i < 4; i++) {
         if (!customerSlots[i]) spawnCustomerIntoEmptySlot();
       }
-      showToast(`🏢 BẮT ĐẦU THỬ THÁCH ĐƠN SỈ: Trộn đủ ${targetBags} phần trong ${seconds} giây!`);
+      showToast(`🏢 BẮT ĐẦU THỬ THÁCH ĐƠN SỈ: Làm đủ ${targetBags} phần trong ${seconds} giây!`);
     }
 
     function updateBulkRushUI() {
@@ -2314,7 +2368,7 @@
         return;
       }
       if (!isResuming) {
-        state.levelAtStartOfDay = state.level; // Sửa Lỗi 1: Chốt cấp độ lúc bắt đầu đẩy xe ra phố
+        state.levelAtStartOfDay = state.level;
       }
       state.isStreetSelling = true;
       if (!isResuming || state.clockMinutes < 14 * 60) state.clockMinutes = 14 * 60;
@@ -2357,7 +2411,7 @@
             updateBulkRushUI();
             state.money = Math.max(0, state.money - 30000);
             adjustRating(-0.15);
-            showToast("❌ Hết giờ giao Đơn Sỉ! Quán bị phạt cọc -30.000đ & -0.15⭐!");
+            showToast("❌ Trễ giờ giao Đơn Sỉ! Khách hủy đơn làm quán ôm hàng lỗ -30.000đ & -0.15⭐!");
             updateAllUI();
           }
         }
@@ -2399,7 +2453,6 @@
       const priceImpact = getPricingCustomerImpact();
       const finalSpawnMs = Math.round((sched.spawnMs || 4500) * priceImpact.spawnMult);
 
-      // Sửa Lỗi 5: Không tự sinh khách mới khi đang mở bất kỳ Pop-up nào
       slotSpawnerTimer = setInterval(() => {
         if (!state.isStreetSelling || isAnyBlockingModalOpen()) return;
         const activeCount = customerSlots.filter(Boolean).length;
@@ -2421,20 +2474,19 @@
       const priceImpact = getPricingCustomerImpact();
       if (priceImpact.walkAwayChance > 0 && Math.random() < priceImpact.walkAwayChance) {
         adjustViral(-2);
-        showToast("💸 Có thực khách vừa ghé nhìn bảng giá rồi lắc đầu bỏ đi vì giá đắt!");
+        showToast("💸 Có khách ghé dòm bảng giá rồi lắc đầu đi luôn vì bán mắc!");
         return;
       }
 
-      // Sửa Lỗi 1: Chỉ phạt nếu món đó đã đủ cấp từ ĐẦU NGÀY mà chủ quán cố tình không mở khóa
       const unpurchasedDishes = getUnpurchasedEligibleDishes(true);
       if (unpurchasedDishes.length > 0 && Math.random() < 0.28) {
         const demandedDish = unpurchasedDishes[Math.floor(Math.random() * unpurchasedDishes.length)];
         adjustRating(-0.04);
         adjustViral(-3);
         playSFX("whistle");
-        const complainHtml = `<span class="text-red-600 font-black">😤 Khách hỏi: "Quán lên Cấp ${state.levelAtStartOfDay || state.level} rồi mà chưa bán món <u>${demandedDish.name}</u> hả? Thôi mình qua quán khác!" (-0.04⭐)</span>`;
+        const complainHtml = `<span class="text-red-600 font-black">😤 Khách hỏi: "Quán đông khách vầy mà chưa có món <u>${demandedDish.name}</u> hả? Thôi mình qua xe khác nha!" (-0.04⭐)</span>`;
         renderSelectedOrderBubble(complainHtml);
-        showToast(`⚠️ Khách vừa bỏ đi vì quán chưa mở khóa món "${demandedDish.name}" (Cấp ${demandedDish.reqLevel})!`);
+        showToast(`⚠️ Khách vừa bỏ đi vì quán chưa mở món "${demandedDish.name}"!`);
         return;
       }
 
@@ -2632,7 +2684,7 @@
 
       if (!c) {
         iconEl.innerHTML = getDishSvgIcon("tron");
-        textEl.innerHTML = `<span class="text-amber-800">Xe đang thư thả, bấm <b>📣 Rao hàng</b> góc phải xe để gọi khách & Shipper tới ngay!</span>`;
+        textEl.innerHTML = `<span class="text-amber-800">Xe đang thư thả, bấm <b>📣 Rao hàng</b> góc phải xe để gọi khách với Shipper tới ngay!</span>`;
         barEl.style.width = "100%";
         return;
       }
@@ -2662,7 +2714,7 @@
         : `Cho mình`;
 
       iconEl.innerHTML = getDishSvgIcon(c.wantedDish);
-      textEl.innerHTML = `${prefix} ${dishTag} ${rauTag} ${hanhTag} ${spiceTag}${traTacTag} nha!`;
+      textEl.innerHTML = `${prefix} ${dishTag}, ${rauTag}, ${hanhTag}, ${spiceTag}${traTacTag} nha!`;
 
       barEl.style.width = `${Math.round(c.patience)}%`;
       barEl.className = `h-full transition-all duration-300 ${c.patience > 50 ? 'bg-amber-500' : 'bg-red-600'}`;
@@ -2671,13 +2723,13 @@
     const SOCIAL_REPLY_TEMPLATES = {
       friendly: [
         "Dạ Dì cảm ơn con nhiều nghen! Lần sau ghé Dì bỏ thêm hành phi giòn rụm cho con nha! 🥰",
-        "Nghe con khen mà Dì hết mệt luôn á, mãi yêu thực khách dễ thương của quán! 💕",
+        "Nghe con khen mà Dì hết mệt luôn á, mãi yêu khách quen dễ thương của quán! 💕",
         "Cảm ơn con đã ủng hộ xe bánh tráng nhỏ của Dì, chúc con một ngày thiệt nhiều niềm vui nghen! 🌸",
         "Dạ Dì nhớ mặt con rồi, lần sau ghé cứ dặn 'làm như cũ' là Dì trộn liền tay nha! 💖"
       ],
       funny: [
         "Bánh tráng trộn bằng cả tính mạng, ngon nhức cái nách luôn phải hôn con! 🔥🤣",
-        "Ăn 1 bịch ghiền tới sáng, ăn 2 bịch thành cổ đông chiến lược của Dì Tư luôn nha! 👑😂",
+        "Ăn 1 bịch ghiền tới sáng, ăn 2 bịch thành mối ruột của Dì Tư luôn nha! 👑😂",
         "Khách khen cay xé lưỡi là tại ớt hiểm miền Tây nó dữ chứ Dì Tư hiền khô à! 🌶️😆",
         "Bí kíp 30 năm nằm ở cái lắc cổ tay thần sầu đó con ơi, lên xu hướng Tóp Tóp thôi! 🤳✨"
       ],
@@ -2692,7 +2744,7 @@
       ]
     };
 
-    // ================= 11. HỆ THỐNG BIẾN CỐ CHIẾN LƯỢC SÂU RỘNG & KHÔNG LẶP LẠI =================
+    // ================= 11. HỆ THỐNG CHUYỆN NGOÀI PHỐ (BIẾN CỐ) =================
     const DILEMMA_EVENTS = [
       {
         id: "wholesale_dry_deal", category: "1. Hợp Đồng Nguồn Hàng (3 Ngày)", icon: "📦", speaker: "Thương Lái Chợ Đầu Mối",
@@ -2806,15 +2858,15 @@
       {
         id: "bulk_order_rush", category: "6. Thử Thách Đơn Sỉ", icon: "🏢", speaker: "Khách Đặt Sỉ Văn Phòng Quận 1",
         title: "Đơn Sỉ Giờ Cao Điểm: Giao Gấp 4 Phần Trong 25 Giây!",
-        desc: "\"Quán ơi, công ty mình đặt gấp 4 phần bánh tráng bất kỳ trong 25 giây tới. Giao kịp mình gửi thưởng nóng +40.000đ, trễ giờ mình hủy đơn phạt cọc -30.000đ nha!\"",
+        desc: "\"Quán ơi, phòng mình đặt gấp 4 phần bánh tráng bất kỳ trong 25 giây tới. Giao kịp mình gửi thêm 40.000đ tiền bo, trễ giờ mình hủy đơn là quán ôm hàng lỗ 30.000đ nha!\"",
         canTrigger: (s) => s.totalSold >= 6 && (!bulkOrderChallenge || !bulkOrderChallenge.active),
         choiceA: {
-          label: "🔥 Nhận Đơn Sỉ! (Đếm ngược 25s: Thưởng +40.000đ / Trễ phạt -30.000đ)",
+          label: "🔥 Nhận Đơn Sỉ! (Đếm ngược 25s: Thưởng +40.000đ / Trễ lỗ -30.000đ)",
           reqCheck: (s) => (s.stock.banhtrang || 0) >= 4,
           lockReason: "🔒 Cần có ít nhất 4 phần Bánh tráng trong kho",
           effect: (s) => {
             startBulkOrderChallenge(4, 25, 40000);
-            return "⏱️ ĐỒNG HỒ 25 GIÂY ĐÃ CHẠY! Hãy trộn đủ 4 phần bánh thật nhanh tay!";
+            return "⏱️ ĐỒNG HỒ 25 GIÂY ĐÃ CHẠY! Hãy làm đủ 4 phần bánh thật nhanh tay!";
           }
         },
         choiceB: {
@@ -2851,7 +2903,7 @@
       }
     ];
 
-    // ================= 12. LƯỚI 10 MÓN & THANH KHO 9 NGUYÊN LIỆU BẤM MUA NGAY (ĐÃ VÁ LỖI 8) =================
+    // ================= 12. LƯỚI 10 MÓN & THANH KHO 9 NGUYÊN LIỆU BẤM MUA NGAY =================
     function getMaxMakeablePortions(dishKey) {
       const recipe = DISH_MENU[dishKey]?.recipe || {};
       let minPortions = 999;
@@ -3078,14 +3130,13 @@
       const rpBody = document.getElementById("svg-ricepaper-body");
       if (rpBody) rpBody.setAttribute("fill", "#fef9c3");
       document.getElementById("mix-bar-fill").style.width = "0%";
-      document.getElementById("bowl-instruction").textContent = "🧤 Trộn thau / Bấm B1";
+      document.getElementById("bowl-instruction").textContent = "🧤 Chạm thau làm tiếp";
       updateVesselVisualByDish();
       updateStepButtonsHighlight();
       renderBottomIngredientTray();
       renderSelectedOrderBubble();
     }
 
-    // Sửa Lỗi 8: Luôn cập nhật dấu ✓ độc lập cho Bước 1 và Bước 2 ở đầu hàm
     function updateStepButtonsHighlight() {
       const b1 = document.getElementById("step-btn-1"), b2 = document.getElementById("step-btn-2"), b3 = document.getElementById("step-btn-3");
       [b1, b2, b3].forEach(b => { if (b) b.classList.remove("active-red-ring"); });
@@ -3108,7 +3159,7 @@
       }
     }
 
-    // ================= 13. XỬ LÝ ĐỨT HÀNG NGAY LẬP TỨC & DỌN XE NGHỈ SỚM (ĐÃ VÁ LỖI 5 & 6) =================
+    // ================= 13. XỬ LÝ ĐỨT HÀNG NGAY LẬP TỨC & DỌN XE NGHỈ SỚM =================
     function closeOutOfStockModal() {
       document.getElementById("modal-out-of-stock").classList.add("hidden");
     }
@@ -3116,13 +3167,12 @@
     function openOutOfStockModal(missingList) {
       if (!missingList || missingList.length === 0) return;
       const modalEl = document.getElementById("modal-out-of-stock");
-      // Sửa Lỗi 5: Nếu Pop-up đang mở sẵn (người chơi đang bấm minigame sơ chế), không reset lại từ đầu
       if (modalEl && !modalEl.classList.contains("hidden")) return;
 
       pendingOosMissingList = missingList;
       oosMinigameProgress = 0;
       playSFX("whistle");
-      document.getElementById("oos-desc").innerHTML = `Cần bổ sung ngay: <b>${missingList.map(m => m.name).join(", ")}</b> trước khi bắt đầu trộn bánh! Con chọn phương án nào?`;
+      document.getElementById("oos-desc").innerHTML = `Cần bổ sung ngay: <b>${missingList.map(m => m.name).join(", ")}</b> trước khi bắt đầu làm bánh! Con chọn phương án nào?`;
       const baseSum = missingList.reduce((acc, m) => acc + getIngredientCost(m), 0);
       document.getElementById("oos-cost-self-5").textContent = `-${formatVND(Math.round(baseSum * 6 * 1.5 / 500) * 500)}`;
 
@@ -3167,7 +3217,7 @@
         pendingOosMissingList.forEach(m => addStockBatch(m.id, pendingOosBoughtQty));
         document.getElementById("modal-out-of-stock").classList.add("hidden");
         updateAllUI();
-        showToast("✅ Đã bổ sung nguyên liệu vào khay! Có thể trộn bánh ngay!");
+        showToast("✅ Đã bổ sung nguyên liệu vào khay! Có thể làm bánh ngay!");
       }
     }
 
@@ -3199,7 +3249,7 @@
       customerSlots = [null, null, null, null];
       if (state.todaySold >= 8) {
         adjustViral(5);
-        showToast("🪧 Quán bán đắt cháy hàng sớm! Cộng +5% Độ Viral Tóp Tóp!");
+        showToast("🪧 Quán cháy hàng sớm! Cộng +5% Độ Viral Tóp Tóp!");
       } else {
         showToast("🪧 Đã treo bảng nghỉ sớm để chuẩn bị nguyên liệu cho ngày mai!");
       }
@@ -3256,7 +3306,7 @@
       if (zz) { zz.classList.remove("anim-zigzag"); void zz.offsetWidth; zz.classList.add("anim-zigzag"); }
 
       if (bowl.rau || bowl.hanh) document.getElementById("svg-layer-herbs").classList.remove("hidden");
-      document.getElementById("bowl-instruction").textContent = "🧤 Bấm Trộn thau (B3)!";
+      document.getElementById("bowl-instruction").textContent = "🧤 Bấm Trộn đều (B3)!";
       spawnFloatingFX(byStaff ? "👧 Mỹ Lan: Vắt tắc & Sốt!" : "🍋 Vắt tắc & Xịt sốt bơ!");
       updateStepButtonsHighlight();
 
@@ -3301,13 +3351,12 @@
       updateStepButtonsHighlight();
     }
 
-    // ================= 14. GIAO BÁNH 1 CHẠM & THU PHÍ SÀN ĐƠN APP (ĐÃ VÁ LỖI 3 & LỖI 7) =================
+    // ================= 14. GIAO BÁNH 1 CHẠM & THU PHÍ SÀN ĐƠN APP =================
     function doStep4Serve() {
       const c = getActiveCustomer();
       if (!c) { showToast("🍃 Chưa có khách nào để giao món!"); return; }
-      if (!bowl.step1Done || !bowl.step2Done || !bowl.step3Done) { showToast("⚠️ Hãy hoàn thành đủ B1 -> B2 -> Trộn thau trước khi giao!"); return; }
+      if (!bowl.step1Done || !bowl.step2Done || !bowl.step3Done) { showToast("⚠️ Hãy làm đủ B1 -> B2 -> Trộn đều trước khi giao!"); return; }
 
-      // Sửa Lỗi 3: Chỉ kiểm tra tồn kho Trà tắc ở đây, CHƯA trừ kho cho tới khi xác nhận đơn không bị lỗi
       if (bowl.tratac && (state.stock.tratac || 0) < 1) {
         openOutOfStockModal([INGREDIENTS.find(x => x.id === "tratac")]);
         return;
@@ -3320,7 +3369,6 @@
       const { min, max } = getSweetSpotBounds();
       const bagQty = c.bagQty || 1;
 
-      // Sửa Lỗi 7: Chỉ báo lỗi nếu số lượng trong thau ÍT HƠN số bịch khách cần (nếu thau có dư do khách trước bỏ đi thì vẫn giao tốt)
       if (bowl.lockedBagQty && bowl.lockedBagQty < bagQty) notes.push(`thiếu số lượng (khách đặt ${bagQty} bịch, thau chỉ có ${bowl.lockedBagQty} bịch)`);
       if (bowl.selectedDish !== c.wantedDish) notes.push(`nhầm món (khách gọi ${DISH_MENU[c.wantedDish].name})`);
       if (bowl.rau !== c.wantedRau) notes.push(c.wantedRau ? "thiếu Rau răm" : "dư Rau răm");
@@ -3344,11 +3392,10 @@
         renderCustomerSlotsRow();
         renderSelectedOrderBubble(errHtml);
         spawnFloatingFX("🗑️ Sai đơn! Đã đổ bỏ!");
-        showToast(`⚠️ Làm sai (${notes[0]})! Đã đổ bỏ thau bánh, con hãy nhìn thẻ màu Xanh Lá và trộn lại nhé!`);
+        showToast(`⚠️ Trộn sai (${notes[0]})! Đã đổ thau, con canh đúng mấy chữ màu Xanh Lá rồi làm lại nghen!`);
         return;
       }
 
-      // Sửa Lỗi 3: Đơn đã hợp lệ 100%, lúc này mới trừ Trà Tắc khỏi kho FIFO
       if (bowl.tratac) {
         consumeStockFIFO("tratac", 1);
       }
@@ -3434,7 +3481,7 @@
       state.reviews.unshift({
         id: "rev_" + Date.now(), custId: c.id, custName: c.name, custAvatar: c.avatar, picky: c.picky,
         dishName: `${usedQty}x ${dishObj.name}`, stars, likes: Math.floor(Math.random() * 35) + 12,
-        comment: stars === 5 ? `"Món ${dishObj.name}${bowl.tratac ? ' kèm Trà Tắc' : ''} ngon xuất sắc, chuẩn 5 sao!"` : `"Bánh trộn thấm vị nhưng miếng khô bò hôm nay hơi cứng nha quán!"`,
+        comment: stars === 5 ? `"Món ${dishObj.name}${bowl.tratac ? ' kèm Trà Tắc' : ''} ngon xuất sắc, chuẩn 5 sao!"` : `"Bánh làm vừa miệng nhưng miếng khô bò hôm nay hơi cứng nha quán!"`,
         replied: false, replyText: ""
       });
       if (state.reviews.length > 25) state.reviews.pop();
@@ -3489,7 +3536,7 @@
       const { min } = getSweetSpotBounds();
       if (!bowl.step1Done) doStep1Base(); else if (!bowl.step2Done) doStep2Sauce(); else if (bowl.mixProgress < min) doStep3Mix(); else doStep4Serve();
     }
-    // ================= 15. MÃ KHÓA KHÔI PHỤC CLOUD & LƯU BẢO MẬT (ĐÃ VÁ LỖI 9) =================
+    // ================= 15. MÃ KHÓA KHÔI PHỤC CLOUD & LƯU BẢO MẬT =================
     function normalizeRecoveryCodeInput(raw) {
       const cleaned = String(raw || "").trim().toUpperCase().replace(/\s+/g, "");
       if (/^\d{6}$/.test(cleaned)) return `BT-${cleaned}`;
@@ -3627,9 +3674,10 @@
       }
     }
 
-    // Sửa Lỗi 9: Tách nhánh /leaderboard chỉ chứa thông tin công khai (không lưu PIN hay fullState ở nhánh xếp hạng)
     async function saveGameEverywhere() {
       ensureRecoveryCode();
+      const nowTs = Date.now();
+      state.updatedAt = nowTs;
       saveToLocalOnly();
       if (!state.shopName) return;
       const key = state.shopKey || sanitizeShopKey(state.shopName);
@@ -3643,7 +3691,7 @@
         level: state.level,
         totalSold: state.totalSold,
         day: state.day,
-        updatedAt: Date.now()
+        updatedAt: nowTs
       };
       try {
         await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {
@@ -3663,12 +3711,12 @@
 
         await fetchWithTimeout(`${FIREBASE_DB_URL}/recoveryCodes/${state.recoveryCode}.json`, {
           method: "PUT", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ shopKey: key, shopName: state.shopName, updatedAt: Date.now() })
+          body: JSON.stringify({ shopKey: key, shopName: state.shopName, updatedAt: nowTs })
         }, 2000);
       } catch (e) {}
     }
 
-    // ================= 16. DASHBOARD SỔ SÁCH & 3 BIỂU ĐỒ SVG =================
+    // ================= 16. SỔ TAY THU CHI & 3 BIỂU ĐỒ SVG =================
     function renderLedgerTab() {
       const dur = Math.round(state.cartDurability || 100);
       const durText = document.getElementById("ledger-durability-text");
@@ -3692,14 +3740,14 @@
         beBox.innerHTML = `
           <div class="flex items-center justify-between font-black text-amber-950">
             <span>🎯 Điểm Hòa Vốn Hôm Nay: <b>${state.todaySold || 0}/${bagsNeeded} bịch</b></span>
-            <span class="${bePct >= 100 ? 'text-emerald-700' : 'text-orange-700'}">${bePct >= 100 ? '✅ Đã có lãi ròng!' : `Cần bán thêm ${Math.max(0, bagsNeeded - (state.todaySold || 0))} bịch`}</span>
+            <span class="${bePct >= 100 ? 'text-emerald-700' : 'text-orange-700'}">${bePct >= 100 ? '✅ Đã có lời!' : `Cần bán thêm ${Math.max(0, bagsNeeded - (state.todaySold || 0))} bịch`}</span>
           </div>
           <div class="w-full h-2.5 bg-white rounded-full overflow-hidden border border-amber-400">
             <div class="h-full bg-gradient-to-r from-amber-500 to-emerald-600 transition-all duration-300" style="width: ${bePct}%"></div>
           </div>
           <div class="text-[11px] text-amber-800 flex justify-between pt-0.5">
-            <span>Phí sàn App lũy kế: <b class="text-blue-700">${formatVND(state.cumulativeCosts?.appFee || 0)}</b></span>
-            <span>Hủy hàng hết HSD lũy kế: <b class="text-red-600">${formatVND(state.cumulativeCosts?.spoiled || 0)}</b></span>
+            <span>Tổng phí sàn App: <b class="text-blue-700">${formatVND(state.cumulativeCosts?.appFee || 0)}</b></span>
+            <span>Tổng hàng hư quá hạn: <b class="text-red-600">${formatVND(state.cumulativeCosts?.spoiled || 0)}</b></span>
           </div>
         `;
       }
@@ -3799,7 +3847,7 @@
         const c = state.cumulativeCosts || {};
         costEl.innerHTML = buildDonutSvg([
           { label: "Nguyên liệu", val: (c.cogs || 0) + (state.todayCogsSpent || 0) + 15000, color: "#f97316" },
-          { label: "Vận hành & Vỉa hè", val: (c.fixed || 0) + 22000, color: "#3b82f6" },
+          { label: "Điện đèn & Vỉa hè", val: (c.fixed || 0) + 22000, color: "#3b82f6" },
           { label: "Lương & Phí App", val: (c.wages || 0) + (c.appFee || 0) + getDailyStaffWages(), color: "#10b981" },
           { label: "Thuế & Hủy HSD", val: (c.tax || 0) + (c.spoiled || 0), color: "#ef4444" }
         ]);
@@ -3816,7 +3864,7 @@
       }
     }
 
-    // ================= 17. MXH, BIẾN CỐ, THÀNH TỰU & HOÃN LÊN CẤP (ĐÃ VÁ LỖI 4) =================
+    // ================= 17. MXH, CHUYỆN NGOÀI PHỐ, THÀNH TỰU & HOÃN LÊN CẤP =================
     function openReviewsModal() { renderReviewsModalList(); document.getElementById("modal-reviews").classList.remove("hidden"); }
     function closeReviewsModal() { document.getElementById("modal-reviews").classList.add("hidden"); }
 
@@ -3891,7 +3939,7 @@
       document.getElementById("dilemma-icon").textContent = ev.icon;
       document.getElementById("dilemma-category").textContent = ev.category;
       document.getElementById("dilemma-title").textContent = ev.title;
-      document.getElementById("dilemma-speaker").textContent = `🗣️ ${ev.speaker || "Thực khách Sài Gòn"}`;
+      document.getElementById("dilemma-speaker").textContent = `🗣️ ${ev.speaker || "Khách quen Sài Gòn"}`;
       document.getElementById("dilemma-desc").textContent = ev.desc;
       document.getElementById("dilemma-choices").innerHTML = `
         <button onclick="chooseDilemmaOption('A')" ${canPickA ? '' : 'disabled'} class="soft-btn w-full p-3 rounded-xl ${canPickA ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white' : 'bg-gray-200 text-gray-500'} font-black text-left shadow">
@@ -3955,7 +4003,7 @@
       const unpurchased = getUnpurchasedEligibleDishes(false);
       if (unpurchased.length > 0) {
         const d = unpurchased[0];
-        el.innerHTML = `🚨 <b>Cảnh báo mất khách:</b> Quán đã đạt Cấp ${state.level}, khách đang hỏi mua món <b>${d.name}</b>! Con vào mục <b>⬆️ Nâng cấp</b> mở khóa ngay kẻo khách bỏ đi nhé!`;
+        el.innerHTML = `🚨 <b>Cảnh báo mất khách:</b> Khách đang hỏi mua món <b>${d.name}</b>! Con vào mục <b>⬆️ Nâng cấp</b> mở món ngay kẻo khách bỏ qua xe khác nghen!`;
         return;
       }
 
@@ -3967,7 +4015,7 @@
       }
 
       const sched = getTodayScheduleInfo(state.day);
-      el.innerHTML = `Hôm nay là <b>${sched.dowName}</b> (${sched.tag}), sức mua khoảng <b>${sched.estBags} phần</b>. Con bấm nút <b>+Đủ ${sched.estBags} phần</b> ở mục Kho & Chợ để nhập vừa khít nhé!`;
+      el.innerHTML = `Hôm nay là <b>${sched.dowName}</b> (${sched.tag}), sức mua tầm <b>${sched.estBags} phần</b>. Con bấm nút <b>+Đủ ${sched.estBags} phần</b> ở mục Kho & Chợ để lấy vừa khít nghen!`;
     }
 
     function addXP(amount) {
@@ -4001,24 +4049,23 @@
 
       const unlockedItems = [];
       Object.values(DISH_MENU).forEach(d => { if (d.reqLevel <= newLvl && !state.unlockedDishes.includes(d.id)) unlockedItems.push(`🥙 Khách bắt đầu hỏi mua: <b>${d.name}</b> (Mở khóa ${formatVND(d.unlockCost)})`); });
-      STAFF_CATALOG.forEach(s => { if (s.reqLevel === newLvl) unlockedItems.push(`🧑‍🍳 Mở quyền thuê nhân viên: <b>${s.name}</b>`); });
-      LICENSES_CATALOG.forEach(l => { if (l.reqLevel === newLvl) unlockedItems.push(`📜 Mở đăng ký pháp lý: <b>${l.name}</b>`); });
+      STAFF_CATALOG.forEach(s => { if (s.reqLevel === newLvl) unlockedItems.push(`🧑‍🍳 Mở quyền thuê phụ bếp: <b>${s.name}</b>`); });
+      LICENSES_CATALOG.forEach(l => { if (l.reqLevel === newLvl) unlockedItems.push(`📜 Mở đăng ký giấy phép: <b>${l.name}</b>`); });
 
       const box = document.getElementById("lvlup-unlocked-box");
       box.innerHTML = unlockedItems.length > 0
         ? `<div class="font-black text-emerald-800 mb-1">🎁 Cột mốc mới ở Cấp ${newLvl}:</div>` + unlockedItems.map(i => `<div>• ${i}</div>`).join("")
-        : `<div class="font-bold text-emerald-800">✨ Uy tín xe bánh tráng tăng cao! Thưởng khích lệ <b>+10.000đ</b> vào két tiền!</div>`;
+        : `<div class="font-bold text-emerald-800">✨ Tiếng lành đồn xa! Thưởng khích lệ <b>+10.000đ</b> vào két tiền!</div>`;
       if (unlockedItems.length === 0) state.money += 10000;
 
       const nextDish = Object.values(DISH_MENU).find(d => d.reqLevel > newLvl);
       document.getElementById("lvlup-next-teaser").innerHTML = nextDish
-        ? `🔥 Lưu ý: Hãy mở khóa ngay món mới trong mục <b>⬆️ Nâng cấp</b> để khách không bỏ đi vào ngày mai nhé!`
+        ? `🔥 Lưu ý: Nhớ mở món mới trong mục <b>⬆️ Nâng cấp</b> để khách không bỏ đi vào ngày mai nghen!`
         : `🔥 Hãy tiếp tục nâng sao món ăn và trang trí xe để xưng bá Sài Gòn!`;
       modal.classList.remove("hidden");
       updateAllUI();
     }
 
-    // Sửa Lỗi 4: Sau khi đóng bảng Lên Cấp, kiểm tra ngay xem két tiền có bị âm hoặc cạn vốn không để kích hoạt Vay Cứu Trợ
     function closeLevelUpModal() {
       document.getElementById("modal-level-up").classList.add("hidden");
       if (state.money < 0 || (state.money < 15000 && (state.stock.banhtrang || 0) < 1)) {
@@ -4044,7 +4091,7 @@
       if (alertBox) {
         if (unpurchased.length > 0) {
           alertBox.classList.remove("hidden");
-          alertBox.innerHTML = `⚠️ <b>Khách hàng đang hỏi mua:</b> ${unpurchased.map(d => d.name).join(", ")}! Hãy mở khóa công thức ngay để không bị khách chê bỏ đi!`;
+          alertBox.innerHTML = `⚠️ <b>Khách đang hỏi mua:</b> ${unpurchased.map(d => d.name).join(", ")}! Hãy mở món ngay để không bị mất khách!`;
         } else {
           alertBox.classList.add("hidden");
         }
@@ -4079,14 +4126,14 @@
 
     function buyDishRecipe(id) {
       const d = DISH_MENU[id];
-      if (state.money < d.unlockCost) { showToast("❌ Chưa đủ tiền mở công thức!"); return; }
+      if (state.money < d.unlockCost) { showToast("❌ Chưa đủ tiền mở món mới!"); return; }
       state.money -= d.unlockCost;
       if (!state.unlockedDishes.includes(id)) state.unlockedDishes.push(id);
       playSFX("cash"); updateAllUI(); saveGameEverywhere();
-      showToast(`🎉 Đã mở khóa món ${d.name}! Khách sẽ rất thích!`);
+      showToast(`🎉 Đã mở món ${d.name}! Khách sẽ rất thích!`);
     }
     function upgradeDishStar(id) { const cost = getDishStarUpgradeCost(id); if (state.money < cost) { showToast("❌ Chưa đủ tiền nâng sao!"); return; } state.money -= cost; state.dishStars[id] = (state.dishStars[id] || 1) + 1; playSFX("cash"); updateAllUI(); saveGameEverywhere(); showToast("⭐ Nâng cấp bậc sao thành công!"); }
-    function hireStaffMember(id) { const st = STAFF_CATALOG.find(x => x.id === id); if (state.money < st.hireCost) { showToast("❌ Chưa đủ tiền thuê nhân viên!"); return; } state.money -= st.hireCost; state.staff[id] = true; if (id === "mylan") state.prepDone = { sate: true, hanhphi: true, trungcut: true }; playSFX("cash"); updateAllUI(); saveGameEverywhere(); showToast(`🧑‍🍳 Đã thuê ${st.name}!`); }
+    function hireStaffMember(id) { const st = STAFF_CATALOG.find(x => x.id === id); if (state.money < st.hireCost) { showToast("❌ Chưa đủ tiền thuê phụ bếp!"); return; } state.money -= st.hireCost; state.staff[id] = true; if (id === "mylan") state.prepDone = { sate: true, hanhphi: true, trungcut: true }; playSFX("cash"); updateAllUI(); saveGameEverywhere(); showToast(`🧑‍🍳 Đã thuê ${st.name}!`); }
     function buyEquipUpgrade(id) { const eq = EQUIP_UPGRADES.find(x => x.id === id), cost = getEquipCost(eq); if (state.money < cost) { showToast("❌ Chưa đủ tiền nâng cấp!"); return; } state.money -= cost; state.equipLevels[id] = (state.equipLevels[id] || 0) + 1; playSFX("cash"); updateAllUI(); saveGameEverywhere(); showToast("⚡ Nâng cấp đồ nghề thành công!"); }
     function buyLicenseItem(id) { const lic = LICENSES_CATALOG.find(x => x.id === id); if (state.money < lic.cost) { showToast("❌ Chưa đủ tiền đăng ký!"); return; } state.money -= lic.cost; state.licenses[id] = true; playSFX("cash"); updateAllUI(); saveGameEverywhere(); showToast("📜 Đăng ký giấy phép thành công!"); }
 
@@ -4142,7 +4189,7 @@
         const debtAdded = nextTier === 1 ? 275000 : 392000;
         document.getElementById("bankruptcy-icon").textContent = "🏦";
         document.getElementById("bankruptcy-title").textContent = `Cứu Nguy Vốn Khởi Nghiệp (Lần ${nextTier}/2)!`;
-        document.getElementById("bankruptcy-desc").innerHTML = `Quán đang cạn tiền mặt nhập hàng! <b>Ngân Hàng Chính Sách Sài Gòn</b> hỗ trợ giải ngân gói vay cứu trợ <b>+${formatVND(grantAmount)}</b> (Trả góp 35.000đ mỗi tối).`;
+        document.getElementById("bankruptcy-desc").innerHTML = `Quán đang cạn tiền mặt lấy hàng! <b>Ngân Hàng Chính Sách Sài Gòn</b> hỗ trợ giải ngân gói vay cứu trợ <b>+${formatVND(grantAmount)}</b> (Trả góp 35.000đ mỗi tối).`;
         document.getElementById("bankruptcy-actions").innerHTML = `
           <button onclick="acceptRescueLoan(${grantAmount}, ${debtAdded})" class="soft-btn w-full py-3 rounded-xl bg-emerald-600 text-white font-black text-sm shadow">✍️ Nhận Gói Vay +${formatVND(grantAmount)}</button>
           <button onclick="declareTrueBankruptcy()" class="soft-btn w-full py-2 rounded-xl bg-gray-200 text-gray-800 font-bold text-xs">💔 Chấp nhận Phá Sản</button>
@@ -4164,7 +4211,7 @@
       const modal = document.getElementById("modal-bankruptcy");
       document.getElementById("bankruptcy-icon").textContent = "💔";
       document.getElementById("bankruptcy-title").textContent = "PHÁ SẢN – ĐÓNG CỬA XE BÁNH TRÁNG!";
-      document.getElementById("bankruptcy-desc").innerHTML = `Sau <b>${state.day} ngày</b> trụ vững và bán <b>${state.totalSold} bịch bánh tráng</b>, quán đã hết vốn lưu động. Hãy khởi nghiệp lại với 350.000đ vốn nhé!`;
+      document.getElementById("bankruptcy-desc").innerHTML = `Sau <b>${state.day} ngày</b> trụ vững và bán <b>${state.totalSold} bịch bánh tráng</b>, quán đã hết vốn xoay xở. Hãy khởi nghiệp lại với 350.000đ vốn nhé!`;
       document.getElementById("bankruptcy-actions").innerHTML = `
         <button onclick="restartFromBankruptcy()" class="soft-btn w-full py-3 rounded-xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-black text-sm shadow-lg">🔄 KHỞI NGHIỆP LẠI VỚI 350K</button>
       `;
@@ -4178,7 +4225,7 @@
       updateAllUI(); saveGameEverywhere(); showToast("🌅 Đã khởi nghiệp lại từ Ngày 1 với 350,0k!");
     }
 
-    // ================= 18. ĐỒNG HỒ CA BÁN HÀNG & CHỐT SỔ HỦY HÀNG HẾT HSD (ĐÃ VÁ LỖI 4 & 5) =================
+    // ================= 18. ĐỒNG HỒ CA BÁN HÀNG & CHỐT SỔ CUỐI NGÀY =================
     let closingTimeNotified = false;
 
     function checkAndTriggerClosingIfEmpty() {
@@ -4192,7 +4239,6 @@
       }
     }
 
-    // Sửa Lỗi 5: Tạm dừng đồng hồ khi đang mở bất kỳ Pop-up nào (Đứt hàng, Biến cố, MXH...)
     function startDayClock() {
       if (clockTimer) clearInterval(clockTimer);
       clockTimer = setInterval(() => {
@@ -4292,12 +4338,12 @@
       document.getElementById("end-day-title").textContent = `🌙 Chốt Sổ Ngày ${state.day} (${sched.dowName})`;
       document.getElementById("end-day-details").innerHTML = `
         <div class="flex justify-between"><span>Số phần đã bán:</span><b>${state.todaySold} phần</b></div>
-        <div class="flex justify-between text-emerald-700"><span>Tổng doanh thu thực nhận:</span><b>+${formatVND(state.todayRevenue)}</b></div>
-        <div class="flex justify-between text-blue-700"><span>Phí sàn App Shipper đã khấu trừ:</span><b>-${formatVND(state.todayAppFees || 0)}</b></div>
-        <div class="flex justify-between text-amber-800"><span>Tiền nhập nguyên liệu & Bao bì:</span><b>-${formatVND(state.todayCogsSpent)}</b></div>
-        <div class="flex justify-between text-red-700"><span>Vận hành, Vỉa hè, Lương & Thuế:</span><b>-${formatVND(totalFixed)}</b></div>
+        <div class="flex justify-between text-emerald-700"><span>Tổng tiền bán thực nhận:</span><b>+${formatVND(state.todayRevenue)}</b></div>
+        <div class="flex justify-between text-blue-700"><span>Phí sàn App Shipper đã trừ:</span><b>-${formatVND(state.todayAppFees || 0)}</b></div>
+        <div class="flex justify-between text-amber-800"><span>Tiền đi chợ & Bịch đựng:</span><b>-${formatVND(state.todayCogsSpent)}</b></div>
+        <div class="flex justify-between text-red-700"><span>Điện đèn, Vỉa hè, Lương & Thuế:</span><b>-${formatVND(totalFixed)}</b></div>
         <div class="flex justify-between text-orange-700">
-          <span>Hủy hàng hết HSD (${spoiledSummaryItems.length ? spoiledSummaryItems.join(", ") : "Không có"}):</span>
+          <span>Hàng hư quá hạn (${spoiledSummaryItems.length ? spoiledSummaryItems.join(", ") : "Không có"}):</span>
           <b>-${formatVND(spoiledTotalVal)}</b>
         </div>
         <div class="flex justify-between border-t border-amber-300 pt-1.5 text-sm font-black ${netProfit >= 0 ? 'text-emerald-800' : 'text-red-700'}">
@@ -4313,7 +4359,7 @@
       state.day += 1;
       state.clockMinutes = 13 * 60;
       state.isStreetSelling = false;
-      state.levelAtStartOfDay = state.level; // Cập nhật cấp độ đầu ngày mới
+      state.levelAtStartOfDay = state.level;
       state.todaySold = 0; state.todayRevenue = 0; state.todayCogsSpent = 0; state.todayAppFees = 0;
       state.featuredSoldToday = 0; state.featuredRewardClaimed = false;
       state.dilemmaTriggeredToday = false;
@@ -4339,7 +4385,7 @@
         showLevelUpModal(highestNewLvl);
         updateAllUI();
         saveGameEverywhere();
-        return; // Khi đóng modal Lên Cấp, closeLevelUpModal() sẽ tự kiểm tra tiếp Phá sản / Vay cứu trợ
+        return;
       }
 
       updateAllUI();
@@ -4349,7 +4395,7 @@
         checkBankruptcyOrRescueLoan();
       } else {
         const sched = getTodayScheduleInfo(state.day);
-        showToast(`☀️ Bước sang Ngày ${state.day} (${sched.dowName})! Dự báo sức mua: ~${sched.estBags} phần!`);
+        showToast(`☀️ Bước sang Ngày ${state.day} (${sched.dowName})! Sức mua dự kiến: ~${sched.estBags} phần!`);
       }
     }
 
