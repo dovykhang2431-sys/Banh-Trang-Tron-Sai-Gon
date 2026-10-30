@@ -939,12 +939,22 @@
     </div>
   </div>
 
-  <!-- 8. POP-UP CHỐT SỔ CUỐI NGÀY -->
+    <!-- 8. POP-UP CHỐT SỔ CUỐI NGÀY (CÓ NÚT ĐÓNG QUAY LẠI BÁN TIẾP) -->
   <div id="modal-end-day" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md cream-card p-5 border-4 border-purple-400 text-xs max-h-[92vh] overflow-y-auto">
-      <h3 id="end-day-title" class="text-base font-black text-amber-950 text-center mb-2">🌙 Chốt Sổ Cuối Ngày</h3>
+      <div class="flex items-center justify-between border-b border-amber-200 pb-2 mb-2.5">
+        <h3 id="end-day-title" class="text-sm sm:text-base font-black text-amber-950">🌙 Chốt Sổ Cuối Ngày</h3>
+        <button onclick="closeEndDayModal()" class="soft-btn px-2.5 py-1 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 font-black text-xs" title="Đóng để bán tiếp">✕ Đóng</button>
+      </div>
       <div id="end-day-details" class="space-y-1.5 bg-amber-50 p-3 rounded-2xl border mb-3"></div>
-      <button onclick="startNextDay()" class="soft-btn w-full py-3 rounded-xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-black text-sm shadow">☀️ VỀ NHÀ NGHỈ NGƠI & SANG NGÀY MỚI</button>
+      <div class="flex gap-2">
+        <button onclick="closeEndDayModal()" class="soft-btn flex-1 py-3 rounded-xl bg-gray-200 hover:bg-gray-300 text-amber-950 font-black text-xs shadow-sm">
+          ⬅️ Bán Tiếp
+        </button>
+        <button onclick="startNextDay()" class="soft-btn flex-[2] py-3 rounded-xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-black text-xs sm:text-sm shadow">
+          ☀️ Về Nhà Nghỉ Bán
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1038,7 +1048,11 @@
           const minSide = Math.min(img.width, img.height);
           ctx.drawImage(img, (img.width - minSide)/2, (img.height - minSide)/2, minSide, minSide, 0, 0, size, size);
           const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
-          if (avatarUploadTarget === "login") { loginSelectedAvatar = dataUrl; renderLoginAvatarGrid(); }
+                  if (avatarUploadTarget === "login") {
+            loginSelectedAvatar = dataUrl;
+            userManuallyChangedLoginAvatar = true;
+            renderLoginAvatarGrid();
+          }
           else { profileTempAvatar = dataUrl; renderProfileAvatarGrid(); }
           playSFX("cash"); showToast("📷 Đã tải ảnh đại diện thành công!");
         };
@@ -1512,6 +1526,8 @@
       return { text: "Báo Động", full: "Nguy Cơ Tẩy Chay!", color: "bg-red-600 text-white" };
     }
 
+    let userManuallyChangedLoginAvatar = false;
+
     function renderLoginAvatarGrid() {
       const grid = document.getElementById("login-avatar-grid");
       if (grid) {
@@ -1521,10 +1537,31 @@
       }
       const badge = document.getElementById("login-selected-avatar-badge");
       if (badge) badge.innerHTML = renderAvatarContent(loginSelectedAvatar, "w-full h-full object-cover rounded-full");
-    }
-    function selectLoginAvatar(av) { loginSelectedAvatar = av; renderLoginAvatarGrid(); }
 
-    // Hàm so sánh xem bản lưu trên Cloud có mới hơn hoặc tiến trình cao hơn bản trên máy hay không
+      // Tự động cập nhật preview Avatar theo tên quán đang gõ để không bị dính ảnh của tài khoản trước
+      const nameInputEl = document.getElementById("login-shop-name");
+      if (nameInputEl && !nameInputEl.dataset.boundAvatarSync) {
+        nameInputEl.dataset.boundAvatarSync = "1";
+        nameInputEl.addEventListener("input", () => {
+          if (userManuallyChangedLoginAvatar) return;
+          const typedKey = sanitizeShopKey(nameInputEl.value);
+          const matchInLb = cloudLeaderboardCache.find(item => item.shopKey === typedKey);
+          if (matchInLb && matchInLb.avatar) {
+            loginSelectedAvatar = matchInLb.avatar;
+          } else {
+            loginSelectedAvatar = "👩‍🍳";
+          }
+          renderLoginAvatarGrid();
+        });
+      }
+    }
+
+    function selectLoginAvatar(av) {
+      loginSelectedAvatar = av;
+      userManuallyChangedLoginAvatar = true;
+      renderLoginAvatarGrid();
+    }
+
     function isCloudProgressNewer(cloudState, localState) {
       if (!cloudState) return false;
       if (!localState) return true;
@@ -1540,6 +1577,7 @@
 
     async function checkExistingLocalSaveForLoginScreen() {
       try {
+        userManuallyChangedLoginAvatar = false;
         const raw = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem("banh_trang_tron_saigon_v5_master_save");
         if (!raw) return;
         let saved = JSON.parse(raw);
@@ -1554,21 +1592,27 @@
           document.getElementById("quick-resume-stats").textContent = `Cấp ${data.level || 1} • ${(data.rating || 5.0).toFixed(1)}⭐ • ${formatShortK(data.money || 350000)}`;
           document.getElementById("login-shop-name").value = data.shopName;
           document.getElementById("login-shop-pin").value = data.pin || "";
-          loginSelectedAvatar = data.avatar || "👩‍🍳";
-          renderLoginAvatarGrid();
+          if (!userManuallyChangedLoginAvatar) {
+            loginSelectedAvatar = data.avatar || "👩‍🍳";
+            renderLoginAvatarGrid();
+          }
         };
 
         renderQuickBox(saved, false);
 
-        // Tự động kiểm tra trên Cloud xem máy kia có cày lên Cấp cao hơn không
         const key = saved.shopKey || sanitizeShopKey(saved.shopName);
         if (key) {
           const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 3500);
           if (res.ok) {
             const cloudShop = await res.json();
             if (cloudShop && cloudShop.fullState && String(cloudShop.pin) === String(saved.pin)) {
-              const cloudState = { ...cloudShop.fullState, updatedAt: cloudShop.updatedAt || cloudShop.fullState.updatedAt || 0 };
-              if (isCloudProgressNewer(cloudState, saved)) {
+              const cloudAvatar = cloudShop.avatar || cloudShop.fullState.avatar || saved.avatar || "👩‍🍳";
+              const cloudState = {
+                ...cloudShop.fullState,
+                avatar: cloudAvatar,
+                updatedAt: cloudShop.updatedAt || cloudShop.fullState.updatedAt || 0
+              };
+              if (isCloudProgressNewer(cloudState, saved) || cloudAvatar !== saved.avatar) {
                 localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cloudState));
                 renderQuickBox(cloudState, true);
               }
@@ -1585,16 +1629,22 @@
         if (raw) {
           let localData = JSON.parse(raw);
           const key = localData.shopKey || sanitizeShopKey(localData.shopName);
-          // Kiểm tra Cloud lần cuối trước khi vào game để không bao giờ lấy bản cũ đè bản mới
           if (key) {
             try {
               const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 2800);
               if (res.ok) {
                 const cloudShop = await res.json();
                 if (cloudShop && cloudShop.fullState && String(cloudShop.pin) === String(localData.pin)) {
-                  const cs = { ...cloudShop.fullState, updatedAt: cloudShop.updatedAt || cloudShop.fullState.updatedAt || 0 };
+                  const cloudAvatar = cloudShop.avatar || cloudShop.fullState.avatar || localData.avatar || "👩‍🍳";
+                  const cs = {
+                    ...cloudShop.fullState,
+                    avatar: cloudAvatar,
+                    updatedAt: cloudShop.updatedAt || cloudShop.fullState.updatedAt || 0
+                  };
                   if (isCloudProgressNewer(cs, localData)) {
                     localData = cs;
+                  } else {
+                    localData.avatar = cloudAvatar;
                   }
                 }
               }
@@ -1625,6 +1675,7 @@
       showLoginMessage("☁️ Đang đồng bộ dữ liệu quán...", "info");
 
       let isExistingCloudShop = false;
+      let loadedCloudAvatar = null;
       try {
         const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 3000);
         const cloudShop = res.ok ? await res.json() : null;
@@ -1635,17 +1686,20 @@
             return;
           }
           isExistingCloudShop = true;
-          const cloudState = cloudShop.fullState ? { ...cloudShop.fullState, updatedAt: cloudShop.updatedAt || cloudShop.fullState.updatedAt || 0 } : null;
+          loadedCloudAvatar = cloudShop.avatar || (cloudShop.fullState && cloudShop.fullState.avatar) || "👩‍🍳";
+          const cloudState = cloudShop.fullState ? {
+            ...cloudShop.fullState,
+            avatar: loadedCloudAvatar,
+            updatedAt: cloudShop.updatedAt || cloudShop.fullState.updatedAt || 0
+          } : null;
+
           if (state.shopKey === key && !isCloudProgressNewer(cloudState, state)) {
-            // Giữ bản trên máy nếu máy đang có tiến trình mới hơn
+            // Giữ bản trên máy nếu cùng 1 tài khoản và máy có tiến trình mới hơn
           } else {
             state = getInitialDefaultState();
             if (cloudState) mergeLoadedState(cloudState);
           }
           if (cloudShop.recoveryCode) state.recoveryCode = cloudShop.recoveryCode;
-          if (cloudShop.avatar && loginSelectedAvatar === "👩‍🍳") {
-            loginSelectedAvatar = cloudShop.avatar;
-          }
         }
       } catch (e) {}
 
@@ -1656,7 +1710,16 @@
       state.shopKey = key;
       state.shopName = nameInput;
       state.pin = pinInput;
-      state.avatar = loginSelectedAvatar || state.avatar || "👩‍🍳";
+
+      // Sửa dứt điểm lỗi dính Avatar giữa các tài khoản:
+      // Nếu đăng nhập vào quán đã có trên Cloud, luôn lấy đúng Avatar của quán đó trên Cloud (trừ khi người chơi vừa chủ động bấm chọn/tải ảnh mới)
+      if (isExistingCloudShop) {
+        state.avatar = userManuallyChangedLoginAvatar ? loginSelectedAvatar : (loadedCloudAvatar || state.avatar || "👩‍🍳");
+      } else {
+        state.avatar = userManuallyChangedLoginAvatar ? loginSelectedAvatar : "👩‍🍳";
+      }
+      loginSelectedAvatar = state.avatar;
+      userManuallyChangedLoginAvatar = false;
       state.levelAtStartOfDay = state.level || 1;
 
       await ensureUniqueRecoveryCodeOnCloud();
@@ -1672,13 +1735,19 @@
     function showLoginMessage(text, type) {
       const msgEl = document.getElementById("login-status-msg");
       if (!msgEl) return;
-      msgEl.classList.remove("hidden", "bg-red-100", "text-red-800", "bg-emerald-100", "text-emerald-800", "bg-amber-100", "text-amber-900");
+      msgEl.classList.remove("hidden", "bg-red-100", "text-red-800", "bg-emerald-100", "text-emerald-800", "bg-amber-100", "bg-amber-900");
       msgEl.classList.add(type === "error" ? "bg-red-100" : type === "success" ? "bg-emerald-100" : "bg-amber-100");
       msgEl.classList.add(type === "error" ? "text-red-800" : type === "success" ? "text-emerald-800" : "text-amber-900");
       msgEl.textContent = text;
     }
 
-    function openLoginModalForSwitch() { checkExistingLocalSaveForLoginScreen(); fetchCloudLeaderboard(false); document.getElementById("login-screen").classList.remove("hidden"); }
+    function openLoginModalForSwitch() {
+      userManuallyChangedLoginAvatar = false;
+      checkExistingLocalSaveForLoginScreen();
+      fetchCloudLeaderboard(false);
+      document.getElementById("login-screen").classList.remove("hidden");
+    }
+
     function openProfileEditModal() {
       ensureRecoveryCode();
       profileTempAvatar = state.avatar || "👩‍🍳";
@@ -4227,10 +4296,12 @@
 
     // ================= 18. ĐỒNG HỒ CA BÁN HÀNG & CHỐT SỔ CUỐI NGÀY =================
     let closingTimeNotified = false;
+    let manualDismissedClosingAt22 = false;
+    let pendingEndDayData = null;
 
     function checkAndTriggerClosingIfEmpty() {
       if (!state.isStreetSelling || state.clockMinutes < 22 * 60) return;
-      if (isAnyBlockingModalOpen()) return;
+      if (isAnyBlockingModalOpen() || manualDismissedClosingAt22) return;
 
       const remainingCustomers = customerSlots.filter(Boolean).length;
       if (remainingCustomers === 0) {
@@ -4246,6 +4317,7 @@
         if (!state.isStreetSelling || isAnyBlockingModalOpen()) return;
 
         if (state.clockMinutes < 22 * 60) {
+          manualDismissedClosingAt22 = false;
           state.clockMinutes = Math.min(22 * 60, state.clockMinutes + 3);
         }
 
@@ -4270,29 +4342,20 @@
       }, 1350);
     }
 
+    // Chỉ tính nháp bảng Chốt Sổ để người chơi xem, nếu bấm "Đóng / Bán Tiếp" sẽ không bị trừ tiền hay hư hàng!
     function endDaySummary() {
-      if (slotPatienceTimer) clearInterval(slotPatienceTimer);
-      if (slotSpawnerTimer) clearInterval(slotSpawnerTimer);
-      activeCartBuff = null;
-      bulkOrderChallenge = null;
-      document.getElementById("cart-active-buff-bar").classList.add("hidden");
-      document.getElementById("bulk-rush-banner").classList.add("hidden");
-      document.getElementById("rain-visual-layer").classList.add("hidden");
-
       const depCost = Math.round(getDailyOperatingFixedCost() * 0.4), utilCost = Math.round(getDailyOperatingFixedCost() * 0.6);
       const rentCost = state.licenses.lic_sidewalk ? 35000 : 0;
       const staffWages = getDailyStaffWages();
-      let progressiveTax = state.level >= 11 ? Math.round((state.todayRevenue * 0.04) / 500) * 500 + 10000 : 0;
-      let bankInstallment = (state.loanDebt || 0) > 0 ? Math.min(state.loanDebt, 35000) : 0;
-      state.loanDebt = Math.max(0, (state.loanDebt || 0) - bankInstallment);
-      if (bankInstallment > 0 && state.loanDebt === 0) state.hasRepaidAllDebt = true;
-
+      const progressiveTax = state.level >= 11 ? Math.round((state.todayRevenue * 0.04) / 500) * 500 + 10000 : 0;
+      const bankInstallment = (state.loanDebt || 0) > 0 ? Math.min(state.loanDebt, 35000) : 0;
       const totalFixed = depCost + utilCost + rentCost + staffWages + progressiveTax + bankInstallment;
 
       ensureValidStockBatches();
       const saveRate = Math.min(0.8, (state.equipLevels.tool_cooler || 0) * 0.16);
       let spoiledTotalVal = 0;
       const spoiledSummaryItems = [];
+      const nextStockBatches = {};
 
       INGREDIENTS.forEach(ing => {
         const list = state.stockBatches[ing.id] || [];
@@ -4311,28 +4374,20 @@
           }
         });
 
-        state.stockBatches[ing.id] = nextList;
+        nextStockBatches[ing.id] = nextList;
         if (expiredQty > 0) {
           const lossVal = expiredQty * ing.baseCost;
           spoiledTotalVal += lossVal;
           spoiledSummaryItems.push(`${ing.short} (${expiredQty})`);
         }
       });
-      syncTotalStockFromBatches();
 
-      state.cumulativeCosts.fixed = (state.cumulativeCosts.fixed || 0) + depCost + utilCost + rentCost;
-      state.cumulativeCosts.wages = (state.cumulativeCosts.wages || 0) + staffWages;
-      state.cumulativeCosts.tax = (state.cumulativeCosts.tax || 0) + progressiveTax;
-      state.cumulativeCosts.spoiled = (state.cumulativeCosts.spoiled || 0) + spoiledTotalVal;
-
-      state.money -= totalFixed;
       const netProfit = state.todayRevenue - state.todayCogsSpent - totalFixed;
-      const existingDayIdx = state.ledgerHistory.findIndex(item => item.day === state.day);
-      if (existingDayIdx !== -1) {
-        state.ledgerHistory[existingDayIdx] = { day: state.day, sold: state.todaySold, revenue: state.todayRevenue, netProfit };
-      } else {
-        state.ledgerHistory.unshift({ day: state.day, sold: state.todaySold, revenue: state.todayRevenue, netProfit });
-      }
+
+      pendingEndDayData = {
+        depCost, utilCost, rentCost, staffWages, progressiveTax, bankInstallment,
+        totalFixed, spoiledTotalVal, nextStockBatches, netProfit
+      };
 
       const sched = getTodayScheduleInfo(state.day);
       document.getElementById("end-day-title").textContent = `🌙 Chốt Sổ Ngày ${state.day} (${sched.dowName})`;
@@ -4351,10 +4406,54 @@
         </div>
       `;
       document.getElementById("modal-end-day").classList.remove("hidden");
-      updateAllUI(); saveGameEverywhere();
+    }
+
+    function closeEndDayModal() {
+      document.getElementById("modal-end-day").classList.add("hidden");
+      pendingEndDayData = null;
+      if (state.clockMinutes >= 22 * 60) {
+        manualDismissedClosingAt22 = true;
+      }
+      playSFX("snip");
+      showToast("⬅️ Đã đóng bảng Chốt sổ, con có thể tiếp tục bán hàng!");
     }
 
     function startNextDay() {
+      if (!pendingEndDayData) endDaySummary();
+      const d = pendingEndDayData;
+      pendingEndDayData = null;
+      manualDismissedClosingAt22 = false;
+
+      if (slotPatienceTimer) clearInterval(slotPatienceTimer);
+      if (slotSpawnerTimer) clearInterval(slotSpawnerTimer);
+      activeCartBuff = null;
+      bulkOrderChallenge = null;
+      document.getElementById("cart-active-buff-bar").classList.add("hidden");
+      document.getElementById("bulk-rush-banner").classList.add("hidden");
+      document.getElementById("rain-visual-layer").classList.add("hidden");
+
+      if (d) {
+        state.loanDebt = Math.max(0, (state.loanDebt || 0) - d.bankInstallment);
+        if (d.bankInstallment > 0 && state.loanDebt === 0) state.hasRepaidAllDebt = true;
+
+        state.stockBatches = d.nextStockBatches;
+        syncTotalStockFromBatches();
+
+        state.cumulativeCosts.fixed = (state.cumulativeCosts.fixed || 0) + d.depCost + d.utilCost + d.rentCost;
+        state.cumulativeCosts.wages = (state.cumulativeCosts.wages || 0) + d.staffWages;
+        state.cumulativeCosts.tax = (state.cumulativeCosts.tax || 0) + d.progressiveTax;
+        state.cumulativeCosts.spoiled = (state.cumulativeCosts.spoiled || 0) + d.spoiledTotalVal;
+
+        state.money -= d.totalFixed;
+
+        const existingDayIdx = state.ledgerHistory.findIndex(item => item.day === state.day);
+        if (existingDayIdx !== -1) {
+          state.ledgerHistory[existingDayIdx] = { day: state.day, sold: state.todaySold, revenue: state.todayRevenue, netProfit: d.netProfit };
+        } else {
+          state.ledgerHistory.unshift({ day: state.day, sold: state.todaySold, revenue: state.todayRevenue, netProfit: d.netProfit });
+        }
+      }
+
       document.getElementById("modal-end-day").classList.add("hidden");
       state.day += 1;
       state.clockMinutes = 13 * 60;
