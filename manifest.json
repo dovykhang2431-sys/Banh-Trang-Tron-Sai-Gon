@@ -1,8 +1,10 @@
 {
+  "id": "/Banh-Trang-Tron-Sai-Gon/",
   "name": "Vua Bánh Tráng Sài Gòn",
   "short_name": "Vua Bánh Tráng",
   "description": "Game mô phỏng kinh doanh xe bánh tráng trộn Sài Gòn thực chiến",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#fdf3eb",
@@ -10,9 +12,8 @@
   "icons": [
     {
       "src": "./icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "sizes": "192x192 512x512 1024x1024 any",
+      "purpose": "any"
     }
   ]
 }
