@@ -16,10 +16,7 @@
     }
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     * {
       box-sizing: border-box;
@@ -375,7 +372,7 @@
       <div class="p-3 rounded-2xl bg-[#ffeae5] border-2 border-[#f5c2b8] flex items-start gap-2.5 shadow-sm">
         <span class="w-3 h-3 rounded-full bg-rose-500 shrink-0 mt-1"></span>
         <div class="flex-1">
-          <div id="prep-featured-title" class="font-black text-sm text-rose-950">Món nổi bật hôm nay: Trộn Thập Cẩm + Trà Tắc</div>
+          <div id="prep-featured-title" class="font-black text-sm text-rose-950">Món nổi bật hôm nay: Trộn Thập Cẩm</div>
           <div id="prep-featured-desc" class="text-xs text-rose-800 font-medium mt-0.5">
             Phần có món này được <b>+10% giá bán</b> • Đã bán <b id="prep-featured-progress">0/8</b> phần để nhận thưởng nóng <b>+15.000đ</b>!
           </div>
@@ -413,7 +410,7 @@
             <div class="w-11 h-11 rounded-2xl bg-amber-200 border border-amber-400 flex items-center justify-center text-2xl shrink-0">📦</div>
             <div>
               <div id="wholesale-guide-title" class="font-black text-xs sm:text-sm text-amber-950">Gợi Ý Lấy Hàng Hôm Nay</div>
-              <div id="wholesale-guide-sub" class="text-[11px] text-amber-800">Chỉ tính nguyên liệu của những món quán đang bán.</div>
+              <div id="wholesale-guide-sub" class="text-[11px] text-amber-800">Tự động phân bổ lượng hàng theo số món đang mở bán.</div>
             </div>
           </div>
           <button id="btn-suggested-order" onclick="fillSuggestedOrder()" class="soft-btn shrink-0 px-3 py-2 rounded-xl bg-amber-600 text-white font-black text-xs shadow">
@@ -953,7 +950,7 @@
     </div>
   </div>
 
-    <!-- 8. POP-UP CHỐT SỔ CUỐI NGÀY (CÓ NÚT ĐÓNG QUAY LẠI BÁN TIẾP) -->
+  <!-- 8. POP-UP CHỐT SỔ CUỐI NGÀY (CÓ NÚT ĐÓNG QUAY LẠI BÁN TIẾP) -->
   <div id="modal-end-day" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md cream-card p-5 border-4 border-purple-400 text-xs max-h-[92vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-amber-200 pb-2 mb-2.5">
@@ -1006,7 +1003,7 @@
     const LOCAL_STORAGE_KEY = "banh_trang_tron_saigon_v6_master_save";
     const AVATAR_LIST = ["👩‍🍳", "🧑‍🍳", "👨‍🍳", "👵", "👧", "👦", "🦊", "🐼"];
 
-    // ================= 1. BỘ ICON SVG MÓN VIỆT =================
+    // ================= 1. BỘ ICON SVG MÓN VIỆT & CHỐNG XSS AVATAR =================
     const VIET_SVG = {
       ing_banhtrang: `<svg class="w-8 h-8" viewBox="0 0 40 40"><circle cx="18" cy="22" r="12" fill="#fef9c3" stroke="#d97706" stroke-width="1.5"/><circle cx="22" cy="18" r="12" fill="#fef08a" stroke="#b45309" stroke-width="1.5"/><line x1="15" y1="16" x2="27" y2="20" stroke="#ca8a04" stroke-width="1.2" stroke-dasharray="2,2"/></svg>`,
       ing_xoai: `<svg class="w-8 h-8" viewBox="0 0 40 40"><path d="M8,26 Q20,10 32,24" fill="none" stroke="#84cc16" stroke-width="3.5" stroke-linecap="round"/><path d="M10,30 Q22,16 34,28" fill="none" stroke="#bef264" stroke-width="3" stroke-linecap="round"/><circle cx="28" cy="14" r="6" fill="#16a34a"/><circle cx="28" cy="14" r="4" fill="#a3e635"/></svg>`,
@@ -1033,11 +1030,38 @@
     function getDishSvgIcon(dishKey) { return VIET_SVG["dish_" + dishKey] || VIET_SVG.dish_tron; }
     function getIngredientSvgIcon(ingId) { return VIET_SVG["ing_" + ingId] || VIET_SVG.ing_banhtrang; }
 
+    function escapeHtml(str) {
+      return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    }
+
+    // Chống XSS tuyệt đối cho Avatar dạng data:image
     function renderAvatarContent(avatarVal, imgClass = "w-full h-full object-cover rounded-xl") {
-      if (typeof avatarVal === "string" && avatarVal.startsWith("data:image")) {
-        return `<img src="${avatarVal}" alt="Avatar" class="${imgClass}" />`;
+      const isSafeDataImage = typeof avatarVal === "string" && /^data:image\/(png|jpeg|jpg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(avatarVal.trim());
+      if (isSafeDataImage) {
+        return `<img src="${avatarVal.trim()}" alt="Avatar" class="${escapeHtml(imgClass)}" />`;
       }
       return `<span>${escapeHtml(avatarVal || "👩‍🍳")}</span>`;
+    }
+
+    // Hàm băm Mã PIN 4 số kèm shopKey (Tương thích ngược với cả PIN cũ và PIN mới đã băm)
+    function hashShopPin(shopKey, rawPin) {
+      const str = `bt_v6_salt_${shopKey}_${String(rawPin).trim()}`;
+      let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+      for (let i = 0; i < str.length; i++) {
+        const ch = str.charCodeAt(i);
+        h1 = Math.imul(h1 ^ ch, 2654435761);
+        h2 = Math.imul(h2 ^ ch, 1597334677);
+      }
+      h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+      h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+      return "PINH_" + (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
+    }
+
+    function verifyShopPin(shopKey, inputPin, storedPin) {
+      if (!storedPin) return false;
+      const cleanInput = String(inputPin || "").trim();
+      const hashedInput = hashShopPin(shopKey, cleanInput);
+      return String(storedPin) === cleanInput || String(storedPin) === hashedInput;
     }
 
     let avatarUploadTarget = "login";
@@ -1062,12 +1086,14 @@
           const minSide = Math.min(img.width, img.height);
           ctx.drawImage(img, (img.width - minSide)/2, (img.height - minSide)/2, minSide, minSide, 0, 0, size, size);
           const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
-                  if (avatarUploadTarget === "login") {
+          if (avatarUploadTarget === "login") {
             loginSelectedAvatar = dataUrl;
             userManuallyChangedLoginAvatar = true;
             renderLoginAvatarGrid();
+          } else {
+            profileTempAvatar = dataUrl;
+            renderProfileAvatarGrid();
           }
-          else { profileTempAvatar = dataUrl; renderProfileAvatarGrid(); }
           playSFX("cash"); showToast("📷 Đã tải ảnh đại diện thành công!");
         };
         img.src = e.target.result;
@@ -1208,21 +1234,21 @@
       } catch (e) {}
     }
 
-    // ================= 3. HỆ THỐNG LỊCH TUẦN, NGÀY LỄ & DỰ BÁO ĐỊNH LƯỢNG =================
+    // ================= 3. HỆ THỐNG LỊCH TUẦN, NGÀY LỄ & DỰ BÁO ĐỊNH LƯỢNG (ĐÃ CÂN BẰNG) =================
     const WEEKLY_SCHEDULE = [
-      { dow: 1, name: "Thứ Hai", tag: "Đầu tuần vắng khách", estBags: 14, traTacChance: 0.35, spawnMs: 5600, desc: "Đầu tuần khách còn vắng, lấy tầm 14 phần đồ tươi là vừa đẹp!" },
-      { dow: 2, name: "Thứ Ba", tag: "Ngày thường êm ả", estBags: 15, traTacChance: 0.38, spawnMs: 5300, desc: "Khách ghé đều đều, lấy khoảng 15 phần để không bị tồn đồ tươi." },
-      { dow: 3, name: "Thứ Tư", tag: "Giữa tuần tan tầm", estBags: 17, traTacChance: 0.45, spawnMs: 4900, desc: "Giữa tuần học sinh tan trường ghé ăn vặt nhiều, nên chuẩn bị tầm 17 phần." },
-      { dow: 4, name: "Thứ Năm", tag: "Đơn App tăng tốc", estBags: 20, traTacChance: 0.48, spawnMs: 4400, desc: "Dân văn phòng đặt App nhiều hơn, chuẩn bị khoảng 20 phần nghen!" },
-      { dow: 5, name: "Thứ Sáu", tag: "Tối Thứ Sáu dạo phố", estBags: 25, traTacChance: 0.55, spawnMs: 3800, desc: "Tối Thứ Sáu khách đi chơi đông, nhớ lấy đủ 25 phần nguyên liệu!" },
-      { dow: 6, name: "Thứ Bảy", tag: "Cuối tuần bùng nổ", estBags: 32, traTacChance: 0.65, spawnMs: 3200, vipBoost: 0.15, desc: "Cuối tuần khách VIP với Shipper ghé dồn dập! Lấy sẵn 32 phần kẻo đứt hàng!" },
-      { dow: 7, name: "Chủ Nhật", tag: "Chủ Nhật xả hơi", estBags: 28, traTacChance: 0.60, spawnMs: 3500, vipBoost: 0.12, desc: "Chủ Nhật khách hay mua một lần 2-3 bịch, chuẩn bị tầm 28 phần nha!" }
+      { dow: 1, name: "Thứ Hai", tag: "Đầu tuần vắng khách", estBags: 16, traTacChance: 0.35, spawnMs: 6200, desc: "Đầu tuần khách còn vắng, chuẩn bị tầm 16 phần nguyên liệu là vừa đẹp!" },
+      { dow: 2, name: "Thứ Ba", tag: "Ngày thường êm ả", estBags: 18, traTacChance: 0.38, spawnMs: 5800, desc: "Khách ghé đều đều, lấy khoảng 18 phần để không bị tồn đồ tươi." },
+      { dow: 3, name: "Thứ Tư", tag: "Giữa tuần tan tầm", estBags: 20, traTacChance: 0.45, spawnMs: 5300, desc: "Giữa tuần học sinh tan trường ghé ăn vặt nhiều, nên chuẩn bị tầm 20 phần." },
+      { dow: 4, name: "Thứ Năm", tag: "Đơn App tăng tốc", estBags: 22, traTacChance: 0.48, spawnMs: 4800, desc: "Dân văn phòng đặt App nhiều hơn, chuẩn bị khoảng 22 phần nghen!" },
+      { dow: 5, name: "Thứ Sáu", tag: "Tối Thứ Sáu dạo phố", estBags: 26, traTacChance: 0.55, spawnMs: 4100, desc: "Tối Thứ Sáu khách đi chơi đông, nhớ lấy đủ 26 phần nguyên liệu!" },
+      { dow: 6, name: "Thứ Bảy", tag: "Cuối tuần bùng nổ", estBags: 32, traTacChance: 0.65, spawnMs: 3400, vipBoost: 0.15, desc: "Cuối tuần khách VIP với Shipper ghé dồn dập! Lấy sẵn 32 phần kẻo đứt hàng!" },
+      { dow: 7, name: "Chủ Nhật", tag: "Chủ Nhật xả hơi", estBags: 28, traTacChance: 0.60, spawnMs: 3800, vipBoost: 0.12, desc: "Chủ Nhật khách hay mua một lần 2-3 bịch, chuẩn bị tầm 28 phần nha!" }
     ];
 
     const SPECIAL_HOLIDAYS = {
-      5:  { name: "🎉 Lễ Hội Ẩm Thực Quận 1", estBags: 34, traTacChance: 0.70, spawnMs: 3000, vipBoost: 0.25, desc: "Sự kiện Lễ hội Đường phố! Khách du lịch & TikToker đổ về cực đông, sức mua ~34 phần!" },
-      10: { name: "⚽ Đêm Chung Kết Bóng Đá", estBags: 36, traTacChance: 0.75, spawnMs: 2900, vipBoost: 0.20, desc: "Cả Sài Gòn thức xem bóng đá! Đơn Shipper mua sỉ 2-3 bịch kèm Trà Tắc tăng đột biến (~36 phần)!" },
-      15: { name: "💸 Ngày Lương Về Sài Gòn", estBags: 32, traTacChance: 0.65, spawnMs: 3100, vipBoost: 0.22, desc: "Dân văn phòng vừa nhận lương, chi tiêu hào phóng và gọi các món đắt tiền nhiều hơn (~32 phần)!" }
+      5:  { name: "🎉 Lễ Hội Ẩm Thực Quận 1", estBags: 34, traTacChance: 0.70, spawnMs: 3100, vipBoost: 0.25, desc: "Sự kiện Lễ hội Đường phố! Khách du lịch & TikToker đổ về cực đông, sức mua ~34 phần!" },
+      10: { name: "⚽ Đêm Chung Kết Bóng Đá", estBags: 36, traTacChance: 0.75, spawnMs: 3000, vipBoost: 0.20, desc: "Cả Sài Gòn thức xem bóng đá! Đơn Shipper mua sỉ 2-3 bịch kèm Trà Tắc tăng đột biến (~36 phần)!" },
+      15: { name: "💸 Ngày Lương Về Sài Gòn", estBags: 32, traTacChance: 0.65, spawnMs: 3200, vipBoost: 0.22, desc: "Dân văn phòng vừa nhận lương, chi tiêu hào phóng và gọi các món đắt tiền nhiều hơn (~32 phần)!" }
     };
 
     function getTodayScheduleInfo(dayNum = state.day) {
@@ -1335,7 +1361,7 @@
       { id: 4, title: "Chương 4: Huyền Thoại Vua Bánh Tráng", story: "Sau bao ngày thức dậy từ sớm thắng sa tế, phi hành giòn, xe bánh tráng tủ kính của con đã trở thành huyền thoại Sài Gòn!", goalDesc: "Đạt Cấp 20 và bán 100 phần bánh", check: (s) => s.level >= 20 && s.totalSold >= 100, reward: 100000 }
     ];
 
-    // ================= 5. TRẠNG THÁI GAME V6 =================
+    // ================= 5. TRẠNG THÁI GAME V6 & CHỐNG GIAN LẬN =================
     const INITIAL_STARTER_STOCK = {
       banhtrang: 8, xoai: 8, muoitom: 8, sotbo: 0, dauphong: 8, khobo: 8, tepmo: 0, trungcut: 8, tratac: 8
     };
@@ -1390,6 +1416,7 @@
         viralPct: 20,
         maxStreak5Star: 0, totalPrepDays: 0, servedPickyCount: 0, repliedReviewsCount: 0, resolvedDilemmasCount: 0,
         claimedAchievements: [],
+        securitySeal: "",
         updatedAt: 0
       };
     }
@@ -1418,7 +1445,6 @@
       return n.toLocaleString("vi-VN") + "đ";
     }
     function formatVND(num) { return Number(num || 0).toLocaleString("vi-VN") + "đ"; }
-    function escapeHtml(str) { return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 
     function isAnyBlockingModalOpen() {
       const modalIds = [
@@ -1512,7 +1538,26 @@
       return { expTodayQty, minDays };
     }
 
-    // ================= 7. ĐĂNG NHẬP, TỰ ĐỘNG ĐỒNG BỘ CLOUD GIỮA 2 MÁY & BẢNG XẾP HẠNG =================
+    // ================= 7. BỘ LỌC CHỐNG GIAN LẬN, ĐĂNG NHẬP & BẢNG XẾP HẠNG =================
+    function computeSecuritySeal(s) {
+      const raw = `${s.shopKey || "init"}|${Math.round(s.money || 0)}|${s.totalSold || 0}|${s.level || 1}|${s.day || 1}|DITU_V6_SECRET_2026`;
+      let hash = 2166136261;
+      for (let i = 0; i < raw.length; i++) {
+        hash ^= raw.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      return "SEAL_" + (hash >>> 0).toString(36);
+    }
+
+    function isStateLegitimate(s) {
+      if (!s || typeof s !== "object") return false;
+      const maxAllowedMoney = 1500000 + (Number(s.totalSold || 0) * 120000);
+      if (Number(s.money) > maxAllowedMoney || Number(s.money) < -500000) return false;
+      if (Number(s.level) < 1 || Number(s.level) > 50) return false;
+      if (Number(s.rating) < 1 || Number(s.rating) > 5) return false;
+      return true;
+    }
+
     function sanitizeShopKey(name) {
       return String(name || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/[^a-z0-9]/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "");
     }
@@ -1552,7 +1597,6 @@
       const badge = document.getElementById("login-selected-avatar-badge");
       if (badge) badge.innerHTML = renderAvatarContent(loginSelectedAvatar, "w-full h-full object-cover rounded-full");
 
-      // Tự động cập nhật preview Avatar theo tên quán đang gõ để không bị dính ảnh của tài khoản trước
       const nameInputEl = document.getElementById("login-shop-name");
       if (nameInputEl && !nameInputEl.dataset.boundAvatarSync) {
         nameInputEl.dataset.boundAvatarSync = "1";
@@ -1605,7 +1649,7 @@
           document.getElementById("quick-resume-name").textContent = data.shopName;
           document.getElementById("quick-resume-stats").textContent = `Cấp ${data.level || 1} • ${(data.rating || 5.0).toFixed(1)}⭐ • ${formatShortK(data.money || 350000)}`;
           document.getElementById("login-shop-name").value = data.shopName;
-          document.getElementById("login-shop-pin").value = data.pin || "";
+          document.getElementById("login-shop-pin").value = (!String(data.pin || "").startsWith("PINH_")) ? (data.pin || "") : "";
           if (!userManuallyChangedLoginAvatar) {
             loginSelectedAvatar = data.avatar || "👩‍🍳";
             renderLoginAvatarGrid();
@@ -1619,7 +1663,7 @@
           const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 3500);
           if (res.ok) {
             const cloudShop = await res.json();
-            if (cloudShop && cloudShop.fullState && String(cloudShop.pin) === String(saved.pin)) {
+            if (cloudShop && cloudShop.fullState && verifyShopPin(key, saved.pin, cloudShop.pin)) {
               const cloudAvatar = cloudShop.avatar || cloudShop.fullState.avatar || saved.avatar || "👩‍🍳";
               const cloudState = {
                 ...cloudShop.fullState,
@@ -1648,7 +1692,7 @@
               const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 2800);
               if (res.ok) {
                 const cloudShop = await res.json();
-                if (cloudShop && cloudShop.fullState && String(cloudShop.pin) === String(localData.pin)) {
+                if (cloudShop && cloudShop.fullState && verifyShopPin(key, localData.pin, cloudShop.pin)) {
                   const cloudAvatar = cloudShop.avatar || cloudShop.fullState.avatar || localData.avatar || "👩‍🍳";
                   const cs = {
                     ...cloudShop.fullState,
@@ -1690,16 +1734,19 @@
 
       let isExistingCloudShop = false;
       let loadedCloudAvatar = null;
+      let storedCloudPin = null;
+
       try {
         const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 3000);
         const cloudShop = res.ok ? await res.json() : null;
         if (cloudShop && cloudShop.pin) {
-          if (String(cloudShop.pin) !== String(pinInput)) {
+          if (!verifyShopPin(key, pinInput, cloudShop.pin)) {
             showLoginMessage("❌ Tên quán đã có chủ! Hãy nhập đúng PIN hoặc đặt Tên khác.", "error");
             btn.disabled = false;
             return;
           }
           isExistingCloudShop = true;
+          storedCloudPin = cloudShop.pin;
           loadedCloudAvatar = cloudShop.avatar || (cloudShop.fullState && cloudShop.fullState.avatar) || "👩‍🍳";
           const cloudState = cloudShop.fullState ? {
             ...cloudShop.fullState,
@@ -1723,10 +1770,9 @@
 
       state.shopKey = key;
       state.shopName = nameInput;
-      state.pin = pinInput;
+      // Giữ tương thích với Firebase Rules если quán cũ đã lưu pin, hoặc băm PIN cho quán mới
+      state.pin = isExistingCloudShop ? storedCloudPin : hashShopPin(key, pinInput);
 
-      // Sửa dứt điểm lỗi dính Avatar giữa các tài khoản:
-      // Nếu đăng nhập vào quán đã có trên Cloud, luôn lấy đúng Avatar của quán đó trên Cloud (trừ khi người chơi vừa chủ động bấm chọn/tải ảnh mới)
       if (isExistingCloudShop) {
         state.avatar = userManuallyChangedLoginAvatar ? loginSelectedAvatar : (loadedCloudAvatar || state.avatar || "👩‍🍳");
       } else {
@@ -1749,7 +1795,7 @@
     function showLoginMessage(text, type) {
       const msgEl = document.getElementById("login-status-msg");
       if (!msgEl) return;
-      msgEl.classList.remove("hidden", "bg-red-100", "text-red-800", "bg-emerald-100", "text-emerald-800", "bg-amber-100", "bg-amber-900");
+      msgEl.classList.remove("hidden", "bg-red-100", "text-red-800", "bg-emerald-100", "text-emerald-800", "bg-amber-100", "text-amber-900");
       msgEl.classList.add(type === "error" ? "bg-red-100" : type === "success" ? "bg-emerald-100" : "bg-amber-100");
       msgEl.classList.add(type === "error" ? "text-red-800" : type === "success" ? "text-emerald-800" : "text-amber-900");
       msgEl.textContent = text;
@@ -1829,60 +1875,47 @@
 
     function saveToLocalOnly() {
       try {
+        if (!isStateLegitimate(state)) {
+          const maxCap = 350000 + (Number(state.totalSold || 0) * 45000);
+          state.money = Math.min(state.money, maxCap);
+          state.level = Math.min(50, Math.max(1, state.level));
+          showToast("⚠️ Dì Tư phát hiện sổ sách khai khống! Đã cân bằng lại két tiền!");
+        }
         state.updatedAt = Date.now();
+        state.securitySeal = computeSecuritySeal(state);
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
       } catch (e) {}
     }
 
+    // Chỉ tải từ /leaderboard.json (Không tải /shops.json để bảo mật tuyệt đối Mã PIN người chơi)
     async function fetchCloudLeaderboard(showFeedback = false) {
       const badge = document.getElementById("login-cloud-badge");
       try {
-        const [resLb, resShops] = await Promise.allSettled([
-          fetchWithTimeout(`${FIREBASE_DB_URL}/leaderboard.json`, {}, 6500),
-          fetchWithTimeout(`${FIREBASE_DB_URL}/shops.json`, {}, 6500)
-        ]);
-
-        let lbData = null, shopsData = null;
-        if (resLb.status === "fulfilled" && resLb.value.ok) {
-          lbData = await resLb.value.json();
-        }
-        if (resShops.status === "fulfilled" && resShops.value.ok) {
-          shopsData = await resShops.value.json();
-        }
-
-        if (!lbData && !shopsData) throw new Error("Cloud Offline");
+        const resLb = await fetchWithTimeout(`${FIREBASE_DB_URL}/leaderboard.json`, {}, 6500);
+        if (!resLb.ok) throw new Error("Cloud Offline");
+        const lbData = await resLb.json();
 
         const mergedShopsMap = new Map();
-
-        const addOrUpdateShop = (item) => {
-          if (!item || !item.shopName) return;
-          const sKey = item.shopKey || sanitizeShopKey(item.shopName);
-          if (!sKey || String(sKey).startsWith("npc_")) return;
-
-          const fs = item.fullState || {};
-          const candidate = {
-            shopKey: sKey,
-            shopName: item.shopName || fs.shopName,
-            avatar: item.avatar || fs.avatar || "👩‍🍳",
-            money: Number(item.money !== undefined ? item.money : fs.money) || 0,
-            rating: Number(item.rating !== undefined ? item.rating : fs.rating) || 5.0,
-            level: Number(item.level !== undefined ? item.level : fs.level) || 1,
-            totalSold: Number(item.totalSold !== undefined ? item.totalSold : fs.totalSold) || 0,
-            day: Number(item.day !== undefined ? item.day : fs.day) || 1,
-            updatedAt: Number(item.updatedAt || 0)
-          };
-
-          const existing = mergedShopsMap.get(sKey);
-          if (!existing || candidate.updatedAt >= existing.updatedAt || candidate.totalSold > existing.totalSold) {
-            mergedShopsMap.set(sKey, candidate);
-          }
-        };
-
-        if (shopsData && typeof shopsData === "object") {
-          Object.values(shopsData).forEach(addOrUpdateShop);
-        }
         if (lbData && typeof lbData === "object") {
-          Object.values(lbData).forEach(addOrUpdateShop);
+          Object.values(lbData).forEach(item => {
+            if (!item || !item.shopName) return;
+            const sKey = item.shopKey || sanitizeShopKey(item.shopName);
+            if (!sKey || String(sKey).startsWith("npc_")) return;
+            const maxLegit = 1500000 + (Number(item.totalSold || 0) * 120000);
+            if (Number(item.money || 0) > maxLegit) return;
+
+            mergedShopsMap.set(sKey, {
+              shopKey: sKey,
+              shopName: item.shopName,
+              avatar: item.avatar || "👩‍🍳",
+              money: Number(item.money) || 0,
+              rating: Number(item.rating) || 5.0,
+              level: Number(item.level) || 1,
+              totalSold: Number(item.totalSold) || 0,
+              day: Number(item.day) || 1,
+              updatedAt: Number(item.updatedAt || 0)
+            });
+          });
         }
 
         cloudLeaderboardCache = Array.from(mergedShopsMap.values());
@@ -2161,7 +2194,7 @@
         } else if ((state.activeMultiDayEffects?.cheapDryDays || 0) > 0) {
           wholesaleTitle.textContent = `📦 Đang hưởng giá Sỉ Đồ Khô -30% (Còn ${state.activeMultiDayEffects.cheapDryDays} ngày)`;
         } else {
-          wholesaleTitle.textContent = `Gợi Ý ${sched.dowName}: Lấy tầm ${sched.estBags} phần nguyên liệu`;
+          wholesaleTitle.textContent = `Gợi Ý ${sched.dowName}: Phục vụ ~${sched.estBags} phần`;
         }
       }
       if (wholesaleSub) {
@@ -2172,7 +2205,7 @@
       }
 
       const featDish = DISH_MENU[state.featuredDishKey] || DISH_MENU.tron;
-      document.getElementById("prep-featured-title").textContent = `Món nổi bật hôm nay: ${featDish.name} + Trà Tắc`;
+      document.getElementById("prep-featured-title").textContent = `Món nổi bật hôm nay: ${featDish.name}`;
       document.getElementById("prep-featured-progress").textContent = `${Math.min(8, state.featuredSoldToday || 0)}/8`;
 
       const unrepBadge = document.getElementById("prep-unreplied-badge");
@@ -2256,7 +2289,7 @@
       else if (sub === "leaderboard") fetchCloudLeaderboard(false);
     }
 
-    // ================= 9. CHỢ ĐẦU MỐI & HIỂN THỊ HẠN SỬ DỤNG TRONG KHO =================
+    // ================= 9. CHỢ ĐẦU MỐI & PHÂN BỔ NGUYÊN LIỆU TỐI ƯU =================
     function renderMarketGrid() {
       const grid = document.getElementById("market-grid");
       if (!grid) return;
@@ -2311,21 +2344,39 @@
       const sched = getTodayScheduleInfo(state.day);
       const targetBags = sched.estBags;
       const targetDrink = Math.max(6, Math.round(targetBags * sched.traTacChance));
-      const usedSet = getActiveUsedIngredientSet();
+      const unlocked = state.unlockedDishes && state.unlockedDishes.length > 0 ? state.unlockedDishes : ["tron"];
 
       INGREDIENTS.forEach(ing => {
         const el = document.getElementById(`buy-qty-${ing.id}`);
         if (!el) return;
-        if (!usedSet.has(ing.id)) {
+
+        if (ing.id === "tratac") {
+          const toBuy = Math.max(0, targetDrink - (state.stock.tratac || 0));
+          el.value = toBuy > 0 ? toBuy : "";
+          return;
+        }
+
+        let dishesUsingCount = 0;
+        unlocked.forEach(dKey => {
+          if (DISH_MENU[dKey]?.recipe?.[ing.id]) {
+            dishesUsingCount += (dKey === state.featuredDishKey) ? 1.5 : 1;
+          }
+        });
+
+        if (dishesUsingCount === 0) {
           el.value = "";
           return;
         }
-        const needed = ing.id === "tratac" ? targetDrink : targetBags;
+
+        const totalWeight = unlocked.length + (unlocked.includes(state.featuredDishKey) ? 0.5 : 0);
+        const usageRatio = Math.min(1, (dishesUsingCount / totalWeight) * 1.15);
+        const needed = Math.ceil(targetBags * usageRatio);
         const toBuy = Math.max(0, needed - (state.stock[ing.id] || 0));
         el.value = toBuy > 0 ? toBuy : "";
       });
+
       recalcMarketOrderTotal();
-      showToast(`✨ Đã điền gợi ý lấy đủ ${targetBags} phần bánh & ${targetDrink} Trà tắc!`);
+      showToast(`✨ Đã tính lượng hàng tối ưu theo tỷ lệ ${unlocked.length} món đang bán!`);
     }
 
     function clearMarketInputs() {
@@ -2534,13 +2585,13 @@
 
       const sched = getTodayScheduleInfo(state.day);
       const priceImpact = getPricingCustomerImpact();
-      const finalSpawnMs = Math.round((sched.spawnMs || 4500) * priceImpact.spawnMult);
+      const finalSpawnMs = Math.round((sched.spawnMs || 5200) * priceImpact.spawnMult);
 
       slotSpawnerTimer = setInterval(() => {
         if (!state.isStreetSelling || isAnyBlockingModalOpen()) return;
         const activeCount = customerSlots.filter(Boolean).length;
         let maxAllowed = state.level <= 3 ? 2 : (state.level <= 7 ? 3 : 4);
-        let spawnProb = 0.68;
+        let spawnProb = 0.62;
         if (activeCartBuff && activeCartBuff.id === "tiktok_storm") { maxAllowed = 4; spawnProb = 1.0; }
         if (activeCartBuff && activeCartBuff.id === "alley_hide") { maxAllowed = 2; spawnProb = 0.35; }
         if (activeCount < maxAllowed && Math.random() < spawnProb) {
@@ -2561,15 +2612,15 @@
         return;
       }
 
-      const unpurchasedDishes = getUnpurchasedEligibleDishes(true);
-      if (unpurchasedDishes.length > 0 && Math.random() < 0.28) {
-        const demandedDish = unpurchasedDishes[Math.floor(Math.random() * unpurchasedDishes.length)];
-        adjustRating(-0.04);
-        adjustViral(-3);
+      const affordableUnpurchased = getUnpurchasedEligibleDishes(true).filter(d => state.money >= d.unlockCost);
+      if (affordableUnpurchased.length > 0 && Math.random() < 0.12) {
+        const demandedDish = affordableUnpurchased[Math.floor(Math.random() * affordableUnpurchased.length)];
+        adjustRating(-0.01);
+        adjustViral(-1);
         playSFX("whistle");
-        const complainHtml = `<span class="text-red-600 font-black">😤 Khách hỏi: "Quán đông khách vầy mà chưa có món <u>${demandedDish.name}</u> hả? Thôi mình qua xe khác nha!" (-0.04⭐)</span>`;
+        const complainHtml = `<span class="text-red-600 font-black">😤 Khách hỏi: "Quán đủ vốn rồi mà chưa mở món <u>${demandedDish.name}</u> hả? Hôm sau nhớ mở nha!" (-0.01⭐)</span>`;
         renderSelectedOrderBubble(complainHtml);
-        showToast(`⚠️ Khách vừa bỏ đi vì quán chưa mở món "${demandedDish.name}"!`);
+        showToast(`💡 Khách hỏi món "${demandedDish.name}"! Tối nay nhớ vào Nâng Cấp mở món nhé!`);
         return;
       }
 
@@ -2598,8 +2649,8 @@
       const wantedSpice = Math.floor(Math.random() * 3);
       const traTacProb = sched.traTacChance || 0.45;
       const bagQty = chosenTemplate.isShipper
-        ? (Math.random() < 0.35 && state.level >= 5 ? 3 : 2)
-        : (Math.random() < 0.20 && state.level >= 3 ? 2 : 1);
+        ? (Math.random() < 0.30 && state.level >= 5 ? 3 : 2)
+        : (Math.random() < 0.18 && state.level >= 3 ? 2 : 1);
 
       const vipBoost = (sched.vipBoost || 0) + ((state.activeMultiDayEffects?.streetFestDays || 0) > 0 ? 0.25 : 0);
 
@@ -2683,8 +2734,8 @@
         return;
       }
 
-      if (state.staff.beti && !bowl.step1Done && bowl.selectedDish === c.wantedDish) {
-        setTimeout(() => { if (!bowl.step1Done && getActiveCustomer()) doStep1Base(true); }, 250);
+      if (state.staff.beti && !bowl.step1Done && bowl.selectedDish === c.wantedDish && bowl.rau === c.wantedRau && bowl.hanh === c.wantedHanh) {
+        setTimeout(() => { if (!bowl.step1Done && getActiveCustomer() === c) doStep1Base(true); }, 450);
       }
     }
 
@@ -3125,8 +3176,8 @@
       if (c && !bowl.step1Done) {
         if (!checkFullOrderIngredientsImmediate(c, dishKey)) return;
       }
-      if (state.staff.beti && !bowl.step1Done && c && dishKey === c.wantedDish) {
-        setTimeout(() => { if (!bowl.step1Done && getActiveCustomer()) doStep1Base(true); }, 240);
+      if (state.staff.beti && !bowl.step1Done && c && dishKey === c.wantedDish && bowl.rau === c.wantedRau && bowl.hanh === c.wantedHanh) {
+        setTimeout(() => { if (!bowl.step1Done && getActiveCustomer() === c) doStep1Base(true); }, 350);
       }
     }
 
@@ -3241,7 +3292,6 @@
         document.getElementById("step-check-3").textContent = bowl.mixProgress <= max ? "✅ Chuẩn" : "⚠️ Lố";
       }
     }
-
     // ================= 13. XỬ LÝ ĐỨT HÀNG NGAY LẬP TỨC & DỌN XE NGHỈ SỚM =================
     function closeOutOfStockModal() {
       document.getElementById("modal-out-of-stock").classList.add("hidden");
@@ -3339,6 +3389,7 @@
       endDaySummary();
     }
 
+    // Đã sửa: Bước 1 chỉ trừ nguyên liệu nhóm 1 (Bánh tráng & Xoài), không trừ oan Khô bò/Trứng cút khi chưa giao
     function doStep1Base(byStaff = false) {
       const c = getActiveCustomer();
       if (!c) { showToast("🍃 Hãy chạm vào khách trên quầy hoặc bấm Rao hàng!"); return; }
@@ -3349,8 +3400,10 @@
       bowl.lockedBagQty = c.bagQty || 1;
       const recipe = DISH_MENU[bowl.selectedDish]?.recipe || {};
       INGREDIENTS.forEach(ing => {
-        const req = (recipe[ing.id] || 0) * bowl.lockedBagQty;
-        if (req > 0) consumeStockFIFO(ing.id, req);
+        if (ing.stepGroup === 1) {
+          const req = (recipe[ing.id] || 0) * bowl.lockedBagQty;
+          if (req > 0) consumeStockFIFO(ing.id, req);
+        }
       });
 
       playSFX("snip");
@@ -3373,7 +3426,7 @@
       updateStepButtonsHighlight();
 
       if (state.staff.mylan && !bowl.step2Done) {
-        setTimeout(() => { if (bowl.step1Done && !bowl.step2Done && getActiveCustomer()) doStep2Sauce(true); }, 250);
+        setTimeout(() => { if (bowl.step1Done && !bowl.step2Done && getActiveCustomer() === c) doStep2Sauce(true); }, 350);
       }
     }
 
@@ -3383,6 +3436,15 @@
       playSFX("sauce");
       bowl.step2Done = true;
 
+      const recipe = DISH_MENU[bowl.selectedDish]?.recipe || {};
+      const qtyMult = bowl.lockedBagQty || 1;
+      INGREDIENTS.forEach(ing => {
+        if (ing.stepGroup === 2) {
+          const req = (recipe[ing.id] || 0) * qtyMult;
+          if (req > 0) consumeStockFIFO(ing.id, req);
+        }
+      });
+
       const sauceLayer = document.getElementById("svg-layer-sauce");
       sauceLayer.classList.remove("hidden");
       const zz = document.getElementById("svg-anim-zigzag");
@@ -3391,12 +3453,14 @@
       if (bowl.rau || bowl.hanh) document.getElementById("svg-layer-herbs").classList.remove("hidden");
       document.getElementById("bowl-instruction").textContent = "🧤 Bấm Trộn đều (B3)!";
       spawnFloatingFX(byStaff ? "👧 Mỹ Lan: Vắt tắc & Sốt!" : "🍋 Vắt tắc & Xịt sốt bơ!");
+      renderSellDishGrid();
+      renderBottomIngredientTray();
       updateStepButtonsHighlight();
 
       if (state.staff.anhba && !bowl.step3Done) {
         setTimeout(() => {
           if (bowl.step2Done && !bowl.step3Done && getActiveCustomer()) doStep3Mix(true);
-        }, 260);
+        }, 300);
       }
     }
 
@@ -3479,6 +3543,15 @@
         return;
       }
 
+      // Chỉ trừ topping đắt tiền (Khô bò, Tép mỡ, Trứng cút) & Trà tắc khi đơn hàng hợp lệ và giao thành công
+      const recipe = DISH_MENU[bowl.selectedDish]?.recipe || {};
+      const usedQty = bagQty;
+      INGREDIENTS.forEach(ing => {
+        if (ing.stepGroup === 4 && ing.id !== "tratac") {
+          const req = (recipe[ing.id] || 0) * usedQty;
+          if (req > 0) consumeStockFIFO(ing.id, req);
+        }
+      });
       if (bowl.tratac) {
         consumeStockFIFO("tratac", 1);
       }
@@ -3499,7 +3572,6 @@
         if (c.isShipper) adjustViral(4);
       }
 
-      const usedQty = bagQty;
       let grossOrderPrice = getDishEffectivePrice(bowl.selectedDish) * usedQty;
       const traTacRev = (c.wantedTraTac && bowl.tratac) ? 7000 : 0;
       grossOrderPrice += traTacRev;
@@ -3619,6 +3691,7 @@
       const { min } = getSweetSpotBounds();
       if (!bowl.step1Done) doStep1Base(); else if (!bowl.step2Done) doStep2Sauce(); else if (bowl.mixProgress < min) doStep3Mix(); else doStep4Serve();
     }
+
     // ================= 15. MÃ KHÓA KHÔI PHỤC CLOUD & LƯU BẢO MẬT =================
     function normalizeRecoveryCodeInput(raw) {
       const cleaned = String(raw || "").trim().toUpperCase().replace(/\s+/g, "");
@@ -3672,9 +3745,10 @@
       const code = ensureRecoveryCode();
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code);
       playSFX("cash");
-      showToast(`📋 Đã sao chép Mã Khóa: ${code} (Nhớ kèm PIN: ${state.pin || "****"})!`);
+      showToast(`📋 Đã sao chép Mã Khóa: ${code} (Nhớ dùng kèm Mã PIN 4 số của con nhé)!`);
     }
 
+    // Đã sửa bảo mật: Chỉ truy vấn đích danh /recoveryCodes/${codeInput} và /shops/${targetShopKey}, không tải toàn bộ /shops.json
     async function handleRecoverByCode() {
       initAudio(); startChillBGM();
       const rawCode = document.getElementById("recovery-code-input")?.value || "";
@@ -3708,27 +3782,15 @@
           if (shopRes.ok) cloudShop = await shopRes.json();
         }
 
-        if (!cloudShop) {
-          const allRes = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops.json`, {}, 3500);
-          if (allRes.ok) {
-            const allShops = await allRes.json();
-            if (allShops && typeof allShops === "object") {
-              const found = Object.values(allShops).find(s =>
-                s && (normalizeRecoveryCodeInput(s.recoveryCode) === codeInput || (s.fullState && normalizeRecoveryCodeInput(s.fullState.recoveryCode) === codeInput))
-              );
-              if (found) cloudShop = found;
-            }
-          }
-        }
-
         if (!cloudShop || !cloudShop.fullState) {
           showLoginMessage("❌ Không tìm thấy quán nào khớp với Mã Khóa này!", "error");
           if (btn) btn.disabled = false;
           return;
         }
 
+        const sKey = cloudShop.shopKey || targetShopKey || sanitizeShopKey(cloudShop.shopName);
         const savedPin = String(cloudShop.pin || cloudShop.fullState.pin || "");
-        if (savedPin !== String(pinInput)) {
+        if (!verifyShopPin(sKey, pinInput, savedPin)) {
           showLoginMessage("❌ Mã PIN 4 số không đúng với Mã Khóa này!", "error");
           if (btn) btn.disabled = false;
           return;
@@ -3739,7 +3801,7 @@
         state.recoveryCode = codeInput;
         state.pin = savedPin;
         state.shopName = cloudShop.shopName || state.shopName;
-        state.shopKey = cloudShop.shopKey || targetShopKey || sanitizeShopKey(state.shopName);
+        state.shopKey = sKey;
         state.avatar = cloudShop.avatar || state.avatar || "👩‍🍳";
         state.levelAtStartOfDay = state.level || 1;
         loginSelectedAvatar = state.avatar;
@@ -3759,10 +3821,10 @@
 
     async function saveGameEverywhere() {
       ensureRecoveryCode();
-      const nowTs = Date.now();
-      state.updatedAt = nowTs;
       saveToLocalOnly();
-      if (!state.shopName) return;
+      if (!state.shopName || !isStateLegitimate(state)) return;
+
+      const nowTs = state.updatedAt || Date.now();
       const key = state.shopKey || sanitizeShopKey(state.shopName);
       state.shopKey = key;
       const publicSummary = {
@@ -3849,12 +3911,15 @@
       }
     }
 
+    // Đã sửa: Không gán doanh thu ảo 50.000đ khi Ngày 1 chưa bán hàng
     function renderSvg7DaysChart() {
       const container = document.getElementById("svg-chart-7days");
       if (!container) return;
       const daysData = [...(state.ledgerHistory || [])].slice(0, 7).reverse();
       if (daysData.length === 0) {
-        daysData.push({ day: state.day, revenue: state.todayRevenue || 50000, cost: state.todayCogsSpent || 25000, netProfit: (state.todayRevenue || 50000) - (state.todayCogsSpent || 25000) });
+        const curRev = state.todayRevenue || 0;
+        const curCost = state.todayCogsSpent || 0;
+        daysData.push({ day: state.day, revenue: curRev, cost: curCost, netProfit: curRev - curCost });
       }
       const maxVal = Math.max(100000, ...daysData.map(d => Math.max(d.revenue || 0, (d.revenue || 0) - (d.netProfit || 0))));
       const w = 320, h = 115, padB = 20, padT = 12, chartH = h - padB - padT;
@@ -3929,8 +3994,8 @@
       if (costEl) {
         const c = state.cumulativeCosts || {};
         costEl.innerHTML = buildDonutSvg([
-          { label: "Nguyên liệu", val: (c.cogs || 0) + (state.todayCogsSpent || 0) + 15000, color: "#f97316" },
-          { label: "Điện đèn & Vỉa hè", val: (c.fixed || 0) + 22000, color: "#3b82f6" },
+          { label: "Nguyên liệu", val: (c.cogs || 0) + (state.todayCogsSpent || 0), color: "#f97316" },
+          { label: "Điện đèn & Vỉa hè", val: (c.fixed || 0) + getDailyOperatingFixedCost(), color: "#3b82f6" },
           { label: "Lương & Phí App", val: (c.wages || 0) + (c.appFee || 0) + getDailyStaffWages(), color: "#10b981" },
           { label: "Thuế & Hủy HSD", val: (c.tax || 0) + (c.spoiled || 0), color: "#ef4444" }
         ]);
@@ -3942,7 +4007,6 @@
           .sort((a, b) => b.val - a.val)
           .slice(0, 4);
         const colors = ["#10b981", "#f59e0b", "#ec4899", "#6366f1"];
-        if (entries.length === 0) entries.push({ label: "Thập cẩm", val: 25000 });
         dishEl.innerHTML = buildDonutSvg(entries.map((e, i) => ({ ...e, color: colors[i % colors.length] })));
       }
     }
@@ -4086,7 +4150,7 @@
       const unpurchased = getUnpurchasedEligibleDishes(false);
       if (unpurchased.length > 0) {
         const d = unpurchased[0];
-        el.innerHTML = `🚨 <b>Cảnh báo mất khách:</b> Khách đang hỏi mua món <b>${d.name}</b>! Con vào mục <b>⬆️ Nâng cấp</b> mở món ngay kẻo khách bỏ qua xe khác nghen!`;
+        el.innerHTML = `🚨 <b>Gợi ý mở rộng thực đơn:</b> Đã đủ cấp mở món <b>${d.name}</b> (${formatVND(d.unlockCost)})! Con vào mục <b>⬆️ Nâng cấp</b> mở món khi đủ vốn nghen!`;
         return;
       }
 
@@ -4131,7 +4195,7 @@
       document.getElementById("lvlup-title").textContent = `Lên Cấp ${newLvl} • ${lObj.title}!`;
 
       const unlockedItems = [];
-      Object.values(DISH_MENU).forEach(d => { if (d.reqLevel <= newLvl && !state.unlockedDishes.includes(d.id)) unlockedItems.push(`🥙 Khách bắt đầu hỏi mua: <b>${d.name}</b> (Mở khóa ${formatVND(d.unlockCost)})`); });
+      Object.values(DISH_MENU).forEach(d => { if (d.reqLevel <= newLvl && !state.unlockedDishes.includes(d.id)) unlockedItems.push(`🥙 Mở quyền mua công thức: <b>${d.name}</b> (${formatVND(d.unlockCost)})`); });
       STAFF_CATALOG.forEach(s => { if (s.reqLevel === newLvl) unlockedItems.push(`🧑‍🍳 Mở quyền thuê phụ bếp: <b>${s.name}</b>`); });
       LICENSES_CATALOG.forEach(l => { if (l.reqLevel === newLvl) unlockedItems.push(`📜 Mở đăng ký giấy phép: <b>${l.name}</b>`); });
 
@@ -4143,7 +4207,7 @@
 
       const nextDish = Object.values(DISH_MENU).find(d => d.reqLevel > newLvl);
       document.getElementById("lvlup-next-teaser").innerHTML = nextDish
-        ? `🔥 Lưu ý: Nhớ mở món mới trong mục <b>⬆️ Nâng cấp</b> để khách không bỏ đi vào ngày mai nghen!`
+        ? `🔥 Lưu ý: Nhớ mở món mới trong mục <b>⬆️ Nâng cấp</b> khi đủ tiền để phục vụ thực khách nghen!`
         : `🔥 Hãy tiếp tục nâng sao món ăn và trang trí xe để xưng bá Sài Gòn!`;
       modal.classList.remove("hidden");
       updateAllUI();
@@ -4174,7 +4238,7 @@
       if (alertBox) {
         if (unpurchased.length > 0) {
           alertBox.classList.remove("hidden");
-          alertBox.innerHTML = `⚠️ <b>Khách đang hỏi mua:</b> ${unpurchased.map(d => d.name).join(", ")}! Hãy mở món ngay để không bị mất khách!`;
+          alertBox.innerHTML = `⚠️ <b>Món mới đã đủ cấp mở khóa:</b> ${unpurchased.map(d => d.name).join(", ")}! Hãy mở món ngay khi đủ vốn nhé!`;
         } else {
           alertBox.classList.add("hidden");
         }
@@ -4356,7 +4420,7 @@
       }, 1350);
     }
 
-    // Chỉ tính nháp bảng Chốt Sổ để người chơi xem, nếu bấm "Đóng / Bán Tiếp" sẽ không bị trừ tiền hay hư hàng!
+    // Đã sửa: Trừ chính xác tiền hàng hư quá hạn (spoiledTotalVal) vào Lãi Ròng cuối ngày
     function endDaySummary() {
       const depCost = Math.round(getDailyOperatingFixedCost() * 0.4), utilCost = Math.round(getDailyOperatingFixedCost() * 0.6);
       const rentCost = state.licenses.lic_sidewalk ? 35000 : 0;
@@ -4396,7 +4460,7 @@
         }
       });
 
-      const netProfit = state.todayRevenue - state.todayCogsSpent - totalFixed;
+      const netProfit = state.todayRevenue - state.todayCogsSpent - totalFixed - spoiledTotalVal;
 
       pendingEndDayData = {
         depCost, utilCost, rentCost, staffWages, progressiveTax, bankInstallment,
@@ -4518,7 +4582,7 @@
       cloudLeaderboardCache.forEach(i => {
         if (i && i.shopKey && !String(i.shopKey).startsWith("npc_")) mergedMap.set(i.shopKey, i);
       });
-      if (state.shopName) {
+      if (state.shopName && isStateLegitimate(state)) {
         const myK = state.shopKey || sanitizeShopKey(state.shopName);
         mergedMap.set(myK, { shopKey: myK, shopName: state.shopName, avatar: state.avatar, money: state.money, rating: state.rating || 5.0, level: state.level, totalSold: state.totalSold, day: state.day });
       }
