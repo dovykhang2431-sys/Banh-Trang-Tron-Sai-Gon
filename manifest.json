@@ -1,19 +1,26 @@
 {
-  "id": "/Banh-Trang-Tron-Sai-Gon/",
-  "name": "Vua Bánh Tráng Sài Gòn",
-  "short_name": "Vua Bánh Tráng",
-  "description": "Game mô phỏng kinh doanh xe bánh tráng trộn Sài Gòn thực chiến",
+  "name": "Vua Bánh Tráng Sài Gòn V6",
+  "short_name": "Bánh Tráng V6",
+  "description": "Game mô phỏng kinh doanh Xe Bánh Tráng Sài Gòn: Quản lý Hạn Sử Dụng, Đơn App & Lịch Tuần thực chiến!",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#fdf3eb",
   "theme_color": "#562328",
+  "lang": "vi",
   "icons": [
     {
       "src": "./icon-512.png?v=2",
-      "sizes": "192x192 512x512 1024x1024 any",
-      "purpose": "any"
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png?v=2",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
