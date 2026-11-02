@@ -362,9 +362,9 @@
         <div class="flex-1">
           <div class="flex items-center justify-between gap-2">
             <div id="prep-forecast-title" class="font-black text-sm text-amber-950">📅 Thứ Hai (Đầu tuần vắng khách)</div>
-            <span id="prep-demand-badge" class="px-2 py-0.5 rounded-full bg-amber-600 text-white font-black text-[10px]">Sức mua: ~14 phần</span>
+            <span id="prep-demand-badge" class="px-2 py-0.5 rounded-full bg-amber-600 text-white font-black text-[10px]">Sức mua: ~16 phần</span>
           </div>
-          <div id="prep-forecast-desc" class="text-xs text-amber-800 font-medium mt-0.5">Đầu tuần khách còn vắng, lấy tầm 14 phần đồ tươi là vừa đẹp!</div>
+          <div id="prep-forecast-desc" class="text-xs text-amber-800 font-medium mt-0.5">Đầu tuần khách còn vắng, chuẩn bị tầm 16 phần nguyên liệu là vừa đẹp!</div>
         </div>
       </div>
 
@@ -414,7 +414,7 @@
             </div>
           </div>
           <button id="btn-suggested-order" onclick="fillSuggestedOrder()" class="soft-btn shrink-0 px-3 py-2 rounded-xl bg-amber-600 text-white font-black text-xs shadow">
-            +Đủ 14 phần
+            +Đủ 16 phần
           </button>
         </div>
 
@@ -931,7 +931,7 @@
   <!-- 6. POP-UP HỒI KÝ -->
   <div id="modal-story" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="w-full max-w-md cream-card p-5 border-4 border-amber-400 max-h-[85vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b pb-2 mb-2.5 text-sm font-black text-amber-950"><span>📖 Hồi Ký 30 Năm Dì Tư</span><button onclick="closeStoryModal()" class="px-2.5 py-0.5 bg-amber-100 rounded-lg">✕</button></div>
+      <div class="flex items-center justify-between border-b pb-2 mb-2.5 text-sm font-black text-amber-950"><span>📖 Hồi Ký 30 Năm Dì Tư (6 Chương)</span><button onclick="closeStoryModal()" class="px-2.5 py-0.5 bg-amber-100 rounded-lg">✕</button></div>
       <div id="story-chapters-container" class="space-y-2.5 text-xs"></div>
     </div>
   </div>
@@ -1266,7 +1266,7 @@
       };
     }
 
-    // ================= 4. DANH MỤC 9 NGUYÊN LIỆU KÈM HẠN SỬ DỤNG =================
+    // ================= 4. DANH MỤC 9 NGUYÊN LIỆU, 10 MÓN, 12 THÀNH TỰU & 6 CHƯƠNG HỒI KÝ =================
     const INGREDIENTS = [
       { id: "banhtrang", name: "Bánh tráng phơi sương", short: "B.Tráng", baseCost: 2500, shelfLife: 4, type: "dry", stepGroup: 1 },
       { id: "xoai", name: "Xoài xanh & Tắc tươi", short: "Xoài", baseCost: 1500, shelfLife: 1, type: "fresh", stepGroup: 1 },
@@ -1354,13 +1354,15 @@
       { id: "ach_legend30", title: "🏆 Huyền Thoại 30 Năm", desc: "Đạt Cấp độ 30 & giữ vững đánh giá 5.0 ⭐", rewardMoney: 100000, rewardXp: 200, check: (s) => s.level >= 30 && (s.rating || 5.0) >= 5.0 }
     ];
 
+    // Đã mở rộng: Trọn bộ 6 Chương Hồi Ký 30 Năm Dì Tư trải dài tới Cấp 45
     const STORY_CHAPTERS = [
       { id: 1, title: "Chương 1: Đôi Quang Gánh Của Dì Tư", story: "Năm 1996, Dì Tư bắt đầu từ những miếng bánh tráng vụn Tây Ninh trộn muối ớt mỡ hành bán 500 đồng trước cổng trường.", goalDesc: "Bán đủ 10 phần bánh tráng", check: (s) => s.totalSold >= 10, reward: 15000 },
       { id: 2, title: "Chương 2: Mưa Rào Sài Gòn & Chỗ Đứng", story: "Buôn bán vỉa hè sợ nhất là những cơn mưa rào bất chợt lúc 5 giờ chiều và chuyện canh lượng hàng theo lịch tuần.", goalDesc: "Đạt Cấp 6 và bán 30 phần bánh", check: (s) => s.level >= 6 && s.totalSold >= 30, reward: 30000 },
       { id: 3, title: "Chương 3: Cơn Sốt Đơn App & Tóp Tóp", story: "Thời đại mới, Shipper Áo Xanh Áo Vàng xếp hàng lấy bánh, chủ quán phải khéo tính toán phí sàn và mở món mới kịp thời!", goalDesc: "Sở hữu 600.000đ & mở 5 món", check: (s) => s.money >= 600000 && (s.unlockedDishes || []).length >= 5, reward: 50000 },
-      { id: 4, title: "Chương 4: Huyền Thoại Vua Bánh Tráng", story: "Sau bao ngày thức dậy từ sớm thắng sa tế, phi hành giòn, xe bánh tráng tủ kính của con đã trở thành huyền thoại Sài Gòn!", goalDesc: "Đạt Cấp 20 và bán 100 phần bánh", check: (s) => s.level >= 20 && s.totalSold >= 100, reward: 100000 }
+      { id: 4, title: "Chương 4: Lửa Than Đà Lạt Giữa Lòng Phố Đêm", story: "Mùi bánh tráng nướng mắm ruốc, trứng cút lòng đào thơm nức mũi làm cả con hẻm Sài Gòn sáng đèn tới tận 10 giờ đêm.", goalDesc: "Đạt Cấp 20 và bán 100 phần bánh", check: (s) => s.level >= 20 && s.totalSold >= 100, reward: 100000 },
+      { id: 5, title: "Chương 5: Sóng Gió Quán Nhái & Bản Lĩnh", story: "Thấy xe bánh tráng ăn nên làm ra, nhiều xe nhái bảng hiệu mọc lên sát vách. Chỉ có chất lượng 5 sao và thương hiệu chính chủ mới giữ chân được khách ruột!", goalDesc: "Đạt Cấp 33, mở 8 món & có Đăng ký Thương hiệu", check: (s) => s.level >= 33 && (s.unlockedDishes || []).length >= 8 && Boolean(s.licenses?.lic_brand), reward: 180000 },
+      { id: 6, title: "Chương 6: Mẹt Đặc Biệt & Huyền Thoại 30 Năm", story: "Từ đôi quang gánh nhỏ năm nào, nay Mẹt Bánh Tráng Dì Tư đã trở thành biểu tượng ẩm thực đường phố Sài Gòn suốt 3 thập kỷ!", goalDesc: "Đạt Cấp 45, mở đủ 10 món & bán 300 phần", check: (s) => s.level >= 45 && (s.unlockedDishes || []).length >= 10 && s.totalSold >= 300, reward: 350000 }
     ];
-
     // ================= 5. TRẠNG THÁI GAME V6 & CHỐNG GIAN LẬN =================
     const INITIAL_STARTER_STOCK = {
       banhtrang: 8, xoai: 8, muoitom: 8, sotbo: 0, dauphong: 8, khobo: 8, tepmo: 0, trungcut: 8, tratac: 8
@@ -1538,7 +1540,7 @@
       return { expTodayQty, minDays };
     }
 
-    // ================= 7. BỘ LỌC CHỐNG GIAN LẬN, ĐĂNG NHẬP & BẢNG XẾP HẠNG =================
+    // ================= 7. BỘ LỌC CHỐNG GIAN LẬN ĐỘNG, ĐĂNG NHẬP & BẢNG XẾP HẠNG =================
     function computeSecuritySeal(s) {
       const raw = `${s.shopKey || "init"}|${Math.round(s.money || 0)}|${s.totalSold || 0}|${s.level || 1}|${s.day || 1}|DITU_V6_SECRET_2026`;
       let hash = 2166136261;
@@ -1551,7 +1553,11 @@
 
     function isStateLegitimate(s) {
       if (!s || typeof s !== "object") return false;
-      const maxAllowedMoney = 1500000 + (Number(s.totalSold || 0) * 120000);
+      const sold = Math.max(0, Number(s.totalSold || 0));
+      const achBonus = Array.isArray(s.claimedAchievements) ? s.claimedAchievements.length * 60000 : 0;
+      const storyBonus = Array.isArray(s.claimedChapters) ? s.claimedChapters.length * 150000 : 0;
+      const loanAllowance = (Number(s.loanDebt || 0) > 0 || s.hasRepaidAllDebt) ? 650000 : 0;
+      const maxAllowedMoney = 400000 + loanAllowance + achBonus + storyBonus + (sold * 95000);
       if (Number(s.money) > maxAllowedMoney || Number(s.money) < -500000) return false;
       if (Number(s.level) < 1 || Number(s.level) > 50) return false;
       if (Number(s.rating) < 1 || Number(s.rating) > 5) return false;
@@ -1726,7 +1732,18 @@
 
       if (nameInput.length < 2) { showLoginMessage("⚠️ Tên quán từ 2 ký tự trở lên!", "error"); return; }
       if (!/^\d{4}$/.test(pinInput)) { showLoginMessage("⚠️ Mã PIN gồm đúng 4 chữ số!", "error"); return; }
-      const key = sanitizeShopKey(nameInput);
+
+      // Giữ nguyên shopKey gốc nếu người chơi từng đổi tên bảng hiệu trên cùng máy
+      let parsedLocal = null;
+      try {
+        const rawLocal = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (rawLocal) parsedLocal = JSON.parse(rawLocal);
+      } catch (e) {}
+
+      const key = (parsedLocal && parsedLocal.shopName === nameInput && parsedLocal.shopKey)
+        ? parsedLocal.shopKey
+        : sanitizeShopKey(nameInput);
+
       if (!key) { showLoginMessage("⚠️ Tên quán không hợp lệ!", "error"); return; }
 
       btn.disabled = true;
@@ -1770,7 +1787,6 @@
 
       state.shopKey = key;
       state.shopName = nameInput;
-      // Giữ tương thích với Firebase Rules если quán cũ đã lưu pin, hoặc băm PIN cho quán mới
       state.pin = isExistingCloudShop ? storedCloudPin : hashShopPin(key, pinInput);
 
       if (isExistingCloudShop) {
@@ -1830,7 +1846,7 @@
       if (newName.length < 2) { showToast("⚠️ Tên bảng hiệu từ 2 ký tự!"); return; }
       state.shopName = newName; state.avatar = profileTempAvatar; loginSelectedAvatar = profileTempAvatar;
       closeProfileEditModal(); playSFX("cash"); updateAllUI(); saveGameEverywhere();
-      showToast("✅ Đã lưu Bảng Hiệu Decal mới!");
+      showToast(`✅ Đã lưu Bảng Hiệu mới! (Mã Khóa Cloud: ${state.recoveryCode})`);
     }
 
     function mergeLoadedState(loaded) {
@@ -1860,6 +1876,12 @@
         ledgerHistory: Array.isArray(loaded.ledgerHistory) ? loaded.ledgerHistory : [],
         claimedAchievements: Array.isArray(loaded.claimedAchievements) ? loaded.claimedAchievements : []
       };
+
+      // Kiểm tra chữ ký bảo mật chống sửa LocalStorage
+      if (loaded.securitySeal && loaded.securitySeal !== computeSecuritySeal(loaded)) {
+        state.money = Math.min(state.money, 350000 + (Number(state.totalSold || 0) * 25000));
+      }
+
       if (state.staff.mylan) state.prepDone = { sate: true, hanhphi: true, trungcut: true };
       ensureValidStockBatches();
 
@@ -1957,6 +1979,7 @@
         </div>
       `).join("");
     }
+
     // ================= 8. GIÁ VỐN CỐ ĐỊNH, ĐỊNH GIÁ BÁN & PHÍ SÀN APP =================
     function getIngredientCost(ing) {
       let mult = 1.0;
@@ -2288,7 +2311,6 @@
       else if (sub === "ledger") renderLedgerTab();
       else if (sub === "leaderboard") fetchCloudLeaderboard(false);
     }
-
     // ================= 9. CHỢ ĐẦU MỐI & PHÂN BỔ NGUYÊN LIỆU TỐI ƯU =================
     function renderMarketGrid() {
       const grid = document.getElementById("market-grid");
@@ -2878,7 +2900,7 @@
       ]
     };
 
-    // ================= 11. HỆ THỐNG CHUYỆN NGOÀI PHỐ (BIẾN CỐ) =================
+    // ================= 11. HỆ THỐNG CHUYỆN NGOÀI PHỐ (TRỌN BỘ 10 BIẾN CỐ) =================
     const DILEMMA_EVENTS = [
       {
         id: "wholesale_dry_deal", category: "1. Hợp Đồng Nguồn Hàng (3 Ngày)", icon: "📦", speaker: "Thương Lái Chợ Đầu Mối",
@@ -3032,6 +3054,78 @@
           effect: (s) => {
             s.activeMultiDayEffects.freshSurgeDays = 2;
             return "⚠️ Giá nhập Đồ tươi sẽ tăng +50% trong 2 ngày tới!";
+          }
+        }
+      },
+      {
+        id: "saigon_rain_storm", category: "8. Thời Tiết Sài Gòn", icon: "🌧️", speaker: "Đài Khí Tượng & Shipper",
+        title: "Mưa Rào Sài Gòn Trút Nước Bất Chợt Lúc Tan Tầm!",
+        desc: "Cơn mưa lớn ập xuống làm bánh tráng dễ bị ẩm (thu hẹp Vùng Xanh nếu quên bấm nút ☂️ Căng bạt mưa ở góc trái xe), nhưng lượng khách đặt qua Shipper App lại tăng vọt!",
+        canTrigger: (s) => s.day >= 2,
+        choiceA: {
+          label: "☂️ Căng bạt che mưa ngay & đón làn sóng Shipper App (+10% Viral, không bị ẩm bánh)",
+          effect: (s) => {
+            activateCartBuff("rain_flood", "🌧️ Mưa Rào Sài Gòn (Đơn App tăng mạnh)", 45);
+            toggleRainTarp();
+            adjustViral(10);
+            return "☂️ Đã căng bạt che mưa kịp thời! Đơn Shipper đang đổ về xe!";
+          }
+        },
+        choiceB: {
+          label: "🌧️ Cứ đứng bán tiếp trong mưa (Nhớ tự bấm nút ☂️ Căng bạt mưa trên xe kẻo bánh bị ẩm!)",
+          effect: (s) => {
+            activateCartBuff("rain_flood", "🌧️ Mưa Rào Sài Gòn (Bấm Căng Bạt ngay!)", 45);
+            updateSweetSpotUI();
+            return "🌧️ Mưa đang tạt vào xe! Hãy bấm nút '☂️ Căng bạt mưa' ở góc dưới xe ngay nhé!";
+          }
+        }
+      },
+      {
+        id: "night_power_outage", category: "9. Sự Cố Phố Đêm", icon: "🕯️", speaker: "Bà Con Khu Phố Đêm",
+        title: "Cả Con Hẻm Bất Ngờ Cúp Điện Giờ Cao Điểm!",
+        desc: "Đường dây điện khu phố bị sự cố tối thui! Các xe hàng xung quanh phải mò mẫm nghỉ sớm, khách đang dồn về phía xe nào có bình ắc-quy và Đèn LED sáng rực!",
+        canTrigger: (s) => s.day >= 4,
+        choiceA: {
+          label: "💡 Bật hệ thống Bóng Đèn Tròn & LED Tủ Kính (Hút trọn khách cả hẻm ➔ +35.000đ & +15% Viral)",
+          reqCheck: (s) => (s.equipLevels?.decor_lantern || 0) >= 1,
+          lockReason: "🔒 Cần nâng cấp ít nhất Cấp 1 'Bóng Đèn Tròn & LED Tủ Kính' ở mục Đồ nghề",
+          effect: (s) => {
+            s.money += 35000;
+            adjustViral(15);
+            addXP(20);
+            return "💡 Xe bánh tráng sáng rực giữa phố đêm! Khách ùa tới mua ủng hộ (+35.000đ)!";
+          }
+        },
+        choiceB: {
+          label: "🔦 Dùng tạm đèn pin điện thoại (Khách khó nhìn menu, giảm khách trong 35s)",
+          effect: (s) => {
+            activateCartBuff("alley_hide", "🕯️ Cúp Điện Khu Phố (Khách giảm)", 35);
+            return "🔦 Quán hơi tối nên khách vãng lai giảm tạm thời. Nhớ nâng cấp Đèn LED nhé!";
+          }
+        }
+      },
+      {
+        id: "copycat_cart_rival", category: "10. Cạnh Tranh Thương Trường", icon: "🪧", speaker: "Khách Quen Báo Tin",
+        title: "Xuất Hiện Xe Bánh Tráng Nhái Bảng Hiệu 'Dì Tư Chính Gốc' Đầu Hẻm!",
+        desc: "\"Dì ơi, đầu hẻm mới có xe bánh tráng làm bảng hiệu màu vàng y hệt quán mình để chèo kéo khách quen với Shipper kìa!\"",
+        canTrigger: (s) => s.level >= 8,
+        choiceA: {
+          label: "📜 Trưng Bảng Decal Chữ Nổi (Cấp 2+) hoặc Giấy Đăng Ký Thương Hiệu ➔ Khách tẩy chay quán nhái!",
+          reqCheck: (s) => Boolean(s.licenses?.lic_brand || (s.equipLevels?.decor_sign || 0) >= 2),
+          lockReason: "🔒 Cần có 'Đăng Ký Thương Hiệu' hoặc 'Bảng Decal Vàng Chữ Nổi' Cấp 2 trở lên",
+          effect: (s) => {
+            adjustRating(0.10);
+            adjustViral(20);
+            s.money += 25000;
+            return "👑 Khách nhận ra ngay quán chính chủ! Quán nhái ế ẩm phải tự dẹp tiệm (+25.000đ & +0.10⭐)!";
+          }
+        },
+        choiceB: {
+          label: "😤 Chấp nhận bị chia sẻ một phần khách trong ngày hôm nay (-0.08⭐ & -10% Viral)",
+          effect: (s) => {
+            adjustRating(-0.08);
+            adjustViral(-10);
+            return "⚠️ Quán nhái đã kéo mất một số khách vãng lai (-0.08⭐). Hãy nâng cấp Bảng Decal hoặc Thương hiệu!";
           }
         }
       }
@@ -3219,6 +3313,11 @@
       }
       renderSelectedOrderBubble();
       playSFX("snip");
+
+      const c = getActiveCustomer();
+      if (state.staff.beti && !bowl.step1Done && c && bowl.selectedDish === c.wantedDish && bowl.rau === c.wantedRau && bowl.hanh === c.wantedHanh) {
+        setTimeout(() => { if (!bowl.step1Done && getActiveCustomer() === c) doStep1Base(true); }, 300);
+      }
     }
 
     function toggleTraTacOption() {
@@ -3389,7 +3488,7 @@
       endDaySummary();
     }
 
-    // Đã sửa: Bước 1 chỉ trừ nguyên liệu nhóm 1 (Bánh tráng & Xoài), không trừ oan Khô bò/Trứng cút khi chưa giao
+    // Bước 1 chỉ trừ nguyên liệu nhóm 1 (Bánh tráng & Xoài), không trừ oan Khô bò/Trứng cút khi chưa giao
     function doStep1Base(byStaff = false) {
       const c = getActiveCustomer();
       if (!c) { showToast("🍃 Hãy chạm vào khách trên quầy hoặc bấm Rao hàng!"); return; }
@@ -3540,6 +3639,11 @@
         renderSelectedOrderBubble(errHtml);
         spawnFloatingFX("🗑️ Sai đơn! Đã đổ bỏ!");
         showToast(`⚠️ Trộn sai (${notes[0]})! Đã đổ thau, con canh đúng mấy chữ màu Xanh Lá rồi làm lại nghen!`);
+
+        // Tự động kích hoạt lại Bé Tí cắt bánh nếu Món + Rau + Hành đã khớp với khách
+        if (state.staff.beti && bowl.selectedDish === c.wantedDish && bowl.rau === c.wantedRau && bowl.hanh === c.wantedHanh) {
+          setTimeout(() => { if (!bowl.step1Done && getActiveCustomer() === c) doStep1Base(true); }, 450);
+        }
         return;
       }
 
@@ -3748,7 +3852,7 @@
       showToast(`📋 Đã sao chép Mã Khóa: ${code} (Nhớ dùng kèm Mã PIN 4 số của con nhé)!`);
     }
 
-    // Đã sửa bảo mật: Chỉ truy vấn đích danh /recoveryCodes/${codeInput} và /shops/${targetShopKey}, không tải toàn bộ /shops.json
+    // Chỉ truy vấn đích danh /recoveryCodes/${codeInput} và /shops/${targetShopKey}, không tải toàn bộ /shops.json
     async function handleRecoverByCode() {
       initAudio(); startChillBGM();
       const rawCode = document.getElementById("recovery-code-input")?.value || "";
@@ -3911,7 +4015,6 @@
       }
     }
 
-    // Đã sửa: Không gán doanh thu ảo 50.000đ khi Ngày 1 chưa bán hàng
     function renderSvg7DaysChart() {
       const container = document.getElementById("svg-chart-7days");
       if (!container) return;
@@ -4420,7 +4523,7 @@
       }, 1350);
     }
 
-    // Đã sửa: Trừ chính xác tiền hàng hư quá hạn (spoiledTotalVal) vào Lãi Ròng cuối ngày
+    // Trừ chính xác tiền hàng hư quá hạn (spoiledTotalVal) vào Lãi Ròng cuối ngày
     function endDaySummary() {
       const depCost = Math.round(getDailyOperatingFixedCost() * 0.4), utilCost = Math.round(getDailyOperatingFixedCost() * 0.6);
       const rentCost = state.licenses.lic_sidewalk ? 35000 : 0;
