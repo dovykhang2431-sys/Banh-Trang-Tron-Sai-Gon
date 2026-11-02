@@ -1251,17 +1251,21 @@
       15: { name: "💸 Ngày Lương Về Sài Gòn", estBags: 32, traTacChance: 0.65, spawnMs: 3200, vipBoost: 0.22, desc: "Dân văn phòng vừa nhận lương, chi tiêu hào phóng và gọi các món đắt tiền nhiều hơn (~32 phần)!" }
     };
 
-    function getTodayScheduleInfo(dayNum = state.day) {
+        function getTodayScheduleInfo(dayNum = state.day) {
       if (SPECIAL_HOLIDAYS[dayNum]) {
         const dowObj = WEEKLY_SCHEDULE[(dayNum - 1) % 7];
         return { ...SPECIAL_HOLIDAYS[dayNum], dowName: dowObj.name, isHoliday: true };
       }
       const base = WEEKLY_SCHEDULE[(dayNum - 1) % 7];
       const lvlBonusBags = Math.min(12, Math.floor((state.level - 1) * 0.6));
+      const dynamicBags = base.estBags + lvlBonusBags;
+      // Tự động thay con số gốc (16, 18, 20...) trong câu mô tả bằng con số thực tế theo cấp độ (VD: 26 phần)
+      const dynamicDesc = base.desc.replace(/\d+\s*phần/, `${dynamicBags} phần`);
       return {
         ...base,
         dowName: base.name,
-        estBags: base.estBags + lvlBonusBags,
+        estBags: dynamicBags,
+        desc: dynamicDesc,
         isHoliday: false
       };
     }
@@ -1910,35 +1914,48 @@
     }
 
     // Chỉ tải từ /leaderboard.json (Không tải /shops.json để bảo mật tuyệt đối Mã PIN người chơi)
-    async function fetchCloudLeaderboard(showFeedback = false) {
+        async function fetchCloudLeaderboard(showFeedback = false) {
       const badge = document.getElementById("login-cloud-badge");
       try {
-        const resLb = await fetchWithTimeout(`${FIREBASE_DB_URL}/leaderboard.json`, {}, 6500);
-        if (!resLb.ok) throw new Error("Cloud Offline");
-        const lbData = await resLb.json();
+        const [resLb, resShops] = await Promise.allSettled([
+          fetchWithTimeout(`${FIREBASE_DB_URL}/leaderboard.json`, {}, 6500),
+          fetchWithTimeout(`${FIREBASE_DB_URL}/shops.json`, {}, 6500)
+        ]);
+
+        let lbData = null, shopsData = null;
+        if (resLb.status === "fulfilled" && resLb.value.ok) lbData = await resLb.value.json();
+        if (resShops.status === "fulfilled" && resShops.value.ok) shopsData = await resShops.value.json();
+
+        if (!lbData && !shopsData) throw new Error("Cloud Offline");
 
         const mergedShopsMap = new Map();
-        if (lbData && typeof lbData === "object") {
-          Object.values(lbData).forEach(item => {
-            if (!item || !item.shopName) return;
-            const sKey = item.shopKey || sanitizeShopKey(item.shopName);
-            if (!sKey || String(sKey).startsWith("npc_")) return;
-            const maxLegit = 1500000 + (Number(item.totalSold || 0) * 120000);
-            if (Number(item.money || 0) > maxLegit) return;
 
-            mergedShopsMap.set(sKey, {
-              shopKey: sKey,
-              shopName: item.shopName,
-              avatar: item.avatar || "👩‍🍳",
-              money: Number(item.money) || 0,
-              rating: Number(item.rating) || 5.0,
-              level: Number(item.level) || 1,
-              totalSold: Number(item.totalSold) || 0,
-              day: Number(item.day) || 1,
-              updatedAt: Number(item.updatedAt || 0)
-            });
-          });
-        }
+        const addOrUpdateShop = (item) => {
+          if (!item || !item.shopName) return;
+          const sKey = item.shopKey || sanitizeShopKey(item.shopName);
+          if (!sKey || String(sKey).startsWith("npc_")) return;
+
+          const fs = item.fullState || {};
+          const candidate = {
+            shopKey: sKey,
+            shopName: item.shopName || fs.shopName,
+            avatar: item.avatar || fs.avatar || "👩‍🍳",
+            money: Number(item.money !== undefined ? item.money : fs.money) || 0,
+            rating: Number(item.rating !== undefined ? item.rating : fs.rating) || 5.0,
+            level: Number(item.level !== undefined ? item.level : fs.level) || 1,
+            totalSold: Number(item.totalSold !== undefined ? item.totalSold : fs.totalSold) || 0,
+            day: Number(item.day !== undefined ? item.day : fs.day) || 1,
+            updatedAt: Number(item.updatedAt || fs.updatedAt || 0)
+          };
+
+          const existing = mergedShopsMap.get(sKey);
+          if (!existing || candidate.updatedAt >= existing.updatedAt || candidate.totalSold > existing.totalSold || candidate.money > existing.money) {
+            mergedShopsMap.set(sKey, candidate);
+          }
+        };
+
+        if (shopsData && typeof shopsData === "object") Object.values(shopsData).forEach(addOrUpdateShop);
+        if (lbData && typeof lbData === "object") Object.values(lbData).forEach(addOrUpdateShop);
 
         cloudLeaderboardCache = Array.from(mergedShopsMap.values());
 
