@@ -540,7 +540,17 @@
         <div class="flex-1 min-w-0">
           <div class="flex items-center justify-between gap-1">
             <span class="font-black text-xs text-amber-950">Dì Tư Dặn Dò</span>
-            <span id="prep-chapter-badge" onclick="openStoryModal()" class="cursor-pointer text-[10px] font-black text-amber-950 bg-amber-200/90 px-2 py-0.2 rounded-full border border-amber-500 shadow-sm">📍 Chương 1: Hẻm Q.4</span>
+            <div class="flex items-center gap-1">
+              <button onclick="openGiftcodeModal()" class="soft-btn relative text-[10px] font-black text-white bg-gradient-to-r from-rose-600 to-orange-500 px-2 py-0.5 rounded-full border border-rose-700 shadow-sm flex items-center gap-0.5">
+                <span>🎁 Giftcode</span>
+                <span id="header-gift-dot" class="hidden w-2 h-2 rounded-full bg-yellow-300 animate-ping"></span>
+              </button>
+              <span id="prep-chapter-badge" onclick="openStoryModal()" class="cursor-pointer text-[10px] font-black text-amber-950 bg-amber-200/90 px-2 py-0.5 rounded-full border border-amber-500 shadow-sm">📍 Chương 1: Hẻm Q.4</span>
+            </div>
+          </div>
+          <div id="live-ops-global-banner" class="hidden mt-0.5 px-2 py-0.5 rounded-lg bg-gradient-to-r from-purple-700 via-fuchsia-600 to-rose-600 text-white text-[10px] font-black flex items-center justify-between shadow-sm">
+            <span id="live-ops-banner-text" class="truncate">⚡ Sự kiện toàn Server đang diễn ra!</span>
+            <button onclick="openGiftcodeModal()" class="underline text-yellow-200 shrink-0 ml-1">Chi tiết</button>
           </div>
           <div id="ditu-smart-tip" class="text-[11px] font-bold text-amber-900 truncate mt-0.5">
             Thứ Hai ~18 bịch! Bấm +Điền Đủ để nhập nguyên liệu vừa khít ca bán nghen!
@@ -974,6 +984,10 @@
           <button onclick="closeQuickMenuModal(); openProfileEditModal()" class="soft-btn p-2.5 rounded-xl bg-blue-100 border-2 border-blue-400 font-black text-blue-950 flex flex-col items-center gap-1">
             <span class="text-2xl">⚙️</span><span>Đổi Bảng Hiệu</span>
           </button>
+          <button onclick="closeQuickMenuModal(); openGiftcodeModal()" class="soft-btn col-span-2 p-2.5 rounded-xl bg-gradient-to-r from-rose-100 via-amber-100 to-orange-100 border-2 border-rose-400 font-black text-rose-950 flex items-center justify-center gap-2 relative shadow-sm">
+            <span class="text-xl">🎁</span><span>Nhập Giftcode & Hộp Thư Sự Kiện</span>
+            <span id="menu-gift-badge" class="hidden px-1.5 py-0.2 rounded-full bg-red-600 text-white font-black text-[9px]">MỚI</span>
+          </button>
         </div>
 
         <div class="flex gap-1.5 pt-1 border-t border-amber-200">
@@ -983,6 +997,67 @@
           <button onclick="closeQuickMenuModal(); openLoginModalForSwitch()" class="soft-btn flex-1 py-2 rounded-xl bg-slate-700 text-white font-black text-xs flex items-center justify-center gap-1">
             <span>🔑</span><span>Đổi Quán</span>
           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= POP-UP NHẬP GIFTCODE & HỘP THƯ ADMIN ================= -->
+  <div id="modal-giftcode" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="w-full max-w-md wooden-clipboard-frame relative overflow-hidden">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-3.5 space-y-2.5 text-xs max-h-[85vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-amber-200 pb-1.5">
+          <div class="flex items-center gap-1.5">
+            <span class="text-lg">🎁</span>
+            <div>
+              <h3 class="font-black text-sm text-amber-950">Giftcode & Hộp Thư Quán</h3>
+              <p class="text-[10px] font-bold text-amber-800">Nhận quà sự kiện & thông báo từ Ban Quản Trị</p>
+            </div>
+          </div>
+          <button onclick="closeGiftcodeModal()" class="px-2.5 py-1 bg-amber-100 hover:bg-amber-200 rounded-lg font-black text-amber-950">✕</button>
+        </div>
+
+        <!-- Khu vực 1: Ô nhập Giftcode -->
+        <div class="p-2.5 rounded-2xl bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50 border-2 border-rose-300 space-y-2 shadow-inner">
+          <div class="font-black text-rose-950 flex items-center justify-between">
+            <span>🎟️ Nhập Mã Giftcode Nhận Thưởng</span>
+            <span id="giftcode-shop-tag" class="text-[10px] font-bold text-amber-800"></span>
+          </div>
+          <div class="flex gap-1.5">
+            <input id="giftcode-input" type="text" maxlength="24" placeholder="Nhập mã (VD: TANTHU50K)..." class="flex-1 px-3 py-2 rounded-xl border-2 border-amber-400 bg-white font-black text-amber-950 uppercase tracking-wider text-xs focus:outline-none focus:border-rose-500" />
+            <button id="btn-redeem-giftcode" onclick="handleRedeemGiftcode()" class="soft-btn btn-game-orange px-3.5 py-2 rounded-xl font-black text-xs shrink-0 shadow">
+              🎁 Nhận Quà
+            </button>
+          </div>
+          <div id="giftcode-status-msg" class="hidden text-[11px] font-black p-2 rounded-xl text-center"></div>
+        </div>
+
+        <!-- Khu vực 2: Hộp thư & Quà từ Ban Quản Trị (Broadcast + Thư riêng) -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-black text-amber-950">📬 Hộp Thư & Quà Ban Quản Trị</span>
+            <button onclick="syncAdminLiveOpsAndMail(true)" class="text-[10px] font-black text-blue-700 underline">🔄 Kiểm tra thư mới</button>
+          </div>
+          <div id="admin-mail-container" class="space-y-1.5">
+            <div class="text-center py-3 text-amber-800 font-bold bg-amber-50/70 rounded-xl border border-amber-200">Chưa có thư hoặc quà đền bù mới.</div>
+          </div>
+        </div>
+
+        <!-- Khu vực 3: Sự kiện toàn Server đang áp dụng -->
+        <div class="p-2.5 rounded-2xl bg-purple-50 border border-purple-300 space-y-1">
+          <div class="font-black text-purple-950 flex items-center justify-between">
+            <span>⚡ Sự Kiện Toàn Server</span>
+            <span id="live-ops-modal-status" class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-black text-[9px]">Mặc định</span>
+          </div>
+          <div id="live-ops-modal-desc" class="text-[11px] font-bold text-purple-900">
+            Nhịp độ khách, điểm kinh nghiệm và giá chợ đang ở mức chuẩn Sài Gòn.
+          </div>
+        </div>
+
+        <!-- Lịch sử mã đã nhập -->
+        <div class="pt-1 border-t border-amber-200">
+          <div class="text-[10px] font-bold text-amber-800">Mã đã nhập tại quán: <span id="redeemed-codes-list" class="font-black text-amber-950">Chưa có</span></div>
         </div>
       </div>
     </div>
@@ -2017,6 +2092,12 @@
         loanDebt: 0, rescueLoanCount: 0, hasRepaidAllDebt: false,
         maxStreak5Star: 0, totalPrepDays: 0, servedPickyCount: 0, repliedReviewsCount: 0, resolvedDilemmasCount: 0,
         claimedAchievements: [],
+        redeemedGiftcodes: [],
+        claimedBroadcasts: [],
+        claimedMailIds: [],
+        adminGrantedMoney: 0,
+        adminOverrideAt: 0,
+        isBanned: false,
         securitySeal: "",
         updatedAt: 0
       };
@@ -2051,7 +2132,7 @@
     function isAnyBlockingModalOpen() {
       const modalIds = [
         "modal-out-of-stock", "modal-dilemma", "modal-prep",
-        "modal-reviews", "modal-end-day", "modal-bankruptcy", "modal-level-up", "modal-ditu-tutorial", "modal-quick-menu", "modal-story"
+        "modal-reviews", "modal-end-day", "modal-bankruptcy", "modal-level-up", "modal-ditu-tutorial", "modal-quick-menu", "modal-story", "modal-giftcode"
       ];
       return modalIds.some(id => {
         const el = document.getElementById(id);
@@ -2117,7 +2198,8 @@
       const ratingFactor = Math.max(0.65, Math.min(1.08, (state.rating || 4.3) / 4.5));
       const weatherFactors = [0.95, 0.98, 1.0, 0.96, 1.0, 1.04, 0.98];
       const wFactor = sched.isHoliday ? 1.05 : weatherFactors[(dayNum - 1) % weatherFactors.length];
-      return Math.max(4, Math.round(sched.estBags * wFactor * priceImp.demandCapMult * ratingFactor));
+      const liveCustMult = (window.serverLiveConfig && window.serverLiveConfig.enabled) ? Math.max(0.5, Math.min(3.0, Number(window.serverLiveConfig.customerMult || 1.0))) : 1.0;
+      return Math.max(4, Math.round(sched.estBags * wFactor * priceImp.demandCapMult * ratingFactor * liveCustMult));
     }
 
     // ================= 8. HỆ THỐNG LÔ HẠN SỬ DỤNG FIFO & TỦ KÍNH GIỮ TƯƠI =================
@@ -2224,8 +2306,10 @@
       const achBonus = Array.isArray(s.claimedAchievements) ? s.claimedAchievements.length * 90000 : 0;
       const storyBonus = Array.isArray(s.claimedChapters) ? s.claimedChapters.length * 300000 : 0;
       const loanAllowance = (Number(s.loanDebt || 0) > 0 || s.hasRepaidAllDebt) ? 650000 : 0;
+      if (s.isBanned) return false;
       const dayAllowance = Number(s.day || 1) * 450000;
-      const maxAllowedMoney = 500000 + loanAllowance + achBonus + storyBonus + dayAllowance + (sold * 120000);
+      const adminAllowance = Math.max(0, Number(s.adminGrantedMoney || 0));
+      const maxAllowedMoney = 500000 + loanAllowance + achBonus + storyBonus + dayAllowance + (sold * 120000) + adminAllowance;
       if (Number(s.money) > maxAllowedMoney || Number(s.money) < -500000) return false;
       if (Number(s.level) < 1 || Number(s.level) > 60) return false;
       if (Number(s.rating) < 1 || Number(s.rating) > 5) return false;
@@ -2300,6 +2384,8 @@
     function isCloudProgressNewer(cloudState, localState) {
       if (!cloudState) return false;
       if (!localState) return true;
+      const cAdmin = Number(cloudState.adminOverrideAt || 0), lAdmin = Number(localState.adminOverrideAt || 0);
+      if (cAdmin > lAdmin) return true;
       const cLevel = Number(cloudState.level || 1), lLevel = Number(localState.level || 1);
       if (cLevel !== lLevel) return cLevel > lLevel;
       const cDay = Number(cloudState.day || 1), lDay = Number(localState.day || 1);
@@ -2340,7 +2426,8 @@
           const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 3500);
           if (res.ok) {
             const cloudShop = await res.json();
-            if (cloudShop && cloudShop.fullState && verifyShopPin(key, saved.pin, cloudShop.pin)) {
+            const isAdminReset = Number(cloudShop?.adminOverrideAt || cloudShop?.fullState?.adminOverrideAt || 0) > Number(saved.adminOverrideAt || 0);
+            if (cloudShop && cloudShop.fullState && (isAdminReset || verifyShopPin(key, saved.pin, cloudShop.pin))) {
               const cloudAvatar = cloudShop.avatar || cloudShop.fullState.avatar || saved.avatar || "av_ditu";
               const cloudState = {
                 ...cloudShop.fullState,
@@ -2369,7 +2456,8 @@
               const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 2800);
               if (res.ok) {
                 const cloudShop = await res.json();
-                if (cloudShop && cloudShop.fullState && verifyShopPin(key, localData.pin, cloudShop.pin)) {
+                const isAdminReset = Number(cloudShop?.adminOverrideAt || cloudShop?.fullState?.adminOverrideAt || 0) > Number(localData.adminOverrideAt || 0);
+                if (cloudShop && cloudShop.fullState && (isAdminReset || verifyShopPin(key, localData.pin, cloudShop.pin))) {
                   const cloudAvatar = cloudShop.avatar || cloudShop.fullState.avatar || localData.avatar || "av_ditu";
                   const cs = {
                     ...cloudShop.fullState,
@@ -2584,7 +2672,13 @@
         reviews: Array.isArray(loaded.reviews) ? loaded.reviews : [],
         claimedChapters: Array.isArray(loaded.claimedChapters) ? loaded.claimedChapters : [],
         ledgerHistory: Array.isArray(loaded.ledgerHistory) ? loaded.ledgerHistory : [],
-        claimedAchievements: Array.isArray(loaded.claimedAchievements) ? loaded.claimedAchievements : []
+        claimedAchievements: Array.isArray(loaded.claimedAchievements) ? loaded.claimedAchievements : [],
+        redeemedGiftcodes: Array.isArray(loaded.redeemedGiftcodes) ? loaded.redeemedGiftcodes : [],
+        claimedBroadcasts: Array.isArray(loaded.claimedBroadcasts) ? loaded.claimedBroadcasts : [],
+        claimedMailIds: Array.isArray(loaded.claimedMailIds) ? loaded.claimedMailIds : [],
+        adminGrantedMoney: Math.max(0, Number(loaded.adminGrantedMoney || 0)),
+        adminOverrideAt: Number(loaded.adminOverrideAt || 0),
+        isBanned: Boolean(loaded.isBanned)
       };
 
       delete state.empire;
@@ -2592,8 +2686,9 @@
       delete state.reputation;
       delete state.appCommissionRate;
 
-      if (loaded.securitySeal && loaded.securitySeal !== computeSecuritySeal(loaded)) {
-        state.money = Math.min(state.money, 450000 + (Number(state.totalSold || 0) * 45000));
+      if (loaded.securitySeal && loaded.securitySeal !== computeSecuritySeal(loaded) && !loaded.adminOverrideAt) {
+        const adminAllowance = Math.max(0, Number(state.adminGrantedMoney || 0));
+        state.money = Math.min(state.money, 450000 + (Number(state.totalSold || 0) * 45000) + adminAllowance);
       }
 
       if (state.staff.mylan) state.prepDone = { sate: true, hanhphi: true, trungcut: true };
@@ -2610,8 +2705,9 @@
     }
     function saveToLocalOnly() {
       try {
-        if (!isStateLegitimate(state)) {
-          const maxCap = 500000 + (Number(state.totalSold || 0) * 75000) + (Number(state.day || 1) * 350000);
+        if (!isStateLegitimate(state) && !state.isBanned) {
+          const adminAllowance = Math.max(0, Number(state.adminGrantedMoney || 0));
+          const maxCap = 500000 + (Number(state.totalSold || 0) * 75000) + (Number(state.day || 1) * 350000) + adminAllowance;
           state.money = Math.min(state.money, maxCap);
           state.level = Math.min(60, Math.max(1, state.level));
         }
@@ -2643,6 +2739,7 @@
           if (!sKey || String(sKey).startsWith("npc_")) return;
 
           const fs = item.fullState || {};
+          if (item.isBanned || fs.isBanned) return;
           const candidate = {
             shopKey: sKey,
             shopName: item.shopName || fs.shopName,
@@ -2710,6 +2807,9 @@
       if ((state.activeMultiDayEffects?.freshSurgeDays || 0) > 0 && ing.type === "fresh") mult *= 1.45;
       if ((state.activeMultiDayEffects?.cheapDryDays || 0) > 0 && ing.type === "dry") mult *= 0.70;
       if ((state.equipLevels?.upg_cooler || 0) >= 5) mult *= 0.85;
+      if (window.serverLiveConfig && window.serverLiveConfig.enabled && Number(window.serverLiveConfig.marketDiscountPct || 0) > 0) {
+        mult *= Math.max(0.5, 1 - Number(window.serverLiveConfig.marketDiscountPct) / 100);
+      }
       return Math.max(400, Math.round((ing.baseCost * mult) / 100) * 100);
     }
 
@@ -3471,7 +3571,8 @@
         const awningLvl = state.equipLevels?.upg_awning || 0;
         const tuNghiaBonus = state.staff?.tunghia ? (0.20 + (state.staffStars?.tunghia || 1) * 0.05) : 0;
         const durabilityPenalty = (state.cartDurability || 100) < 50 ? 1.25 : 1.0;
-        const patienceMult = 1 + (stoolLvl * 0.15) + (fanLvl * 0.10) + (awningLvl * 0.06) + tuNghiaBonus;
+        const livePatienceBonus = (window.serverLiveConfig && window.serverLiveConfig.enabled) ? (Number(window.serverLiveConfig.patienceBonusPct || 0) / 100) : 0;
+        const patienceMult = 1 + (stoolLvl * 0.15) + (fanLvl * 0.10) + (awningLvl * 0.06) + tuNghiaBonus + livePatienceBonus;
         const slowFactor = Math.max(0.25, (1 / patienceMult) * durabilityPenalty);
 
         let changed = false;
@@ -4903,6 +5004,9 @@
         if (c.picky) tip += 6000;
         if (activeCartBuff && activeCartBuff.id === "tiktok_storm") tip = Math.round(tip * 1.5 / 500) * 500;
         if (state.nextCustomerTipBonus > 0) { tip += state.nextCustomerTipBonus; state.nextCustomerTipBonus = 0; }
+        if (window.serverLiveConfig && window.serverLiveConfig.enabled && Number(window.serverLiveConfig.tipMult || 1) > 1) {
+          tip = Math.round(tip * Number(window.serverLiveConfig.tipMult));
+        }
         tip = Math.round(tip / 500) * 500;
       }
 
@@ -5490,7 +5594,8 @@
     }
 
     function addXP(amount) {
-      state.xp += amount;
+      const xpMult = (window.serverLiveConfig && window.serverLiveConfig.enabled) ? Math.max(1, Number(window.serverLiveConfig.xpMult || 1)) : 1;
+      state.xp += Math.round(amount * xpMult);
       let lObj = LEVEL_DATA.find(l => l.level === state.level);
       let leveledUp = false;
       while (lObj && state.level < 60 && state.xp >= lObj.xpNeed) {
@@ -6165,11 +6270,375 @@
       toastTimeout = setTimeout(() => { box.classList.add("opacity-0", "-translate-y-3"); box.classList.remove("opacity-100", "translate-y-0"); }, 2500);
     }
 
-    // KHỞI CHẠY TOÀN BỘ GAME V10
+    // ================= 22. CỔNG GIFTCODE, HỘP THƯ ADMIN & SỰ KIỆN LIVE-OPS TOÀN SERVER =================
+    window.serverLiveConfig = { enabled: false, title: "", customerMult: 1.0, xpMult: 1.0, tipMult: 1.0, marketDiscountPct: 0, patienceBonusPct: 0 };
+    window.serverBroadcastData = null;
+    window.personalAdminMails = [];
+
+    function openGiftcodeModal() {
+      playSFX("snip");
+      const modal = document.getElementById("modal-giftcode");
+      if (!modal) return;
+      modal.classList.remove("hidden");
+      const tag = document.getElementById("giftcode-shop-tag");
+      if (tag) tag.textContent = state.shopName ? `Quán: ${state.shopName}` : "Chưa đăng nhập";
+      const msg = document.getElementById("giftcode-status-msg");
+      if (msg) msg.classList.add("hidden");
+      renderGiftcodeModalContent();
+      syncAdminLiveOpsAndMail(false);
+    }
+
+    function closeGiftcodeModal() {
+      const modal = document.getElementById("modal-giftcode");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    function showGiftcodeStatus(text, isSuccess = true) {
+      const el = document.getElementById("giftcode-status-msg");
+      if (!el) return;
+      el.classList.remove("hidden");
+      el.className = `text-[11px] font-black p-2 rounded-xl text-center border ${isSuccess ? "bg-emerald-100 text-emerald-900 border-emerald-400" : "bg-red-100 text-red-900 border-red-400"}`;
+      el.textContent = text;
+    }
+
+    function renderGiftcodeModalContent() {
+      // Lịch sử mã đã nhập
+      const listEl = document.getElementById("redeemed-codes-list");
+      if (listEl) {
+        const arr = Array.isArray(state.redeemedGiftcodes) ? state.redeemedGiftcodes : [];
+        listEl.textContent = arr.length > 0 ? arr.join(", ") : "Chưa có";
+      }
+
+      // Sự kiện toàn server
+      const cfg = window.serverLiveConfig || { enabled: false };
+      const bannerEl = document.getElementById("live-ops-global-banner");
+      const bannerTxt = document.getElementById("live-ops-banner-text");
+      const statusBadge = document.getElementById("live-ops-modal-status");
+      const descEl = document.getElementById("live-ops-modal-desc");
+
+      if (cfg && cfg.enabled) {
+        const parts = [];
+        if (Number(cfg.customerMult || 1) !== 1) parts.push(`Khách x${cfg.customerMult}`);
+        if (Number(cfg.xpMult || 1) > 1) parts.push(`XP x${cfg.xpMult}`);
+        if (Number(cfg.tipMult || 1) > 1) parts.push(`Tip x${cfg.tipMult}`);
+        if (Number(cfg.marketDiscountPct || 0) > 0) parts.push(`Chợ -${cfg.marketDiscountPct}%`);
+        if (Number(cfg.patienceBonusPct || 0) > 0) parts.push(`Kiên nhẫn +${cfg.patienceBonusPct}%`);
+        const summaryStr = parts.length > 0 ? parts.join(" • ") : "Sự kiện đặc biệt đang diễn ra";
+        const eventTitle = cfg.title || "🎉 Sự Kiện Toàn Server";
+        if (bannerEl && bannerTxt) {
+          bannerEl.classList.remove("hidden");
+          bannerTxt.textContent = `⚡ ${eventTitle}: ${summaryStr}`;
+        }
+        if (statusBadge) {
+          statusBadge.textContent = "Đang diễn ra";
+          statusBadge.className = "px-2 py-0.5 rounded-full bg-emerald-600 text-white font-black text-[9px]";
+        }
+        if (descEl) {
+          descEl.innerHTML = `<div class="font-black text-purple-950">${escapeHtml(eventTitle)}</div><div class="mt-0.5 text-emerald-800">${escapeHtml(summaryStr)}</div>`;
+        }
+      } else {
+        if (bannerEl) bannerEl.classList.add("hidden");
+        if (statusBadge) {
+          statusBadge.textContent = "Mặc định";
+          statusBadge.className = "px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-black text-[9px]";
+        }
+        if (descEl) {
+          descEl.textContent = "Nhịp độ khách, điểm kinh nghiệm và giá chợ đang ở mức chuẩn Sài Gòn.";
+        }
+      }
+
+      // Hộp thư Admin (Broadcast + Thư riêng)
+      const mailBox = document.getElementById("admin-mail-container");
+      const claimedB = new Set(Array.isArray(state.claimedBroadcasts) ? state.claimedBroadcasts : []);
+      const claimedM = new Set(Array.isArray(state.claimedMailIds) ? state.claimedMailIds : []);
+      const itemsHtml = [];
+      let unclaimedCount = 0;
+
+      const bc = window.serverBroadcastData;
+      if (bc && bc.id && bc.active !== false) {
+        const isClaimed = claimedB.has(bc.id);
+        if (!isClaimed) unclaimedCount++;
+        const moneyTxt = Number(bc.rewardMoney || 0) > 0 ? `+${formatVND(bc.rewardMoney)}` : "";
+        const xpTxt = Number(bc.rewardXp || 0) > 0 ? `+${bc.rewardXp} XP` : "";
+        const rewardStr = [moneyTxt, xpTxt].filter(Boolean).join(" & ");
+        itemsHtml.push(`
+          <div class="p-2.5 rounded-xl border-2 ${isClaimed ? 'bg-amber-50/60 border-amber-200 opacity-75' : 'bg-yellow-50 border-orange-400 shadow-sm'} flex items-center justify-between gap-2">
+            <div class="min-w-0 flex-1">
+              <div class="font-black text-amber-950 flex items-center gap-1">
+                <span>📢</span><span class="truncate">${escapeHtml(bc.title || "Thông Báo Toàn Server")}</span>
+              </div>
+              <p class="text-[11px] font-bold text-amber-900 mt-0.5 leading-snug">${escapeHtml(bc.message || "")}</p>
+              ${rewardStr ? `<div class="text-[10px] font-black text-emerald-700 mt-0.5">🎁 Quà đính kèm: ${rewardStr}</div>` : ""}
+            </div>
+            ${isClaimed
+              ? `<span class="px-2 py-1 rounded-lg bg-gray-200 text-gray-700 font-black text-[10px] shrink-0">✓ Đã nhận</span>`
+              : `<button onclick="claimServerBroadcast('${escapeHtml(bc.id)}')" class="soft-btn btn-game-green px-2.5 py-1.5 rounded-xl font-black text-[10px] shrink-0">🎉 Nhận</button>`
+            }
+          </div>
+        `);
+      }
+
+      if (Array.isArray(window.personalAdminMails)) {
+        window.personalAdminMails.forEach(mail => {
+          if (!mail || !mail.id) return;
+          const isClaimed = claimedM.has(mail.id) || Boolean(mail.claimed);
+          if (!isClaimed) unclaimedCount++;
+          const moneyTxt = Number(mail.rewardMoney || 0) > 0 ? `+${formatVND(mail.rewardMoney)}` : "";
+          const xpTxt = Number(mail.rewardXp || 0) > 0 ? `+${mail.rewardXp} XP` : "";
+          const rewardStr = [moneyTxt, xpTxt].filter(Boolean).join(" & ");
+          itemsHtml.push(`
+            <div class="p-2.5 rounded-xl border-2 ${isClaimed ? 'bg-amber-50/60 border-amber-200 opacity-75' : 'bg-emerald-50 border-emerald-400 shadow-sm'} flex items-center justify-between gap-2">
+              <div class="min-w-0 flex-1">
+                <div class="font-black text-emerald-950 flex items-center gap-1">
+                  <span>💌</span><span class="truncate">${escapeHtml(mail.title || "Quà Riêng Từ Admin")}</span>
+                </div>
+                <p class="text-[11px] font-bold text-amber-900 mt-0.5 leading-snug">${escapeHtml(mail.message || "")}</p>
+                ${rewardStr ? `<div class="text-[10px] font-black text-emerald-700 mt-0.5">🎁 Quà: ${rewardStr}</div>` : ""}
+              </div>
+              ${isClaimed
+                ? `<span class="px-2 py-1 rounded-lg bg-gray-200 text-gray-700 font-black text-[10px] shrink-0">✓ Đã nhận</span>`
+                : `<button onclick="claimPersonalAdminMail('${escapeHtml(mail.id)}')" class="soft-btn btn-game-green px-2.5 py-1.5 rounded-xl font-black text-[10px] shrink-0">🎉 Nhận</button>`
+              }
+            </div>
+          `);
+        });
+      }
+
+      if (mailBox) {
+        mailBox.innerHTML = itemsHtml.length > 0
+          ? itemsHtml.join("")
+          : `<div class="text-center py-3 text-amber-800 font-bold bg-amber-50/70 rounded-xl border border-amber-200">Chưa có thư hoặc quà đền bù mới.</div>`;
+      }
+
+      const dotEl = document.getElementById("header-gift-dot");
+      const menuBadge = document.getElementById("menu-gift-badge");
+      if (dotEl) dotEl.classList.toggle("hidden", unclaimedCount === 0);
+      if (menuBadge) menuBadge.classList.toggle("hidden", unclaimedCount === 0);
+    }
+
+    async function syncAdminLiveOpsAndMail(showFeedback = false) {
+      try {
+        const key = state.shopKey || sanitizeShopKey(state.shopName || "");
+        const requests = [
+          fetchWithTimeout(`${FIREBASE_DB_URL}/liveConfig.json`, {}, 3500),
+          fetchWithTimeout(`${FIREBASE_DB_URL}/adminBroadcast.json`, {}, 3500)
+        ];
+        if (key) {
+          requests.push(fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 3500));
+        }
+
+        const results = await Promise.allSettled(requests);
+
+        if (results[0].status === "fulfilled" && results[0].value.ok) {
+          const cfg = await results[0].value.json();
+          if (cfg && typeof cfg === "object") {
+            window.serverLiveConfig = cfg;
+          }
+        }
+        if (results[1].status === "fulfilled" && results[1].value.ok) {
+          const bc = await results[1].value.json();
+          window.serverBroadcastData = (bc && bc.id && bc.active !== false) ? bc : null;
+        }
+        if (key && results[2] && results[2].status === "fulfilled" && results[2].value.ok) {
+          const cloudShop = await results[2].value.json();
+          if (cloudShop) {
+            // Nếu Admin vừa chỉnh sửa hồ sơ người chơi trên Web Admin (adminOverrideAt mới hơn)
+            const cAdminTs = Number(cloudShop.adminOverrideAt || cloudShop.fullState?.adminOverrideAt || 0);
+            const lAdminTs = Number(state.adminOverrideAt || 0);
+            if (cAdminTs > lAdminTs && cloudShop.fullState) {
+              const prevPin = state.pin;
+              mergeLoadedState({
+                ...cloudShop.fullState,
+                pin: cloudShop.pin || cloudShop.fullState.pin || prevPin,
+                adminOverrideAt: cAdminTs,
+                isBanned: Boolean(cloudShop.isBanned || cloudShop.fullState.isBanned)
+              });
+              saveToLocalOnly();
+              updateAllUI();
+              showToast("⚡ Hồ sơ quán vừa được cập nhật từ Ban Quản Trị!");
+            }
+            if (cloudShop.adminInbox && typeof cloudShop.adminInbox === "object") {
+              window.personalAdminMails = Object.values(cloudShop.adminInbox).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            } else {
+              window.personalAdminMails = [];
+            }
+          }
+        }
+
+        renderGiftcodeModalContent();
+        updateAllUI();
+        if (showFeedback) showToast("☁️ Đã đồng bộ Hộp thư & Sự kiện mới nhất!");
+      } catch (e) {
+        if (showFeedback) showToast("⚠️ Không thể kết nối máy chủ sự kiện lúc này.");
+      }
+    }
+
+    async function claimServerBroadcast(bId) {
+      const bc = window.serverBroadcastData;
+      if (!bc || bc.id !== bId) return;
+      if (!Array.isArray(state.claimedBroadcasts)) state.claimedBroadcasts = [];
+      if (state.claimedBroadcasts.includes(bId)) {
+        showToast("⚠️ Quán của bạn đã nhận phần quà thông báo này rồi!");
+        return;
+      }
+      state.claimedBroadcasts.push(bId);
+      const rewardM = Math.max(0, Number(bc.rewardMoney || 0));
+      const rewardX = Math.max(0, Number(bc.rewardXp || 0));
+      if (rewardM > 0) {
+        state.money += rewardM;
+        state.adminGrantedMoney = (state.adminGrantedMoney || 0) + rewardM;
+      }
+      if (rewardX > 0) addXP(rewardX);
+      playSFX("cash");
+      renderGiftcodeModalContent();
+      updateAllUI();
+      await saveGameEverywhere();
+      showToast(`🎉 Đã nhận quà thông báo: +${formatVND(rewardM)}${rewardX > 0 ? ` & +${rewardX} XP` : ""}!`);
+    }
+
+    async function claimPersonalAdminMail(mailId) {
+      const mail = (window.personalAdminMails || []).find(m => m && m.id === mailId);
+      if (!mail) return;
+      if (!Array.isArray(state.claimedMailIds)) state.claimedMailIds = [];
+      if (state.claimedMailIds.includes(mailId) || mail.claimed) {
+        showToast("⚠️ Bạn đã nhận thư này rồi!");
+        return;
+      }
+      state.claimedMailIds.push(mailId);
+      mail.claimed = true;
+      const rewardM = Math.max(0, Number(mail.rewardMoney || 0));
+      const rewardX = Math.max(0, Number(mail.rewardXp || 0));
+      if (rewardM > 0) {
+        state.money += rewardM;
+        state.adminGrantedMoney = (state.adminGrantedMoney || 0) + rewardM;
+      }
+      if (rewardX > 0) addXP(rewardX);
+      playSFX("cash");
+      renderGiftcodeModalContent();
+      updateAllUI();
+      try {
+        const key = state.shopKey || sanitizeShopKey(state.shopName || "");
+        if (key) {
+          await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}/adminInbox/${mailId}/claimed.json`, {
+            method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(true)
+          }, 2500);
+        }
+      } catch (e) {}
+      await saveGameEverywhere();
+      showToast(`🎉 Đã nhận quà từ Admin: +${formatVND(rewardM)}${rewardX > 0 ? ` & +${rewardX} XP` : ""}!`);
+    }
+
+    async function handleRedeemGiftcode() {
+      const inputEl = document.getElementById("giftcode-input");
+      const btn = document.getElementById("btn-redeem-giftcode");
+      if (!inputEl) return;
+      const rawCode = inputEl.value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "");
+      if (!rawCode) {
+        showGiftcodeStatus("⚠️ Vui lòng nhập mã Giftcode!", false);
+        return;
+      }
+      if (!state.shopName) {
+        showGiftcodeStatus("⚠️ Hãy đăng nhập quán trước khi nhập Giftcode!", false);
+        return;
+      }
+      if (!Array.isArray(state.redeemedGiftcodes)) state.redeemedGiftcodes = [];
+      if (state.redeemedGiftcodes.includes(rawCode)) {
+        showGiftcodeStatus(`⚠️ Quán của bạn đã sử dụng mã "${rawCode}" rồi!`, false);
+        return;
+      }
+
+      if (btn) btn.disabled = true;
+      showGiftcodeStatus("⏳ Đang kiểm tra mã Giftcode trên máy chủ...", true);
+
+      try {
+        const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/giftcodes/${rawCode}.json`, {}, 4000);
+        if (!res.ok) throw new Error("Network error");
+        const gift = await res.json();
+
+        if (!gift || !gift.code) {
+          showGiftcodeStatus(`❌ Mã Giftcode "${rawCode}" không tồn tại hoặc đã bị xóa!`, false);
+          if (btn) btn.disabled = false;
+          return;
+        }
+        if (gift.active === false) {
+          showGiftcodeStatus(`❌ Mã Giftcode "${rawCode}" hiện đã tạm khóa hoặc hết hạn!`, false);
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        const key = state.shopKey || sanitizeShopKey(state.shopName);
+        const redeemedBy = gift.redeemedBy || {};
+        const usedCount = Math.max(Number(gift.usedCount || 0), Object.keys(redeemedBy).length);
+        const maxUses = Math.max(1, Number(gift.maxUses || 100));
+
+        if (redeemedBy[key]) {
+          if (!state.redeemedGiftcodes.includes(rawCode)) state.redeemedGiftcodes.push(rawCode);
+          saveToLocalOnly();
+          renderGiftcodeModalContent();
+          showGiftcodeStatus(`⚠️ Quán "${state.shopName}" đã nhập mã này trước đó rồi!`, false);
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        if (usedCount >= maxUses) {
+          showGiftcodeStatus(`❌ Mã "${rawCode}" đã hết lượt sử dụng (${usedCount}/${maxUses} lượt)!`, false);
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        const rewardM = Math.max(0, Number(gift.rewardMoney || 0));
+        const rewardX = Math.max(0, Number(gift.rewardXp || 0));
+        const unlockDish = gift.unlockDish || "";
+
+        state.money += rewardM;
+        state.adminGrantedMoney = (state.adminGrantedMoney || 0) + rewardM;
+        if (rewardX > 0) addXP(rewardX);
+
+        let dishUnlockedMsg = "";
+        if (unlockDish && DISH_RECIPES[unlockDish] && !state.unlockedDishes.includes(unlockDish)) {
+          state.unlockedDishes.push(unlockDish);
+          dishUnlockedMsg = ` + Mở khóa ${DISH_RECIPES[unlockDish].name}`;
+        }
+
+        state.redeemedGiftcodes.push(rawCode);
+        inputEl.value = "";
+
+        const updatedGift = {
+          ...gift,
+          usedCount: usedCount + 1,
+          redeemedBy: {
+            ...redeemedBy,
+            [key]: { shopName: state.shopName, redeemedAt: Date.now() }
+          }
+        };
+
+        await fetchWithTimeout(`${FIREBASE_DB_URL}/giftcodes/${rawCode}.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedGift)
+        }, 3500);
+
+        playSFX("cash");
+        await saveGameEverywhere();
+        updateAllUI();
+        renderGiftcodeModalContent();
+
+        const customNote = gift.note ? ` (${gift.note})` : "";
+        showGiftcodeStatus(`🎉 Nhập mã "${rawCode}" thành công! Nhận +${formatVND(rewardM)}${rewardX > 0 ? `, +${rewardX} XP` : ""}${dishUnlockedMsg}${customNote}!`, true);
+        showToast(`🎁 Nhận Giftcode "${rawCode}": +${formatVND(rewardM)}!`);
+      } catch (e) {
+        showGiftcodeStatus("⚠️ Lỗi kết nối máy chủ khi kiểm tra Giftcode, vui lòng thử lại!", false);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    // KHỞI CHẠY TOÀN BỘ GAME V13
     window.addEventListener("DOMContentLoaded", () => {
       renderLoginAvatarGrid();
       checkExistingLocalSaveForLoginScreen();
       fetchCloudLeaderboard(false);
+      syncAdminLiveOpsAndMail(false);
       updateAllUI();
       startDayClock();
     });
