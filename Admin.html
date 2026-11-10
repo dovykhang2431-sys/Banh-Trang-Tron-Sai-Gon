@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Web Admin - Vua Bánh Tráng Sài Gòn (Cloud Control Center)</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+    body {
+      background: linear-gradient(135deg, #1c1917 0%, #292524 50%, #431407 100%);
+      min-height: 100vh;
+      color: #1c1917;
+    }
+    .glass-card {
+      background: rgba(255, 251, 235, 0.97);
+      border: 2px solid #f59e0b;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
+    }
+    .soft-btn {
+      transition: transform 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
+    }
+    .soft-btn:active:not(:disabled) {
+      transform: translateY(1px) scale(0.98);
+    }
+    .soft-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .tab-btn-active {
+      background: linear-gradient(135deg, #ea580c, #d97706);
+      color: #ffffff;
+      border-color: #9a3412;
+      box-shadow: 0 4px 12px rgba(234, 88, 12, 0.35);
+    }
+    .tab-btn-inactive {
+      background: #fef3c7;
+      color: #78350f;
+      border-color: #fcd34d;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #fef3c7; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb { background: #d97706; border-radius: 999px; }
+  </style>
+</head>
+<body class="p-2 sm:p-4 md:p-6">
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="admin-toast" class="fixed top-4 right-4 z-[90] pointer-events-none opacity-0 -translate-y-3 transition-all duration-200 max-w-sm">
+    <div id="admin-toast-inner" class="px-4 py-3 rounded-2xl bg-amber-950 text-amber-100 border-2 border-amber-400 shadow-2xl font-bold text-xs sm:text-sm flex items-center gap-2">
+      <span>⚡</span>
+      <span id="admin-toast-text">Đã cập nhật!</span>
+    </div>
+  </div>
+
+  <!-- ================= MÀN HÌNH ĐĂNG NHẬP ADMIN ================= -->
+  <div id="admin-login-screen" class="fixed inset-0 z-50 bg-stone-950/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="w-full max-w-md glass-card rounded-3xl p-5 sm:p-6 space-y-4">
+      <div class="flex items-center gap-3 border-b border-amber-200 pb-3">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-2xl shadow-lg text-white font-black">
+          🛡️
+        </div>
+        <div>
+          <span class="px-2 py-0.5 rounded-full bg-orange-100 text-orange-800 border border-orange-300 font-black text-[10px] uppercase">Cloud Control Center</span>
+          <h1 class="text-lg sm:text-xl font-black text-amber-950 mt-0.5">Web Admin • Vua Bánh Tráng</h1>
+          <p class="text-xs font-semibold text-amber-800">Quản lý người chơi, BXH, Giftcode & Sự kiện</p>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label for="admin-pass-input" class="block text-xs font-black text-amber-950 mb-1">🔑 Mật khẩu Quản Trị Viên</label>
+          <div class="relative">
+            <input id="admin-pass-input" type="password" placeholder="Nhập mật khẩu Admin..." onkeydown="if(event.key==='Enter') handleAdminLogin()" class="w-full px-3.5 py-2.5 pr-16 rounded-xl border-2 border-amber-400 bg-white font-black text-amber-950 text-sm focus:outline-none focus:border-orange-600" />
+            <button type="button" onclick="togglePasswordVisibility()" id="btn-toggle-pass" class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 rounded-lg bg-amber-100 text-amber-900 font-bold text-[11px]">
+              Hiện
+            </button>
+          </div>
+        </div>
+
+        <label class="flex items-center gap-2 text-xs font-bold text-amber-900 cursor-pointer select-none">
+          <input id="admin-remember-chk" type="checkbox" checked class="w-4 h-4 accent-orange-600 rounded" />
+          <span>Ghi nhớ phiên đăng nhập trên trình duyệt này</span>
+        </label>
+
+        <div id="admin-login-error" class="hidden p-2.5 rounded-xl bg-red-100 border border-red-400 text-red-800 text-xs font-bold text-center"></div>
+
+        <button onclick="handleAdminLogin()" class="soft-btn w-full py-3 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-black text-sm shadow-lg">
+          🚀 Mở Bảng Điều Khiển Admin
+        </button>
+      </div>
+
+      <div class="pt-2 border-t border-amber-200 flex items-center justify-between text-[11px] font-semibold text-amber-800">
+        <span>☁️ Server: <b class="text-emerald-700">Asia-Southeast1 (Firebase)</b></span>
+        <span>Phiên bản V13 Admin</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= GIAO DIỆN CHÍNH ADMIN DASHBOARD ================= -->
+  <div id="admin-main-app" class="max-w-6xl mx-auto space-y-4">
+
+    <!-- HEADER BAR -->
+    <header class="glass-card rounded-3xl p-3.5 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-600 to-amber-500 flex items-center justify-center text-2xl text-white shadow-md shrink-0">
+          🥙
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-400 font-black text-[10px]" id="cloud-status-badge">🟢 Đang kết nối Cloud...</span>
+            <span class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-950 font-black text-[10px]" id="last-sync-badge">Chưa đồng bộ</span>
+          </div>
+          <h1 class="text-base sm:text-xl font-black text-amber-950 mt-0.5">Trung Tâm Quản Trị • Vua Bánh Tráng Sài Gòn</h1>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="refreshAllCloudData(true)" class="soft-btn px-3 py-2 rounded-xl bg-amber-800 hover:bg-amber-700 text-white font-black text-xs flex items-center gap-1.5 shadow">
+          <span>🔄</span><span>Làm Mới Cloud</span>
+        </button>
+        <button onclick="openCreateShopModal()" class="soft-btn px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs flex items-center gap-1.5 shadow">
+          <span>➕</span><span>Tạo Quán Mới</span>
+        </button>
+        <button onclick="exportFullDatabaseJson()" class="soft-btn px-3 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-black text-xs flex items-center gap-1.5 shadow">
+          <span>💾</span><span>Xuất Backup JSON</span>
+        </button>
+        <button onclick="handleAdminLogout()" class="soft-btn px-3 py-2 rounded-xl bg-stone-700 hover:bg-stone-600 text-white font-bold text-xs">
+          🔒 Khóa
+        </button>
+      </div>
+    </header>
+
+    <!-- 4 KPI SUMMARY CARDS -->
+    <section class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
+      <div class="glass-card rounded-2xl p-3.5 flex items-center justify-between">
+        <div>
+          <div class="text-[11px] font-bold text-amber-800">👥 Tổng Quán Trên Server</div>
+          <div id="kpi-total-shops" class="text-xl sm:text-2xl font-black text-amber-950 mt-0.5">0 quán</div>
+          <div id="kpi-sub-shops" class="text-[10px] font-semibold text-emerald-700">Đang hoạt động: 0</div>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center text-xl font-black">🏪</div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-3.5 flex items-center justify-between">
+        <div>
+          <div class="text-[11px] font-bold text-amber-800">💰 Tổng Tiền Lưu Thông</div>
+          <div id="kpi-total-money" class="text-xl sm:text-2xl font-black text-emerald-700 mt-0.5">0đ</div>
+          <div id="kpi-sub-sold" class="text-[10px] font-semibold text-amber-800">Tổng đã bán: 0 bịch</div>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl font-black">💵</div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-3.5 flex items-center justify-between">
+        <div>
+          <div class="text-[11px] font-bold text-amber-800">🎁 Giftcode Đang Mở</div>
+          <div id="kpi-total-codes" class="text-xl sm:text-2xl font-black text-rose-700 mt-0.5">0 mã</div>
+          <div id="kpi-sub-codes" class="text-[10px] font-semibold text-amber-800">Tổng lượt nhập: 0</div>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-xl font-black">🎟️</div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-3.5 flex items-center justify-between">
+        <div>
+          <div class="text-[11px] font-bold text-amber-800">⚡ Sự Kiện Live-Ops</div>
+          <div id="kpi-liveops-state" class="text-base sm:text-lg font-black text-purple-800 mt-0.5 truncate">Mặc định (Tắt)</div>
+          <div id="kpi-sub-liveops" class="text-[10px] font-semibold text-amber-800 truncate">Khách x1 • XP x1</div>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl font-black">🔥</div>
+      </div>
+    </section>
+
+    <!-- NAVIGATION TABS -->
+    <nav class="glass-card rounded-2xl p-1.5 grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+      <button onclick="switchAdminTab('shops')" id="tab-btn-shops" class="soft-btn py-2.5 px-3 rounded-xl border font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 tab-btn-active">
+        <span>👥</span><span>Quản Lý Quán & BXH</span>
+      </button>
+      <button onclick="switchAdminTab('giftcodes')" id="tab-btn-giftcodes" class="soft-btn py-2.5 px-3 rounded-xl border font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 tab-btn-inactive">
+        <span>🎁</span><span>Quản Lý Giftcode</span>
+      </button>
+      <button onclick="switchAdminTab('broadcast')" id="tab-btn-broadcast" class="soft-btn py-2.5 px-3 rounded-xl border font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 tab-btn-inactive">
+        <span>📢</span><span>Thông Báo & Phát Quà</span>
+      </button>
+      <button onclick="switchAdminTab('liveops')" id="tab-btn-liveops" class="soft-btn py-2.5 px-3 rounded-xl border font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 tab-btn-inactive">
+        <span>⚡</span><span>Sự Kiện Live-Ops</span>
+      </button>
+    </nav>
+
+    <!-- ================= TAB 1: QUẢN LÝ QUÁN & BẢNG XẾP HẠNG ================= -->
+    <section id="panel-shops" class="glass-card rounded-3xl p-3.5 sm:p-5 space-y-3.5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-amber-200 pb-3">
+        <div>
+          <h2 class="text-base sm:text-lg font-black text-amber-950">👥 Danh Sách Quán & Người Chơi Trên Cloud</h2>
+          <p class="text-xs font-semibold text-amber-800">Tìm kiếm, sửa Tiền / Cấp độ / Nâng cấp, cấp lại mã PIN 4 số hoặc xóa quán rác</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <input id="shop-search-input" type="text" oninput="renderShopsList()" placeholder="🔍 Tìm tên quán, shopKey, mã BT-..." class="px-3 py-2 rounded-xl border-2 border-amber-300 bg-white text-xs font-bold text-amber-950 w-full sm:w-64 focus:outline-none focus:border-orange-500" />
+          <select id="shop-filter-select" onchange="renderShopsList()" class="px-3 py-2 rounded-xl border-2 border-amber-300 bg-white text-xs font-black text-amber-950">
+            <option value="money_desc">💰 Xếp theo Tiền giảm dần</option>
+            <option value="level_desc">⭐ Xếp theo Cấp độ giảm dần</option>
+            <option value="sold_desc">🛍️ Xếp theo Số bịch đã bán</option>
+            <option value="recent_desc">🕒 Mới cập nhật gần nhất</option>
+            <option value="banned_only">🚫 Chỉ hiện quán đang Khóa (Ban)</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="shops-list-container" class="space-y-2.5">
+        <div class="text-center py-8 text-amber-800 font-bold text-sm">⏳ Đang tải danh sách quán từ Firebase Cloud...</div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 2: QUẢN LÝ GIFTCODE ================= -->
+    <section id="panel-giftcodes" class="hidden glass-card rounded-3xl p-3.5 sm:p-5 space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+        <!-- Form tạo Giftcode -->
+        <div class="lg:col-span-5 p-4 rounded-2xl bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50 border-2 border-rose-300 space-y-3">
+          <div class="flex items-center justify-between border-b border-rose-200 pb-2">
+            <div>
+              <h3 class="text-sm sm:text-base font-black text-rose-950">🎟️ Tạo / Cập Nhật Mã Giftcode</h3>
+              <p class="text-[11px] font-semibold text-amber-800">Người chơi nhập mã này ở mục 🎁 Giftcode trong game</p>
+            </div>
+            <button onclick="generateRandomGiftcode()" class="soft-btn px-2.5 py-1 rounded-lg bg-rose-200 text-rose-900 font-black text-[11px]">
+              🎲 Mã Ngẫu Nhiên
+            </button>
+          </div>
+
+          <!-- 3 Nút tạo mẫu nhanh -->
+          <div class="space-y-1">
+            <span class="text-[10px] font-black text-amber-800 uppercase">⚡ Điền nhanh mẫu phổ biến:</span>
+            <div class="grid grid-cols-3 gap-1.5">
+              <button type="button" onclick="fillGiftcodePreset('TANTHU50K', 50000, 60, 200, 'Quà khởi nghiệp Dì Tư tặng!')" class="soft-btn p-1.5 rounded-xl bg-white border border-amber-300 text-[10px] font-black text-amber-950 text-center">
+                🌱 Tân Thủ<br><span class="text-emerald-700">+50k • 60 XP</span>
+              </button>
+              <button type="button" onclick="fillGiftcodePreset('DENBU150K', 150000, 150, 100, 'Quà đền bù nâng cấp hệ thống!')" class="soft-btn p-1.5 rounded-xl bg-white border border-amber-300 text-[10px] font-black text-amber-950 text-center">
+                🛠️ Đền Bù<br><span class="text-emerald-700">+150k • 150 XP</span>
+              </button>
+              <button type="button" onclick="fillGiftcodePreset('VIPSAIGON', 500000, 350, 50, 'Quà VIP Đại Gia Bánh Tráng!')" class="soft-btn p-1.5 rounded-xl bg-white border border-amber-300 text-[10px] font-black text-amber-950 text-center">
+                👑 Quà VIP<br><span class="text-emerald-700">+500k • 350 XP</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-2.5 text-xs">
+            <div>
+              <label class="block font-black text-amber-950 mb-1">Mã Giftcode (Chữ in hoa & Số, viết liền)</label>
+              <input id="gc-code-input" type="text" maxlength="24" placeholder="VD: TANTHU50K" class="w-full px-3 py-2 rounded-xl border-2 border-amber-400 bg-white font-black text-amber-950 uppercase tracking-wider" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block font-black text-amber-950 mb-1">💰 Tiền thưởng (VNĐ)</label>
+                <input id="gc-money-input" type="number" step="5000" value="50000" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-emerald-800" />
+              </div>
+              <div>
+                <label class="block font-black text-amber-950 mb-1">⭐ Điểm XP thưởng</label>
+                <input id="gc-xp-input" type="number" step="10" value="50" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-purple-800" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block font-black text-amber-950 mb-1">👥 Số lượt nhập tối đa</label>
+                <input id="gc-maxuses-input" type="number" min="1" value="100" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-amber-950" />
+              </div>
+              <div>
+                <label class="block font-black text-amber-950 mb-1">🥙 Tặng kèm mở khóa món</label>
+                <select id="gc-dish-select" class="w-full px-2.5 py-2 rounded-xl border-2 border-amber-300 bg-white font-bold text-amber-950">
+                  <option value="">-- Không tặng món --</option>
+                  <option value="chamme">Chấm Sốt Me</option>
+                  <option value="cuon">Cuộn Sốt Bơ</option>
+                  <option value="phoisuong">Phơi Sương Muối</option>
+                  <option value="bo">Bơ Tép Mỡ</option>
+                  <option value="nuong">Nướng Đà Lạt</option>
+                  <option value="xoainon">Xoài Non Khô Bò</option>
+                  <option value="lacphomai">Lắc Phô Mai</option>
+                  <option value="mamruoc">Nướng Mắm Ruốc</option>
+                  <option value="metditu">Mẹt Gia Truyền Dì Tư</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-black text-amber-950 mb-1">💬 Lời nhắn khi nhận quà</label>
+              <input id="gc-note-input" type="text" placeholder="VD: Chúc bạn buôn may bán đắt!" value="Chúc quán buôn may bán đắt!" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-bold text-amber-950" />
+            </div>
+
+            <button onclick="saveGiftcodeToCloud()" class="soft-btn w-full py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-orange-600 text-white font-black text-xs sm:text-sm shadow-md">
+              💾 Lưu & Kích Hoạt Giftcode Lên Server
+            </button>
+          </div>
+        </div>
+
+        <!-- Danh sách Giftcode hiện có -->
+        <div class="lg:col-span-7 space-y-2.5">
+          <div class="flex items-center justify-between border-b border-amber-200 pb-2">
+            <div>
+              <h3 class="text-sm sm:text-base font-black text-amber-950">📋 Danh Sách Giftcode Trên Server</h3>
+              <p class="text-[11px] font-semibold text-amber-800">Theo dõi số lượt đã nhập và danh sách các quán đã nhận</p>
+            </div>
+          </div>
+
+          <div id="giftcodes-list-container" class="space-y-2 max-h-[520px] overflow-y-auto pr-1">
+            <div class="text-center py-8 text-amber-800 font-bold text-xs">Chưa có mã Giftcode nào.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= TAB 3: THÔNG BÁO & PHÁT QUÀ TOÀN SERVER ================= -->
+    <section id="panel-broadcast" class="hidden glass-card rounded-3xl p-3.5 sm:p-5 space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+        <div class="lg:col-span-6 p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 space-y-3">
+          <div class="border-b border-amber-200 pb-2">
+            <h3 class="text-sm sm:text-base font-black text-amber-950">📢 Phát Thông Báo & Quà Toàn Server</h3>
+            <p class="text-[11px] font-semibold text-amber-800">Tất cả người chơi mở game sẽ thấy thông báo này trong Hộp Thư và được bấm nhận quà 1 lần</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-1.5">
+            <button type="button" onclick="fillBroadcastTemplate('🎉 Chào Mừng Bản Cập Nhật V13!', 'Dì Tư gửi tặng tất cả chủ quán gói vốn trợ lực cập nhật tính năng Thau Trống & Khách Kỹ Tính mới!', 80000, 80)" class="soft-btn p-2 rounded-xl bg-white border border-amber-300 text-[11px] font-black text-amber-950">
+              🎉 Mẫu Quà Cập Nhật (+80k)
+            </button>
+            <button type="button" onclick="fillBroadcastTemplate('🔥 Tiếp Sức Cuối Tuần Đông Khách!', 'Chúc các chủ quán cuối tuần chốt sổ rực rỡ, nhớ nâng cấp Bảng Hiệu và Ghim Maps nhé!', 50000, 50)" class="soft-btn p-2 rounded-xl bg-white border border-amber-300 text-[11px] font-black text-amber-950">
+              ☀️ Mẫu Quà Cuối Tuần (+50k)
+            </button>
+          </div>
+
+          <div class="space-y-2.5 text-xs">
+            <div>
+              <label class="block font-black text-amber-950 mb-1">Tiêu đề thông báo</label>
+              <input id="bc-title-input" type="text" value="🎉 Quà Trợ Lực Từ Ban Quản Trị!" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-amber-950" />
+            </div>
+
+            <div>
+              <label class="block font-black text-amber-950 mb-1">Nội dung lời nhắn gửi tất cả người chơi</label>
+              <textarea id="bc-msg-input" rows="3" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-bold text-amber-950">Chúc các chủ quán buôn may bán đắt! Nhớ kiểm tra mục Nâng Cấp Hút Khách để mở rộng quán nhé!</textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block font-black text-amber-950 mb-1">💰 Quà Tiền Mặt Đính Kèm</label>
+                <input id="bc-money-input" type="number" step="10000" value="50000" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-emerald-800" />
+              </div>
+              <div>
+                <label class="block font-black text-amber-950 mb-1">⭐ Quà XP Đính Kèm</label>
+                <input id="bc-xp-input" type="number" step="10" value="50" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-purple-800" />
+              </div>
+            </div>
+
+            <button onclick="publishServerBroadcast()" class="soft-btn w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-xs sm:text-sm shadow-md">
+              🚀 Phát Thông Báo & Quà Mới Toàn Server
+            </button>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 p-4 rounded-2xl bg-white border-2 border-amber-200 space-y-3">
+          <div class="flex items-center justify-between border-b border-amber-200 pb-2">
+            <h3 class="text-sm sm:text-base font-black text-amber-950">📡 Thông Báo Đang Phát Hiện Tại</h3>
+            <button onclick="clearServerBroadcast()" class="soft-btn px-2.5 py-1 rounded-lg bg-red-100 text-red-800 font-black text-[11px]">
+              🛑 Gỡ Thông Báo
+            </button>
+          </div>
+
+          <div id="current-broadcast-preview" class="p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-xs space-y-1.5">
+            <div class="text-amber-800 font-bold">Chưa có thông báo toàn server nào đang phát.</div>
+          </div>
+
+          <!-- Đổi mật khẩu Admin -->
+          <div class="pt-3 border-t border-amber-200 space-y-2">
+            <h4 class="text-xs font-black text-amber-950">🔐 Bảo Mật Tài Khoản Admin</h4>
+            <p class="text-[11px] font-semibold text-amber-800">Mật khẩu gốc mặc định của bạn là <code class="px-1.5 py-0.5 rounded bg-amber-100 font-black">0941375321</code>. Bạn có thể đặt thêm mật khẩu phụ trên Cloud:</p>
+            <div class="flex gap-2">
+              <input id="new-admin-pass-input" type="password" placeholder="Nhập mật khẩu Admin mới..." class="flex-1 px-3 py-2 rounded-xl border border-amber-300 text-xs font-bold" />
+              <button onclick="saveNewAdminPassword()" class="soft-btn px-3 py-2 rounded-xl bg-amber-800 text-white font-black text-xs">Lưu Mật Khẩu</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= TAB 4: ĐIỀU KHIỂN SỰ KIỆN LIVE-OPS ================= -->
+    <section id="panel-liveops" class="hidden glass-card rounded-3xl p-3.5 sm:p-5 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-200 pb-3">
+        <div>
+          <h2 class="text-base sm:text-lg font-black text-amber-950">⚡ Điều Khiển Sự Kiện & Hệ Số Server (Live-Ops)</h2>
+          <p class="text-xs font-semibold text-amber-800">Thay đổi nhịp độ khách, x2 XP, tiền Tip và giảm giá Chợ Đầu Mối theo thời gian thực mà không cần sửa code game</p>
+        </div>
+        <div class="flex flex-wrap gap-1.5">
+          <button onclick="applyLiveOpsPreset('normal')" class="soft-btn px-3 py-1.5 rounded-xl bg-stone-200 text-stone-800 font-black text-xs">⚖️ Chuẩn (Tắt)</button>
+          <button onclick="applyLiveOpsPreset('weekend')" class="soft-btn px-3 py-1.5 rounded-xl bg-purple-100 text-purple-900 border border-purple-300 font-black text-xs">🎉 Cuối Tuần (Khách x1.3 • XP x2)</button>
+          <button onclick="applyLiveOpsPreset('festival')" class="soft-btn px-3 py-1.5 rounded-xl bg-rose-100 text-rose-900 border border-rose-300 font-black text-xs">🔥 Lễ Hội (Khách x1.5 • Tip x1.5 • Chợ -20%)</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="p-4 rounded-2xl bg-purple-50 border-2 border-purple-300 space-y-3">
+          <label class="flex items-center justify-between cursor-pointer">
+            <span class="font-black text-sm text-purple-950">🟢 Kích Hoạt Sự Kiện Toàn Server</span>
+            <input id="lo-enabled-chk" type="checkbox" class="w-5 h-5 accent-purple-700 rounded" />
+          </label>
+
+          <div>
+            <label class="block font-black text-purple-950 mb-1">🏷️ Tên Sự Kiện Hiển Thị Đầu Màn Hình Game</label>
+            <input id="lo-title-input" type="text" value="🎉 Sự Kiện Cuối Tuần Sài Gòn" class="w-full px-3 py-2 rounded-xl border-2 border-purple-300 bg-white font-black text-purple-950" />
+          </div>
+
+          <div>
+            <div class="flex justify-between font-black text-purple-950 mb-1">
+              <span>👥 Hệ Số Lượng Khách Hàng Ngày</span>
+              <span id="lo-cust-val" class="text-emerald-700">1.0x</span>
+            </div>
+            <input id="lo-cust-slider" type="range" min="0.5" max="2.5" step="0.1" value="1.0" oninput="updateLiveOpsLabels()" class="w-full accent-purple-700" />
+            <div class="flex justify-between text-[10px] font-semibold text-purple-800"><span>0.5x (Vắng)</span><span>1.0x (Chuẩn)</span><span>1.5x (Đông)</span><span>2.5x (Bão Đơn)</span></div>
+          </div>
+
+          <div>
+            <div class="flex justify-between font-black text-purple-950 mb-1">
+              <span>⭐ Hệ Số Điểm Kinh Nghiệm (XP)</span>
+              <span id="lo-xp-val" class="text-purple-700">1.0x</span>
+            </div>
+            <input id="lo-xp-slider" type="range" min="1.0" max="3.0" step="0.25" value="1.0" oninput="updateLiveOpsLabels()" class="w-full accent-purple-700" />
+            <div class="flex justify-between text-[10px] font-semibold text-purple-800"><span>1.0x</span><span>1.5x</span><span>2.0x</span><span>3.0x</span></div>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 space-y-3">
+          <div>
+            <div class="flex justify-between font-black text-amber-950 mb-1">
+              <span>💵 Hệ Số Tiền Tip Khách Thưởng (5⭐)</span>
+              <span id="lo-tip-val" class="text-emerald-700">1.0x</span>
+            </div>
+            <input id="lo-tip-slider" type="range" min="1.0" max="2.5" step="0.25" value="1.0" oninput="updateLiveOpsLabels()" class="w-full accent-orange-600" />
+          </div>
+
+          <div>
+            <div class="flex justify-between font-black text-amber-950 mb-1">
+              <span>🛒 Giảm Giá Nhập Nguyên Liệu Chợ Đầu Mối</span>
+              <span id="lo-market-val" class="text-rose-700">0%</span>
+            </div>
+            <input id="lo-market-slider" type="range" min="0" max="35" step="5" value="0" oninput="updateLiveOpsLabels()" class="w-full accent-orange-600" />
+          </div>
+
+          <div>
+            <div class="flex justify-between font-black text-amber-950 mb-1">
+              <span>😊 Cộng Thêm Độ Kiên Nhẫn Khách Đợi</span>
+              <span id="lo-patience-val" class="text-sky-700">+0%</span>
+            </div>
+            <input id="lo-patience-slider" type="range" min="0" max="50" step="5" value="0" oninput="updateLiveOpsLabels()" class="w-full accent-orange-600" />
+          </div>
+
+          <button onclick="saveLiveOpsConfigToCloud()" class="soft-btn w-full py-3 rounded-xl bg-gradient-to-r from-purple-700 to-rose-600 text-white font-black text-xs sm:text-sm shadow-lg mt-2">
+            💾 Lưu & Áp Dụng Sự Kiện Toàn Server
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ================= MODAL CHỈNH SỬA HỒ SƠ QUÁN TOÀN DIỆN ================= -->
+  <div id="modal-edit-shop" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4">
+    <div class="w-full max-w-2xl glass-card rounded-3xl p-4 sm:p-5 max-h-[92vh] overflow-y-auto space-y-3.5 text-xs">
+      <div class="flex items-center justify-between border-b border-amber-200 pb-2.5">
+        <div>
+          <span id="edit-shop-key-badge" class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-950 font-black text-[10px]">shopKey</span>
+          <h3 id="edit-shop-title" class="text-base sm:text-lg font-black text-amber-950 mt-0.5">✏️ Chỉnh Sửa Hồ Sơ Quán</h3>
+        </div>
+        <button onclick="closeEditShopModal()" class="px-3 py-1 rounded-xl bg-amber-100 hover:bg-amber-200 font-black text-sm">✕</button>
+      </div>
+
+      <!-- Chỉ số cơ bản -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+        <div>
+          <label class="block font-black text-amber-950 mb-1">🏷️ Tên Quán</label>
+          <input id="es-name" type="text" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-amber-950" />
+        </div>
+        <div>
+          <label class="block font-black text-amber-950 mb-1">💰 Tiền Mặt (VNĐ)</label>
+          <input id="es-money" type="number" step="10000" class="w-full px-3 py-2 rounded-xl border-2 border-emerald-400 bg-white font-black text-emerald-800" />
+        </div>
+        <div>
+          <label class="block font-black text-amber-950 mb-1">🔑 Cấp Lại PIN 4 Số Mới</label>
+          <input id="es-newpin" type="text" maxlength="4" placeholder="Để trống = Giữ nguyên" class="w-full px-3 py-2 rounded-xl border-2 border-rose-300 bg-white font-black text-rose-900" />
+        </div>
+        <div>
+          <label class="block font-black text-amber-950 mb-1">🆙 Cấp Độ (1–50)</label>
+          <input id="es-level" type="number" min="1" max="50" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-amber-950" />
+        </div>
+        <div>
+          <label class="block font-black text-amber-950 mb-1">📅 Ngày Bán</label>
+          <input id="es-day" type="number" min="1" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-amber-950" />
+        </div>
+        <div>
+          <label class="block font-black text-amber-950 mb-1">⭐ Đánh Giá (1.0–5.0)</label>
+          <input id="es-rating" type="number" min="1.0" max="5.0" step="0.1" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-amber-950" />
+        </div>
+        <div>
+          <label class="block font-black text-amber-950 mb-1">🛍️ Tổng Bịch Đã Bán</label>
+          <input id="es-sold" type="number" min="0" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-amber-950" />
+        </div>
+        <div>
+          <label class="block font-black text-amber-950 mb-1">🔥 Độ Nổi Tiếng (0–100%)</label>
+          <input id="es-viral" type="number" min="0" max="100" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-amber-950" />
+        </div>
+        <div>
+          <label class="block font-black text-amber-950 mb-1">🛡️ Mã Khôi Phục</label>
+          <input id="es-recovery" type="text" readonly class="w-full px-3 py-2 rounded-xl border border-amber-200 bg-amber-100/70 font-black text-amber-900" />
+        </div>
+      </div>
+
+      <!-- Nút cộng tiền nhanh -->
+      <div class="flex flex-wrap items-center gap-1.5 pt-1">
+        <span class="font-black text-amber-800 text-[11px]">⚡ Cộng nhanh Tiền:</span>
+        <button type="button" onclick="adjustEditorMoney(50000)" class="soft-btn px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-900 border border-emerald-300 font-black">+50k</button>
+        <button type="button" onclick="adjustEditorMoney(200000)" class="soft-btn px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-900 border border-emerald-300 font-black">+200k</button>
+        <button type="button" onclick="adjustEditorMoney(500000)" class="soft-btn px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-900 border border-emerald-300 font-black">+500k</button>
+        <button type="button" onclick="adjustEditorMoney(2000000)" class="soft-btn px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-900 border border-emerald-300 font-black">+2 Triệu</button>
+        <button type="button" onclick="document.getElementById('es-money').value = 350000" class="soft-btn px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 border border-amber-300 font-bold">Về 350k gốc</button>
+      </div>
+
+      <!-- 8 Nâng cấp Hút Khách & Giữ Chân -->
+      <div class="p-3 rounded-2xl bg-amber-50 border border-amber-300 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-black text-amber-950">🛠️ Cấp Độ 8 Nâng Cấp (0 ➔ 5)</span>
+          <div class="flex gap-1.5">
+            <button type="button" onclick="setAllEditorUpgrades(0)" class="soft-btn px-2 py-0.5 rounded bg-stone-200 text-stone-800 font-bold text-[10px]">Về Cấp 0</button>
+            <button type="button" onclick="setAllEditorUpgrades(5)" class="soft-btn px-2 py-0.5 rounded bg-orange-600 text-white font-black text-[10px]">⚡ Max Cấp 5 Tất Cả</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="es-upgrades-grid"></div>
+      </div>
+
+      <!-- Phụ Bếp & Thực Đơn & Giấy Phép -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <div class="p-3 rounded-2xl bg-emerald-50 border border-emerald-300 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-black text-emerald-950">👩‍🍳 Đội Ngũ 4 Phụ Bếp</span>
+            <button type="button" onclick="maxAllEditorStaff()" class="soft-btn px-2 py-0.5 rounded bg-emerald-600 text-white font-black text-[10px]">🌟 Mở Đủ 5⭐</button>
+          </div>
+          <div id="es-staff-list" class="space-y-1.5"></div>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-sky-50 border border-sky-300 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-black text-sky-950">📜 Giấy Phép & Thực Đơn</span>
+            <button type="button" onclick="unlockAllEditorDishesAndLicenses()" class="soft-btn px-2 py-0.5 rounded bg-sky-600 text-white font-black text-[10px]">🥙 Mở Full 10 Món & Giấy Phép</button>
+          </div>
+          <div id="es-licenses-list" class="space-y-1"></div>
+          <div class="pt-1 border-t border-sky-200 flex items-center justify-between">
+            <span class="font-bold text-sky-900">Số món đã mở: <b id="es-dishes-count">1/10</b></span>
+            <label class="flex items-center gap-1.5 font-black text-red-700 cursor-pointer">
+              <input id="es-banned-chk" type="checkbox" class="w-4 h-4 accent-red-600" />
+              <span>🚫 Khóa quán (Ban BXH)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-amber-200">
+        <button type="button" onclick="closeEditShopModal()" class="soft-btn px-4 py-2.5 rounded-xl bg-stone-200 text-stone-800 font-black">Hủy</button>
+        <button type="button" onclick="saveEditedShopToCloud()" id="btn-save-edited-shop" class="soft-btn px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white font-black shadow-lg">
+          💾 Lưu Thay Đổi Lên Cloud
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL GỬI QUÀ RIÊNG / TẠO QUÁN / XÁC NHẬN XÓA ================= -->
+  <div id="modal-send-mail" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md glass-card rounded-3xl p-4 sm:p-5 space-y-3 text-xs">
+      <div class="flex items-center justify-between border-b border-amber-200 pb-2">
+        <h3 class="text-base font-black text-amber-950">💌 Gửi Quà & Thư Riêng Tới Quán</h3>
+        <button onclick="closeSendMailModal()" class="px-2.5 py-1 rounded-lg bg-amber-100 font-black">✕</button>
+      </div>
+      <div id="sm-target-label" class="font-black text-orange-800"></div>
+      <div>
+        <label class="block font-black text-amber-950 mb-1">Tiêu đề thư</label>
+        <input id="sm-title" type="text" value="🎁 Quà Thưởng Đặc Biệt Từ Admin!" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black" />
+      </div>
+      <div>
+        <label class="block font-black text-amber-950 mb-1">Lời nhắn</label>
+        <textarea id="sm-message" rows="2" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-bold">Chúc mừng quán đã hoạt động tích cực! Nhận ngay phần quà trợ lực từ Admin nhé!</textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="block font-black text-amber-950 mb-1">💰 Tiền tặng (VNĐ)</label>
+          <input id="sm-money" type="number" step="10000" value="100000" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-emerald-800" />
+        </div>
+        <div>
+          <label class="block font-black text-amber-950 mb-1">⭐ XP tặng</label>
+          <input id="sm-xp" type="number" step="10" value="100" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-purple-800" />
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeSendMailModal()" class="soft-btn px-4 py-2 rounded-xl bg-stone-200 font-black">Đóng</button>
+        <button onclick="confirmSendPersonalMail()" class="soft-btn px-4 py-2 rounded-xl bg-emerald-600 text-white font-black shadow">🚀 Gửi Ngay</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL TẠO QUÁN MỚI -->
+  <div id="modal-create-shop" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md glass-card rounded-3xl p-4 sm:p-5 space-y-3 text-xs">
+      <div class="flex items-center justify-between border-b border-amber-200 pb-2">
+        <h3 class="text-base font-black text-amber-950">➕ Tạo Tài Khoản Quán Mới</h3>
+        <button onclick="closeCreateShopModal()" class="px-2.5 py-1 rounded-lg bg-amber-100 font-black">✕</button>
+      </div>
+      <div>
+        <label class="block font-black text-amber-950 mb-1">🏷️ Tên Quán Mới</label>
+        <input id="cs-name" type="text" placeholder="VD: Bánh Tráng Cô Ba" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black" />
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="block font-black text-amber-950 mb-1">🔑 Mã PIN (4 chữ số)</label>
+          <input id="cs-pin" type="text" maxlength="4" value="1234" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black" />
+        </div>
+        <div>
+          <label class="block font-black text-amber-950 mb-1">🆙 Cấp Độ Khởi Đầu</label>
+          <input id="cs-level" type="number" min="1" max="50" value="1" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black" />
+        </div>
+      </div>
+      <div>
+        <label class="block font-black text-amber-950 mb-1">💰 Vốn Khởi Đầu (VNĐ)</label>
+        <input id="cs-money" type="number" step="50000" value="500000" class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 bg-white font-black text-emerald-800" />
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeCreateShopModal()" class="soft-btn px-4 py-2 rounded-xl bg-stone-200 font-black">Hủy</button>
+        <button onclick="confirmCreateNewShop()" class="soft-btn px-4 py-2 rounded-xl bg-emerald-600 text-white font-black shadow">✨ Tạo Quán Lên Cloud</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL XÁC NHẬN XÓA -->
+  <div id="modal-confirm-delete" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-sm glass-card rounded-3xl p-4 sm:p-5 space-y-3 text-xs text-center">
+      <div class="text-3xl">⚠️</div>
+      <h3 id="confirm-del-title" class="text-base font-black text-red-900">Xác nhận xóa?</h3>
+      <p id="confirm-del-desc" class="font-semibold text-amber-900">Hành động này sẽ xóa dữ liệu trên Firebase Cloud.</p>
+      <div class="flex justify-center gap-2 pt-2">
+        <button onclick="closeConfirmDeleteModal()" class="soft-btn px-4 py-2 rounded-xl bg-stone-200 font-black">Hủy</button>
+        <button id="btn-confirm-del-exec" class="soft-btn px-4 py-2 rounded-xl bg-red-600 text-white font-black shadow">🗑️ Xóa Ngay</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const FIREBASE_DB_URL = "https://banh-trang-tron-sai-gon-default-rtdb.asia-southeast1.firebasedatabase.app";
+    const ADMIN_SESSION_KEY = "vua_banh_trang_admin_auth_v13";
+    // Hash mặc định của mật khẩu chủ game "0941375321"
+    const MASTER_PASS_HASH = "ADM_1cba7e41980319";
+
+    const UPGRADE_META = [
+      { id: "upg_maps", icon: "📍", name: "Ghim Google Maps" },
+      { id: "upg_signbox", icon: "🪧", name: "Bảng Hiệu Hộp Đèn" },
+      { id: "upg_appads", icon: "📱", name: "Quảng Cáo App" },
+      { id: "upg_tiktoker", icon: "🤳", name: "Thuê TikToker" },
+      { id: "upg_stool", icon: "🪑", name: "Bàn Ghế Nhựa Đỏ" },
+      { id: "upg_neon", icon: "🪭", name: "Quạt Phun Sương" },
+      { id: "upg_awning", icon: "☂️", name: "Mái Hiên Che Mưa" },
+      { id: "upg_cooler", icon: "🧊", name: "Tủ Kính & Thùng Đá" }
+    ];
+
+    const STAFF_META = [
+      { id: "beti", icon: "👦", name: "Phụ Bếp Bé Tí" },
+      { id: "mylan", icon: "👧", name: "Chị Phụ Việc Mỹ Lan" },
+      { id: "tunghia", icon: "👮‍♂️", name: "Chú Bảo Vệ Tư Nghĩa" },
+      { id: "anhba", icon: "🧑‍🍳", name: "Nghệ Nhân Anh Ba" }
+    ];
+
+    const LICENSE_META = [
+      { id: "lic_vsattp", icon: "🧼", name: "Giấy Chứng Nhận VSATTP" },
+      { id: "lic_sidewalk", icon: "📐", name: "Hợp Đồng Thuê Vỉa Hè" },
+      { id: "lic_nightmarket", icon: "🏮", name: "Giấy Phép Họp Chợ Đêm" },
+      { id: "lic_brand", icon: "📜", name: "Bằng Độc Quyền Dì Tư" }
+    ];
+
+    const ALL_DISH_KEYS = ["tron", "chamme", "cuon", "phoisuong", "bo", "nuong", "xoainon", "lacphomai", "mamruoc", "metditu"];
+
+    let shopsMap = {};
+    let leaderboardMap = {};
+    let giftcodesMap = {};
+    let liveOpsConfig = { enabled: false, title: "🎉 Sự Kiện Cuối Tuần Sài Gòn", customerMult: 1.0, xpMult: 1.0, tipMult: 1.0, marketDiscountPct: 0, patienceBonusPct: 0 };
+    let currentBroadcast = null;
+    let customCloudPassHash = null;
+
+    let activeEditingShopKey = null;
+    let activeMailShopKey = null;
+    let editorUnlockedDishes = ["tron"];
+
+    function escapeHtml(str) {
+      return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    }
+
+    function formatVND(num) {
+      return Number(num || 0).toLocaleString("vi-VN") + "đ";
+    }
+
+    function formatShortK(num) {
+      const n = Number(num || 0);
+      if (Math.abs(n) >= 1000000) return (n / 1000000).toFixed(2).replace(".", ",") + "Tr";
+      if (Math.abs(n) >= 1000) return (n / 1000).toFixed(1).replace(".", ",") + "k";
+      return n.toLocaleString("vi-VN") + "đ";
+    }
+
+    function sanitizeShopKey(name) {
+      return String(name || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/[^a-z0-9]/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "");
+    }
+
+    // Cùng thuật toán băm PIN của game chính
+    function hashShopPin(shopKey, rawPin) {
+      const str = `bt_v6_salt_${shopKey}_${String(rawPin).trim()}`;
+      let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+      for (let i = 0; i < str.length; i++) {
+        const ch = str.charCodeAt(i);
+        h1 = Math.imul(h1 ^ ch, 2654435761);
+        h2 = Math.imul(h2 ^ ch, 1597334677);
+      }
+      h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+      h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+      return "PINH_" + (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
+    }
+
+    // Cùng thuật toán Security Seal của game chính
+    function computeSecuritySeal(s) {
+      const raw = `${s.shopKey || "init"}|${Math.round(s.money || 0)}|${s.totalSold || 0}|${s.level || 1}|${s.day || 1}|DITU_V6_SECRET_2026`;
+      let hash = 2166136261;
+      for (let i = 0; i < raw.length; i++) {
+        hash ^= raw.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      return "SEAL_" + (hash >>> 0).toString(36);
+    }
+
+    function hashAdminPassword(rawPass) {
+      const str = `bt_admin_master_2026_${String(rawPass).trim()}`;
+      let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+      for (let i = 0; i < str.length; i++) {
+        const ch = str.charCodeAt(i);
+        h1 = Math.imul(h1 ^ ch, 2654435761);
+        h2 = Math.imul(h2 ^ ch, 1597334677);
+      }
+      h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+      h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+      return "ADM_" + (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
+    }
+
+    let toastTimer = null;
+    function showAdminToast(msg) {
+      const box = document.getElementById("admin-toast");
+      const txt = document.getElementById("admin-toast-text");
+      if (!box || !txt) return;
+      txt.textContent = msg;
+      box.classList.remove("opacity-0", "-translate-y-3");
+      box.classList.add("opacity-100", "translate-y-0");
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        box.classList.add("opacity-0", "-translate-y-3");
+        box.classList.remove("opacity-100", "translate-y-0");
+      }, 2800);
+    }
+
+    async function fetchJson(url, options = {}, timeoutMs = 5000) {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), timeoutMs);
+      try {
+        const res = await fetch(url, { ...options, signal: ctrl.signal });
+        clearTimeout(t);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return await res.json();
+      } catch (e) {
+        clearTimeout(t);
+        throw e;
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const inp = document.getElementById("admin-pass-input");
+      const btn = document.getElementById("btn-toggle-pass");
+      if (!inp || !btn) return;
+      if (inp.type === "password") {
+        inp.type = "text";
+        btn.textContent = "Ẩn";
+      } else {
+        inp.type = "password";
+        btn.textContent = "Hiện";
+      }
+    }
+
+    async function handleAdminLogin() {
+      const inp = document.getElementById("admin-pass-input");
+      const errEl = document.getElementById("admin-login-error");
+      const remember = document.getElementById("admin-remember-chk")?.checked;
+      const val = String(inp?.value || "").trim();
+
+      if (!val) {
+        if (errEl) { errEl.textContent = "⚠️ Vui lòng nhập mật khẩu Admin!"; errEl.classList.remove("hidden"); }
+        return;
+      }
+
+      const hashed = hashAdminPassword(val);
+      if (hashed === MASTER_PASS_HASH || (customCloudPassHash && hashed === customCloudPassHash)) {
+        if (errEl) errEl.classList.add("hidden");
+        document.getElementById("admin-login-screen").classList.add("hidden");
+        try {
+          if (remember) localStorage.setItem(ADMIN_SESSION_KEY, hashed);
+        } catch (e) {}
+        showAdminToast("🔓 Đăng nhập Admin thành công!");
+        refreshAllCloudData(false);
+      } else {
+        if (errEl) {
+          errEl.textContent = "❌ Mật khẩu không chính xác! Vui lòng kiểm tra lại.";
+          errEl.classList.remove("hidden");
+        }
+      }
+    }
+
+    function handleAdminLogout() {
+      try { localStorage.removeItem(ADMIN_SESSION_KEY); } catch (e) {}
+      const inp = document.getElementById("admin-pass-input");
+      if (inp) inp.value = "";
+      document.getElementById("admin-login-screen").classList.remove("hidden");
+      showAdminToast("🔒 Đã khóa bảng điều khiển Admin.");
+    }
+
+    async function saveNewAdminPassword() {
+      const inp = document.getElementById("new-admin-pass-input");
+      const raw = String(inp?.value || "").trim();
+      if (raw.length < 4) {
+        showAdminToast("⚠️ Mật khẩu mới cần ít nhất 4 ký tự!");
+        return;
+      }
+      const newHash = hashAdminPassword(raw);
+      try {
+        await fetchJson(`${FIREBASE_DB_URL}/adminConfig/passHash.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newHash)
+        });
+        customCloudPassHash = newHash;
+        inp.value = "";
+        showAdminToast("✅ Đã lưu mật khẩu Admin phụ lên Cloud!");
+      } catch (e) {
+        showAdminToast("⚠️ Lỗi kết nối khi lưu mật khẩu mới.");
+      }
+    }
+
+    function switchAdminTab(tabId) {
+      ["shops", "giftcodes", "broadcast", "liveops"].forEach(id => {
+        const panel = document.getElementById(`panel-${id}`);
+        const btn = document.getElementById(`tab-btn-${id}`);
+        if (panel) panel.classList.toggle("hidden", id !== tabId);
+        if (btn) {
+          btn.className = `soft-btn py-2.5 px-3 rounded-xl border font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 ${id === tabId ? "tab-btn-active" : "tab-btn-inactive"}`;
+        }
+      });
+    }
+
+    async function refreshAllCloudData(showFeedback = false) {
+      const statusBadge = document.getElementById("cloud-status-badge");
+      try {
+        const [shopsRes, lbRes, gcRes, loRes, bcRes, passRes] = await Promise.allSettled([
+          fetchJson(`${FIREBASE_DB_URL}/shops.json`),
+          fetchJson(`${FIREBASE_DB_URL}/leaderboard.json`),
+          fetchJson(`${FIREBASE_DB_URL}/giftcodes.json`),
+          fetchJson(`${FIREBASE_DB_URL}/liveConfig.json`),
+          fetchJson(`${FIREBASE_DB_URL}/adminBroadcast.json`),
+          fetchJson(`${FIREBASE_DB_URL}/adminConfig/passHash.json`)
+        ]);
+
+        shopsMap = (shopsRes.status === "fulfilled" && shopsRes.value && typeof shopsRes.value === "object") ? shopsRes.value : {};
+        leaderboardMap = (lbRes.status === "fulfilled" && lbRes.value && typeof lbRes.value === "object") ? lbRes.value : {};
+        giftcodesMap = (gcRes.status === "fulfilled" && gcRes.value && typeof gcRes.value === "object") ? gcRes.value : {};
+
+        // Gộp thêm những quán chỉ có trên leaderboard nhưng chưa có trong shopsMap
+        Object.entries(leaderboardMap).forEach(([k, val]) => {
+          if (!shopsMap[k] && val && val.shopName) {
+            shopsMap[k] = { ...val, shopKey: k, fullState: { ...val, shopKey: k } };
+          }
+        });
+
+        if (loRes.status === "fulfilled" && loRes.value && typeof loRes.value === "object") {
+          liveOpsConfig = { ...liveOpsConfig, ...loRes.value };
+        }
+        if (bcRes.status === "fulfilled" && bcRes.value && typeof bcRes.value === "object") {
+          currentBroadcast = bcRes.value;
+        } else {
+          currentBroadcast = null;
+        }
+        if (passRes.status === "fulfilled" && typeof passRes.value === "string") {
+          customCloudPassHash = passRes.value;
+        }
+
+        if (statusBadge) {
+          statusBadge.textContent = "🟢 Cloud Online";
+          statusBadge.className = "px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-400 font-black text-[10px]";
+        }
+        const syncBadge = document.getElementById("last-sync-badge");
+        if (syncBadge) {
+          const now = new Date();
+          syncBadge.textContent = `Cập nhật: ${now.toLocaleTimeString("vi-VN")}`;
+        }
+
+        updateKpiCards();
+        renderShopsList();
+        renderGiftcodesList();
+        renderBroadcastPreview();
+        populateLiveOpsForm();
+
+        if (showFeedback) showAdminToast("✅ Đã đồng bộ toàn bộ dữ liệu từ Firebase Cloud!");
+      } catch (e) {
+        if (statusBadge) {
+          statusBadge.textContent = "🔴 Lỗi kết nối Cloud";
+          statusBadge.className = "px-2 py-0.5 rounded-full bg-red-100 text-red-800 border border-red-400 font-black text-[10px]";
+        }
+        if (showFeedback) showAdminToast("⚠️ Không thể tải dữ liệu từ Firebase.");
+      }
+    }
+
+    function updateKpiCards() {
+      const shopEntries = Object.values(shopsMap).filter(s => s && s.shopName && !String(s.shopKey || "").startsWith("npc_"));
+      const activeShops = shopEntries.filter(s => !(s.isBanned || s.fullState?.isBanned));
+      const totalMoney = activeShops.reduce((acc, s) => acc + Number(s.money ?? s.fullState?.money ?? 0), 0);
+      const totalSold = activeShops.reduce((acc, s) => acc + Number(s.totalSold ?? s.fullState?.totalSold ?? 0), 0);
+
+      document.getElementById("kpi-total-shops").textContent = `${shopEntries.length} quán`;
+      document.getElementById("kpi-sub-shops").textContent = `Hoạt động: ${activeShops.length} • Khóa: ${shopEntries.length - activeShops.length}`;
+      document.getElementById("kpi-total-money").textContent = formatShortK(totalMoney);
+      document.getElementById("kpi-sub-sold").textContent = `Tổng đã bán: ${totalSold.toLocaleString("vi-VN")} bịch`;
+
+      const gcList = Object.values(giftcodesMap).filter(g => g && g.code);
+      const activeGc = gcList.filter(g => g.active !== false);
+      const totalRedeems = gcList.reduce((acc, g) => acc + Math.max(Number(g.usedCount || 0), Object.keys(g.redeemedBy || {}).length), 0);
+
+      document.getElementById("kpi-total-codes").textContent = `${activeGc.length} mã`;
+      document.getElementById("kpi-sub-codes").textContent = `Tổng lượt đã nhập: ${totalRedeems}`;
+
+      const loState = document.getElementById("kpi-liveops-state");
+      const loSub = document.getElementById("kpi-sub-liveops");
+      if (liveOpsConfig && liveOpsConfig.enabled) {
+        loState.textContent = liveOpsConfig.title || "Đang Bật";
+        loState.className = "text-base sm:text-lg font-black text-emerald-700 mt-0.5 truncate";
+        loSub.textContent = `Khách x${liveOpsConfig.customerMult || 1} • XP x${liveOpsConfig.xpMult || 1} • Chợ -${liveOpsConfig.marketDiscountPct || 0}%`;
+      } else {
+        loState.textContent = "Mặc định (Tắt)";
+        loState.className = "text-base sm:text-lg font-black text-stone-600 mt-0.5 truncate";
+        loSub.textContent = "Nhịp độ chuẩn Sài Gòn";
+      }
+    }
+
+    // ================= TAB 1: QUẢN LÝ QUÁN & NGƯỜI CHƠI =================
+    function renderShopsList() {
+      const container = document.getElementById("shops-list-container");
+      if (!container) return;
+
+      const q = String(document.getElementById("shop-search-input")?.value || "").trim().toLowerCase();
+      const sortMode = document.getElementById("shop-filter-select")?.value || "money_desc";
+
+      let list = Object.entries(shopsMap)
+        .map(([k, item]) => {
+          if (!item || !item.shopName) return null;
+          const fs = item.fullState || {};
+          return {
+            shopKey: k,
+            shopName: item.shopName || fs.shopName || k,
+            recoveryCode: item.recoveryCode || fs.recoveryCode || "Chưa có",
+            pin: item.pin || fs.pin || "",
+            money: Number(item.money !== undefined ? item.money : fs.money) || 0,
+            level: Number(item.level !== undefined ? item.level : fs.level) || 1,
+            day: Number(item.day !== undefined ? item.day : fs.day) || 1,
+            rating: Number(item.rating !== undefined ? item.rating : fs.rating) || 4.3,
+            totalSold: Number(item.totalSold !== undefined ? item.totalSold : fs.totalSold) || 0,
+            viralPct: Number(fs.viralPct || 15),
+            updatedAt: Number(item.updatedAt || fs.updatedAt || 0),
+            isBanned: Boolean(item.isBanned || fs.isBanned),
+            equipLevels: fs.equipLevels || {},
+            staff: fs.staff || {},
+            unlockedDishes: Array.isArray(fs.unlockedDishes) ? fs.unlockedDishes : ["tron"]
+          };
+        })
+        .filter(Boolean);
+
+      if (q) {
+        list = list.filter(s =>
+          s.shopName.toLowerCase().includes(q) ||
+          s.shopKey.toLowerCase().includes(q) ||
+          s.recoveryCode.toLowerCase().includes(q)
+        );
+      }
+
+      if (sortMode === "banned_only") {
+        list = list.filter(s => s.isBanned);
+      } else if (sortMode === "money_desc") {
+        list.sort((a, b) => b.money - a.money);
+      } else if (sortMode === "level_desc") {
+        list.sort((a, b) => (b.level - a.level) || (b.money - a.money));
+      } else if (sortMode === "sold_desc") {
+        list.sort((a, b) => b.totalSold - a.totalSold);
+      } else if (sortMode === "recent_desc") {
+        list.sort((a, b) => b.updatedAt - a.updatedAt);
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-amber-800 font-bold text-xs">Không tìm thấy quán nào khớp bộ lọc.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map((s, idx) => {
+        const upgSum = Object.values(s.equipLevels || {}).reduce((a, b) => a + Number(b || 0), 0);
+        const staffCount = Object.values(s.staff || {}).filter(Boolean).length;
+        const timeStr = s.updatedAt ? new Date(s.updatedAt).toLocaleString("vi-VN") : "Chưa rõ";
+        const pinLabel = String(s.pin).startsWith("PINH_") ? "🔒 PIN Đã Mã Hóa" : (s.pin ? `🔑 PIN: ${escapeHtml(s.pin)}` : "Chưa đặt PIN");
+
+        return `
+          <div class="p-3 sm:p-4 rounded-2xl border-2 ${s.isBanned ? 'bg-red-50/90 border-red-400' : 'bg-white border-amber-200 hover:border-amber-400'} transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <div class="space-y-1 min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="px-2 py-0.5 rounded-lg bg-amber-900 text-amber-100 font-black text-[10px]">#${idx + 1}</span>
+                <span class="font-black text-sm sm:text-base text-amber-950 truncate">${escapeHtml(s.shopName)}</span>
+                <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-[10px]">ID: ${escapeHtml(s.shopKey)}</span>
+                <span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-900 font-black text-[10px]">🛡️ ${escapeHtml(s.recoveryCode)}</span>
+                <span class="px-2 py-0.5 rounded-full bg-stone-100 text-stone-700 font-bold text-[10px]">${pinLabel}</span>
+                ${s.isBanned ? `<span class="px-2 py-0.5 rounded-full bg-red-600 text-white font-black text-[10px]">🚫 ĐANG KHÓA (BAN)</span>` : ""}
+              </div>
+
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-bold text-amber-900">
+                <span>💰 Tiền: <b class="text-emerald-700 font-black">${formatVND(s.money)}</b></span>
+                <span>🆙 Cấp: <b class="text-amber-950">${s.level}</b></span>
+                <span>📅 Ngày: <b class="text-amber-950">${s.day}</b></span>
+                <span>⭐ Sao: <b class="text-amber-600">${s.rating.toFixed(1)}⭐</b></span>
+                <span>🛍️ Đã bán: <b class="text-amber-950">${s.totalSold} bịch</b></span>
+                <span>🛠️ Nâng cấp: <b>${upgSum}/40</b></span>
+                <span>👩‍🍳 Phụ bếp: <b>${staffCount}/4</b></span>
+                <span>🥙 Món: <b>${s.unlockedDishes.length}/10</b></span>
+                <span class="text-[10px] text-stone-500">🕒 ${timeStr}</span>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+              <button onclick="openEditShopModal('${escapeHtml(s.shopKey)}')" class="soft-btn px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-amber-950 font-black text-xs shadow-sm">
+                ✏️ Sửa Hồ Sơ
+              </button>
+              <button onclick="quickGrantShopMoney('${escapeHtml(s.shopKey)}', 100000)" class="soft-btn px-2.5 py-1.5 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-400 font-black text-xs">
+                +100k
+              </button>
+              <button onclick="openSendMailModal('${escapeHtml(s.shopKey)}')" class="soft-btn px-2.5 py-1.5 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-900 border border-purple-300 font-black text-xs">
+                💌 Gửi Quà
+              </button>
+              <button onclick="toggleBanShop('${escapeHtml(s.shopKey)}')" class="soft-btn px-2.5 py-1.5 rounded-xl ${s.isBanned ? 'bg-sky-600 text-white' : 'bg-orange-100 text-orange-900 border border-orange-300'} font-black text-xs">
+                ${s.isBanned ? '🔓 Mở Khóa' : '🚫 Khóa'}
+              </button>
+              <button onclick="promptDeleteShop('${escapeHtml(s.shopKey)}')" class="soft-btn px-2.5 py-1.5 rounded-xl bg-red-100 hover:bg-red-200 text-red-800 border border-red-300 font-black text-xs">
+                🗑️ Xóa
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function openEditShopModal(shopKey) {
+      const rawShop = shopsMap[shopKey];
+      if (!rawShop) return;
+      activeEditingShopKey = shopKey;
+      const fs = rawShop.fullState || {};
+
+      document.getElementById("edit-shop-key-badge").textContent = `ID: ${shopKey}`;
+      document.getElementById("edit-shop-title").textContent = `✏️ Chỉnh Sửa Quán: ${rawShop.shopName || fs.shopName || shopKey}`;
+      document.getElementById("es-name").value = rawShop.shopName || fs.shopName || "";
+      document.getElementById("es-money").value = Math.round(Number(rawShop.money !== undefined ? rawShop.money : fs.money) || 0);
+      document.getElementById("es-newpin").value = "";
+      document.getElementById("es-level").value = Number(rawShop.level !== undefined ? rawShop.level : fs.level) || 1;
+      document.getElementById("es-day").value = Number(rawShop.day !== undefined ? rawShop.day : fs.day) || 1;
+      document.getElementById("es-rating").value = Number(rawShop.rating !== undefined ? rawShop.rating : fs.rating) || 4.3;
+      document.getElementById("es-sold").value = Number(rawShop.totalSold !== undefined ? rawShop.totalSold : fs.totalSold) || 0;
+      document.getElementById("es-viral").value = Number(fs.viralPct || 15);
+      document.getElementById("es-recovery").value = rawShop.recoveryCode || fs.recoveryCode || "Chưa có";
+      document.getElementById("es-banned-chk").checked = Boolean(rawShop.isBanned || fs.isBanned);
+
+      editorUnlockedDishes = Array.isArray(fs.unlockedDishes) && fs.unlockedDishes.length > 0 ? [...fs.unlockedDishes] : ["tron"];
+      document.getElementById("es-dishes-count").textContent = `${editorUnlockedDishes.length}/10`;
+
+      // Render 8 upgrades
+      const eq = fs.equipLevels || {};
+      const upgGrid = document.getElementById("es-upgrades-grid");
+      upgGrid.innerHTML = UPGRADE_META.map(u => {
+        const cur = Math.min(5, Math.max(0, Number(eq[u.id] || 0)));
+        return `
+          <div class="p-2 rounded-xl bg-white border border-amber-200">
+            <div class="font-black text-[11px] text-amber-950 truncate">${u.icon} ${u.name}</div>
+            <select id="es-upg-${u.id}" class="mt-1 w-full px-2 py-1 rounded-lg border border-amber-300 bg-amber-50 font-black text-amber-950 text-xs">
+              ${[0, 1, 2, 3, 4, 5].map(lvl => `<option value="${lvl}" ${lvl === cur ? "selected" : ""}>Cấp ${lvl}/5</option>`).join("")}
+            </select>
+          </div>
+        `;
+      }).join("");
+
+      // Render 4 staff
+      const st = fs.staff || {};
+      const stStars = fs.staffStars || {};
+      const staffList = document.getElementById("es-staff-list");
+      staffList.innerHTML = STAFF_META.map(m => {
+        const hired = Boolean(st[m.id]);
+        const star = Math.min(5, Math.max(1, Number(stStars[m.id] || 1)));
+        return `
+          <div class="flex items-center justify-between gap-2 bg-white p-1.5 rounded-xl border border-emerald-200">
+            <label class="flex items-center gap-1.5 font-bold text-emerald-950 cursor-pointer">
+              <input id="es-staff-hire-${m.id}" type="checkbox" ${hired ? "checked" : ""} class="w-4 h-4 accent-emerald-600" />
+              <span>${m.icon} ${m.name}</span>
+            </label>
+            <select id="es-staff-star-${m.id}" class="px-2 py-0.5 rounded-lg border border-emerald-300 bg-emerald-50 font-black text-emerald-900">
+              ${[1, 2, 3, 4, 5].map(v => `<option value="${v}" ${v === star ? "selected" : ""}>${v}⭐</option>`).join("")}
+            </select>
+          </div>
+        `;
+      }).join("");
+
+      // Render 4 licenses
+      const lic = fs.licenses || {};
+      const licList = document.getElementById("es-licenses-list");
+      licList.innerHTML = LICENSE_META.map(l => {
+        const owned = Boolean(lic[l.id]);
+        return `
+          <label class="flex items-center gap-2 bg-white p-1.5 rounded-xl border border-sky-200 font-bold text-sky-950 cursor-pointer">
+            <input id="es-lic-${l.id}" type="checkbox" ${owned ? "checked" : ""} class="w-4 h-4 accent-sky-600" />
+            <span>${l.icon} ${l.name}</span>
+          </label>
+        `;
+      }).join("");
+
+      document.getElementById("modal-edit-shop").classList.remove("hidden");
+    }
+
+    function closeEditShopModal() {
+      document.getElementById("modal-edit-shop").classList.add("hidden");
+      activeEditingShopKey = null;
+    }
+
+    function adjustEditorMoney(delta) {
+      const inp = document.getElementById("es-money");
+      if (!inp) return;
+      inp.value = Math.max(0, (Number(inp.value || 0) + delta));
+    }
+
+    function setAllEditorUpgrades(targetLvl) {
+      UPGRADE_META.forEach(u => {
+        const el = document.getElementById(`es-upg-${u.id}`);
+        if (el) el.value = String(targetLvl);
+      });
+    }
+
+    function maxAllEditorStaff() {
+      STAFF_META.forEach(m => {
+        const chk = document.getElementById(`es-staff-hire-${m.id}`);
+        const sel = document.getElementById(`es-staff-star-${m.id}`);
+        if (chk) chk.checked = true;
+        if (sel) sel.value = "5";
+      });
+    }
+
+    function unlockAllEditorDishesAndLicenses() {
+      editorUnlockedDishes = [...ALL_DISH_KEYS];
+      document.getElementById("es-dishes-count").textContent = "10/10";
+      LICENSE_META.forEach(l => {
+        const chk = document.getElementById(`es-lic-${l.id}`);
+        if (chk) chk.checked = true;
+      });
+      showAdminToast("🥙 Đã chọn mở khóa đủ 10 món bánh & 4 giấy phép!");
+    }
+
+    async function saveEditedShopToCloud() {
+      if (!activeEditingShopKey) return;
+      const key = activeEditingShopKey;
+      const rawShop = shopsMap[key] || {};
+      const fs = { ...(rawShop.fullState || {}) };
+
+      const newName = String(document.getElementById("es-name").value || "").trim() || rawShop.shopName || key;
+      const newMoney = Math.max(0, Math.round(Number(document.getElementById("es-money").value || 0)));
+      const newPinRaw = String(document.getElementById("es-newpin").value || "").trim();
+      const newLevel = Math.min(50, Math.max(1, Number(document.getElementById("es-level").value || 1)));
+      const newDay = Math.max(1, Number(document.getElementById("es-day").value || 1));
+      const newRating = Math.min(5.0, Math.max(1.0, Number(document.getElementById("es-rating").value || 4.3)));
+      const newSold = Math.max(0, Number(document.getElementById("es-sold").value || 0));
+      const newViral = Math.min(100, Math.max(0, Number(document.getElementById("es-viral").value || 15)));
+      const isBanned = Boolean(document.getElementById("es-banned-chk").checked);
+
+      if (newPinRaw && !/^\d{4}$/.test(newPinRaw)) {
+        showAdminToast("⚠️ Mã PIN mới phải gồm đúng 4 chữ số!");
+        return;
+      }
+
+      const finalPin = newPinRaw ? hashShopPin(key, newPinRaw) : (rawShop.pin || fs.pin || "");
+
+      const newEquip = {};
+      UPGRADE_META.forEach(u => {
+        newEquip[u.id] = Math.min(5, Math.max(0, Number(document.getElementById(`es-upg-${u.id}`)?.value || 0)));
+      });
+
+      const newStaff = {};
+      const newStaffStars = {};
+      STAFF_META.forEach(m => {
+        newStaff[m.id] = Boolean(document.getElementById(`es-staff-hire-${m.id}`)?.checked);
+        newStaffStars[m.id] = Math.min(5, Math.max(1, Number(document.getElementById(`es-staff-star-${m.id}`)?.value || 1)));
+      });
+
+      const newLicenses = {};
+      LICENSE_META.forEach(l => {
+        newLicenses[l.id] = Boolean(document.getElementById(`es-lic-${l.id}`)?.checked);
+      });
+
+      const nowTs = Date.now();
+      const updatedFullState = {
+        ...fs,
+        shopKey: key,
+        shopName: newName,
+        pin: finalPin,
+        money: newMoney,
+        level: newLevel,
+        day: newDay,
+        rating: newRating,
+        totalSold: newSold,
+        viralPct: newViral,
+        equipLevels: newEquip,
+        staff: newStaff,
+        staffStars: newStaffStars,
+        licenses: newLicenses,
+        unlockedDishes: editorUnlockedDishes,
+        v13MarketingReset: true,
+        adminGrantedMoney: Math.max(Number(fs.adminGrantedMoney || 0), newMoney),
+        adminOverrideAt: nowTs,
+        isBanned: isBanned,
+        updatedAt: nowTs
+      };
+      updatedFullState.securitySeal = computeSecuritySeal(updatedFullState);
+
+      const publicSummary = {
+        shopKey: key,
+        shopName: newName,
+        avatar: rawShop.avatar || fs.avatar || "av_ditu",
+        money: newMoney,
+        rating: newRating,
+        level: newLevel,
+        totalSold: newSold,
+        day: newDay,
+        isBanned: isBanned,
+        adminOverrideAt: nowTs,
+        updatedAt: nowTs
+      };
+
+      const fullPayload = {
+        ...rawShop,
+        ...publicSummary,
+        pin: finalPin,
+        recoveryCode: rawShop.recoveryCode || fs.recoveryCode || "",
+        fullState: updatedFullState
+      };
+
+      const btn = document.getElementById("btn-save-edited-shop");
+      if (btn) btn.disabled = true;
+
+      try {
+        await fetchJson(`${FIREBASE_DB_URL}/shops/${key}.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(fullPayload)
+        });
+
+        if (isBanned) {
+          await fetchJson(`${FIREBASE_DB_URL}/leaderboard/${key}.json`, { method: "DELETE" });
+          delete leaderboardMap[key];
+        } else {
+          await fetchJson(`${FIREBASE_DB_URL}/leaderboard/${key}.json`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(publicSummary)
+          });
+          leaderboardMap[key] = publicSummary;
+        }
+
+        shopsMap[key] = fullPayload;
+        closeEditShopModal();
+        updateKpiCards();
+        renderShopsList();
+        showAdminToast(`✅ Đã lưu hồ sơ quán "${newName}" lên Cloud!`);
+      } catch (e) {
+        showAdminToast("⚠️ Lỗi khi lưu dữ liệu quán lên Cloud!");
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    async function quickGrantShopMoney(shopKey, amount) {
+      const rawShop = shopsMap[shopKey];
+      if (!rawShop) return;
+      const fs = { ...(rawShop.fullState || {}) };
+      const curMoney = Number(rawShop.money !== undefined ? rawShop.money : fs.money) || 0;
+      const newMoney = Math.max(0, curMoney + amount);
+      const nowTs = Date.now();
+
+      fs.shopKey = shopKey;
+      fs.money = newMoney;
+      fs.adminGrantedMoney = Math.max(Number(fs.adminGrantedMoney || 0), newMoney);
+      fs.adminOverrideAt = nowTs;
+      fs.updatedAt = nowTs;
+      fs.securitySeal = computeSecuritySeal(fs);
+
+      const updatedShop = {
+        ...rawShop,
+        money: newMoney,
+        adminOverrideAt: nowTs,
+        updatedAt: nowTs,
+        fullState: fs
+      };
+
+      try {
+        await fetchJson(`${FIREBASE_DB_URL}/shops/${shopKey}.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedShop)
+        });
+        if (!updatedShop.isBanned) {
+          await fetchJson(`${FIREBASE_DB_URL}/leaderboard/${shopKey}/money.json`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newMoney)
+          });
+        }
+        shopsMap[shopKey] = updatedShop;
+        updateKpiCards();
+        renderShopsList();
+        showAdminToast(`💰 Đã cộng +${formatVND(amount)} cho quán "${rawShop.shopName}"!`);
+      } catch (e) {
+        showAdminToast("⚠️ Lỗi kết nối khi cộng tiền nhanh!");
+      }
+    }
+
+    async function toggleBanShop(shopKey) {
+      const rawShop = shopsMap[shopKey];
+      if (!rawShop) return;
+      const fs = { ...(rawShop.fullState || {}) };
+      const nextBan = !(rawShop.isBanned || fs.isBanned);
+      const nowTs = Date.now();
+
+      fs.isBanned = nextBan;
+      fs.adminOverrideAt = nowTs;
+      const updatedShop = {
+        ...rawShop,
+        isBanned: nextBan,
+        adminOverrideAt: nowTs,
+        updatedAt: nowTs,
+        fullState: fs
+      };
+
+      try {
+        await fetchJson(`${FIREBASE_DB_URL}/shops/${shopKey}.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedShop)
+        });
+        if (nextBan) {
+          await fetchJson(`${FIREBASE_DB_URL}/leaderboard/${shopKey}.json`, { method: "DELETE" });
+        } else {
+          await fetchJson(`${FIREBASE_DB_URL}/leaderboard/${shopKey}.json`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              shopKey,
+              shopName: updatedShop.shopName,
+              avatar: updatedShop.avatar || "av_ditu",
+              money: updatedShop.money || 0,
+              rating: updatedShop.rating || 4.3,
+              level: updatedShop.level || 1,
+              totalSold: updatedShop.totalSold || 0,
+              day: updatedShop.day || 1,
+              updatedAt: nowTs
+            })
+          });
+        }
+        shopsMap[shopKey] = updatedShop;
+        updateKpiCards();
+        renderShopsList();
+        showAdminToast(nextBan ? `🚫 Đã khóa quán "${rawShop.shopName}" & ẩn khỏi BXH!` : `🔓 Đã mở khóa quán "${rawShop.shopName}"!`);
+      } catch (e) {
+        showAdminToast("⚠️ Lỗi khi cập nhật trạng thái khóa!");
+      }
+    }
+
+    function promptDeleteShop(shopKey) {
+      const rawShop = shopsMap[shopKey];
+      if (!rawShop) return;
+      document.getElementById("confirm-del-title").textContent = `🗑️ Xóa vĩnh viễn quán "${rawShop.shopName}"?`;
+      document.getElementById("confirm-del-desc").textContent = `Quán (${shopKey}) sẽ bị xóa khỏi /shops, /leaderboard và /recoveryCodes trên Firebase Cloud.`;
+      const btn = document.getElementById("btn-confirm-del-exec");
+      btn.onclick = () => executeDeleteShop(shopKey);
+      document.getElementById("modal-confirm-delete").classList.remove("hidden");
+    }
+
+    function closeConfirmDeleteModal() {
+      document.getElementById("modal-confirm-delete").classList.add("hidden");
+    }
+
+    async function executeDeleteShop(shopKey) {
+      const rawShop = shopsMap[shopKey];
+      const recCode = rawShop?.recoveryCode || rawShop?.fullState?.recoveryCode;
+      closeConfirmDeleteModal();
+      try {
+        const reqs = [
+          fetchJson(`${FIREBASE_DB_URL}/shops/${shopKey}.json`, { method: "DELETE" }),
+          fetchJson(`${FIREBASE_DB_URL}/leaderboard/${shopKey}.json`, { method: "DELETE" })
+        ];
+        if (recCode) {
+          reqs.push(fetchJson(`${FIREBASE_DB_URL}/recoveryCodes/${recCode}.json`, { method: "DELETE" }));
+        }
+        await Promise.allSettled(reqs);
+        delete shopsMap[shopKey];
+        delete leaderboardMap[shopKey];
+        updateKpiCards();
+        renderShopsList();
+        showAdminToast(`🗑️ Đã xóa quán "${rawShop?.shopName || shopKey}" khỏi Server!`);
+      } catch (e) {
+        showAdminToast("⚠️ Lỗi khi xóa quán trên Cloud!");
+      }
+    }
+
+    // Gửi thư & quà riêng cho 1 quán
+    function openSendMailModal(shopKey) {
+      const rawShop = shopsMap[shopKey];
+      if (!rawShop) return;
+      activeMailShopKey = shopKey;
+      document.getElementById("sm-target-label").textContent = `Người nhận: ${rawShop.shopName} (ID: ${shopKey})`;
+      document.getElementById("modal-send-mail").classList.remove("hidden");
+    }
+
+    function closeSendMailModal() {
+      document.getElementById("modal-send-mail").classList.add("hidden");
+      activeMailShopKey = null;
+    }
+
+    async function confirmSendPersonalMail() {
+      if (!activeMailShopKey) return;
+      const key = activeMailShopKey;
+      const title = String(document.getElementById("sm-title").value || "🎁 Quà Từ Admin").trim();
+      const message = String(document.getElementById("sm-message").value || "").trim();
+      const rewardMoney = Math.max(0, Number(document.getElementById("sm-money").value || 0));
+      const rewardXp = Math.max(0, Number(document.getElementById("sm-xp").value || 0));
+
+      const mailId = "MAIL_" + Date.now();
+      const mailObj = { id: mailId, title, message, rewardMoney, rewardXp, createdAt: Date.now(), claimed: false };
+
+      try {
+        await fetchJson(`${FIREBASE_DB_URL}/shops/${key}/adminInbox/${mailId}.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(mailObj)
+        });
+        closeSendMailModal();
+        showAdminToast(`💌 Đã gửi thư & quà (+${formatVND(rewardMoney)}) tới quán "${shopsMap[key]?.shopName || key}"!`);
+      } catch (e) {
+        showAdminToast("⚠️ Lỗi khi gửi thư cho quán!");
+      }
+    }
+
+    // Tạo quán mới từ Admin
+    function openCreateShopModal() {
+      document.getElementById("cs-name").value = "";
+      document.getElementById("cs-pin").value = "1234";
+      document.getElementById("cs-level").value = "1";
+      document.getElementById("cs-money").value = "500000";
+      document.getElementById("modal-create-shop").classList.remove("hidden");
+    }
+
+    function closeCreateShopModal() {
+      document.getElementById("modal-create-shop").classList.add("hidden");
+    }
+
+    async function confirmCreateNewShop() {
+      const name = String(document.getElementById("cs-name").value || "").trim();
+      const pinRaw = String(document.getElementById("cs-pin").value || "").trim();
+      const level = Math.min(50, Math.max(1, Number(document.getElementById("cs-level").value || 1)));
+      const money = Math.max(0, Number(document.getElementById("cs-money").value || 350000));
+
+      if (name.length < 2) { showAdminToast("⚠️ Tên quán cần ít nhất 2 ký tự!"); return; }
+      if (!/^\d{4}$/.test(pinRaw)) { showAdminToast("⚠️ Mã PIN phải gồm đúng 4 chữ số!"); return; }
+
+      const key = sanitizeShopKey(name);
+      if (!key) { showAdminToast("⚠️ Tên quán không hợp lệ!"); return; }
+
+      const nowTs = Date.now();
+      const recCode = "BT-" + Math.random().toString(36).substring(2, 6).toUpperCase() + "-" + Math.random().toString(36).substring(2, 6).toUpperCase();
+      const hashedPin = hashShopPin(key, pinRaw);
+
+      const fullState = {
+        shopKey: key,
+        shopName: name,
+        pin: hashedPin,
+        recoveryCode: recCode,
+        avatar: "av_ditu",
+        v13MarketingReset: true,
+        money: money,
+        rating: 4.5,
+        viralPct: 20,
+        level: level,
+        xp: 0,
+        day: 1,
+        totalSold: 0,
+        unlockedDishes: ["tron"],
+        equipLevels: { upg_maps: 0, upg_signbox: 0, upg_appads: 0, upg_tiktoker: 0, upg_stool: 0, upg_neon: 0, upg_awning: 0, upg_cooler: 0 },
+        staff: { beti: false, mylan: false, tunghia: false, anhba: false },
+        staffStars: { beti: 1, mylan: 1, tunghia: 1, anhba: 1 },
+        licenses: { lic_vsattp: false, lic_sidewalk: false, lic_nightmarket: false, lic_brand: false },
+        adminGrantedMoney: money,
+        adminOverrideAt: nowTs,
+        updatedAt: nowTs
+      };
+      fullState.securitySeal = computeSecuritySeal(fullState);
+
+      const summary = {
+        shopKey: key, shopName: name, avatar: "av_ditu",
+        money, rating: 4.5, level, totalSold: 0, day: 1, updatedAt: nowTs
+      };
+
+      const shopPayload = { ...summary, pin: hashedPin, recoveryCode: recCode, adminOverrideAt: nowTs, fullState };
+
+      try {
+        await Promise.all([
+          fetchJson(`${FIREBASE_DB_URL}/shops/${key}.json`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(shopPayload) }),
+          fetchJson(`${FIREBASE_DB_URL}/leaderboard/${key}.json`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(summary) }),
+          fetchJson(`${FIREBASE_DB_URL}/recoveryCodes/${recCode}.json`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ shopKey: key, shopName: name, updatedAt: nowTs }) })
+        ]);
+        shopsMap[key] = shopPayload;
+        closeCreateShopModal();
+        updateKpiCards();
+        renderShopsList();
+        showAdminToast(`✨ Đã tạo quán "${name}" (PIN: ${pinRaw} • Mã: ${recCode})!`);
+      } catch (e) {
+        showAdminToast("⚠️ Lỗi khi tạo quán mới lên Cloud!");
+      }
+    }
+
+    // ================= TAB 2: QUẢN LÝ GIFTCODE =================
+    function generateRandomGiftcode() {
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let code = "BT";
+      for (let i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+      document.getElementById("gc-code-input").value = code;
+    }
+
+    function fillGiftcodePreset(code, money, xp, maxUses, note) {
+      document.getElementById("gc-code-input").value = code;
+      document.getElementById("gc-money-input").value = money;
+      document.getElementById("gc-xp-input").value = xp;
+      document.getElementById("gc-maxuses-input").value = maxUses;
+      document.getElementById("gc-note-input").value = note;
+      showAdminToast(`⚡ Đã điền mẫu mã "${code}" — bấm Lưu để kích hoạt!`);
+    }
+
+    async function saveGiftcodeToCloud() {
+      const rawCode = String(document.getElementById("gc-code-input").value || "").trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "");
+      const rewardMoney = Math.max(0, Number(document.getElementById("gc-money-input").value || 0));
+      const rewardXp = Math.max(0, Number(document.getElementById("gc-xp-input").value || 0));
+      const maxUses = Math.max(1, Number(document.getElementById("gc-maxuses-input").value || 100));
+      const unlockDish = document.getElementById("gc-dish-select").value || "";
+      const note = String(document.getElementById("gc-note-input").value || "").trim();
+
+      if (rawCode.length < 3) {
+        showAdminToast("⚠️ Mã Giftcode cần ít nhất 3 ký tự!");
+        return;
+      }
+
+      const existing = giftcodesMap[rawCode] || {};
+      const payload = {
+        code: rawCode,
+        rewardMoney,
+        rewardXp,
+        maxUses,
+        unlockDish,
+        note,
+        active: true,
+        usedCount: Number(existing.usedCount || 0),
+        redeemedBy: existing.redeemedBy || {},
+        updatedAt: Date.now()
+      };
+
+      try {
+        await fetchJson(`${FIREBASE_DB_URL}/giftcodes/${rawCode}.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        giftcodesMap[rawCode] = payload;
+        updateKpiCards();
+        renderGiftcodesList();
+        showAdminToast(`🎁 Đã lưu và kích hoạt mã Giftcode "${rawCode}"!`);
+      } catch (e) {
+        showAdminToast("⚠️ Lỗi khi lưu Giftcode lên Cloud!");
+      }
+    }
+
+    function copyTextToClipboard(text) {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text);
+        } else {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          ta.remove();
+        }
+        showAdminToast(`📋 Đã sao chép mã: ${text}`);
+      } catch (e) {}
+    }
+
+    function renderGiftcodesList() {
+      const container = document.getElementById("giftcodes-list-container");
+      if (!container) return;
+
+      const list = Object.values(giftcodesMap).filter(g => g && g.code).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+      if (list.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-amber-800 font-bold text-xs">Chưa có mã Giftcode nào trên Server. Hãy tạo mã ở khung bên trái!</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(g => {
+        const redeemedEntries = Object.values(g.redeemedBy || {});
+        const used = Math.max(Number(g.usedCount || 0), redeemedEntries.length);
+        const max = Math.max(1, Number(g.maxUses || 100));
+        const isActive = g.active !== false && used < max;
+        const redeemedNames = redeemedEntries.map(r => r.shopName || "Quán").slice(0, 8).join(", ");
+
+        return `
+          <div class="p-3 rounded-2xl border-2 ${isActive ? 'bg-white border-amber-300' : 'bg-stone-100 border-stone-300 opacity-80'} space-y-1.5 text-xs">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-1.5">
+                <span onclick="copyTextToClipboard('${escapeHtml(g.code)}')" class="cursor-pointer px-2.5 py-1 rounded-xl bg-rose-600 text-white font-black tracking-wider text-xs shadow-sm">
+                  🎟️ ${escapeHtml(g.code)} 📋
+                </span>
+                <span class="px-2 py-0.5 rounded-full font-black text-[10px] ${isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">
+                  ${isActive ? '🟢 Đang mở' : '🔴 Đã khóa / Hết lượt'}
+                </span>
+                <span class="font-black text-amber-950">Lượt nhập: ${used}/${max}</span>
+              </div>
+
+              <div class="flex items-center gap-1.5">
+                <button onclick="toggleGiftcodeActive('${escapeHtml(g.code)}')" class="soft-btn px-2.5 py-1 rounded-lg ${g.active !== false ? 'bg-amber-100 text-amber-900' : 'bg-emerald-600 text-white'} font-black text-[11px]">
+                  ${g.active !== false ? '⏸️ Tạm khóa' : '▶️ Mở lại'}
+                </button>
+                <button onclick="deleteGiftcode('${escapeHtml(g.code)}')" class="soft-btn px-2.5 py-1 rounded-lg bg-red-100 text-red-800 font-black text-[11px]">
+                  🗑️ Xóa
+                </button>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 font-bold text-amber-900">
+              <span>💰 Thưởng: <b class="text-emerald-700">+${formatVND(g.rewardMoney || 0)}</b></span>
+              <span>⭐ XP: <b class="text-purple-700">+${g.rewardXp || 0} XP</b></span>
+              ${g.unlockDish ? `<span>🥙 Mở món: <b class="text-rose-700">${escapeHtml(g.unlockDish)}</b></span>` : ""}
+              ${g.note ? `<span class="text-stone-600 italic">"${escapeHtml(g.note)}"</span>` : ""}
+            </div>
+
+            ${redeemedEntries.length > 0 ? `<div class="text-[10px] font-semibold text-stone-600">Đã nhận bởi: <b>${escapeHtml(redeemedNames)}${redeemedEntries.length > 8 ? ` (+${redeemedEntries.length - 8} quán khác)` : ""}</b></div>` : ""}
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function toggleGiftcodeActive(code) {
+      const g = giftcodesMap[code];
+      if (!g) return;
+      const nextState = g.active === false;
+      try {
+        await fetchJson(`${FIREBASE_DB_URL}/giftcodes/${code}/active.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(nextState)
+        });
+        g.active = nextState;
+        updateKpiCards();
+        renderGiftcodesList();
+        showAdminToast(nextState ? `▶️ Đã mở lại mã "${code}"!` : `⏸️ Đã tạm khóa mã "${code}"!`);
+      } catch (e) {
+        showAdminToast("⚠️ Lỗi khi đổi trạng thái Giftcode!");
+      }
+    }
+
+    async function deleteGiftcode(code) {
+      try {
+        await fetchJson(`${FIREBASE_DB_URL}/giftcodes/${code}.json`, { method: "DELETE" });
+        delete giftcodesMap[code];
+        updateKpiCards();
+        renderGiftcodesList();
+        showAdminToast(`🗑️ Đã xóa mã Giftcode "${code}"!`);
+      } catch (e) {
+        showAdminToast("⚠️ Lỗi khi xóa mã Giftcode!");
+      }
+    }
+
+    // ================= TAB 3: PHÁT THÔNG BÁO & QUÀ TOÀN SERVER =================
+    function fillBroadcastTemplate(title, msg, money, xp) {
+      document.getElementById("bc-title-input").value = title;
+      document.getElementById("bc-msg-input").value = msg;
+      document.getElementById("bc-money-input").value = money;
+      document.getElementById("bc-xp-input").value = xp;
+    }
+
+    function renderBroadcastPreview() {
+      const box = document.getElementById("current-broadcast-preview");
+      if (!box) return;
+      if (!currentBroadcast || !currentBroadcast.id || currentBroadcast.active === false) {
+        box.innerHTML = `<div class="text-amber-800 font-bold">Chưa có thông báo toàn server nào đang phát.</div>`;
+        return;
+      }
+      box.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="font-black text-sm text-amber-950">📢 ${escapeHtml(currentBroadcast.title)}</span>
+          <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-black text-[10px]">Đang phát (${escapeHtml(currentBroadcast.id)})</span>
+        </div>
+        <p class="font-semibold text-amber-900">${escapeHtml(currentBroadcast.message)}</p>
+        <div class="font-black text-emerald-700">🎁 Quà đính kèm: +${formatVND(currentBroadcast.rewardMoney || 0)} & +${currentBroadcast.rewardXp || 0} XP</div>
+      `;
+    }
+
+    async function publishServerBroadcast() {
+      const title = String(document.getElementById("bc-title-input").value || "").trim();
+      const message = String(document.getElementById("bc-msg-input").value || "").trim();
+      const rewardMoney = Math.max(0, Number(document.getElementById("bc-money-input").value || 0));
+      const rewardXp = Math.max(0, Number(document.getElementById("bc-xp-input").value || 0));
+
+      if (!title || !message) {
+        showAdminToast("⚠️ Vui lòng nhập đầy đủ tiêu đề và nội dung thông báo!");
+        return;
+      }
+
+      const payload = {
+        id: "BC_" + Date.now(),
+        title,
+        message,
+        rewardMoney,
+        rewardXp,
+        active: true,
+        createdAt: Date.now()
+      };
+
+      try {
+        await fetchJson(`${FIREBASE_DB_URL}/adminBroadcast.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        currentBroadcast = payload;
+        renderBroadcastPreview();
+        showAdminToast("🚀 Đã phát thông báo & quà toàn Server!");
+      } catch (e) {
+        showAdminToast("⚠️ Lỗi khi phát thông báo toàn Server!");
+      }
+    }
+
+    async function clearServerBroadcast() {
+      try {
+        await fetchJson(`${FIREBASE_DB_URL}/adminBroadcast.json`, { method: "DELETE" });
+        currentBroadcast = null;
+        renderBroadcastPreview();
+        showAdminToast("🛑 Đã gỡ thông báo toàn Server.");
+      } catch (e) {
+        showAdminToast("⚠️ Lỗi khi gỡ thông báo!");
+      }
+    }
+
+    // ================= TAB 4: SỰ KIỆN LIVE-OPS =================
+    function populateLiveOpsForm() {
+      document.getElementById("lo-enabled-chk").checked = Boolean(liveOpsConfig.enabled);
+      document.getElementById("lo-title-input").value = liveOpsConfig.title || "🎉 Sự Kiện Cuối Tuần Sài Gòn";
+      document.getElementById("lo-cust-slider").value = Number(liveOpsConfig.customerMult || 1.0);
+      document.getElementById("lo-xp-slider").value = Number(liveOpsConfig.xpMult || 1.0);
+      document.getElementById("lo-tip-slider").value = Number(liveOpsConfig.tipMult || 1.0);
+      document.getElementById("lo-market-slider").value = Number(liveOpsConfig.marketDiscountPct || 0);
+      document.getElementById("lo-patience-slider").value = Number(liveOpsConfig.patienceBonusPct || 0);
+      updateLiveOpsLabels();
+    }
+
+    function updateLiveOpsLabels() {
+      document.getElementById("lo-cust-val").textContent = `${Number(document.getElementById("lo-cust-slider").value).toFixed(1)}x`;
+      document.getElementById("lo-xp-val").textContent = `${Number(document.getElementById("lo-xp-slider").value).toFixed(2).replace(".00", ".0")}x`;
+      document.getElementById("lo-tip-val").textContent = `${Number(document.getElementById("lo-tip-slider").value).toFixed(2).replace(".00", ".0")}x`;
+      document.getElementById("lo-market-val").textContent = `-${document.getElementById("lo-market-slider").value}%`;
+      document.getElementById("lo-patience-val").textContent = `+${document.getElementById("lo-patience-slider").value}%`;
+    }
+
+    function applyLiveOpsPreset(mode) {
+      if (mode === "normal") {
+        liveOpsConfig = { enabled: false, title: "Chuẩn Sài Gòn", customerMult: 1.0, xpMult: 1.0, tipMult: 1.0, marketDiscountPct: 0, patienceBonusPct: 0 };
+      } else if (mode === "weekend") {
+        liveOpsConfig = { enabled: true, title: "🎉 Sự Kiện Cuối Tuần Đông Khách", customerMult: 1.3, xpMult: 2.0, tipMult: 1.25, marketDiscountPct: 10, patienceBonusPct: 15 };
+      } else if (mode === "festival") {
+        liveOpsConfig = { enabled: true, title: "🔥 Lễ Hội Ẩm Thực Đêm Sài Gòn", customerMult: 1.5, xpMult: 2.0, tipMult: 1.5, marketDiscountPct: 20, patienceBonusPct: 25 };
+      }
+      populateLiveOpsForm();
+      showAdminToast("⚡ Đã chọn cấu hình mẫu — bấm Lưu để áp dụng lên Server!");
+    }
+
+    async function saveLiveOpsConfigToCloud() {
+      const payload = {
+        enabled: Boolean(document.getElementById("lo-enabled-chk").checked),
+        title: String(document.getElementById("lo-title-input").value || "🎉 Sự Kiện Toàn Server").trim(),
+        customerMult: Number(document.getElementById("lo-cust-slider").value || 1.0),
+        xpMult: Number(document.getElementById("lo-xp-slider").value || 1.0),
+        tipMult: Number(document.getElementById("lo-tip-slider").value || 1.0),
+        marketDiscountPct: Number(document.getElementById("lo-market-slider").value || 0),
+        patienceBonusPct: Number(document.getElementById("lo-patience-slider").value || 0),
+        updatedAt: Date.now()
+      };
+
+      try {
+        await fetchJson(`${FIREBASE_DB_URL}/liveConfig.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        liveOpsConfig = payload;
+        updateKpiCards();
+        showAdminToast(payload.enabled ? `🔥 Đã bật Sự Kiện "${payload.title}" trên toàn Server!` : "⚖️ Đã tắt sự kiện, đưa Server về mức chuẩn!");
+      } catch (e) {
+        showAdminToast("⚠️ Lỗi khi lưu cấu hình Live-Ops!");
+      }
+    }
+
+    function exportFullDatabaseJson() {
+      const backup = {
+        exportedAt: new Date().toISOString(),
+        shops: shopsMap,
+        leaderboard: leaderboardMap,
+        giftcodes: giftcodesMap,
+        liveConfig: liveOpsConfig,
+        adminBroadcast: currentBroadcast
+      };
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `vua_banh_trang_backup_${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showAdminToast("💾 Đã tải xuống file Backup JSON toàn Server!");
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      try {
+        const savedHash = localStorage.getItem(ADMIN_SESSION_KEY);
+        if (savedHash === MASTER_PASS_HASH) {
+          document.getElementById("admin-login-screen").classList.add("hidden");
+        }
+      } catch (e) {}
+      refreshAllCloudData(false);
+    });
+  </script>
+</body>
+</html>
