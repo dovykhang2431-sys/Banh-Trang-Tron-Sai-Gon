@@ -2773,25 +2773,38 @@
 
         if (!lbData && !shopsData) throw new Error("Cloud Offline");
 
+        const regObj = (shopsData && shopsData["npc_admin_registry"] && shopsData["npc_admin_registry"].fullState && shopsData["npc_admin_registry"].fullState.adminRegistry)
+          ? shopsData["npc_admin_registry"].fullState.adminRegistry
+          : {};
+        window.cachedAdminRegistry = regObj;
+        const delMap = regObj.deletedShops || {};
+        const banMap = regObj.bannedShops || {};
+        const ovrMap = regObj.shopOverrides || {};
+
         const mergedShopsMap = new Map();
 
         const addOrUpdateShop = (item) => {
           if (!item || !item.shopName) return;
-          const sKey = item.shopKey || sanitizeShopKey(item.shopName);
+          if (String(item.shopName).startsWith("[DELETED]") || String(item.shopName).startsWith("[BANNED]")) return;
+          const sKey = sanitizeShopKey(item.shopKey || item.shopName);
           if (!sKey || String(sKey).startsWith("npc_")) return;
+          if (delMap[sKey] || (banMap[sKey] && banMap[sKey].isBanned)) return;
 
           const fs = item.fullState || {};
           if (item.isBanned || fs.isBanned || item.isDeleted || fs.isDeleted || String(item.pin || "").startsWith("BANNED_")) return;
+          const ovr = ovrMap[sKey] || {};
+          if (ovr.isBanned) return;
+
           const candidate = {
             shopKey: sKey,
-            shopName: item.shopName || fs.shopName,
+            shopName: ovr.shopName || item.shopName || fs.shopName,
             avatar: item.avatar || fs.avatar || "av_ditu",
-            money: Number(item.money !== undefined ? item.money : fs.money) || 0,
-            rating: Number(item.rating !== undefined ? item.rating : fs.rating) || 5.0,
-            level: Number(item.level !== undefined ? item.level : fs.level) || 1,
-            totalSold: Number(item.totalSold !== undefined ? item.totalSold : fs.totalSold) || 0,
-            day: Number(item.day !== undefined ? item.day : fs.day) || 1,
-            adminOverrideAt: Number(item.adminOverrideAt || fs.adminOverrideAt || 0),
+            money: ovr.money !== undefined ? Number(ovr.money) : (Number(item.money !== undefined ? item.money : fs.money) || 0),
+            rating: ovr.rating !== undefined ? Number(ovr.rating) : (Number(item.rating !== undefined ? item.rating : fs.rating) || 5.0),
+            level: ovr.level !== undefined ? Number(ovr.level) : (Number(item.level !== undefined ? item.level : fs.level) || 1),
+            totalSold: ovr.totalSold !== undefined ? Number(ovr.totalSold) : (Number(item.totalSold !== undefined ? item.totalSold : fs.totalSold) || 0),
+            day: ovr.day !== undefined ? Number(ovr.day) : (Number(item.day !== undefined ? item.day : fs.day) || 1),
+            adminOverrideAt: Math.max(Number(ovr.adminOverrideAt || 0), Number(item.adminOverrideAt || fs.adminOverrideAt || 0)),
             updatedAt: Number(item.updatedAt || fs.updatedAt || 0)
           };
 
@@ -6464,67 +6477,61 @@
     async function syncAdminLiveOpsAndMail(showFeedback = false) {
       try {
         const key = state.shopKey || sanitizeShopKey(state.shopName || "");
-        const requests = [
-          fetchWithTimeout(`${FIREBASE_DB_URL}/liveConfig.json`, {}, 3500),
-          fetchWithTimeout(`${FIREBASE_DB_URL}/adminBroadcast.json`, {}, 3500)
-        ];
-        if (key) {
-          requests.push(fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 3500));
-        }
+        const resReg = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/npc_admin_registry.json`, {}, 4500);
+        if (resReg.ok) {
+          const regShop = await resReg.json();
+          const reg = regShop?.fullState?.adminRegistry || {};
+          window.cachedAdminRegistry = reg;
 
-        const results = await Promise.allSettled(requests);
-
-        if (results[0].status === "fulfilled" && results[0].value.ok) {
-          const cfg = await results[0].value.json();
-          if (cfg && typeof cfg === "object") {
-            window.serverLiveConfig = cfg;
+          if (reg.liveConfig && typeof reg.liveConfig === "object") {
+            window.serverLiveConfig = reg.liveConfig;
           }
-        }
-        if (results[1].status === "fulfilled" && results[1].value.ok) {
-          const bc = await results[1].value.json();
+          const bc = reg.adminBroadcast;
           window.serverBroadcastData = (bc && bc.id && bc.active !== false) ? bc : null;
-        }
-        if (key && results[2] && results[2].status === "fulfilled" && results[2].value.ok) {
-          const cloudShop = await results[2].value.json();
-          if (!cloudShop || cloudShop.isDeleted || String(cloudShop.shopKey || "").startsWith("npc_deleted_")) {
-            localStorage.removeItem(LOCAL_STORAGE_KEY);
-            localStorage.removeItem("banh_trang_tron_saigon_v5_master_save");
-            state = getInitialDefaultState();
-            document.getElementById("login-screen").classList.remove("hidden");
-            document.getElementById("quick-resume-box").classList.add("hidden");
-            showLoginMessage("🗑️ Quán này đã bị Quản Trị Viên xóa khỏi hệ thống!", "error");
-            return;
-          }
-          if (cloudShop.isBanned || cloudShop.fullState?.isBanned || String(cloudShop.shopKey || "").startsWith("npc_banned_") || String(cloudShop.pin || "").startsWith("BANNED_")) {
-            localStorage.removeItem(LOCAL_STORAGE_KEY);
-            state.isBanned = true;
-            document.getElementById("login-screen").classList.remove("hidden");
-            document.getElementById("quick-resume-box").classList.add("hidden");
-            showLoginMessage("🚫 Quán của bạn hiện đang bị Quản Trị Viên tạm khóa!", "error");
-            return;
-          }
-          if (cloudShop) {
-            const cAdminTs = Number(cloudShop.adminOverrideAt || cloudShop.fullState?.adminOverrideAt || 0);
-            const lAdminTs = Number(state.adminOverrideAt || 0);
-            if (cAdminTs > lAdminTs && cloudShop.fullState) {
-              const prevPin = state.pin;
-              mergeLoadedState({
-                ...cloudShop.fullState,
-                shopKey: key,
-                shopName: cloudShop.shopName || cloudShop.bannedShopName || cloudShop.fullState.shopName || state.shopName,
-                pin: cloudShop.pin || cloudShop.fullState.pin || prevPin,
-                adminOverrideAt: cAdminTs,
-                isBanned: false
-              });
-              saveToLocalOnly();
-              updateAllUI();
-              fetchCloudLeaderboard(false);
-              showToast("⚡ Hồ sơ quán vừa được cập nhật từ Ban Quản Trị!");
+
+          if (key) {
+            if (reg.deletedShops && reg.deletedShops[key]) {
+              localStorage.removeItem(LOCAL_STORAGE_KEY);
+              localStorage.removeItem("banh_trang_tron_saigon_v5_master_save");
+              state = getInitialDefaultState();
+              document.getElementById("login-screen").classList.remove("hidden");
+              document.getElementById("quick-resume-box").classList.add("hidden");
+              showLoginMessage("🗑️ Quán này đã bị Quản Trị Viên xóa khỏi hệ thống!", "error");
+              return;
             }
-            if (cloudShop.adminInbox && typeof cloudShop.adminInbox === "object") {
-              window.personalAdminMails = Object.values(cloudShop.adminInbox).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-            } else {
-              window.personalAdminMails = [];
+            if ((reg.bannedShops && reg.bannedShops[key]?.isBanned) || (reg.shopOverrides && reg.shopOverrides[key]?.isBanned)) {
+              localStorage.removeItem(LOCAL_STORAGE_KEY);
+              state.isBanned = true;
+              document.getElementById("login-screen").classList.remove("hidden");
+              document.getElementById("quick-resume-box").classList.add("hidden");
+              showLoginMessage("🚫 Quán của bạn hiện đang bị Quản Trị Viên tạm khóa!", "error");
+              return;
+            }
+            const ovr = reg.shopOverrides && reg.shopOverrides[key];
+            if (ovr) {
+              const cAdminTs = Number(ovr.adminOverrideAt || 0);
+              const lAdminTs = Number(state.adminOverrideAt || 0);
+              if (cAdminTs > lAdminTs) {
+                mergeLoadedState({
+                  ...state,
+                  ...ovr,
+                  shopKey: key,
+                  shopName: ovr.shopName || state.shopName,
+                  pin: ovr.pin || state.pin,
+                  adminOverrideAt: cAdminTs,
+                  isBanned: false
+                });
+                saveToLocalOnly();
+                await saveGameEverywhere();
+                updateAllUI();
+                fetchCloudLeaderboard(false);
+                showToast("⚡ Hồ sơ quán vừa được cập nhật từ Ban Quản Trị!");
+              }
+              if (ovr.adminInbox && typeof ovr.adminInbox === "object") {
+                window.personalAdminMails = Object.values(ovr.adminInbox).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+              } else {
+                window.personalAdminMails = [];
+              }
             }
           }
         }
@@ -6615,9 +6622,11 @@
       showGiftcodeStatus("⏳ Đang kiểm tra mã Giftcode trên máy chủ...", true);
 
       try {
-        const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/giftcodes/${rawCode}.json`, {}, 4000);
+        const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/npc_admin_registry.json`, {}, 4500);
         if (!res.ok) throw new Error("Network error");
-        const gift = await res.json();
+        const regShop = await res.json();
+        const allCodes = regShop?.fullState?.adminRegistry?.giftcodes || {};
+        const gift = allCodes[rawCode] || null;
 
         if (!gift || !gift.code) {
           showGiftcodeStatus(`❌ Mã Giftcode "${rawCode}" không tồn tại hoặc đã bị xóa!`, false);
@@ -6676,11 +6685,14 @@
           }
         };
 
-        await fetchWithTimeout(`${FIREBASE_DB_URL}/giftcodes/${rawCode}.json`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updatedGift)
-        }, 3500);
+        if (regShop && regShop.fullState && regShop.fullState.adminRegistry && regShop.fullState.adminRegistry.giftcodes) {
+          regShop.fullState.adminRegistry.giftcodes[rawCode] = updatedGift;
+          await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/npc_admin_registry.json`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(regShop)
+          }, 3500);
+        }
 
         playSFX("cash");
         await saveGameEverywhere();
