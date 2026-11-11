@@ -93,7 +93,7 @@
 
       <div class="pt-2 border-t border-amber-200 flex items-center justify-between text-[11px] font-semibold text-amber-800">
         <span>☁️ Server: <b class="text-emerald-700">Asia-Southeast1 (Firebase)</b></span>
-        <span>Phiên bản V13 Admin</span>
+        <span>Phiên bản V13.2 Admin</span>
       </div>
     </div>
   </div>
@@ -192,11 +192,11 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-amber-200 pb-3">
         <div>
           <h2 class="text-base sm:text-lg font-black text-amber-950">👥 Danh Sách Quán & Người Chơi Trên Cloud</h2>
-          <p class="text-xs font-semibold text-amber-800">Tìm kiếm, sửa Tiền / Cấp độ / Nâng cấp, cấp lại mã PIN 4 số hoặc xóa quán rác</p>
+          <p class="text-xs font-semibold text-amber-800">Chỉnh sửa Tiền / Cấp độ / Nâng cấp, cấp lại mã PIN 4 số, Khóa (ẩn khỏi BXH) hoặc Xóa vĩnh viễn</p>
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
-          <input id="shop-search-input" type="text" oninput="renderShopsList()" placeholder="🔍 Tìm tên quán, shopKey, mã BT-..." class="px-3 py-2 rounded-xl border-2 border-amber-300 bg-white text-xs font-bold text-amber-950 w-full sm:w-64 focus:outline-none focus:border-orange-500" />
+          <input id="shop-search-input" type="text" oninput="renderShopsList()" placeholder="🔍 Tìm tên quán, ID, mã BT-..." class="px-3 py-2 rounded-xl border-2 border-amber-300 bg-white text-xs font-bold text-amber-950 w-full sm:w-64 focus:outline-none focus:border-orange-500" />
           <select id="shop-filter-select" onchange="renderShopsList()" class="px-3 py-2 rounded-xl border-2 border-amber-300 bg-white text-xs font-black text-amber-950">
             <option value="money_desc">💰 Xếp theo Tiền giảm dần</option>
             <option value="level_desc">⭐ Xếp theo Cấp độ giảm dần</option>
@@ -228,7 +228,6 @@
             </button>
           </div>
 
-          <!-- 3 Nút tạo mẫu nhanh -->
           <div class="space-y-1">
             <span class="text-[10px] font-black text-amber-800 uppercase">⚡ Điền nhanh mẫu phổ biến:</span>
             <div class="grid grid-cols-3 gap-1.5">
@@ -641,10 +640,10 @@
     <div class="w-full max-w-sm glass-card rounded-3xl p-4 sm:p-5 space-y-3 text-xs text-center">
       <div class="text-3xl">⚠️</div>
       <h3 id="confirm-del-title" class="text-base font-black text-red-900">Xác nhận xóa?</h3>
-      <p id="confirm-del-desc" class="font-semibold text-amber-900">Hành động này sẽ xóa dữ liệu trên Firebase Cloud.</p>
+      <p id="confirm-del-desc" class="font-semibold text-amber-900">Hành động này sẽ xóa vĩnh viễn dữ liệu quán trên Firebase Cloud.</p>
       <div class="flex justify-center gap-2 pt-2">
         <button onclick="closeConfirmDeleteModal()" class="soft-btn px-4 py-2 rounded-xl bg-stone-200 font-black">Hủy</button>
-        <button id="btn-confirm-del-exec" class="soft-btn px-4 py-2 rounded-xl bg-red-600 text-white font-black shadow">🗑️ Xóa Ngay</button>
+        <button id="btn-confirm-del-exec" class="soft-btn px-4 py-2 rounded-xl bg-red-600 text-white font-black shadow">🗑️ Xóa Vĩnh Viễn</button>
       </div>
     </div>
   </div>
@@ -652,6 +651,7 @@
   <script>
     const FIREBASE_DB_URL = "https://banh-trang-tron-sai-gon-default-rtdb.asia-southeast1.firebasedatabase.app";
     const ADMIN_SESSION_KEY = "vua_banh_trang_admin_auth_v13";
+    const GAME_LOCAL_STORAGE_KEYS = ["banh_trang_tron_saigon_v6_master_save", "banh_trang_tron_saigon_v5_master_save"];
     // Hash mặc định của mật khẩu chủ game "0941375321"
     const MASTER_PASS_HASH = "ADM_1cba7e41980319";
 
@@ -689,6 +689,7 @@
     let currentBroadcast = null;
     let customCloudPassHash = null;
 
+    let currentRenderedShops = [];
     let activeEditingShopKey = null;
     let activeMailShopKey = null;
     let editorUnlockedDishes = ["tron"];
@@ -712,7 +713,6 @@
       return String(name || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/[^a-z0-9]/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "");
     }
 
-    // Cùng thuật toán băm PIN của game chính
     function hashShopPin(shopKey, rawPin) {
       const str = `bt_v6_salt_${shopKey}_${String(rawPin).trim()}`;
       let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
@@ -726,7 +726,6 @@
       return "PINH_" + (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
     }
 
-    // Cùng thuật toán Security Seal của game chính
     function computeSecuritySeal(s) {
       const raw = `${s.shopKey || "init"}|${Math.round(s.money || 0)}|${s.totalSold || 0}|${s.level || 1}|${s.day || 1}|DITU_V6_SECRET_2026`;
       let hash = 2166136261;
@@ -750,6 +749,26 @@
       return "ADM_" + (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
     }
 
+    // Đồng bộ trực tiếp vào localStorage nếu Admin và Game mở trên cùng thiết bị/tên miền (khang2431-sys.github.io)
+    function syncSameOriginLocalStorage(targetShopKey, action, newFullState = null) {
+      try {
+        GAME_LOCAL_STORAGE_KEYS.forEach(lsKey => {
+          const raw = localStorage.getItem(lsKey);
+          if (!raw) return;
+          const parsed = JSON.parse(raw);
+          if (!parsed) return;
+          const pKey = parsed.shopKey || sanitizeShopKey(parsed.shopName || "");
+          if (pKey === targetShopKey) {
+            if (action === "delete" || action === "ban") {
+              localStorage.removeItem(lsKey);
+            } else if (action === "update" && newFullState) {
+              localStorage.setItem(lsKey, JSON.stringify({ ...parsed, ...newFullState }));
+            }
+          }
+        });
+      } catch (e) {}
+    }
+
     let toastTimer = null;
     function showAdminToast(msg) {
       const box = document.getElementById("admin-toast");
@@ -762,20 +781,40 @@
       toastTimer = setTimeout(() => {
         box.classList.add("opacity-0", "-translate-y-3");
         box.classList.remove("opacity-100", "translate-y-0");
-      }, 2800);
+      }, 3000);
     }
 
-    async function fetchJson(url, options = {}, timeoutMs = 5000) {
+    async function fetchJson(url, options = {}, timeoutMs = 12000) {
       const ctrl = new AbortController();
       const t = setTimeout(() => ctrl.abort(), timeoutMs);
       try {
         const res = await fetch(url, { ...options, signal: ctrl.signal });
         clearTimeout(t);
         if (!res.ok) throw new Error("HTTP " + res.status);
-        return await res.json();
+        const text = await res.text();
+        return text ? JSON.parse(text) : null;
       } catch (e) {
         clearTimeout(t);
         throw e;
+      }
+    }
+
+    // Xóa nút trên Firebase an toàn: thử DELETE trước, nếu Rules chặn DELETE thì ghi đè null hoặc đánh dấu npc_deleted_
+    async function safeDeleteFirebaseNode(pathUrl, fallbackTombstone = null) {
+      try {
+        await fetchJson(pathUrl, { method: "DELETE" }, 6000);
+        return true;
+      } catch (e) {
+        try {
+          await fetchJson(pathUrl, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(fallbackTombstone)
+          }, 6000);
+          return true;
+        } catch (e2) {
+          return false;
+        }
       }
     }
 
@@ -861,28 +900,120 @@
       });
     }
 
+    // Gộp dữ liệu từ cả /shops và /leaderboard một cách thông minh:
+    // - Lưu lại tất cả các key thật trên Firebase (shopFirebaseKeys, lbFirebaseKeys) để khi Sửa/Khóa/Xóa sẽ xử lý triệt để mọi bản ghi trùng
+    // - Ưu tiên bản ghi có adminOverrideAt mới hơn hoặc tiến trình mới hơn
+    function buildUnifiedShopsMap(rawShopsObj, rawLbObj) {
+      const unified = {};
+
+      const ingestEntry = (fbKey, item, sourceType) => {
+        if (!item || typeof item !== "object") return;
+        const fs = item.fullState || {};
+        if (item.isDeleted || fs.isDeleted || String(item.shopKey || "").startsWith("npc_deleted_")) return;
+
+        const actualName = item.shopName || item.bannedShopName || fs.shopName || fs.bannedShopName || "";
+        const rawKey = String(item.shopKey || fs.shopKey || fbKey || "").replace(/^npc_banned_/, "");
+        const canonicalKey = sanitizeShopKey(rawKey || actualName || fbKey);
+        if (!canonicalKey || canonicalKey.startsWith("npc_")) return;
+        if (!actualName) return;
+
+        if (!unified[canonicalKey]) {
+          unified[canonicalKey] = {
+            shopKey: canonicalKey,
+            shopName: actualName,
+            bannedShopName: item.bannedShopName || fs.bannedShopName || actualName,
+            avatar: item.avatar || fs.avatar || "av_ditu",
+            pin: item.pin || fs.pin || "",
+            bannedOriginalPin: item.bannedOriginalPin || fs.bannedOriginalPin || "",
+            recoveryCode: item.recoveryCode || fs.recoveryCode || "",
+            money: Number(item.money !== undefined ? item.money : fs.money) || 0,
+            level: Number(item.level !== undefined ? item.level : fs.level) || 1,
+            day: Number(item.day !== undefined ? item.day : fs.day) || 1,
+            rating: Number(item.rating !== undefined ? item.rating : fs.rating) || 4.3,
+            totalSold: Number(item.totalSold !== undefined ? item.totalSold : fs.totalSold) || 0,
+            updatedAt: Number(item.updatedAt || fs.updatedAt || 0),
+            adminOverrideAt: Number(item.adminOverrideAt || fs.adminOverrideAt || 0),
+            isBanned: Boolean(item.isBanned || fs.isBanned || String(item.shopKey || "").startsWith("npc_banned_") || String(item.pin || "").startsWith("BANNED_")),
+            fullState: { ...fs, shopKey: canonicalKey, shopName: actualName },
+            shopFirebaseKeys: [],
+            lbFirebaseKeys: []
+          };
+        }
+
+        const target = unified[canonicalKey];
+        if (sourceType === "shops" && !target.shopFirebaseKeys.includes(fbKey)) {
+          target.shopFirebaseKeys.push(fbKey);
+        }
+        if (sourceType === "lb" && !target.lbFirebaseKeys.includes(fbKey)) {
+          target.lbFirebaseKeys.push(fbKey);
+        }
+
+        const itemAdminTs = Number(item.adminOverrideAt || fs.adminOverrideAt || 0);
+        const itemUpdated = Number(item.updatedAt || fs.updatedAt || 0);
+        const itemSold = Number(item.totalSold !== undefined ? item.totalSold : fs.totalSold) || 0;
+        const itemMoney = Number(item.money !== undefined ? item.money : fs.money) || 0;
+
+        // Nếu nguồn là /shops thì giữ lại fullState, pin, recoveryCode đầy đủ
+        if (sourceType === "shops") {
+          if (item.pin || fs.pin) target.pin = item.pin || fs.pin;
+          if (item.bannedOriginalPin || fs.bannedOriginalPin) target.bannedOriginalPin = item.bannedOriginalPin || fs.bannedOriginalPin;
+          if (item.recoveryCode || fs.recoveryCode) target.recoveryCode = item.recoveryCode || fs.recoveryCode;
+          if (item.fullState && Object.keys(item.fullState).length > 3) {
+            target.fullState = { ...target.fullState, ...item.fullState, shopKey: canonicalKey, shopName: actualName };
+          }
+          if (item.isBanned || fs.isBanned || String(item.shopKey || "").startsWith("npc_banned_")) {
+            target.isBanned = true;
+          }
+        }
+
+        // Cập nhật chỉ số hiển thị nếu bản ghi này có adminOverrideAt mới hơn, hoặc (nếu cùng adminOverrideAt) có tiến độ mới hơn
+        const isNewerAdmin = itemAdminTs > target.adminOverrideAt;
+        const isSameAdminButNewerPlay = (itemAdminTs === target.adminOverrideAt) && (itemUpdated > target.updatedAt || itemSold > target.totalSold || (itemSold === target.totalSold && itemMoney > target.money));
+
+        if (isNewerAdmin || isSameAdminButNewerPlay) {
+          target.money = itemMoney;
+          target.level = Number(item.level !== undefined ? item.level : fs.level) || target.level;
+          target.day = Number(item.day !== undefined ? item.day : fs.day) || target.day;
+          target.rating = Number(item.rating !== undefined ? item.rating : fs.rating) || target.rating;
+          target.totalSold = itemSold;
+          target.updatedAt = Math.max(target.updatedAt, itemUpdated);
+          target.adminOverrideAt = Math.max(target.adminOverrideAt, itemAdminTs);
+          target.fullState.money = target.money;
+          target.fullState.level = target.level;
+          target.fullState.day = target.day;
+          target.fullState.rating = target.rating;
+          target.fullState.totalSold = target.totalSold;
+        }
+      };
+
+      if (rawShopsObj && typeof rawShopsObj === "object") {
+        Object.entries(rawShopsObj).forEach(([k, v]) => ingestEntry(k, v, "shops"));
+      }
+      if (rawLbObj && typeof rawLbObj === "object") {
+        Object.entries(rawLbObj).forEach(([k, v]) => ingestEntry(k, v, "lb"));
+      }
+
+      return unified;
+    }
+
     async function refreshAllCloudData(showFeedback = false) {
       const statusBadge = document.getElementById("cloud-status-badge");
       try {
         const [shopsRes, lbRes, gcRes, loRes, bcRes, passRes] = await Promise.allSettled([
-          fetchJson(`${FIREBASE_DB_URL}/shops.json`),
-          fetchJson(`${FIREBASE_DB_URL}/leaderboard.json`),
-          fetchJson(`${FIREBASE_DB_URL}/giftcodes.json`),
-          fetchJson(`${FIREBASE_DB_URL}/liveConfig.json`),
-          fetchJson(`${FIREBASE_DB_URL}/adminBroadcast.json`),
-          fetchJson(`${FIREBASE_DB_URL}/adminConfig/passHash.json`)
+          fetchJson(`${FIREBASE_DB_URL}/shops.json`, {}, 15000),
+          fetchJson(`${FIREBASE_DB_URL}/leaderboard.json`, {}, 10000),
+          fetchJson(`${FIREBASE_DB_URL}/giftcodes.json`, {}, 8000),
+          fetchJson(`${FIREBASE_DB_URL}/liveConfig.json`, {}, 8000),
+          fetchJson(`${FIREBASE_DB_URL}/adminBroadcast.json`, {}, 8000),
+          fetchJson(`${FIREBASE_DB_URL}/adminConfig/passHash.json`, {}, 6000)
         ]);
 
-        shopsMap = (shopsRes.status === "fulfilled" && shopsRes.value && typeof shopsRes.value === "object") ? shopsRes.value : {};
-        leaderboardMap = (lbRes.status === "fulfilled" && lbRes.value && typeof lbRes.value === "object") ? lbRes.value : {};
-        giftcodesMap = (gcRes.status === "fulfilled" && gcRes.value && typeof gcRes.value === "object") ? gcRes.value : {};
+        const rawShops = (shopsRes.status === "fulfilled" && shopsRes.value && typeof shopsRes.value === "object") ? shopsRes.value : {};
+        const rawLb = (lbRes.status === "fulfilled" && lbRes.value && typeof lbRes.value === "object") ? lbRes.value : {};
+        leaderboardMap = rawLb;
+        shopsMap = buildUnifiedShopsMap(rawShops, rawLb);
 
-        // Gộp thêm những quán chỉ có trên leaderboard nhưng chưa có trong shopsMap
-        Object.entries(leaderboardMap).forEach(([k, val]) => {
-          if (!shopsMap[k] && val && val.shopName) {
-            shopsMap[k] = { ...val, shopKey: k, fullState: { ...val, shopKey: k } };
-          }
-        });
+        giftcodesMap = (gcRes.status === "fulfilled" && gcRes.value && typeof gcRes.value === "object") ? gcRes.value : {};
 
         if (loRes.status === "fulfilled" && loRes.value && typeof loRes.value === "object") {
           liveOpsConfig = { ...liveOpsConfig, ...loRes.value };
@@ -897,7 +1028,7 @@
         }
 
         if (statusBadge) {
-          statusBadge.textContent = "🟢 Cloud Online";
+          statusBadge.textContent = `🟢 Cloud Online (${Object.keys(shopsMap).length} quán)`;
           statusBadge.className = "px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-400 font-black text-[10px]";
         }
         const syncBadge = document.getElementById("last-sync-badge");
@@ -923,13 +1054,13 @@
     }
 
     function updateKpiCards() {
-      const shopEntries = Object.values(shopsMap).filter(s => s && s.shopName && !String(s.shopKey || "").startsWith("npc_"));
-      const activeShops = shopEntries.filter(s => !(s.isBanned || s.fullState?.isBanned));
-      const totalMoney = activeShops.reduce((acc, s) => acc + Number(s.money ?? s.fullState?.money ?? 0), 0);
-      const totalSold = activeShops.reduce((acc, s) => acc + Number(s.totalSold ?? s.fullState?.totalSold ?? 0), 0);
+      const shopEntries = Object.values(shopsMap).filter(s => s && s.shopName);
+      const activeShops = shopEntries.filter(s => !s.isBanned);
+      const totalMoney = activeShops.reduce((acc, s) => acc + Number(s.money || 0), 0);
+      const totalSold = activeShops.reduce((acc, s) => acc + Number(s.totalSold || 0), 0);
 
       document.getElementById("kpi-total-shops").textContent = `${shopEntries.length} quán`;
-      document.getElementById("kpi-sub-shops").textContent = `Hoạt động: ${activeShops.length} • Khóa: ${shopEntries.length - activeShops.length}`;
+      document.getElementById("kpi-sub-shops").textContent = `Hoạt động: ${activeShops.length} • Đang khóa: ${shopEntries.length - activeShops.length}`;
       document.getElementById("kpi-total-money").textContent = formatShortK(totalMoney);
       document.getElementById("kpi-sub-sold").textContent = `Tổng đã bán: ${totalSold.toLocaleString("vi-VN")} bịch`;
 
@@ -961,29 +1092,26 @@
       const q = String(document.getElementById("shop-search-input")?.value || "").trim().toLowerCase();
       const sortMode = document.getElementById("shop-filter-select")?.value || "money_desc";
 
-      let list = Object.entries(shopsMap)
-        .map(([k, item]) => {
-          if (!item || !item.shopName) return null;
-          const fs = item.fullState || {};
-          return {
-            shopKey: k,
-            shopName: item.shopName || fs.shopName || k,
-            recoveryCode: item.recoveryCode || fs.recoveryCode || "Chưa có",
-            pin: item.pin || fs.pin || "",
-            money: Number(item.money !== undefined ? item.money : fs.money) || 0,
-            level: Number(item.level !== undefined ? item.level : fs.level) || 1,
-            day: Number(item.day !== undefined ? item.day : fs.day) || 1,
-            rating: Number(item.rating !== undefined ? item.rating : fs.rating) || 4.3,
-            totalSold: Number(item.totalSold !== undefined ? item.totalSold : fs.totalSold) || 0,
-            viralPct: Number(fs.viralPct || 15),
-            updatedAt: Number(item.updatedAt || fs.updatedAt || 0),
-            isBanned: Boolean(item.isBanned || fs.isBanned),
-            equipLevels: fs.equipLevels || {},
-            staff: fs.staff || {},
-            unlockedDishes: Array.isArray(fs.unlockedDishes) ? fs.unlockedDishes : ["tron"]
-          };
-        })
-        .filter(Boolean);
+      let list = Object.values(shopsMap).map(item => {
+        const fs = item.fullState || {};
+        return {
+          shopKey: item.shopKey,
+          shopName: item.shopName || item.bannedShopName || fs.shopName || item.shopKey,
+          recoveryCode: item.recoveryCode || fs.recoveryCode || "Chưa có",
+          pin: item.pin || fs.pin || "",
+          money: Number(item.money !== undefined ? item.money : fs.money) || 0,
+          level: Number(item.level !== undefined ? item.level : fs.level) || 1,
+          day: Number(item.day !== undefined ? item.day : fs.day) || 1,
+          rating: Number(item.rating !== undefined ? item.rating : fs.rating) || 4.3,
+          totalSold: Number(item.totalSold !== undefined ? item.totalSold : fs.totalSold) || 0,
+          viralPct: Number(fs.viralPct || 15),
+          updatedAt: Number(item.updatedAt || fs.updatedAt || 0),
+          isBanned: Boolean(item.isBanned),
+          equipLevels: fs.equipLevels || {},
+          staff: fs.staff || {},
+          unlockedDishes: Array.isArray(fs.unlockedDishes) ? fs.unlockedDishes : ["tron"]
+        };
+      });
 
       if (q) {
         list = list.filter(s =>
@@ -1005,6 +1133,8 @@
         list.sort((a, b) => b.updatedAt - a.updatedAt);
       }
 
+      currentRenderedShops = list;
+
       if (list.length === 0) {
         container.innerHTML = `<div class="text-center py-8 text-amber-800 font-bold text-xs">Không tìm thấy quán nào khớp bộ lọc.</div>`;
         return;
@@ -1014,10 +1144,12 @@
         const upgSum = Object.values(s.equipLevels || {}).reduce((a, b) => a + Number(b || 0), 0);
         const staffCount = Object.values(s.staff || {}).filter(Boolean).length;
         const timeStr = s.updatedAt ? new Date(s.updatedAt).toLocaleString("vi-VN") : "Chưa rõ";
-        const pinLabel = String(s.pin).startsWith("PINH_") ? "🔒 PIN Đã Mã Hóa" : (s.pin ? `🔑 PIN: ${escapeHtml(s.pin)}` : "Chưa đặt PIN");
+        const pinLabel = String(s.pin).startsWith("BANNED_")
+          ? "🚫 PIN Đang Khóa"
+          : (String(s.pin).startsWith("PINH_") ? "🔒 PIN Đã Mã Hóa" : (s.pin ? `🔑 PIN: ${escapeHtml(s.pin)}` : "Chưa đặt PIN"));
 
         return `
-          <div class="p-3 sm:p-4 rounded-2xl border-2 ${s.isBanned ? 'bg-red-50/90 border-red-400' : 'bg-white border-amber-200 hover:border-amber-400'} transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          <div class="p-3 sm:p-4 rounded-2xl border-2 ${s.isBanned ? 'bg-red-50/95 border-red-500' : 'bg-white border-amber-200 hover:border-amber-400'} transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3">
             <div class="space-y-1 min-w-0 flex-1">
               <div class="flex flex-wrap items-center gap-1.5">
                 <span class="px-2 py-0.5 rounded-lg bg-amber-900 text-amber-100 font-black text-[10px]">#${idx + 1}</span>
@@ -1025,7 +1157,7 @@
                 <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-[10px]">ID: ${escapeHtml(s.shopKey)}</span>
                 <span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-900 font-black text-[10px]">🛡️ ${escapeHtml(s.recoveryCode)}</span>
                 <span class="px-2 py-0.5 rounded-full bg-stone-100 text-stone-700 font-bold text-[10px]">${pinLabel}</span>
-                ${s.isBanned ? `<span class="px-2 py-0.5 rounded-full bg-red-600 text-white font-black text-[10px]">🚫 ĐANG KHÓA (BAN)</span>` : ""}
+                ${s.isBanned ? `<span class="px-2 py-0.5 rounded-full bg-red-600 text-white font-black text-[10px]">🚫 ĐANG KHÓA (ẨN KHỎI BXH)</span>` : ""}
               </div>
 
               <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-bold text-amber-900">
@@ -1042,19 +1174,19 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-1.5 shrink-0">
-              <button onclick="openEditShopModal('${escapeHtml(s.shopKey)}')" class="soft-btn px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-amber-950 font-black text-xs shadow-sm">
+              <button type="button" onclick="openEditShopByIdx(${idx})" class="soft-btn px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-amber-950 font-black text-xs shadow-sm">
                 ✏️ Sửa Hồ Sơ
               </button>
-              <button onclick="quickGrantShopMoney('${escapeHtml(s.shopKey)}', 100000)" class="soft-btn px-2.5 py-1.5 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-400 font-black text-xs">
+              <button type="button" onclick="quickGrantByIdx(${idx}, 100000)" class="soft-btn px-2.5 py-1.5 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-400 font-black text-xs">
                 +100k
               </button>
-              <button onclick="openSendMailModal('${escapeHtml(s.shopKey)}')" class="soft-btn px-2.5 py-1.5 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-900 border border-purple-300 font-black text-xs">
+              <button type="button" onclick="openSendMailByIdx(${idx})" class="soft-btn px-2.5 py-1.5 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-900 border border-purple-300 font-black text-xs">
                 💌 Gửi Quà
               </button>
-              <button onclick="toggleBanShop('${escapeHtml(s.shopKey)}')" class="soft-btn px-2.5 py-1.5 rounded-xl ${s.isBanned ? 'bg-sky-600 text-white' : 'bg-orange-100 text-orange-900 border border-orange-300'} font-black text-xs">
+              <button type="button" onclick="toggleBanByIdx(${idx})" class="soft-btn px-2.5 py-1.5 rounded-xl ${s.isBanned ? 'bg-sky-600 text-white' : 'bg-orange-100 text-orange-900 border border-orange-300'} font-black text-xs">
                 ${s.isBanned ? '🔓 Mở Khóa' : '🚫 Khóa'}
               </button>
-              <button onclick="promptDeleteShop('${escapeHtml(s.shopKey)}')" class="soft-btn px-2.5 py-1.5 rounded-xl bg-red-100 hover:bg-red-200 text-red-800 border border-red-300 font-black text-xs">
+              <button type="button" onclick="promptDeleteByIdx(${idx})" class="soft-btn px-2.5 py-1.5 rounded-xl bg-red-100 hover:bg-red-200 text-red-800 border border-red-300 font-black text-xs">
                 🗑️ Xóa
               </button>
             </div>
@@ -1063,7 +1195,53 @@
       }).join("");
     }
 
-    function openEditShopModal(shopKey) {
+    function openEditShopByIdx(idx) {
+      const item = currentRenderedShops[idx];
+      if (item) openEditShopModal(item.shopKey);
+    }
+    function quickGrantByIdx(idx, amount) {
+      const item = currentRenderedShops[idx];
+      if (item) quickGrantShopMoney(item.shopKey, amount);
+    }
+    function openSendMailByIdx(idx) {
+      const item = currentRenderedShops[idx];
+      if (item) openSendMailModal(item.shopKey);
+    }
+    function toggleBanByIdx(idx) {
+      const item = currentRenderedShops[idx];
+      if (item) toggleBanShop(item.shopKey);
+    }
+    function promptDeleteByIdx(idx) {
+      const item = currentRenderedShops[idx];
+      if (item) promptDeleteShop(item.shopKey);
+    }
+
+    // Tải trực tiếp hồ sơ đầy đủ của 1 quán từ /shops/{key}.json trước khi sửa/khóa để không bao giờ mất fullState
+    async function ensureLatestShopRecordLoaded(shopKey) {
+      const existing = shopsMap[shopKey] || {};
+      const keysToTry = [shopKey, ...(existing.shopFirebaseKeys || [])];
+      for (const k of keysToTry) {
+        try {
+          const cloudData = await fetchJson(`${FIREBASE_DB_URL}/shops/${encodeURIComponent(k)}.json`, {}, 5000);
+          if (cloudData && typeof cloudData === "object") {
+            const fs = cloudData.fullState || {};
+            existing.pin = cloudData.pin || fs.pin || existing.pin || "";
+            existing.bannedOriginalPin = cloudData.bannedOriginalPin || fs.bannedOriginalPin || existing.bannedOriginalPin || "";
+            existing.recoveryCode = cloudData.recoveryCode || fs.recoveryCode || existing.recoveryCode || "";
+            existing.avatar = cloudData.avatar || fs.avatar || existing.avatar || "av_ditu";
+            if (cloudData.fullState) {
+              existing.fullState = { ...cloudData.fullState, ...(existing.fullState || {}), money: existing.money, level: existing.level, day: existing.day, rating: existing.rating, totalSold: existing.totalSold };
+            }
+            shopsMap[shopKey] = existing;
+            break;
+          }
+        } catch (e) {}
+      }
+      return shopsMap[shopKey];
+    }
+
+    async function openEditShopModal(shopKey) {
+      await ensureLatestShopRecordLoaded(shopKey);
       const rawShop = shopsMap[shopKey];
       if (!rawShop) return;
       activeEditingShopKey = shopKey;
@@ -1071,7 +1249,7 @@
 
       document.getElementById("edit-shop-key-badge").textContent = `ID: ${shopKey}`;
       document.getElementById("edit-shop-title").textContent = `✏️ Chỉnh Sửa Quán: ${rawShop.shopName || fs.shopName || shopKey}`;
-      document.getElementById("es-name").value = rawShop.shopName || fs.shopName || "";
+      document.getElementById("es-name").value = rawShop.shopName || rawShop.bannedShopName || fs.shopName || "";
       document.getElementById("es-money").value = Math.round(Number(rawShop.money !== undefined ? rawShop.money : fs.money) || 0);
       document.getElementById("es-newpin").value = "";
       document.getElementById("es-level").value = Number(rawShop.level !== undefined ? rawShop.level : fs.level) || 1;
@@ -1080,12 +1258,11 @@
       document.getElementById("es-sold").value = Number(rawShop.totalSold !== undefined ? rawShop.totalSold : fs.totalSold) || 0;
       document.getElementById("es-viral").value = Number(fs.viralPct || 15);
       document.getElementById("es-recovery").value = rawShop.recoveryCode || fs.recoveryCode || "Chưa có";
-      document.getElementById("es-banned-chk").checked = Boolean(rawShop.isBanned || fs.isBanned);
+      document.getElementById("es-banned-chk").checked = Boolean(rawShop.isBanned);
 
       editorUnlockedDishes = Array.isArray(fs.unlockedDishes) && fs.unlockedDishes.length > 0 ? [...fs.unlockedDishes] : ["tron"];
       document.getElementById("es-dishes-count").textContent = `${editorUnlockedDishes.length}/10`;
 
-      // Render 8 upgrades
       const eq = fs.equipLevels || {};
       const upgGrid = document.getElementById("es-upgrades-grid");
       upgGrid.innerHTML = UPGRADE_META.map(u => {
@@ -1100,7 +1277,6 @@
         `;
       }).join("");
 
-      // Render 4 staff
       const st = fs.staff || {};
       const stStars = fs.staffStars || {};
       const staffList = document.getElementById("es-staff-list");
@@ -1120,7 +1296,6 @@
         `;
       }).join("");
 
-      // Render 4 licenses
       const lic = fs.licenses || {};
       const licList = document.getElementById("es-licenses-list");
       licList.innerHTML = LICENSE_META.map(l => {
@@ -1194,7 +1369,9 @@
         return;
       }
 
-      const finalPin = newPinRaw ? hashShopPin(key, newPinRaw) : (rawShop.pin || fs.pin || "");
+      const cleanExistingPin = String(rawShop.bannedOriginalPin || rawShop.pin || fs.pin || "").replace(/^BANNED_/, "");
+      const basePin = newPinRaw ? hashShopPin(key, newPinRaw) : cleanExistingPin;
+      const finalPin = isBanned ? ("BANNED_" + basePin) : basePin;
 
       const newEquip = {};
       UPGRADE_META.forEach(u => {
@@ -1216,9 +1393,11 @@
       const nowTs = Date.now();
       const updatedFullState = {
         ...fs,
-        shopKey: key,
-        shopName: newName,
+        shopKey: isBanned ? ("npc_banned_" + key) : key,
+        shopName: isBanned ? "" : newName,
+        bannedShopName: newName,
         pin: finalPin,
+        bannedOriginalPin: basePin,
         money: newMoney,
         level: newLevel,
         day: newDay,
@@ -1231,16 +1410,17 @@
         licenses: newLicenses,
         unlockedDishes: editorUnlockedDishes,
         v13MarketingReset: true,
-        adminGrantedMoney: Math.max(Number(fs.adminGrantedMoney || 0), newMoney),
+        adminGrantedMoney: Math.max(Number(fs.adminGrantedMoney || 0), newMoney + 5000000),
         adminOverrideAt: nowTs,
         isBanned: isBanned,
         updatedAt: nowTs
       };
-      updatedFullState.securitySeal = computeSecuritySeal(updatedFullState);
+      updatedFullState.securitySeal = computeSecuritySeal({ ...updatedFullState, shopKey: key });
 
       const publicSummary = {
-        shopKey: key,
-        shopName: newName,
+        shopKey: isBanned ? ("npc_banned_" + key) : key,
+        shopName: isBanned ? "" : newName,
+        bannedShopName: newName,
         avatar: rawShop.avatar || fs.avatar || "av_ditu",
         money: newMoney,
         rating: newRating,
@@ -1256,33 +1436,61 @@
         ...rawShop,
         ...publicSummary,
         pin: finalPin,
+        bannedOriginalPin: basePin,
         recoveryCode: rawShop.recoveryCode || fs.recoveryCode || "",
         fullState: updatedFullState
       };
+      delete fullPayload.shopFirebaseKeys;
+      delete fullPayload.lbFirebaseKeys;
 
       const btn = document.getElementById("btn-save-edited-shop");
       if (btn) btn.disabled = true;
 
       try {
-        await fetchJson(`${FIREBASE_DB_URL}/shops/${key}.json`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(fullPayload)
-        });
+        const allShopKeys = Array.from(new Set([key, ...(rawShop.shopFirebaseKeys || [])]));
+        const allLbKeys = Array.from(new Set([key, ...(rawShop.lbFirebaseKeys || [])]));
 
-        if (isBanned) {
-          await fetchJson(`${FIREBASE_DB_URL}/leaderboard/${key}.json`, { method: "DELETE" });
-          delete leaderboardMap[key];
-        } else {
-          await fetchJson(`${FIREBASE_DB_URL}/leaderboard/${key}.json`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(publicSummary)
-          });
-          leaderboardMap[key] = publicSummary;
+        for (const k of allShopKeys) {
+          if (k === key) {
+            await fetchJson(`${FIREBASE_DB_URL}/shops/${encodeURIComponent(k)}.json`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(fullPayload)
+            });
+          } else {
+            await safeDeleteFirebaseNode(`${FIREBASE_DB_URL}/shops/${encodeURIComponent(k)}.json`, null);
+          }
         }
 
-        shopsMap[key] = fullPayload;
+        for (const k of allLbKeys) {
+          if (isBanned || k !== key) {
+            await safeDeleteFirebaseNode(`${FIREBASE_DB_URL}/leaderboard/${encodeURIComponent(k)}.json`, {
+              shopKey: "npc_banned_" + key,
+              shopName: "",
+              isBanned: true,
+              updatedAt: nowTs
+            });
+            delete leaderboardMap[k];
+          } else {
+            await fetchJson(`${FIREBASE_DB_URL}/leaderboard/${encodeURIComponent(k)}.json`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(publicSummary)
+            });
+            leaderboardMap[k] = publicSummary;
+          }
+        }
+
+        // Đồng bộ trực tiếp vào localStorage nếu đang mở trên cùng thiết bị với game
+        syncSameOriginLocalStorage(key, isBanned ? "ban" : "update", { ...updatedFullState, shopKey: key, shopName: newName });
+
+        shopsMap[key] = {
+          ...fullPayload,
+          shopKey: key,
+          shopName: newName,
+          shopFirebaseKeys: [key],
+          lbFirebaseKeys: isBanned ? [] : [key]
+        };
         closeEditShopModal();
         updateKpiCards();
         renderShopsList();
@@ -1295,106 +1503,187 @@
     }
 
     async function quickGrantShopMoney(shopKey, amount) {
+      await ensureLatestShopRecordLoaded(shopKey);
       const rawShop = shopsMap[shopKey];
       if (!rawShop) return;
       const fs = { ...(rawShop.fullState || {}) };
       const curMoney = Number(rawShop.money !== undefined ? rawShop.money : fs.money) || 0;
       const newMoney = Math.max(0, curMoney + amount);
       const nowTs = Date.now();
+      const displayName = rawShop.shopName || rawShop.bannedShopName || shopKey;
 
-      fs.shopKey = shopKey;
+      fs.shopKey = rawShop.isBanned ? ("npc_banned_" + shopKey) : shopKey;
+      fs.shopName = rawShop.isBanned ? "" : displayName;
+      fs.bannedShopName = displayName;
       fs.money = newMoney;
-      fs.adminGrantedMoney = Math.max(Number(fs.adminGrantedMoney || 0), newMoney);
+      fs.adminGrantedMoney = Math.max(Number(fs.adminGrantedMoney || 0), newMoney + 5000000);
       fs.adminOverrideAt = nowTs;
       fs.updatedAt = nowTs;
-      fs.securitySeal = computeSecuritySeal(fs);
+      fs.securitySeal = computeSecuritySeal({ ...fs, shopKey });
 
-      const updatedShop = {
+      const updatedPayload = {
         ...rawShop,
+        shopKey: rawShop.isBanned ? ("npc_banned_" + shopKey) : shopKey,
+        shopName: rawShop.isBanned ? "" : displayName,
+        bannedShopName: displayName,
         money: newMoney,
         adminOverrideAt: nowTs,
         updatedAt: nowTs,
         fullState: fs
       };
+      delete updatedPayload.shopFirebaseKeys;
+      delete updatedPayload.lbFirebaseKeys;
 
       try {
-        await fetchJson(`${FIREBASE_DB_URL}/shops/${shopKey}.json`, {
+        await fetchJson(`${FIREBASE_DB_URL}/shops/${encodeURIComponent(shopKey)}.json`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updatedShop)
+          body: JSON.stringify(updatedPayload)
         });
-        if (!updatedShop.isBanned) {
-          await fetchJson(`${FIREBASE_DB_URL}/leaderboard/${shopKey}/money.json`, {
+        if (!rawShop.isBanned) {
+          const lbSummary = {
+            shopKey,
+            shopName: displayName,
+            avatar: rawShop.avatar || fs.avatar || "av_ditu",
+            money: newMoney,
+            rating: rawShop.rating || 4.3,
+            level: rawShop.level || 1,
+            totalSold: rawShop.totalSold || 0,
+            day: rawShop.day || 1,
+            adminOverrideAt: nowTs,
+            updatedAt: nowTs
+          };
+          await fetchJson(`${FIREBASE_DB_URL}/leaderboard/${encodeURIComponent(shopKey)}.json`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newMoney)
+            body: JSON.stringify(lbSummary)
           });
         }
-        shopsMap[shopKey] = updatedShop;
+        syncSameOriginLocalStorage(shopKey, "update", { ...fs, shopKey, shopName: displayName });
+        shopsMap[shopKey] = { ...rawShop, money: newMoney, adminOverrideAt: nowTs, updatedAt: nowTs, fullState: fs };
         updateKpiCards();
         renderShopsList();
-        showAdminToast(`💰 Đã cộng +${formatVND(amount)} cho quán "${rawShop.shopName}"!`);
+        showAdminToast(`💰 Đã cộng +${formatVND(amount)} cho quán "${displayName}"!`);
       } catch (e) {
         showAdminToast("⚠️ Lỗi kết nối khi cộng tiền nhanh!");
       }
     }
 
+    // Khóa / Mở khóa quán:
+    // Khi Khóa: đổi shopKey trên Cloud thành "npc_banned_..." và xóa shopName chính để TẤT CẢ phiên bản game (kể cả bản cũ) tự động ẩn khỏi BXH 100%, đồng thời khóa mã PIN không cho đăng nhập!
     async function toggleBanShop(shopKey) {
+      await ensureLatestShopRecordLoaded(shopKey);
       const rawShop = shopsMap[shopKey];
       if (!rawShop) return;
       const fs = { ...(rawShop.fullState || {}) };
-      const nextBan = !(rawShop.isBanned || fs.isBanned);
+      const nextBan = !Boolean(rawShop.isBanned);
       const nowTs = Date.now();
+      const displayName = rawShop.shopName || rawShop.bannedShopName || fs.shopName || fs.bannedShopName || shopKey;
+      const cleanPin = String(rawShop.bannedOriginalPin || rawShop.pin || fs.pin || "").replace(/^BANNED_/, "");
+      const nextPin = nextBan ? ("BANNED_" + cleanPin) : cleanPin;
 
       fs.isBanned = nextBan;
+      fs.shopKey = nextBan ? ("npc_banned_" + shopKey) : shopKey;
+      fs.shopName = nextBan ? "" : displayName;
+      fs.bannedShopName = displayName;
+      fs.pin = nextPin;
+      fs.bannedOriginalPin = cleanPin;
       fs.adminOverrideAt = nowTs;
-      const updatedShop = {
+      fs.updatedAt = nowTs;
+
+      const updatedPayload = {
         ...rawShop,
+        shopKey: nextBan ? ("npc_banned_" + shopKey) : shopKey,
+        shopName: nextBan ? "" : displayName,
+        bannedShopName: displayName,
+        pin: nextPin,
+        bannedOriginalPin: cleanPin,
         isBanned: nextBan,
         adminOverrideAt: nowTs,
         updatedAt: nowTs,
         fullState: fs
       };
+      delete updatedPayload.shopFirebaseKeys;
+      delete updatedPayload.lbFirebaseKeys;
 
       try {
-        await fetchJson(`${FIREBASE_DB_URL}/shops/${shopKey}.json`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updatedShop)
-        });
+        const allShopKeys = Array.from(new Set([shopKey, ...(rawShop.shopFirebaseKeys || [])]));
+        const allLbKeys = Array.from(new Set([shopKey, ...(rawShop.lbFirebaseKeys || [])]));
+
+        for (const k of allShopKeys) {
+          if (k === shopKey) {
+            await fetchJson(`${FIREBASE_DB_URL}/shops/${encodeURIComponent(k)}.json`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(updatedPayload)
+            });
+          } else {
+            await safeDeleteFirebaseNode(`${FIREBASE_DB_URL}/shops/${encodeURIComponent(k)}.json`, null);
+          }
+        }
+
         if (nextBan) {
-          await fetchJson(`${FIREBASE_DB_URL}/leaderboard/${shopKey}.json`, { method: "DELETE" });
+          for (const k of allLbKeys) {
+            await safeDeleteFirebaseNode(`${FIREBASE_DB_URL}/leaderboard/${encodeURIComponent(k)}.json`, {
+              shopKey: "npc_banned_" + shopKey,
+              shopName: "",
+              isBanned: true,
+              updatedAt: nowTs
+            });
+            delete leaderboardMap[k];
+          }
+          syncSameOriginLocalStorage(shopKey, "ban");
         } else {
-          await fetchJson(`${FIREBASE_DB_URL}/leaderboard/${shopKey}.json`, {
+          const lbSummary = {
+            shopKey,
+            shopName: displayName,
+            avatar: rawShop.avatar || fs.avatar || "av_ditu",
+            money: rawShop.money || 0,
+            rating: rawShop.rating || 4.3,
+            level: rawShop.level || 1,
+            totalSold: rawShop.totalSold || 0,
+            day: rawShop.day || 1,
+            isBanned: false,
+            adminOverrideAt: nowTs,
+            updatedAt: nowTs
+          };
+          await fetchJson(`${FIREBASE_DB_URL}/leaderboard/${encodeURIComponent(shopKey)}.json`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              shopKey,
-              shopName: updatedShop.shopName,
-              avatar: updatedShop.avatar || "av_ditu",
-              money: updatedShop.money || 0,
-              rating: updatedShop.rating || 4.3,
-              level: updatedShop.level || 1,
-              totalSold: updatedShop.totalSold || 0,
-              day: updatedShop.day || 1,
-              updatedAt: nowTs
-            })
+            body: JSON.stringify(lbSummary)
           });
+          leaderboardMap[shopKey] = lbSummary;
         }
-        shopsMap[shopKey] = updatedShop;
+
+        shopsMap[shopKey] = {
+          ...rawShop,
+          shopKey,
+          shopName: displayName,
+          bannedShopName: displayName,
+          pin: nextPin,
+          bannedOriginalPin: cleanPin,
+          isBanned: nextBan,
+          adminOverrideAt: nowTs,
+          updatedAt: nowTs,
+          fullState: fs,
+          shopFirebaseKeys: [shopKey],
+          lbFirebaseKeys: nextBan ? [] : [shopKey]
+        };
+
         updateKpiCards();
         renderShopsList();
-        showAdminToast(nextBan ? `🚫 Đã khóa quán "${rawShop.shopName}" & ẩn khỏi BXH!` : `🔓 Đã mở khóa quán "${rawShop.shopName}"!`);
+        showAdminToast(nextBan ? `🚫 Đã khóa quán "${displayName}" & ẩn hoàn toàn khỏi BXH!` : `🔓 Đã mở khóa quán "${displayName}" & khôi phục lên BXH!`);
       } catch (e) {
-        showAdminToast("⚠️ Lỗi khi cập nhật trạng thái khóa!");
+        showAdminToast("⚠️ Lỗi khi cập nhật trạng thái khóa trên Cloud!");
       }
     }
 
     function promptDeleteShop(shopKey) {
       const rawShop = shopsMap[shopKey];
       if (!rawShop) return;
-      document.getElementById("confirm-del-title").textContent = `🗑️ Xóa vĩnh viễn quán "${rawShop.shopName}"?`;
-      document.getElementById("confirm-del-desc").textContent = `Quán (${shopKey}) sẽ bị xóa khỏi /shops, /leaderboard và /recoveryCodes trên Firebase Cloud.`;
+      const displayName = rawShop.shopName || rawShop.bannedShopName || shopKey;
+      document.getElementById("confirm-del-title").textContent = `🗑️ Xóa vĩnh viễn quán "${displayName}"?`;
+      document.getElementById("confirm-del-desc").textContent = `Quán (${shopKey}) sẽ bị xóa sạch khỏi /shops, /leaderboard, /recoveryCodes và bộ nhớ trình duyệt.`;
       const btn = document.getElementById("btn-confirm-del-exec");
       btn.onclick = () => executeDeleteShop(shopKey);
       document.getElementById("modal-confirm-delete").classList.remove("hidden");
@@ -1406,22 +1695,40 @@
 
     async function executeDeleteShop(shopKey) {
       const rawShop = shopsMap[shopKey];
-      const recCode = rawShop?.recoveryCode || rawShop?.fullState?.recoveryCode;
+      if (!rawShop) return;
+      const displayName = rawShop.shopName || rawShop.bannedShopName || shopKey;
+      const recCode = rawShop.recoveryCode || rawShop.fullState?.recoveryCode;
+      const allShopKeys = Array.from(new Set([shopKey, ...(rawShop.shopFirebaseKeys || [])]));
+      const allLbKeys = Array.from(new Set([shopKey, ...(rawShop.lbFirebaseKeys || [])]));
+
       closeConfirmDeleteModal();
+
+      const tombstone = {
+        shopKey: "npc_deleted_" + shopKey,
+        shopName: "",
+        isDeleted: true,
+        deletedAt: Date.now()
+      };
+
       try {
-        const reqs = [
-          fetchJson(`${FIREBASE_DB_URL}/shops/${shopKey}.json`, { method: "DELETE" }),
-          fetchJson(`${FIREBASE_DB_URL}/leaderboard/${shopKey}.json`, { method: "DELETE" })
-        ];
-        if (recCode) {
-          reqs.push(fetchJson(`${FIREBASE_DB_URL}/recoveryCodes/${recCode}.json`, { method: "DELETE" }));
+        for (const k of allShopKeys) {
+          await safeDeleteFirebaseNode(`${FIREBASE_DB_URL}/shops/${encodeURIComponent(k)}.json`, tombstone);
         }
-        await Promise.allSettled(reqs);
+        for (const k of allLbKeys) {
+          await safeDeleteFirebaseNode(`${FIREBASE_DB_URL}/leaderboard/${encodeURIComponent(k)}.json`, tombstone);
+          delete leaderboardMap[k];
+        }
+        if (recCode && recCode !== "Chưa có") {
+          await safeDeleteFirebaseNode(`${FIREBASE_DB_URL}/recoveryCodes/${encodeURIComponent(recCode)}.json`, null);
+        }
+
+        // Xóa luôn trong localStorage nếu đang mở trên cùng trình duyệt với game để tránh game tự hồi sinh quán
+        syncSameOriginLocalStorage(shopKey, "delete");
+
         delete shopsMap[shopKey];
-        delete leaderboardMap[shopKey];
         updateKpiCards();
         renderShopsList();
-        showAdminToast(`🗑️ Đã xóa quán "${rawShop?.shopName || shopKey}" khỏi Server!`);
+        showAdminToast(`🗑️ Đã xóa vĩnh viễn quán "${displayName}" khỏi Server!`);
       } catch (e) {
         showAdminToast("⚠️ Lỗi khi xóa quán trên Cloud!");
       }
@@ -1432,7 +1739,7 @@
       const rawShop = shopsMap[shopKey];
       if (!rawShop) return;
       activeMailShopKey = shopKey;
-      document.getElementById("sm-target-label").textContent = `Người nhận: ${rawShop.shopName} (ID: ${shopKey})`;
+      document.getElementById("sm-target-label").textContent = `Người nhận: ${rawShop.shopName || rawShop.bannedShopName} (ID: ${shopKey})`;
       document.getElementById("modal-send-mail").classList.remove("hidden");
     }
 
@@ -1453,7 +1760,7 @@
       const mailObj = { id: mailId, title, message, rewardMoney, rewardXp, createdAt: Date.now(), claimed: false };
 
       try {
-        await fetchJson(`${FIREBASE_DB_URL}/shops/${key}/adminInbox/${mailId}.json`, {
+        await fetchJson(`${FIREBASE_DB_URL}/shops/${encodeURIComponent(key)}/adminInbox/${mailId}.json`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(mailObj)
@@ -1491,7 +1798,7 @@
       if (!key) { showAdminToast("⚠️ Tên quán không hợp lệ!"); return; }
 
       const nowTs = Date.now();
-      const recCode = "BT-" + Math.random().toString(36).substring(2, 6).toUpperCase() + "-" + Math.random().toString(36).substring(2, 6).toUpperCase();
+      const recCode = "BT-" + Math.floor(100000 + Math.random() * 900000);
       const hashedPin = hashShopPin(key, pinRaw);
 
       const fullState = {
@@ -1513,7 +1820,7 @@
         staff: { beti: false, mylan: false, tunghia: false, anhba: false },
         staffStars: { beti: 1, mylan: 1, tunghia: 1, anhba: 1 },
         licenses: { lic_vsattp: false, lic_sidewalk: false, lic_nightmarket: false, lic_brand: false },
-        adminGrantedMoney: money,
+        adminGrantedMoney: money + 5000000,
         adminOverrideAt: nowTs,
         updatedAt: nowTs
       };
@@ -1521,18 +1828,18 @@
 
       const summary = {
         shopKey: key, shopName: name, avatar: "av_ditu",
-        money, rating: 4.5, level, totalSold: 0, day: 1, updatedAt: nowTs
+        money, rating: 4.5, level, totalSold: 0, day: 1, adminOverrideAt: nowTs, updatedAt: nowTs
       };
 
       const shopPayload = { ...summary, pin: hashedPin, recoveryCode: recCode, adminOverrideAt: nowTs, fullState };
 
       try {
         await Promise.all([
-          fetchJson(`${FIREBASE_DB_URL}/shops/${key}.json`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(shopPayload) }),
-          fetchJson(`${FIREBASE_DB_URL}/leaderboard/${key}.json`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(summary) }),
-          fetchJson(`${FIREBASE_DB_URL}/recoveryCodes/${recCode}.json`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ shopKey: key, shopName: name, updatedAt: nowTs }) })
+          fetchJson(`${FIREBASE_DB_URL}/shops/${encodeURIComponent(key)}.json`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(shopPayload) }),
+          fetchJson(`${FIREBASE_DB_URL}/leaderboard/${encodeURIComponent(key)}.json`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(summary) }),
+          fetchJson(`${FIREBASE_DB_URL}/recoveryCodes/${encodeURIComponent(recCode)}.json`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ shopKey: key, shopName: name, updatedAt: nowTs }) })
         ]);
-        shopsMap[key] = shopPayload;
+        shopsMap[key] = { ...shopPayload, shopFirebaseKeys: [key], lbFirebaseKeys: [key] };
         closeCreateShopModal();
         updateKpiCards();
         renderShopsList();
@@ -1587,7 +1894,7 @@
       };
 
       try {
-        await fetchJson(`${FIREBASE_DB_URL}/giftcodes/${rawCode}.json`, {
+        await fetchJson(`${FIREBASE_DB_URL}/giftcodes/${encodeURIComponent(rawCode)}.json`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
@@ -1675,7 +1982,7 @@
       if (!g) return;
       const nextState = g.active === false;
       try {
-        await fetchJson(`${FIREBASE_DB_URL}/giftcodes/${code}/active.json`, {
+        await fetchJson(`${FIREBASE_DB_URL}/giftcodes/${encodeURIComponent(code)}/active.json`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(nextState)
@@ -1691,7 +1998,7 @@
 
     async function deleteGiftcode(code) {
       try {
-        await fetchJson(`${FIREBASE_DB_URL}/giftcodes/${code}.json`, { method: "DELETE" });
+        await safeDeleteFirebaseNode(`${FIREBASE_DB_URL}/giftcodes/${encodeURIComponent(code)}.json`, null);
         delete giftcodesMap[code];
         updateKpiCards();
         renderGiftcodesList();
@@ -1763,7 +2070,7 @@
 
     async function clearServerBroadcast() {
       try {
-        await fetchJson(`${FIREBASE_DB_URL}/adminBroadcast.json`, { method: "DELETE" });
+        await safeDeleteFirebaseNode(`${FIREBASE_DB_URL}/adminBroadcast.json`, { active: false });
         currentBroadcast = null;
         renderBroadcastPreview();
         showAdminToast("🛑 Đã gỡ thông báo toàn Server.");
