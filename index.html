@@ -2426,15 +2426,34 @@
           const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 3500);
           if (res.ok) {
             const cloudShop = await res.json();
+            if (!cloudShop || cloudShop.isDeleted || String(cloudShop.shopKey || "").startsWith("npc_deleted_")) {
+              if (Number(saved.updatedAt || 0) > 0) {
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+                localStorage.removeItem("banh_trang_tron_saigon_v5_master_save");
+                document.getElementById("quick-resume-box").classList.add("hidden");
+                showLoginMessage("🗑️ Quán trước đó đã được xóa khỏi hệ thống Cloud.", "error");
+              }
+              return;
+            }
+            if (cloudShop.isBanned || cloudShop.fullState?.isBanned || String(cloudShop.shopKey || "").startsWith("npc_banned_") || String(cloudShop.pin || "").startsWith("BANNED_")) {
+              localStorage.removeItem(LOCAL_STORAGE_KEY);
+              document.getElementById("quick-resume-box").classList.add("hidden");
+              showLoginMessage("🚫 Quán này hiện đang bị Quản Trị Viên tạm khóa!", "error");
+              return;
+            }
             const isAdminReset = Number(cloudShop?.adminOverrideAt || cloudShop?.fullState?.adminOverrideAt || 0) > Number(saved.adminOverrideAt || 0);
             if (cloudShop && cloudShop.fullState && (isAdminReset || verifyShopPin(key, saved.pin, cloudShop.pin))) {
               const cloudAvatar = cloudShop.avatar || cloudShop.fullState.avatar || saved.avatar || "av_ditu";
               const cloudState = {
                 ...cloudShop.fullState,
+                shopKey: key,
+                shopName: cloudShop.shopName || cloudShop.bannedShopName || cloudShop.fullState.shopName || saved.shopName,
+                pin: cloudShop.pin || cloudShop.fullState.pin || saved.pin,
                 avatar: cloudAvatar,
+                adminOverrideAt: Number(cloudShop.adminOverrideAt || cloudShop.fullState.adminOverrideAt || 0),
                 updatedAt: cloudShop.updatedAt || cloudShop.fullState.updatedAt || 0
               };
-              if (isCloudProgressNewer(cloudState, saved) || cloudAvatar !== saved.avatar) {
+              if (isAdminReset || isCloudProgressNewer(cloudState, saved) || cloudAvatar !== saved.avatar) {
                 localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cloudState));
                 renderQuickBox(cloudState, true);
               }
@@ -2456,15 +2475,32 @@
               const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 2800);
               if (res.ok) {
                 const cloudShop = await res.json();
+                if (!cloudShop || cloudShop.isDeleted || String(cloudShop.shopKey || "").startsWith("npc_deleted_")) {
+                  localStorage.removeItem(LOCAL_STORAGE_KEY);
+                  localStorage.removeItem("banh_trang_tron_saigon_v5_master_save");
+                  document.getElementById("quick-resume-box").classList.add("hidden");
+                  showLoginMessage("🗑️ Quán này đã bị xóa khỏi hệ thống Cloud!", "error");
+                  return;
+                }
+                if (cloudShop.isBanned || cloudShop.fullState?.isBanned || String(cloudShop.shopKey || "").startsWith("npc_banned_") || String(cloudShop.pin || "").startsWith("BANNED_")) {
+                  localStorage.removeItem(LOCAL_STORAGE_KEY);
+                  document.getElementById("quick-resume-box").classList.add("hidden");
+                  showLoginMessage("🚫 Quán này hiện đang bị Quản Trị Viên tạm khóa!", "error");
+                  return;
+                }
                 const isAdminReset = Number(cloudShop?.adminOverrideAt || cloudShop?.fullState?.adminOverrideAt || 0) > Number(localData.adminOverrideAt || 0);
                 if (cloudShop && cloudShop.fullState && (isAdminReset || verifyShopPin(key, localData.pin, cloudShop.pin))) {
                   const cloudAvatar = cloudShop.avatar || cloudShop.fullState.avatar || localData.avatar || "av_ditu";
                   const cs = {
                     ...cloudShop.fullState,
+                    shopKey: key,
+                    shopName: cloudShop.shopName || cloudShop.bannedShopName || cloudShop.fullState.shopName || localData.shopName,
+                    pin: cloudShop.pin || cloudShop.fullState.pin || localData.pin,
                     avatar: cloudAvatar,
+                    adminOverrideAt: Number(cloudShop.adminOverrideAt || cloudShop.fullState.adminOverrideAt || 0),
                     updatedAt: cloudShop.updatedAt || cloudShop.fullState.updatedAt || 0
                   };
-                  if (isCloudProgressNewer(cs, localData)) {
+                  if (isAdminReset || isCloudProgressNewer(cs, localData)) {
                     localData = cs;
                   } else {
                     localData.avatar = cloudAvatar;
@@ -2513,7 +2549,13 @@
 
       try {
         const res = await fetchWithTimeout(`${FIREBASE_DB_URL}/shops/${key}.json`, {}, 3000);
-        const cloudShop = res.ok ? await res.json() : null;
+        const rawCloudShop = res.ok ? await res.json() : null;
+        if (rawCloudShop && (rawCloudShop.isBanned || rawCloudShop.fullState?.isBanned || String(rawCloudShop.shopKey || "").startsWith("npc_banned_") || String(rawCloudShop.pin || "").startsWith("BANNED_"))) {
+          showLoginMessage("🚫 Quán này hiện đang bị Quản Trị Viên tạm khóa!", "error");
+          btn.disabled = false;
+          return;
+        }
+        const cloudShop = (rawCloudShop && !rawCloudShop.isDeleted && !String(rawCloudShop.shopKey || "").startsWith("npc_deleted_")) ? rawCloudShop : null;
         if (cloudShop && cloudShop.pin) {
           if (!verifyShopPin(key, pinInput, cloudShop.pin)) {
             showLoginMessage("❌ Tên quán đã có chủ! Hãy nhập đúng PIN hoặc đặt Tên khác.", "error");
@@ -2739,7 +2781,7 @@
           if (!sKey || String(sKey).startsWith("npc_")) return;
 
           const fs = item.fullState || {};
-          if (item.isBanned || fs.isBanned) return;
+          if (item.isBanned || fs.isBanned || item.isDeleted || fs.isDeleted || String(item.pin || "").startsWith("BANNED_")) return;
           const candidate = {
             shopKey: sKey,
             shopName: item.shopName || fs.shopName,
@@ -2749,11 +2791,14 @@
             level: Number(item.level !== undefined ? item.level : fs.level) || 1,
             totalSold: Number(item.totalSold !== undefined ? item.totalSold : fs.totalSold) || 0,
             day: Number(item.day !== undefined ? item.day : fs.day) || 1,
+            adminOverrideAt: Number(item.adminOverrideAt || fs.adminOverrideAt || 0),
             updatedAt: Number(item.updatedAt || fs.updatedAt || 0)
           };
 
           const existing = mergedShopsMap.get(sKey);
-          if (!existing || candidate.updatedAt >= existing.updatedAt || candidate.totalSold > existing.totalSold || candidate.money > existing.money) {
+          const isNewerAdmin = existing && candidate.adminOverrideAt > (existing.adminOverrideAt || 0);
+          const isSameAdminNewer = existing && candidate.adminOverrideAt === (existing.adminOverrideAt || 0) && (candidate.updatedAt >= existing.updatedAt || candidate.totalSold > existing.totalSold);
+          if (!existing || isNewerAdmin || isSameAdminNewer) {
             mergedShopsMap.set(sKey, candidate);
           }
         };
@@ -6441,20 +6486,39 @@
         }
         if (key && results[2] && results[2].status === "fulfilled" && results[2].value.ok) {
           const cloudShop = await results[2].value.json();
+          if (!cloudShop || cloudShop.isDeleted || String(cloudShop.shopKey || "").startsWith("npc_deleted_")) {
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            localStorage.removeItem("banh_trang_tron_saigon_v5_master_save");
+            state = getInitialDefaultState();
+            document.getElementById("login-screen").classList.remove("hidden");
+            document.getElementById("quick-resume-box").classList.add("hidden");
+            showLoginMessage("🗑️ Quán này đã bị Quản Trị Viên xóa khỏi hệ thống!", "error");
+            return;
+          }
+          if (cloudShop.isBanned || cloudShop.fullState?.isBanned || String(cloudShop.shopKey || "").startsWith("npc_banned_") || String(cloudShop.pin || "").startsWith("BANNED_")) {
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            state.isBanned = true;
+            document.getElementById("login-screen").classList.remove("hidden");
+            document.getElementById("quick-resume-box").classList.add("hidden");
+            showLoginMessage("🚫 Quán của bạn hiện đang bị Quản Trị Viên tạm khóa!", "error");
+            return;
+          }
           if (cloudShop) {
-            // Nếu Admin vừa chỉnh sửa hồ sơ người chơi trên Web Admin (adminOverrideAt mới hơn)
             const cAdminTs = Number(cloudShop.adminOverrideAt || cloudShop.fullState?.adminOverrideAt || 0);
             const lAdminTs = Number(state.adminOverrideAt || 0);
             if (cAdminTs > lAdminTs && cloudShop.fullState) {
               const prevPin = state.pin;
               mergeLoadedState({
                 ...cloudShop.fullState,
+                shopKey: key,
+                shopName: cloudShop.shopName || cloudShop.bannedShopName || cloudShop.fullState.shopName || state.shopName,
                 pin: cloudShop.pin || cloudShop.fullState.pin || prevPin,
                 adminOverrideAt: cAdminTs,
-                isBanned: Boolean(cloudShop.isBanned || cloudShop.fullState.isBanned)
+                isBanned: false
               });
               saveToLocalOnly();
               updateAllUI();
+              fetchCloudLeaderboard(false);
               showToast("⚡ Hồ sơ quán vừa được cập nhật từ Ban Quản Trị!");
             }
             if (cloudShop.adminInbox && typeof cloudShop.adminInbox === "object") {
@@ -6632,6 +6696,13 @@
         if (btn) btn.disabled = false;
       }
     }
+
+    // Tự động đồng bộ ngay khi người chơi chuyển tab từ trang Admin quay lại tab Game
+    window.addEventListener("focus", () => {
+      checkExistingLocalSaveForLoginScreen();
+      syncAdminLiveOpsAndMail(false);
+      fetchCloudLeaderboard(false);
+    });
 
     // KHỞI CHẠY TOÀN BỘ GAME V13
     window.addEventListener("DOMContentLoaded", () => {
