@@ -11,7 +11,7 @@ const LOCAL_STORAGE_KEY = "banh_trang_tron_saigon_v6_master_save";
 const LOCAL_SHOPS_REGISTRY_KEY = "banh_trang_tron_saigon_v16_multi_shops_vault";
 
 // 👉 DÁN URL FIREBASE REALTIME DATABASE CỦA BẠN VÀO ĐÂY (Không có dấu / ở cuối):
-const DEFAULT_FIREBASE_DB_URL = "";
+const DEFAULT_FIREBASE_DB_URL = "https://vua-banh-trang-default-rtdb.asia-southeast1.firebasedatabase.app";
 
 window.FIREBASE_CONFIG = {
   databaseURL: DEFAULT_FIREBASE_DB_URL,
