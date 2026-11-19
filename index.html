@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Vua Bánh Tráng Sài Gòn - Đế Chế 80 Cấp</title>
+  <meta name="description" content="Game mô phỏng khởi nghiệp xe bánh tráng Sài Gòn: Đi chợ, sơ chế, trộn bánh 3 hệ, xây chuỗi nhượng quyền và đua Bảng Xếp Hạng Firebase Cloud." />
+  <meta name="theme-color" content="#562328" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Vua Bánh Tráng" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body class="flex flex-col items-center justify-start min-h-screen">
+
+  <input id="hidden-avatar-upload" type="file" accept="image/*" class="hidden" onchange="handleAvatarFileSelected(event)" />
+  <div id="rain-visual-layer" class="rain-overlay hidden"></div>
+
+  <!-- ================= MÀN HÌNH ĐĂNG NHẬP 2D CASUAL ================= -->
+  <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-2.5 overflow-y-auto bg-black/75 backdrop-blur-md">
+    <div class="w-full max-w-md wooden-clipboard-frame my-auto">
+      <div class="clipboard-metal-clip"><div class="w-3 h-3 rounded-full bg-slate-700"></div></div>
+      <div class="clipboard-paper-inner p-3.5 space-y-2.5">
+        <div class="flex flex-col items-center text-center">
+          <div class="w-full flex items-center justify-between gap-1 px-2.5 py-1 rounded-xl bg-amber-950 text-amber-100 border border-yellow-400 shadow mb-1 text-[9.5px] font-bold">
+            <div class="flex items-center gap-1.5">
+              <span class="px-1.5 py-0.5 rounded bg-emerald-600 text-white font-black text-[9px] border border-emerald-300">00+</span>
+              <span class="text-yellow-200 font-extrabold">Tuân thủ Nghị định 147/2024/NĐ-CP</span>
+            </div>
+            <button type="button" onclick="openLegalComplianceModal()" class="underline text-amber-300 hover:text-white font-black text-[9px]">📜 Quy định</button>
+          </div>
+          <div class="w-full px-2 py-1 rounded-lg bg-red-50 border border-red-300 text-red-900 text-[9px] font-extrabold leading-tight mb-1">
+            ⚠️ Chơi quá 180 phút một ngày sẽ ảnh hưởng xấu đến sức khỏe.
+          </div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 text-white text-[10px] font-black shadow mb-1">
+            <span>👑 VUA BÁNH TRÁNG SÀI GÒN</span>
+            <span>•</span>
+            <span>XE ĐẨY ➔ ĐẾ CHẾ 80 CẤP</span>
+          </div>
+
+          <div class="relative w-20 h-20 rounded-full border-4 border-amber-500 shadow-lg overflow-hidden mb-1 bg-amber-100">
+            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABcAFwDASIAAhEBAxEB/8QAGwAAAQUBAQAAAAAAAAAAAAAABQABAwQGAgf/xAA7EAACAQMBBQYDBAoCAwAAAAABAgMABBEhBRIxQVETImFxgZEyodEGFFKxFSMkM0NTYnLB4UKSovDx/8QAGQEAAwEBAQAAAAAAAAAAAAAAAgMEAAEF/8QAJREAAwACAgEEAQUAAAAAAAAAAAECAxESITEEIjJBURNhcZGx/9oADAMBAAIRAxEAPwD0mlSpiQBk1jCrh5VQZJGOtVLu9WFTk68Mf+8TQ/fknc9qxT+kHX3+lS36jvUdjpxNrbCMt/HHxYD5VCdqJxGSPX6VAscceioNeJxk1S2htWC0d4jMsRj/AHkmhKn8K50z746dFcsj+w+ML6DKXmUDkFVPNjgfOrEU4kGVIYf0kGvP/wBPWkdwzljNkYLyxs2fU1Ik0d6/3mIoqDjJCN3d9tR60ybue68G/SVNqX4PQVYHhT1lbXadzaFO0la5g3csHIMq+RHHyPvWmhmWWNXRgyuAVYcCDT4yKhNQ5JaVNT0wAaqV7dCJDjOeQHH/AO1amcIhJ4c6CMXnuSwGd04H93P6e9S+otr2L7G4p32xgu62/KN5yPQeArpWJcYGBnhXbGIkAtvHPLRf+1IsiYZoHUa4IbQ6E8x4UpY2l0N5oivrgWdpNdE/u07o/qOi/MisFGk20mxBA88o0MnL3PCtlt6I332dvVtyVkRVfdPUd4jPlp54oXYmCxtdnwm+lhd0TdhVQFLEZIY44nPM02fbJxe5kGz/ALL70iyX7rug57JDnPmfpQu4t5tlbZmW3kETBiyMfhZTrg9RrW2vu9aE9pLCNCTH8XlwNBfuVlty0YQbQknKjuNIO+h5a4BIrKt/LwG5/BXsLhHs2eKbs2ZSChH7txrp4dKNfZy/kMSxygAS5kiA/wDNffvDzPSsJs55IruWCZghB72TzU4NaHYVpdXXYMO0jtY3WTtTkAEfh6k8NNNTQuFLejPdrdHocbh1yDnxruh1hcb5YEBSCdOmuo/zRCn4r5zslqeL0UtoydnCT019taH27BFjUN3+Pqf91Z2wf1RHLB/MUOmlEUE0kbBWRMK5/wCJJChvTOalr3ZWUwtYx5btoZZEt0BijOpO9gNzUEAjA8eGoqp+lVuFnODudkwDZ+FtAR0PMe9V1Es7JFaRqke6SJXQqcDmMNk58autFDs7ZuZZQ6ybp7QkEsT8WnOnJ+dg1MpHN8s77Ajt4cC4vnEe8Tjd3snPnhQB511bLmyt91AxEamNT13RRRlWBUwytD3cBtSnQjwHyqjKi2/aLKn7KWJz/JJOSD0GdQeXA40rlLo2OtM7WRmjbfjkUAakjFcQquVKKm4NRugAeelci2iUF5pN+IajeclceOTg1W2jfulu0dggaVsKrHRQWOB58aV+xQC1jC287XBRHuXkDhiBvuSQo8gMeA1NamUDdVS2VCgAjgRjiPCsVsvY009xiR+zkKuGZxnLrgsDzHOtRawG2tmhmkhwGBjWIk7oxrxAxk6486OvAt91pFq3cJed0jBAJ9ND8iKOL8IrOKw+8pu9CM+laJPhFb0/ypCs61pg7bC5gbH4T9f8VQjiSSORW7yyhYyDwIZgD8qM30e9CeeNaCQEojqf4bJ6jeGPzrlLWb+Qoe8THupoxOELpExJj3uZxnA8jpWG2g7W1w1v2qusTFQVOR6f5rUX80i3kcLxxzKriRN4aqDqNcdetVJ7C3unMsylpCdXTI6enD60F5En2cSlNc0V9hbRMl4TcI0gEYQbpzoe7+RNEdqbbuLNd2JYPvGCvAuxxpk6ga8hrnNcW1vZbPtpiFEe8y5ZhqOfH2rmKzE+1zcsAUVA2Dzf4c+gHuaPFarpByobbS6JNnbJf7us07xySyntCcAYzg4HL2ptvrb22yZIXYGabCqvPjnPy41YtxKUZVlkjgBPZ7pA0zwzx5E+tBdulI27KPPcQyPnUljoM+mfei497Y/G3VKQlsq/XcSe/ULM8QU3C5xrjV164AG8PWikyMcYI1GQQdCOoNVoYY1hityu80cajhwOK4swYZ5rIPmMoZoR+AgjeA8CDnHgetFc77EJ8X0XIU/aUAOe6fngVok+EUC2ZHvzb3EDh5D/AHR8DAAofTLt0L9Q+0hmGRigN9F93kY6BJAFyTgY3hj2NaCq91brPGVYf6puWOWqXlC4rXT8MxV7E8twp7dAI3IUdqpBXXBx1wadHSXfa3idwp3S4OVVhzIGT8qk2jZNaXchkkaKOXvbwbCkgY3fDw4dKoRWzTXI/R4YzDT9TqPNm4Dzzmp1jVLZXy67GiSGe77G4WWTtQF3o42xCfUag86tbRN9s8RKrRiIZVJFXOuOBBOnDPpUVn9pnjjVbmKRiOJVt76GjEU9ptqyZRkodCODKR+Rrvx8DeLlp0ugHBtW5hiEZSGQL8OSRgdKo3MhnuTJKFHayqSAeAGNPYVdv9m3FjvOVM0A/iIuo/uHLz4eVDEH325ihiOgIdiTu4UEZOvh+dEm2yrWFQ6j8GrsUY2/bSaSTd855A6gVwRI21IzEMqiujN+HK4qeAmUb5kDLxAT4c+PWimzrLGHcHHEZ5nqa5dtvhPn/DzektstbPt+xiGRg9OnQVdpAYGKeqYhRPFEtU6e2KlSpUYJDPbpMhV1BBoXNYzRFTEzFVO8ADjHpwNGqY0nJhm+/DGRkcnnVz9nZUY9nKp1zhxumo7PZ+07C6EsMasODqHHeH16V6O0aMMMoPnURtIP5S+1IeLIvssXrdzxaAyT90FhhqqwbKM0ao6doFYlWIwF1JGvhnFaVLeJfhjUelSgAcq7OC35r+hDzr6QPtdnJFgsASOAA0FEAABpT0qpjHMLSEVTp7YqVKlRgn//2Q==" alt="Dì Tư" class="w-full h-full object-cover" />
+            <div id="login-selected-avatar-badge" class="absolute bottom-0 right-0 bg-white rounded-full w-8 h-8 flex items-center justify-center border-2 border-orange-600 shadow overflow-hidden text-sm">
+              👩‍🍳
+            </div>
+          </div>
+
+          <h1 class="text-lg sm:text-xl font-black text-amber-950 tracking-tight">VUA BÁNH TRÁNG SÀI GÒN</h1>
+          <p class="text-[11px] text-amber-800 font-bold">Khởi Nghiệp Hẻm Nhỏ ➔ Mở Rộng Đế Chế Sài Thành</p>
+          <button type="button" onclick="openPwaInstallModal()" class="soft-btn mt-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-[11px] shadow flex items-center gap-1.5">
+            <span>📲</span><span>Cài Game Ra Màn Hình Chính</span>
+          </button>
+        </div>
+
+        <div id="quick-resume-box" class="hidden p-2.5 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-500">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+              <div id="quick-resume-avatar" class="w-10 h-10 rounded-xl bg-white border-2 border-emerald-400 flex items-center justify-center text-lg overflow-hidden shrink-0">👩‍🍳</div>
+              <div class="min-w-0 flex-1">
+                <div id="quick-resume-label" class="text-[9px] font-bold text-emerald-700 uppercase">Quán đang lưu:</div>
+                <div id="quick-resume-name" class="text-xs font-black text-emerald-950 mobile-safe-text">Bánh Tráng Dì Tư</div>
+                <div id="quick-resume-stats" class="text-[10px] font-semibold text-emerald-800">Cấp 1 • 5.0⭐ • 350,0k</div>
+              </div>
+            </div>
+            <button onclick="quickResumeGame()" class="soft-btn btn-game-green shrink-0 px-3 py-1.5 rounded-xl font-black text-xs">
+              Chơi Tiếp ▶
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-2 bg-amber-50/90 p-2.5 rounded-2xl border-2 border-amber-300">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-[11px] font-extrabold text-amber-950">1. Chọn Avatar Chủ Quán 2D:</label>
+              <button type="button" onclick="triggerAvatarUpload('login')" class="soft-btn px-2 py-0.5 rounded-lg bg-orange-600 text-white font-black text-[10px] shadow">📷 Tải Ảnh</button>
+            </div>
+            <div id="login-avatar-grid" class="grid grid-cols-6 gap-1"></div>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5">
+            <div class="col-span-2">
+              <label class="block text-[11px] font-extrabold text-amber-950 mb-0.5">2. Tên Bảng Hiệu:</label>
+              <input id="login-shop-name" type="text" maxlength="24" placeholder="VD: Bánh Tráng Dì Tư..." class="w-full px-2.5 py-1.5 rounded-xl border-2 border-amber-400 focus:border-orange-600 focus:outline-none text-xs font-extrabold text-amber-950 bg-white" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-extrabold text-amber-950 mb-0.5">3. PIN (4 số):</label>
+              <input id="login-shop-pin" type="password" inputmode="numeric" maxlength="4" placeholder="1234" class="w-full px-2 py-1.5 rounded-xl border-2 border-amber-400 focus:border-orange-600 focus:outline-none text-xs font-black tracking-widest text-center text-amber-950 bg-white" />
+            </div>
+          </div>
+          <div class="flex items-center justify-between gap-1.5 px-2 py-1 rounded-xl bg-white/95 border border-emerald-400 text-[9.5px]">
+            <div class="font-extrabold text-amber-950 flex items-center gap-1">
+              <span>🛡️ Chế độ lưu:</span>
+              <span id="login-network-mode-label" class="text-emerald-700 font-black">Tự động lưu & Khôi phục bằng Mã/PIN</span>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+              <button type="button" onclick="openFirebaseConfigModal()" class="soft-btn px-2 py-0.5 rounded-lg bg-emerald-600 text-white font-black text-[9px] shadow">
+                ☁️ Firebase
+              </button>
+              <button type="button" onclick="openProfileEditModal()" class="soft-btn px-2 py-0.5 rounded-lg bg-amber-100 border border-amber-400 text-amber-950 font-black text-[9px]">
+                🔑 Mã Quán
+              </button>
+            </div>
+          </div>
+          <div id="login-status-msg" class="hidden text-xs font-bold text-center py-1 px-2 rounded-lg"></div>
+          <button id="btn-login-submit" onclick="handleLoginOrRegister()" class="soft-btn btn-game-red w-full py-2.5 rounded-xl font-black text-xs sm:text-sm">
+            🚀 ĐẨY XE RA NGHỀ!
+          </button>
+
+          <div class="pt-1 border-t border-amber-300/80 space-y-1.5">
+            <button type="button" onclick="toggleRecoveryBox()" class="w-full text-center text-[10px] font-extrabold text-blue-700 hover:underline">
+              🔑 Khôi phục quán bằng Mã Khóa (BT-XXXXXX + PIN) hoặc Mã BTT1 / File
+            </button>
+            <div id="recovery-code-box" class="hidden mt-1.5 p-2 rounded-xl bg-blue-50 border-2 border-blue-300 space-y-1.5">
+              <div class="flex gap-1.5">
+                <input id="recovery-code-input" type="text" placeholder="Mã BT-123456 hoặc BTT1-..." class="flex-1 px-2.5 py-1 rounded-lg border border-blue-400 text-xs font-black text-blue-950 bg-white" />
+                <input id="recovery-pin-input" type="password" inputmode="numeric" maxlength="4" placeholder="PIN 4 số" class="w-20 px-2 py-1 rounded-lg border border-blue-400 text-xs font-black text-center text-blue-950 bg-white" />
+              </div>
+              <div class="grid grid-cols-2 gap-1.5">
+                <button type="button" id="btn-recover-submit" onclick="handleRecoverByCode()" class="soft-btn btn-game-blue py-1.5 rounded-lg font-black text-[11px]">
+                  🔑 Khôi Phục Bằng Mã
+                </button>
+                <button type="button" onclick="triggerImportSaveJson()" class="soft-btn bg-emerald-600 text-white py-1.5 rounded-lg font-black text-[11px] shadow">
+                  📂 Nạp File (.json)
+                </button>
+              </div>
+              <input type="file" id="import-save-json-input" accept=".json,application/json" class="hidden" onchange="handleImportSaveJson(event)" />
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white/95 rounded-2xl p-2 border-2 border-amber-300">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[10px] font-black text-amber-950 uppercase">🏪 Quán Đã Lưu Trong Hệ Thống</span>
+            <span id="login-cloud-badge" class="text-[9px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">🛡️ Độc lập 100%</span>
+          </div>
+          <div id="login-top3-list" class="space-y-1 text-xs max-h-28 overflow-y-auto pr-0.5">
+            <div class="text-center text-amber-700 py-1 text-xs">Nhập Tên Bảng Hiệu + PIN 4 số để vào quán.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= THANH HEADER GỖ TỐI GIẢN ================= -->
+  <header class="w-full max-w-lg shrink-0 z-30">
+    <div id="top-awning-roof" class="casual-awning-roof w-full transition-all duration-300"></div>
+    <div class="wooden-header-board px-2 py-1.5 rounded-b-2xl flex items-center justify-between gap-1.5">
+      <!-- Trái: Avatar tròn + Tên quán 1 dòng + Ngày/Giờ 1 dòng rõ ràng -->
+      <div class="flex items-center gap-1.5 min-w-0 flex-1">
+        <div onclick="openProfileEditModal()" class="cursor-pointer relative shrink-0">
+          <div id="home-avatar-box" class="w-10 h-10 rounded-full bg-amber-100 border-2 border-yellow-300 flex items-center justify-center overflow-hidden shadow-md">
+            👩‍🍳
+          </div>
+          <span id="home-level-text" class="absolute -bottom-1 left-1/2 -translate-x-1/2 px-1.5 py-0 rounded-full bg-amber-900 border border-yellow-300 text-yellow-200 font-black text-[8.5px] whitespace-nowrap shadow">
+            Cấp 1
+          </span>
+        </div>
+        <div class="leading-tight min-w-0 flex-1">
+          <div id="home-shop-title" onclick="openProfileEditModal()" title="Chạm đổi tên quán" class="cursor-pointer font-black text-xs sm:text-sm text-yellow-200 leading-tight break-words line-clamp-2 drop-shadow">
+            Bánh Tráng Dì Tư
+          </div>
+          <div class="flex items-center gap-1 mt-0.5 whitespace-nowrap overflow-hidden">
+            <span id="topbar-day-label" class="text-[10px] font-extrabold text-amber-200 whitespace-nowrap">N.1 • Thứ Hai</span>
+            <span class="text-amber-400 text-[9px]">•</span>
+            <span id="topbar-sub-time" class="text-[10px] font-bold text-yellow-300 whitespace-nowrap">13:00</span>
+          </div>
+          <div class="w-24 h-1.5 bg-black/40 rounded-full overflow-hidden mt-0.5">
+            <div id="home-xp-bar" class="h-full bg-gradient-to-r from-yellow-300 to-orange-500 rounded-full transition-all duration-300" style="width: 15%"></div>
+          </div>
+          <span id="home-xp-label" class="hidden">0/100 XP</span>
+          <span id="home-empire-badge" class="hidden">🛒 Xe Đẩy</span>
+        </div>
+      </div>
+
+      <!-- Giữa: Bảng Két Tiền Gỗ Gọn Gàng + Sao Đánh Giá -->
+      <div class="wooden-coin-board px-2 py-0.5 flex flex-col items-center shrink-0">
+        <div class="coin-inner-pill px-2 py-0.5 flex items-center gap-1">
+          <span class="w-3.5 h-3.5 rounded-full bg-gradient-to-b from-yellow-300 to-amber-500 text-amber-950 font-black text-[9px] flex items-center justify-center border border-white shadow-sm shrink-0">★</span>
+          <span id="topbar-money" class="font-black text-xs sm:text-sm text-white tracking-tight whitespace-nowrap">350,0k</span>
+          <button id="cloud-sync-btn" onclick="forceManualCloudSync()" title="Đồng bộ Cloud" class="ml-0.5 w-3.5 h-3.5 rounded-full bg-black/45 border border-white/25 flex items-center justify-center hover:bg-black/70 transition shrink-0">
+            <span id="cloud-sync-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span id="cloud-sync-text" class="sr-only">Đã lưu</span>
+          </button>
+        </div>
+        <button onclick="openReviewsModal()" class="soft-btn flex items-center gap-0.5 mt-0.5 text-[9px] font-black text-yellow-200 whitespace-nowrap">
+          <span id="topbar-stars-row" class="text-yellow-300">★★★★★</span>
+          <span id="topbar-rating-num">5,0</span>
+          <span>(<span id="topbar-review-count">0</span>)</span>
+        </button>
+      </div>
+
+      <!-- Phải: Nút BXH 🏆 + Nút Menu Tròn ☰ -->
+      <div class="flex items-center gap-1 shrink-0">
+        <button onclick="handleTopLeftButtonClick()" id="topbar-mode-btn" class="hidden soft-btn w-9 h-9 rounded-full menu-round-btn flex items-center justify-center text-sm font-black text-white" title="Chốt sổ">
+          ⏸
+        </button>
+        <button onclick="openLeaderboardFromAnywhere()" class="soft-btn w-9 h-9 rounded-full menu-round-btn flex items-center justify-center text-sm font-black text-yellow-100 relative" title="Bảng Xếp Hạng Đế Chế">
+          🏆
+        </button>
+        <button onclick="openQuickMenuModal()" class="soft-btn w-10 h-10 rounded-full menu-round-btn flex items-center justify-center text-lg font-black text-yellow-100 relative" title="Menu Tiện Ích">
+          <span>☰</span>
+          <span id="badge-ach-notify" class="hidden absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-red-500 border border-white animate-ping"></span>
+        </button>
+      </div>
+    </div>
+    <div id="nd147-compliance-bar" onclick="openLegalComplianceModal()" class="cursor-pointer mx-1 mt-0.5 px-2 py-0.5 rounded-lg bg-amber-950/95 border border-amber-500/70 text-amber-100 flex items-center justify-between gap-1 text-[8.5px] leading-tight shadow-sm">
+      <div class="flex items-center gap-1 min-w-0">
+        <span class="px-1 py-0 rounded bg-emerald-600 text-white font-black text-[8px] border border-emerald-300 shrink-0">00+</span>
+        <span class="font-bold text-amber-100 truncate">Chơi quá 180 phút/ngày sẽ ảnh hưởng xấu đến sức khỏe</span>
+      </div>
+      <span id="playtime-180-badge" class="px-1.5 py-0 rounded bg-amber-900 border border-amber-400 text-yellow-300 font-black text-[8.5px] whitespace-nowrap shrink-0">⏱️ 00:00/180p</span>
+    </div>
+  </header>
+
+  <!-- ================= KHUNG CHÍNH CỦA GAME ================= -->
+  <main id="main-scroll-viewport" class="w-full max-w-lg px-2 pt-1.5 flex flex-col gap-2">
+
+    <!-- ========================================================================= -->
+    <!-- MÀN HÌNH 1: SÂN NHÀ CHUẨN BỊ GỌN GÀNG (CÓ BOTTOM DOCK BAR CỐ ĐỊNH)         -->
+    <!-- ========================================================================= -->
+    <div id="screen-home-prep" class="flex flex-col gap-2 pb-44">
+
+      <!-- 1. THANH TRẠNG THÁI NGÀY MỚI SIÊU GỌN (TIẾT KIỆM DIỆN TÍCH DỌC) -->
+      <div class="mentor-banner-card px-2 py-1.5 flex flex-col gap-1">
+        <div class="flex items-center justify-between gap-1">
+          <!-- Trái: Avatar Dì Tư nhỏ + Thứ/Ngày + Dự báo lượng khách hôm nay -->
+          <div onclick="openDiTuTutorialModal(0)" class="cursor-pointer flex items-center gap-1.5 min-w-0">
+            <img src="data:image/jpeg;base64,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" alt="Dì Tư" class="w-8 h-8 rounded-full object-cover border-2 border-amber-700 shrink-0 shadow-sm" />
+            <div class="flex items-center gap-1 flex-wrap">
+              <span id="prep-forecast-title" class="hidden font-black text-xs text-amber-950 whitespace-nowrap">Thứ Hai</span>
+              <span id="prep-demand-badge" class="px-2 py-0.5 rounded-full bg-sky-600 text-white font-black text-[9.5px] whitespace-nowrap shadow-sm">🎯 Dự kiến ~18 bịch</span>
+            </div>
+          </div>
+
+          <!-- Phải: Món Hot Hôm Nay + Huy hiệu Chương -->
+          <div class="flex items-center gap-1 shrink-0 flex-wrap justify-end">
+            <div onclick="switchPrepSubTab('menu')" class="cursor-pointer px-2 py-1 rounded-xl bg-rose-600 text-white text-center leading-none shadow-sm flex items-center gap-1">
+              <span id="prep-featured-title" class="font-black text-[9.5px] whitespace-nowrap">🔥 Thập cẩm</span>
+              <span class="text-[8.5px] font-extrabold bg-black/20 px-1 py-0.5 rounded text-yellow-200"><b id="prep-featured-progress">0/8</b></span>
+            </div>
+            <span id="prep-chapter-badge" onclick="openStoryModal()" class="cursor-pointer text-[9.5px] font-black text-amber-950 bg-amber-200/90 px-2 py-1 rounded-xl border border-amber-500 whitespace-nowrap shadow-sm">📍 Chương 1</span>
+          </div>
+        </div>
+
+        <!-- Dòng 2: Lời nhắc Dì Tư tự xuống dòng mượt, không bao giờ bị cắt mất chữ -->
+        <div id="ditu-smart-tip" onclick="openDiTuTutorialModal(0)" class="cursor-pointer text-[10px] font-bold text-amber-950 bg-amber-100/85 border border-amber-300/90 rounded-lg px-2 py-1 leading-snug break-words">
+          💡 Bấm <b>⚡ Lấy Đủ Hàng</b> để nhập kho nhanh đúng sức mua hôm nay!
+        </div>
+
+        <!-- Banner Sự Kiện Server (Chỉ hiện khi có sự kiện) -->
+        <div id="live-ops-global-banner" class="hidden px-2 py-1 rounded-lg bg-gradient-to-r from-purple-700 via-fuchsia-600 to-rose-600 text-white text-[9.5px] font-black flex items-center justify-between gap-1.5">
+          <span id="live-ops-banner-text" class="leading-snug break-words flex-1">⚡ Sự kiện toàn Server đang diễn ra!</span>
+          <button onclick="openGiftcodeModal()" class="underline text-yellow-200 shrink-0">Chi tiết</button>
+        </div>
+
+        <!-- Các phần tử ẩn tương thích ngược -->
+        <span id="prep-forecast-desc" class="hidden"></span>
+        <button onclick="openGiftcodeModal()" class="hidden"><span>🎁 Giftcode</span><span id="header-gift-dot" class="hidden"></span></button>
+        <button onclick="switchPrepSubTab('soche')" class="hidden"><div>🌶️ Sơ chế</div><div id="prep-quick-summary">0/3 món</div></button>
+        <span id="header-codex-dot" class="hidden"></span>
+      </div>
+
+      <!-- 2. BẢNG KẸP GỖ CHÍNH -->
+      <div class="wooden-clipboard-frame">
+        <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+        <div class="clipboard-paper-inner">
+
+          <!-- ================= SUB-PANEL A: ĐI CHỢ & SƠ CHẾ (+ BẢN TIN DỰ BÁO THỜI TIẾT & BIẾN CỐ SÁNG SỚM) ================= -->
+          <div id="prep-panel-kho" class="space-y-2">
+            <div id="morning-forecast-briefing-box" class="p-2 rounded-2xl bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50 border-2 border-amber-300 space-y-1 text-xs shadow-sm"></div>
+
+            <div class="grid grid-cols-2 gap-1.5 bg-amber-100 p-1 rounded-xl border border-amber-300">
+              <button type="button" id="subbtn-market-buy" onclick="switchMarketInnerMode('buy')" class="soft-btn py-1.5 px-2 rounded-lg font-black text-[10.5px] bg-orange-600 text-white shadow flex items-center justify-center gap-1">
+                <span>🛒</span><span>Nhập Nguyên Liệu (9)</span>
+              </button>
+              <button type="button" id="subbtn-market-prep" onclick="switchMarketInnerMode('prep')" class="soft-btn py-1.5 px-2 rounded-lg font-black text-[10.5px] bg-white text-amber-950 flex items-center justify-center gap-1">
+                <span>🌶️</span><span>Sơ Chế & Pha Sốt (<span id="inner-prep-count-lbl">0/3</span>)</span>
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between gap-1 border-b border-amber-200 pb-1">
+              <div>
+                <div id="wholesale-guide-title" class="font-black text-xs text-amber-950">🧺 Chợ Đầu Mối Buổi Sáng</div>
+                <div id="wholesale-guide-sub" class="hidden"></div>
+              </div>
+              <div class="text-right shrink-0">
+                <span class="text-[10px] font-bold text-amber-800">Giỏ đi chợ: </span>
+                <span id="market-order-total" class="font-black text-xs text-rose-600">0đ (0 phần)</span>
+              </div>
+            </div>
+
+            <!-- Thanh Trả Giá Chợ Sỉ Gọn 1 Hàng -->
+            <div id="market-bargain-banner" class="px-2 py-1 rounded-xl bg-gradient-to-r from-amber-100 via-yellow-50 to-orange-100 border border-amber-400 flex items-center justify-between gap-1.5 shadow-sm"></div>
+
+            <!-- Thanh nút hành động Đi Chợ đặt ngay đầu giúp thao tác 1 chạm không cần cuộn -->
+            <div class="flex items-center justify-between gap-1.5 py-1">
+              <button id="btn-suggested-order" onclick="fillSuggestedOrder()" class="soft-btn btn-game-green flex-1 py-2 rounded-xl font-black text-[11px] flex items-center justify-center gap-1">
+                <span>⚡ LẤY ĐỦ HÀNG (~10 BỊCH)</span>
+              </button>
+              <button onclick="clearMarketInputs()" class="soft-btn px-2.5 py-2 rounded-xl bg-amber-100 border border-amber-300 text-amber-950 font-bold text-[11px]">Xóa</button>
+              <button onclick="confirmMarketPurchase()" class="soft-btn btn-game-orange px-3 py-2 rounded-xl font-black text-[11px]">
+                ✅ Nhập Kho
+              </button>
+            </div>
+
+            <!-- Danh sách Nguyên Liệu Dạng 1 Hàng Ngang Gọn Sạch -->
+            <div id="market-grid" class="space-y-1.5"></div>
+          </div>
+
+          <!-- ================= SUB-PANEL B: THỰC ĐƠN 10 MÓN (TAM HỆ) & ĐỊNH GIÁ BÁN ================= -->
+          <div id="prep-panel-menu" class="hidden space-y-1.5">
+            <div id="menu-weather-dish-hint-box" class="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 text-[10px] font-bold text-amber-950 flex items-center justify-between gap-1.5"></div>
+            <div id="daily-sales-strategy-box" class="hidden"></div>
+            <div id="pricing-customer-impact-box" class="px-2.5 py-1.5 rounded-xl border flex items-center justify-between gap-1.5"></div>
+
+            <div class="flex items-center justify-between gap-1.5 px-1">
+              <div class="text-[10px] font-bold text-blue-900 flex items-center gap-1">
+                <span>🛵 Phí App: <b id="app-comm-rate-label" class="text-red-600">20%</b></span>
+                <button id="btn-toggle-app-markup" onclick="toggleAppPriceMarkup()" class="soft-btn px-2 py-0.5 rounded-lg font-black text-[9px] bg-blue-50 border border-blue-400 text-blue-900">
+                  Phụ thu: TẮT
+                </button>
+              </div>
+              <button onclick="resetAllDishPrices()" class="soft-btn px-2 py-0.5 rounded-lg bg-amber-100 border border-amber-400 text-amber-950 font-black text-[9px] shrink-0">
+                ⚖️ Về giá chuẩn
+              </button>
+            </div>
+
+            <div id="upgrade-demand-alert" class="hidden px-2.5 py-1.5 rounded-xl bg-red-50 border border-red-400 text-[10px] font-bold text-red-900"></div>
+
+            <!-- Danh sách 10 Món Gọn 1 Dòng -->
+            <div id="menu-dishes-list" class="space-y-1.5"></div>
+          </div>
+
+          <!-- ================= SUB-PANEL MỚI: TRUNG TÂM TIẾP THỊ THEO CẤP & SO KÈ ĐỐI THỦ ================= -->
+          <div id="prep-panel-marketing" class="hidden space-y-2">
+            <div class="grid grid-cols-3 gap-1 bg-amber-100 p-1 rounded-xl border border-amber-300">
+              <button type="button" id="mkt-sub-campaigns" onclick="switchMarketingCenterSubTab('campaigns')" class="soft-btn py-1.5 px-1 rounded-lg font-black text-[10px] bg-orange-600 text-white shadow">📢 Chiến Dịch Ngày</button>
+              <button type="button" id="mkt-sub-vouchers" onclick="switchMarketingCenterSubTab('vouchers')" class="soft-btn py-1.5 px-1 rounded-lg font-black text-[10px] bg-white text-amber-950">🎟️ Tạo Voucher</button>
+              <button type="button" id="mkt-sub-rivals" onclick="switchMarketingCenterSubTab('rivals')" class="soft-btn py-1.5 px-1 rounded-lg font-black text-[10px] bg-white text-amber-950">⚔️ So Kè Các Quán</button>
+            </div>
+            <div id="marketing-center-content" class="space-y-2 text-xs"></div>
+          </div>
+
+          <!-- ================= SUB-PANEL C: XÂY QUÁN TINH GỌN 3 TRỤC (1. QUÁN & ĐỒ NGHỀ • 2. NHÂN SỰ • 3. PHONG CÁCH & CHUỖI) ================= -->
+          <div id="prep-panel-upgrade" class="hidden space-y-2">
+            <div class="grid grid-cols-3 gap-1.5 bg-amber-100 p-1 rounded-xl border border-amber-300">
+              <button onclick="switchUpgradeSubTab('marketing')" id="upg-sub-marketing" class="soft-btn py-1.5 px-1.5 rounded-lg font-black text-[10.5px] bg-orange-600 text-white shadow">🏠 Quán & Đồ Nghề</button>
+              <button onclick="switchUpgradeSubTab('staff')" id="upg-sub-staff" class="soft-btn py-1.5 px-1.5 rounded-lg font-black text-[10.5px] text-amber-950 bg-white">🧑‍🍳 Nhân Sự (7)</button>
+              <button onclick="switchUpgradeSubTab('decor')" id="upg-sub-decor" class="soft-btn py-1.5 px-1.5 rounded-lg font-black text-[10.5px] text-amber-950 bg-white">🎨 Phong Cách & Chuỗi</button>
+            </div>
+            <div id="upgrade-sub-content" class="space-y-2"></div>
+          </div>
+
+          <!-- ================= SUB-PANEL D: SƠ CHẾ GIA TRUYỀN & PHA SỐT ĐỘC QUYỀN ================= -->
+          <div id="prep-panel-soche" class="hidden space-y-2.5">
+            <div class="grid grid-cols-2 gap-1.5 bg-amber-100 p-1 rounded-xl border border-amber-300">
+              <button type="button" onclick="switchMarketInnerMode('buy')" class="soft-btn py-1.5 px-2 rounded-lg font-black text-[10.5px] bg-white text-amber-950 flex items-center justify-center gap-1">
+                <span>🛒</span><span>Quay Lại Chợ (9)</span>
+              </button>
+              <button type="button" class="soft-btn py-1.5 px-2 rounded-lg font-black text-[10.5px] bg-orange-600 text-white shadow flex items-center justify-center gap-1">
+                <span>🌶️</span><span>Sơ Chế & Pha Sốt</span>
+              </button>
+            </div>
+            <div class="flex items-center justify-between">
+              <h3 class="font-black text-xs text-amber-950">🔥 Sơ Chế Tại Nhà (+1.000đ Tip/bịch)</h3>
+              <span id="prep-bonus-status" class="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-100 text-amber-900">0/3 món</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <button onclick="openPrepModal('sate')" id="prep-btn-sate" class="soft-btn p-2.5 rounded-2xl bg-white border-2 border-amber-300 flex flex-col items-center text-center gap-0.5">
+                <span class="text-2xl">🌶️</span><span class="font-extrabold text-xs">Sa Tế Ớt</span><span id="prep-status-sate" class="text-[10px] font-bold text-orange-600">Làm ngay</span>
+              </button>
+              <button onclick="openPrepModal('hanhphi')" id="prep-btn-hanhphi" class="soft-btn p-2.5 rounded-2xl bg-white border-2 border-amber-300 flex flex-col items-center text-center gap-0.5">
+                <span class="text-2xl">🧅</span><span class="font-extrabold text-xs">Hành Phi</span><span id="prep-status-hanhphi" class="text-[10px] font-bold text-orange-600">Làm ngay</span>
+              </button>
+              <button onclick="openPrepModal('trungcut')" id="prep-btn-trungcut" class="soft-btn p-2.5 rounded-2xl bg-white border-2 border-amber-300 flex flex-col items-center text-center gap-0.5">
+                <span class="text-2xl">🥚</span><span class="font-extrabold text-xs">Trứng Cút</span><span id="prep-status-trungcut" class="text-[10px] font-bold text-orange-600">Làm ngay</span>
+              </button>
+            </div>
+
+            <!-- HŨ SỐT ĐỘC QUYỀN BUỔI SÁNG (CUSTOM SAUCE LAB) -->
+            <div class="pt-2 border-t border-amber-200 space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-black text-xs text-amber-950">🥣 Hũ Sốt Độc Quyền Hôm Nay (Miễn phí)</span>
+                <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Đổi tự do trước giờ mở bán</span>
+              </div>
+              <div id="custom-sauce-lab-box" class="space-y-1.5"></div>
+            </div>
+          </div>
+
+          <!-- ================= SUB-PANEL E: SỔ THU CHI CHI TIẾT TỪNG NGÀY ================= -->
+          <div id="prep-panel-ledger" class="hidden space-y-2">
+            <div id="ledger-breakeven-box" class="p-2 rounded-xl bg-amber-50 border border-amber-300 space-y-1 text-xs"></div>
+
+            <div class="p-2 rounded-xl bg-amber-50 border border-amber-300 flex items-center justify-between gap-2">
+              <div class="flex-1 min-w-0 space-y-1">
+                <div class="flex justify-between text-[10.5px] font-black text-amber-950">
+                  <span>🔧 Độ Bền Xe & Mặt Bằng Quán:</span>
+                  <span id="ledger-durability-text" class="text-emerald-700">100%</span>
+                </div>
+                <div class="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden"><div id="ledger-durability-bar" class="h-full bg-emerald-500" style="width: 100%"></div></div>
+              </div>
+              <button onclick="repairCartEquipment()" id="btn-repair-cart" class="soft-btn btn-game-orange px-3 py-1.5 rounded-xl font-black text-[10px] shrink-0">🛠️ Tu Sửa Xe</button>
+              <span id="ledger-loan-count" class="hidden">0/2</span>
+              <span id="ledger-debt-amount" class="hidden">0đ</span>
+            </div>
+
+            <div id="saigon-bank-center-box" class="p-2.5 rounded-2xl bg-gradient-to-br from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-400 space-y-2 text-xs shadow-sm"></div>
+
+            <div id="ledger-history-list" class="space-y-2 text-xs"></div>
+          </div>
+
+          <!-- ================= SUB-PANEL F: BẢNG XẾP HẠNG ĐẾ CHẾ SÀI GÒN V2.0 (FIREBASE REALTIME) ================= -->
+          <div id="prep-panel-leaderboard" class="hidden space-y-2">
+            <div class="flex items-center justify-between gap-1.5 flex-wrap border-b border-amber-200 pb-1.5">
+              <div class="flex items-center gap-1.5">
+                <span class="font-black text-xs sm:text-sm text-amber-950">🏆 BXH Đế Chế Sài Gòn</span>
+                <span id="lb-total-shops-count" class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-950 font-black text-[9.5px]">105 quán</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="openFirebaseConfigModal()" class="soft-btn px-2 py-1 rounded-xl bg-amber-100 border border-amber-400 text-amber-950 font-black text-[9.5px]">
+                  ☁️ Cấu Hình Firebase
+                </button>
+                <button type="button" onclick="fetchCloudLeaderboard(true)" class="soft-btn btn-game-green px-2.5 py-1 rounded-xl font-black text-[10px]">
+                  🔄 Làm mới
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-1.5">
+              <span id="lb-firebase-status-badge" class="px-2 py-0.5 rounded-full bg-amber-100 border border-amber-400 text-amber-900 font-black text-[9.5px]">
+                ☁️ Trạng thái Cloud
+              </span>
+              <span class="text-[9.5px] font-bold text-amber-800">Chạm vào quán bất kỳ để xem hồ sơ</span>
+            </div>
+
+            <!-- Thẻ Ghim Thứ Hạng Của Quán Bạn -->
+            <div id="leaderboard-my-rank-card" class="my-rank-sticky-card p-2.5 rounded-2xl text-xs"></div>
+
+            <!-- 4 Chế Độ Xếp Hạng -->
+            <div class="grid grid-cols-4 gap-1 bg-amber-100 p-1 rounded-xl border border-amber-300">
+              <button type="button" id="lb-filter-networth" onclick="switchLeaderboardSortMode('networth')" class="soft-btn lb-filter-btn lb-filter-active py-1.5 px-1 rounded-lg font-black text-[10px] border border-orange-800 shadow">
+                💎 Định Giá
+              </button>
+              <button type="button" id="lb-filter-level" onclick="switchLeaderboardSortMode('level')" class="soft-btn lb-filter-btn py-1.5 px-1 rounded-lg font-black text-[10px] bg-white text-amber-950 border border-amber-300">
+                👑 Cấp & Bịch
+              </button>
+              <button type="button" id="lb-filter-rating" onclick="switchLeaderboardSortMode('rating')" class="soft-btn lb-filter-btn py-1.5 px-1 rounded-lg font-black text-[10px] bg-white text-amber-950 border border-amber-300">
+                ⭐ Danh Tiếng
+              </button>
+              <button type="button" id="lb-filter-pvp" onclick="switchLeaderboardSortMode('pvp')" class="soft-btn lb-filter-btn py-1.5 px-1 rounded-lg font-black text-[10px] bg-white text-amber-950 border border-amber-300">
+                ⚔️ Phòng PvP
+              </button>
+            </div>
+
+            <!-- Thanh Nhập Mã Phòng Thách Đấu Ca (Chỉ hiện ở Tab Phòng PvP) -->
+            <div id="lb-pvp-room-bar" class="hidden p-2 rounded-xl bg-rose-50 border-2 border-rose-300 flex items-center justify-between gap-1.5">
+              <div class="text-[10px] font-black text-rose-950">⚔️ Mã Phòng Đua Doanh Thu Ca:</div>
+              <div class="flex items-center gap-1">
+                <input id="pvp-room-code-input" type="text" maxlength="12" value="SAIGON01" placeholder="SAIGON01" class="w-24 px-2 py-1 rounded-lg border border-rose-400 text-xs font-black uppercase text-center text-rose-950 bg-white" />
+                <button type="button" onclick="joinOrSyncPvpRoom()" class="soft-btn btn-game-red px-2.5 py-1 rounded-lg font-black text-[10px]">
+                  Vào Phòng
+                </button>
+              </div>
+            </div>
+
+            <!-- Ô Tìm Kiếm Quán Trên BXH -->
+            <div class="relative">
+              <input id="leaderboard-search-input" type="text" oninput="handleLeaderboardSearchInput(this.value)" placeholder="🔍 Tìm tên quán hoặc thứ hạng (VD: Chôm Chôm, #1)..." class="w-full px-3 py-1.5 rounded-xl border-2 border-amber-300 focus:border-orange-500 focus:outline-none text-xs font-bold text-amber-950 bg-white" />
+            </div>
+
+            <!-- Danh Sách Quán Xếp Hạng -->
+            <div id="leaderboard-container" class="space-y-1.5 text-xs max-h-[52vh] overflow-y-auto pr-0.5"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CỤM NÚT MỞ CỬA HÀNG + THANH DOCK CỐ ĐỊNH GỌN ĐẸP KHÔNG CHE NỘI DUNG -->
+      <div class="fixed bottom-0 left-0 right-0 z-30 flex flex-col items-center pointer-events-none">
+        <div class="w-full max-w-lg px-2.5 pb-1 pt-0.5 pointer-events-auto">
+          <button onclick="startStreetSellingPhase()" id="btn-open-day-big" class="soft-btn btn-game-red w-full py-2 rounded-xl font-black text-xs sm:text-sm tracking-wide uppercase shadow-lg">
+            🚀 MỞ CỬA HÀNG (NGÀY 1)
+          </button>
+          <div id="home-fixed-cost-footer" class="hidden"></div>
+        </div>
+
+        <nav class="w-full max-w-lg wooden-bottom-dock px-1 py-1.5 grid grid-cols-6 gap-1 pointer-events-auto">
+          <button onclick="switchPrepSubTab('kho')" id="prep-tab-kho" class="dock-tab-btn dock-tab-active py-1 px-0.5 flex flex-col items-center justify-center relative">
+            <span class="text-base leading-none">🧺</span>
+            <span class="font-black text-[8.5px] mt-0.5 whitespace-nowrap">Đi Chợ</span>
+            <span id="badge-soche-notify" class="absolute top-0 right-0.5 px-1 rounded-full bg-amber-400 text-amber-950 font-black text-[6.5px]">0/3</span>
+          </button>
+          <button onclick="switchPrepSubTab('menu')" id="prep-tab-menu" class="dock-tab-btn py-1 px-0.5 flex flex-col items-center justify-center relative">
+            <span class="text-base leading-none">🥙</span>
+            <span class="font-black text-[8.5px] mt-0.5 whitespace-nowrap">Thực Đơn</span>
+            <span id="badge-new-dish-demand" class="hidden absolute top-0 right-1 px-1 rounded-full bg-red-600 text-white font-black text-[7.5px] animate-bounce">!</span>
+          </button>
+          <button onclick="switchPrepSubTab('marketing')" id="prep-tab-marketing" class="dock-tab-btn py-1 px-0.5 flex flex-col items-center justify-center relative">
+            <span class="text-base leading-none">📣</span>
+            <span class="font-black text-[8.5px] mt-0.5 whitespace-nowrap">Tiếp Thị</span>
+            <span id="badge-marketing-unlock" class="absolute top-0 right-0.5 px-1 rounded-full bg-emerald-500 text-white font-black text-[6.5px]">C.8+</span>
+          </button>
+          <button onclick="switchPrepSubTab('upgrade')" id="prep-tab-upgrade" class="dock-tab-btn py-1 px-0.5 flex flex-col items-center justify-center relative">
+            <span class="text-base leading-none">🏗️</span>
+            <span class="font-black text-[8.5px] mt-0.5 whitespace-nowrap">Xây Quán</span>
+            <span id="badge-upgrade-notify" class="hidden absolute top-0 right-1 w-2 h-2 rounded-full bg-amber-400"></span>
+          </button>
+          <button onclick="switchPrepSubTab('ledger')" id="prep-tab-ledger" class="dock-tab-btn py-1 px-0.5 flex flex-col items-center justify-center relative">
+            <span class="text-base leading-none">📒</span>
+            <span class="font-black text-[8.5px] mt-0.5 whitespace-nowrap">Thu Chi</span>
+          </button>
+          <button onclick="switchPrepSubTab('leaderboard')" id="prep-tab-leaderboard" class="dock-tab-btn py-1 px-0.5 flex flex-col items-center justify-center relative">
+            <span class="text-base leading-none">🏆</span>
+            <span class="font-black text-[8.5px] mt-0.5 whitespace-nowrap">Xếp Hạng</span>
+          </button>
+        </nav>
+      </div>
+    </div> <!-- Đóng #screen-home-prep -->
+
+    <!-- ========================================================================= -->
+    <!-- MÀN HÌNH 2: BẾP BÁN HÀNG GỌN GÀNG "KHÔNG CẦN CUỘN" (ZERO-SCROLL KITCHEN)    -->
+    <!-- ========================================================================= -->
+    <div id="screen-street-sell" class="hidden flex flex-col gap-1.5 pb-4">
+
+      <!-- 1. SÂN KHẤU XE ĐẨY + 4 Ô KHÁCH + BONG BÓNG GỌI MÓN NẰM GỌN TRONG CÙNG 1 KHUNG -->
+      <div id="stage-sky-container" class="inox-cart-stage p-2 flex flex-col justify-between">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCACpASwDASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAwQBAgUGAAf/xABDEAACAQMCAwUGAgcHAgcBAAABAgMABBESIQUxQRMiUWFxFDKBkaGxwdEGIzNCcpLwNENSYoKy4RUkU2Nzg6LC8UX/xAAZAQADAQEBAAAAAAAAAAAAAAABAgMABAX/xAAmEQACAgMBAAICAgIDAAAAAAAAAQIRAxIhMSJBE1EEYTJCI3GB/9oADAMBAAIRAxEAPwDg/eYsT3eVXyQNSjnt6eQ8aIEA7o06sZ3P28asq94ajzHM9BUm0M6XASRk7lTknY+FFCEvld/I7E/AUeFSyg50spDYwfgfDlRCY4mRZkyMkkrzAP8AWaVu3QKsB2b6XV+7jx2xVVXB1fzfn9qbMatCvasUyAVXQCfMnrihG3mA1KmtT+8hyD5Ec6pGLoBYxiXvAjUNjtvVViAbBU+oH1r0Tssx27xHI8xRTIx5hdvKquMX1+ipS8XhdUCDC8qmvRapHIyOWeVXIwcHY10RyRfESljklbKUN2OrQoOvPu43o5TkCMjqM4zQyoiQsBjSSRp55NJk3bqPgI19ijgn3mVdW+MZ8v69KC2jLHtG3zv4jpTBgYkkqVXFVEJcnA25Ajqf6FcsouyyaFQmvO5xyqwi3GFPPkORpoxBWU6Tpc6MDPPHLxqexLPnSdJOOX4UjdDCek6cEHAA5DaieznOQN/pTIAOpezycHBPX8vnUMCu/wCrIPgDzxWSk/oHBYxFiTpwRucdKowZRucitKJpJl/VqqbHnuTivexShpJGbUynGf65U09YpdDFN+maY3094afAdflVQCvexqHnvinWtjqKjnzonYu8eVAx1PU+nwpNxmtXQjlttyAd/Cq6R060aWMoAcANkDfkap7r4I6bDnmjYOgtGNwdJzz6GiKuYX14XT7uOpNWIYsFPdzyUf1zqRHg4Ee+M770b/YeP0G4xpYHOQDnH9ZqCGXB31nltRxEDIoIKE+WoHyqXj9nDOyjXnugADqccvMfWhaBr+hcR6cZ3Lb1UD9Wu+9HCgTsH6HPKqujIqhg2Tk4z/W9GwasCV6Y7v2qVG2luY3XHU7VfRIeS1Bjk/w4ojKMiGwGAyB6DarxDU4B32NRoJTDL3vGidn7MjBh+sYbDwFYZQp2AjfSwJGcdPEVZtL7nZxyPiPA1VScYC1YrjmaxPZrgMcxnwrxzk4O1WYZVsbEd4V5So205ojVfR6OEFIzqB1DSRjPjz+Qq0lvNDbrcl4+zZioUNk/KlldkYlTgnH503acOubt9kYDme7k/KtpTt+BVExBpIh2RZ7mQlAq+8fD7fWtaw4TdSRMZdL9m2ptgVjP/wBj9B50tHKlopitl0atnbOXfyJ6DyFa1lxB47dowyqrLgj+uVLP4q4oeCTfyMi9hjBYRgs3MknJz40GOCVZmVCyMDzG/jWpJCrIzjbAzRopEa6umIBJIxt61t6jYdPlRm4Dd29iyP8AGozj4flXv+mmYarKVZf8oOSPgdx8zWiYe0Ow5+VKXdskbgAgMu5YHcGjHLfGB466jMmtbqBv1kLK2fAg/XevR3ZHdcax1BG9aK8RvYx2YvNa492TDj60CSYStqlsrZz4ohU/jVOMS5ICtygBwrYztXjdDoh+dEEUT7i0K/OpWJFDZtoztkE42xVFlpUSeNN2AE+p1Gkjf9070WJFOAMBlGMda92ChtQVkI8O8Pz+tH09oMlNf+ZNyPhzpXL5bDRxxaoGYh4A89j5jH5fKvNCGbJyfHfnVZJjGpIYP035j1FCW7kOxAx5bVWLjLtEpQlF1ZMunB7vMYHLf13yKj2d0LFiWYbMSeXkM+OfpTqKpKyBBq2I2wMY5bev0qdH6vQD0xvUFjnKTcguSSpDXB7NJ5WXGcMDty9c8/jXR8V4Fb2dqpiI7y4ck538fvXOWcgikZiRrPQnflzz8/KtK74rrhIaTUAOrE7VyfhnJ9R1RnGjEvoSs4Kc9IyD12FLumcFsRqoHpmr3c8k8z9lhW2yeekGqWKLLIpYaierNk59P+KtijClt6JlblNteC88LNDqUMI9t2671PsjAsoYLgZODgY8a7Lh36PrfuNZKqBlivM+H2rN4xwtrRWiRd1ypx1FRyT+dIpDHcTmGwSVCgqNs8uXXyqpkVABKrhs7OAO98OlHkjnGlUjcAZyCc5J646c6lLdjrbsXz2ZYljnOTgHHh5/GnaSFcWK9syzRypsy8gRkA/jVoDqZEcsQTjJPIbk1VrOaONmCMMDfwowtdCjtIc782JI+VPS8Co0DBWW4bQpYE5AVcnlVSpLPJJlmJJ0qfuaYi1NMEz3MZ0jYcvAUWaEu6KGEerYty9KZxpWC7fBJzJhcNp1bBV2/r41VTMpyZGAbqGpw2qQFpXk7SQ9AQT/AMetDKN7OndJY45dDgmpp34FwaTt9F3klGAxdv4t/vRAsUmFYLHIeWfdb0PSoWFiR+8zHq3LpkiqvC7aWKkqXGcjn4/jRdLgkZNAZoXhcnTg8iCKggBdZDaTy5b+taUaGWFo33dFyueq+Hw+1KXKCNiUUbnAOnYjGKClY0oWrQBgA41HcEhj5UFgUYqeYNEBDEqedVkGSPTH4VQWP6NWOeEH9XAkWBk55/zE1pxXV/JA0UDpFE65JDYyBjw9aRteGzXXdjjLE7AAZNeu+HT2me6yOmcfukEVpuDdWGKmldB4rXme2jYjmVBOKN2KoMvcKv8Ap/5qt9LNDb23ZShNaHUCAQ3djO4POk0mkzkxWr+ken/aRWts1GmklvoKPeHBGCFRfvmiI1irMUeVi25y+M/IVnLJE479rgjqkn5g/erqlsebzp6qGH0P4Ura8HUJemipjkOIwR/MfvVRBDknSWPki/nS8UOplSC4V2Y4CkEH6gU5FAxB/wC4VRjko3+dSlKvCijfoiHWC6uGMTMCQAqsARgddjtUtfBV1CyBB6mXP2WmbW13IMmkMCfdzv5VSayhXP62Rf4VI/CjGdglBISbieELC0t1366yevn5V64YtZQXWNEjqWKjJX38YwSelee2tEOovKT46KJOsR4bb6ncRaG3x3sdpVlRFiq3+nZ4lz4oxH0OR9qagurJyO1Dqf8AERg/MZFLR2tk7ZF7GR4OSp+tXaxYfsLZ5x4xzKfpWdM0WzYNlZXkQaO7glbHuzjSR6OKzLvhrI24kixyLDWh/wBQ3+9IyL2D5mtJImHVyV+ummjcyR2EU0LsCzEHLEjnili3HxjNqXqKFJogqmRdxkFTkEcqtCS2BJIQTypvg0kV1fxHiDDSAVGlAMDn8aPeW0aTtJFGzwDPJflTxz9pi/gUlaF1hA6k+pqswKqdC5ODgac5OP8AjNWjuFMWRFKQo3IXamBG8tuJ1ibs/HOPKq5JJxqycMM7tCaWkZjIQhl30nHjjNFs+0WZtSsQzBug32zt059KJe9tB2fZmMlwTjGcUsLiZXJKRluRO/50n4lJKvoLuDakdXYcWNoMqyDO2GJ3xWfxK+F0zlnUs3MgH8qx5pHZI2AxkEnHqa1bI2os4mlMayDOTq7x2Py6eVcU4JPZnZLIsSVRMsKjMdLr57H8q9HDE741LkfvHJ1DbA+GK1w9jEJWgSAFVZAMnDjSOfjvmvWRtI768Qdn2T6dPpqBOD86znwRZ3L/AFBngs1xAsaKCZTgAkr0z4cuVJXdg0UKLIw7QbMu53FdpaXtvDcLJMUY6CCU7wG+30rC49NFPds8S4Rj4eVSxzdotbknaOWsolbicKSAFCwDZOBiu1j4RwhhloLM+sprkbUonFIGbRp2yXOB8a7GO6sMftOE/GZq7Mmz8OZKX+tf+ifFuEWKWDex21qXJAPZyEsB1wPlVuBcAt7iNhfRxOxXuLq7y+eB+PQedOi6sTsH4Sf/AHWpmx4hYW8xZ5uHxjSRmOQk/WppSuzfNL6MBP0bjs7zN1bNLEWKRoTpaUjyHQ1f9I/0a7Lsm4ZFJrmfV2agYTSB+PjXQSX3D5L2Jkv7fstzIDL3s+XhTjX1n7Qr9ujxhNIIOcHP47fKlk2kw8pcOLuOCJb8KN20kHtD9myEnDptuPDO/wAhWLdW6m37WQpDl9JUHIzjOccwPPcV3XEBbXdvLGZraJHcMpdsMMEE+mcH51k8QtOGzwaIX4dC67qyStz8/HlSw2fRlsvKOBubVop5FIAwBy3FKksNgAR5mt+W3VXkgjwzjvJ/mxsQPln41lyWzasopYHwFdCl9MVx+0dt+i13bWs6vNyHXwr36UXdtdXDPABgj5mjLwWGG7ihVVOsE5yelKS2iFVm7FUCguO9qzjr88D5+FcsalK0WktV0y7u5K29qbeRlwhDAeSoN/kaTWWQKVkWMnJJDxKT9q1IbWKWDOnWy6UDZ5AgfipHxrQsuH25vJTfQq8eo7npv+ZH81dN6xbILrSOfDro3t4MnkFUrn5GoGGWPub5G4kIz8CDXW8W4VYwrF2EKxudTFwfdUDGfqKy5bCBZmXRtoDDDhc557nw8qnCe6sq6iU4bHH7TCQHDaxzYEc9+gre4Xa9oQg5u2M+FKWEFpGAxiww5M83L03ArZsntNB09mrKchxKEx9cGpZEw7r1DfEOHxi1D6dohyI6eH2rmrmx1XCIuCC2ME4z5V0dxdmaFke4iIxtpdRk+e/Kuf8Aa4faI5GlQFO8Rq8KWPxdo0G3FpmJxG2jXtlVBGUBxseYoVzDjhcEXUQsM/8AuimuKTCQzKCCGJIOob59K9KqNZI/aAKsJOo8v2wFdEJuS6JOCTMWGy1WC3Ei51uVGGO2PIUE27C4SO3y5fGnTz/rY1rraXTcJUwRdpFG7N2qEkHfB2xmr2sEtmsclxbFZBhkZ305HoceNFzfQPHHVdM6Zr60wBPOsZ2zk4z8c1E5LcNWR2y7Pg90DkT4UzxJricCKSOTUSG3A6ZpeS3lHCxGyMHD5AIxkEmjjba+QM0UptR8Fbd5tSiI7+Vb1jeXjcPmijjBAUs+eYFD4Xw+BrCSWYSpIPcITIzjlQEDxCRTkZGCPjTuCaBByxv/ALKxcTeO1e3TSQ/zqIr+dYlgLkR55Ve3tLV5l7fWgIO6b0ZbNI+JRJbMtxuGAbYHyNV+H6Gf5dU754NLDb3+HVmJTbunFU4fw2CfiM0M7SdmmcYO9XNzMLuWaOzEYlOyoO6Mc8VPDLj/AL2SdxgNqznkN6VuVcM1BpWRcWxteI+ywSSpGYw+7HnnFNwcLnmhjlN66hxnqcfWjQ31nLxGQsNY7NAMRltgTn7iteObh5USx2rGIjIfsTg/SuLLOSdF8cqgjNi4E5GW4njyOfzo6/o/JjI4lkfH86caayYN/wBtJnJwRAfh0oVg/aRXsMepX2wpGnp+dS3lQ1v0CeEyRDJ4iB6g/nWfeW0iRmU3fbIradIzuSD51o3MNwLRBIPdLZ1uNs4xzrLl7JbaZTJHrZlAQMCTgMc7etGDtjW66zn+zE17Cre6QMj505aWKSq7ZICoXOd/Tr5ilYFC38GkYBHTx3rp+Ex27W86yrGNbgNk4JGAfvXe7+mcbklB8M2DhMcsZZlbAbSSp25Z61M3C7GDR2vtA1gkYC9DjxrqEt7JIRHG4VdWr38nOMdaFfWFpMkUsruFjGkBSN980McpbfN8IN/DnpzycOshOYk9q1jO2legz406bNbaMtqkwCB88+HpTi+wpetdZlLMSdJZcDIxRY2tJwbctIRJjdnXpuOVSmpt/wBFpSil8PTCuIO0MYMndfdiF93cg9d+VLzcOigunilLOUYrnO+c4BrphFZRymPsVdUGRq3xzzzrM4rMJr/VHuOzXY+TZp01SivUHE5dcldi8n6PRXHFJLeGR4ljjVgWOTnJGRyxyrE4jYNDfSRTzJFKpw2+A3+YeRGDXZ2VyJOKT3KxzvGYwmrQTuDnHyNEu4OG3solu+HtK4GkM0JJx4fWoSyNSKpc8A37n223VW0kq+SDuF6n+vGgRabx5lQg5QIunkAMHb/41icbvFHGGQS6ldAj4/cOaY4deNZspRlYspO455OftinxQqFhk9pUaYtMWztHpOhNeyacAEN+H3rQitreddeT2sg7Fx45Gx+1Cg4hbvYy9rntJAVK+A0n6Una8TgS2h75EhVcELnp0HU7mhK2TqmK8Sk9sv4dYxiHB5bEEZ5+ZNQthan+9YMu5Ukcv5ao8qycWMioVV0d1B5gMQf69a0OHRe2XQgfPYrIdQ6EZz9sUy+MQP0zSUifRFO7ESFdsct8dPStWykg7BGnu2DY3zIo/Ct65S0htjGtvEI1UtpCgchXH3ttYWaRO0sjyyZLBHGAdsjJB5ZqM/kvSuPrpo27e47ftxFdkiM7AMM4+VEhhN3bq7STEH/ziPsK562uLMsy2k0ouGyoL4A0nGTtRZGmWTsLckEMVGiVzn0GM0Fjb+wzpcoevLFY7m3QSTBZGwcXDZNZ1zbgPJEjOAI2AYsS39oHWpuLu4E8VsJe2ljbKOh1a88sfb4VSR5UTMqt2vZNlcZOfaB4VWKkuNkpa8od4RpHD4dQ1P2j99mOr3vQ0r+kiIptkAIUF+vpTfBTqsICGbeSTZZMfveHWlP0p3a3OkjdvjyqaX/KVb+BsSBtUjanwincgZ9AfCuZuoYLN3MahUBTn6GumlZFWcs6bjBwckZ5Z2rkuIs83DjJq7zSR5b0zTYvRGkdLw+6lltjLBFCIzvpG1J3M54nMkMViCyd878xypfgki2nD5ZWLlSRux5/Cs664i1ndxTQOwKjfB2xnrTRjbdDNpdY/Pa22uITQyWgY/tOYx6Upb8NmvL+aOzk7VYtwx2LCi3vGl4la2+mLDRknTnnSLXksF+ZiWjkkXThDjAq+PaKonl+asfs1uYr1IIrgpdjISMjPr5VmXRubeSRIyRKH0nHiTRJuISdqlxAojliUKZcnUd/vS01wXlM0jZ1E5J8c01ytuhaikumlY3Di/zcAvIiMpaOPGfPArdtL0LweGIQXLERqMiEkc/GuStpmYyneTUmnKnzHP5VowcWvoIUiQkxqMAEA7VzZMbkdGOSSOg/6iqjJguR6xEUPhs+eJXbgMA3Rhg86xL/AIi15KumBggGNLEHfxpjgs0huZlkBVtO5J8xUni1i2W3UpJG5xOc+xOR0IP1rlHdmkQgnY+vQ1uX1xG9mwWQHOMVyfEDISAj4HXbNU/jx+LJ/wAik0M22fbocnOPyNbsUzQwM63KRBXJYE5PujHd5msCxVVu4QoxyPPyNMXalrl0DtlmB056bda6W6ZyuKcas6+C8Sa1VnkCs572SRp8t/OvXJB4fLpbKiTY/wCmsccYkt4hEkdrpEZAwmCuBzz41Rr5pEKFmAbGO9sKml20BxaXRgtDy0gDPMZqmuISbCRdsDQoOeWedeY4LYgTCjUcTdKWuAoLFxpIP7p1DlRpfQe3bHmujICMT4Awcxr1OfGk5GVJdTEg6c7gDbpyzSqvFkLIXIzgkIdh40lxGRFQ9hJ3tIyG29aEYpMZydUdb+jt7BIJY0kBcMTp68hWn2lcT+iFuTPLdy4YIPeBOFrro5UlQPE4dTyINc2aK3dF8fY2z5sdTNvuWO5Jp6K5kVVjiJSQbbnYjwwdqyBM+cNkEeApyKd5UYPpOgagdIBzXbKLXUc0ZJ8NQS3j2qmZ1WOVGGFULnGnI2360pDI1vJqhIRuWQMVoRTRJwe1MpGSr4XTnPuUkklor5YMwxjl9aVtu0NjpU2PQ3DGQNlCI4Gx06jnWjwfiLJdENpUO5JCnI5f0fnWHJOsjH2dCqrGdXIbVUXZjB0BgeZYHwraWqFcqlZ3fEJddnKc7lCNj5Vw/E75pCiMc6JZM48MirrezvHoka6aLnpC7feht/0+fVrjlDNzbDZHy2qf46VFY5NXbQDhbn/qcJ/dOeW3Suma5mlUlFkckudUknNiPe25EKDz51jQJw6CXtY5WjbGBlWI+oo8lxHO2prq21FtWcgY8gNsDyo6sSc1J2NqltdXbzX09yr93AjhC5xyOd8emKm4lELQyKzMArEMRkn9f8KUQwQoqgQzhRgd8DbJPRumTRpHU21u6JsIidPvD9vy86XR7NkbZpW906Rh5XZG7RmeNFyTnl61n8Sdbu7jhlEkIXJZ3IJGRtyP40uWHeJVVY9QjDHoKqe8Sy7jUoyNzypI4mnY/wCWTWoW5vZhLK6CIKxxqVQC3nhs9aWuCBwoclPbAeP+KrkQLEQ+++TobvfQHH/FIXtxjhjFC4i7VQM41Z72arGK8QU2l09ahpLlAk5RicEZytdVdfodF7J7SbgSFhk7fauFjupUAIfUOmRvW4vHrqa3W3DP3eQBoyjKLHivyK0S9lFZ+7kleVZEplmuRNKTqHjTss84OJCwJ6MKHGqTblwD/hGxq0f2ybbrUWCs0nQbjc16WJjbase7z+dOm30sGU6QOnPNeEUriVEhZgf8W2d81m+2arSR7gUcPbOLr3Nxk5xkelbWrh6szBNTaeeDg7EY+1Yy2d8oHYqqb5OfrRDBxEf3jfCoSipO2y0JOKpI1LWS0j17KpWRtLEHJU4/DPxrPs2l9tf2cO7NkEAZJBxzoQivgd3f4imI4OxsZJrpwr9CpxillFRun6VhK2r5QKQlZTE8el1bTjYb1mXLEvscAc+tBa5ulfVrwScr2g5/GlHMiuWmQtnfntV8cNUc2fIpvhqRSG3dJVZX0497u1qSWqCyivzOpMpPdU7g561gwzq0LK+QhH7x5VeKTXAgcYYdRtkUJWNCKkqNhoo1izoOw542NeCRHICLnGcUs8k00KxxuzgY7nI4otnYXTyls9mCN2wMfKh+JON3035XGVfRsRiHskzpzpH2pa8jAiZ0KhdYGMbe7zp4S8SVFRLuIBQAP1PhSt3acQvFZjcoxA3AjxmqJpenOoyb4ZfbEEgaMnblWXczM8unI0qenKiXby2kmHjJYeYx9KRFxG7nWCvlzoSSbuPg6uFqXptW120UJUCQodyI8c/nWrw7jtpa2UcRKxsN2DI2SfE1y8V1GjktCSDyIYgihPc6jkyP/OaV49uMdZdeohydO+/mKtDNpjdNO7YGasVPgR6VI80B8yM1XUnt9mnNIVsLEBmXZ91O/KOgRyt2jKzaz44qLhj7HZhULHS3LpslG4XASZJ5oYplGBodyMfIjPSl1XplJ+Fo270p5fqWr1uUluFjc5Q5LAHcgAnFaiQw3dtP2Fjbx9mmXkVjlR8W8emDXrW3d3Ci4BRgdzGM4+dTlko2svoFHw+27UGXOM/s1c/LOaHc2SmSR7cqIoiAwZjux8Ph+NGV9LEdqxKkrz322yaX7fsrS5XmWlTO3gDXNHLK3ZbGnOSVgvZtSsyyRKyb6Q3veXrSwkyOe1MQCV0Zij9ix0lgCwBHkPWguVgTsy3LJUnbB6nx3xV45Wl4L/IShKrsjAPMA+op2dgvCrdQBjsCMdP21KxwCYFtXZjICqu5Y+H5mmpIw1taRnHeQjunb9r4mnU1IgnYnBv0I2zsxFMc7ByNwZl3JJ6CvS2roBoOsHIynj8fl86m1ybcibBzMcgjyHSl3TReON6qTKOOwtg6SKxJxtkYPoQKBfMTwSLI3aYk/Nq2Ykt0guSgj1djt3fMZ/KsW7PacLi15GZSf91CDTfBpuuGWCSeW3rUx6pWYasL5c6uIk6lvpVSexlLCPMZ6DmKvVvpPao0g8ZkgwnauYyfdJ5GmdAPlmkkczugjiIAOSxrSUx9Yz/NW8Bd+lBEejUVLdjv2hHwqTpPurp+Oauhx1pG2OkWW2J/vm+VWFmekzfKoD4oiTAe8pb44qT2KLUobRv/ABm+X/NKcQhZLYsZSyrvpxzrQM6Y/ZH+el7l1liZBHjUMbtWjtfTSquGSLRGhD60Z2GSNYDfWlHhmQldLqv+anGtblV0rKpTwI3qqRmNNArpTOZoViKZUHp40WEGd3LMdI6eNFEYJ9xT61LRS9oHiIVsYPga1fY2zSovEskEsYjkbTJtjNaAhlJ/av8AKkreKUSiWdwzDljkKfEzDkaNMSz3s0nWZh8P+apLrtUL+0nPQY50dboL76avjih3M8MsLKLfvY2OvOK1GUq8MOWSWedniViRz32oZkDtonQZ8cUaMhrcwqMODlstjNAKh5NG7MPPNZIDbZDIikaJMjwoZUsSRRvZpQ2RCD9Pxrwt5/8Awsf6hRSV9A3zhoRxtIThlUDqxxn08aMkA2LSfTSPrmhrHMoIRtOenQ/CrqZBrY6cIuQMYOo7AH47+eK3DOwsIieOBZWAATbIz0WvXDgSKsYZVDbZGOg6VW2kEenIdjpGN87YHSjPJbzH9Y5VuXe7v3zSzx2h4ZNWmFtJdGsAnMsZXf4Hl8KPaXUayoSVPLzNRaQ2kfecuwxyGw+maeuOIIiILXslkfYsVyV+HOuZ4PplpZ03wQmhmDFiigEkgF8E/DFAltLj2cNoADnUMHOMHHy861bOznaQyPgOf7y4Gn5A5/CtuLhPbRZmunmGclFwFJ8+prSUV6Ljk4ytHI2dncq8iNG4aRRpblgg+u22fpT4tLyIqO2ZiwB0l9X3GK3eJW0KRnJUS+8F5nHU/XnWDFch2ESHSX7oDOSCSMVNz8SKSxvI3KxB5w7YmSInPMRAH6VeRtUdiQAoIY4G2P1tP3thGkWuaNGlDMHZdge8aSmjDmxiHIqwwDj+9rojRz1QxfiKO1/VxqGEIOoE7HSD96zoSTbkf+b+Ao1zMHgZFYFymnTnfOMVSygaTELxt3n1bHnsOo/CubEnTs78rSikv6DQjRHKW2HZnc7eFJTZVI4XHfViSvPbvb+m9bS8O7GUJHH2k2NRXOSo8Tk4QeZ38KDNNZwTZ0LeXROAB+xjPPfO7H128jVca1ObJJSMcKPAVIXypl4ppJGklcMzHJOk1HYP5fymrWJQDFTij+zv4jb/ACmvezv5fKtYaBAnxqwNWNtL5fI172aXy+RocN0jVXtflU+zS+K/I1Ps8viPkaFIPSC23KhMTRvZ5fFf5TVTbSHqP5TRVAdi51GqkGmfZpPEfymoNvJ5fI0yaFpi2fKpBo3sr9T/APGoFtK4ymkjz2ouSXplCUvEDDYqe0A5kfOvGCULqwCPLJq9tMYGHZjU8hA7u2wBJ500ZKXjFnCUfUWEcrR6wndIyCSBn6160Ec90sTuyrvqKjJUDrinJL5lhVTKyqc4XQGx44zypWS+iCqsYK6EKhtsnPjvTvHOuCKUL6IXVnC876WbAOxxjIoSW0cfJqZMiMWZyWYjYhlGKqFkcHGNjjlW1lFWzWm+A+zXxPyqOzHiaIYZf6zXuxk8vkaFhoakJEbHGMA0JlYRQpgt2rhyccwMAfQ5+NNmMyDs847Q6fTxPyzRZWCkhdl6eXQD5bVO/sbW2ZcbZlRcf3efotOxa+SsQOvhSkAzIn8A+y09J3YgqnbqfGrOv2R6EhaInS0MbHxA0n5jFHnhC27SxGRdJGVLagckDwz1o3A+Ge0ya5WCL4mjcaEcKSR28iOigAkHO+obUJTiuIKjJ9MuG6niJ7KcRkHGNZT7bU9Dxe/jOrQJfMIr/Vd/rWQrBncFhq1HbO9SV0nUBv4//lSlqyqhJI6m2/SXtCVliUMy6W0tgkeGGBq3tPDQSwtkhc/vGD8VJ+1c5Hfe6jMZFJA0vh/oa2xa2xsHnBKMhAIRioOfLl9KjKKX0Ol/YC7ZJ2IguSNXvBXVgf8AS2CKzwRDeW+t8hGZdTd3P6z6VN32YGVdydQBDhfuMfas+XSJIpAgyVbJGOearFWhWmma800TS4KBmY4VVXdj4AcyfX5U3EgtmBu3aKR9ltoO9M/kTvp+p9Kxre+lg1G3Cwll0tLpw2PAf8Ypnha3E8zi1BGRh5WO5Hr+ApNKC5NjHEZpQggbRDETn2aE9fF26n+s0vHblYkd1CkybKByGlq1Gskt5cDLOq95j41WdBoh85T/ALGpZTSSSGhGxLTjoflUkEjABB9Ka074AyakRgD1pNy2ooEwNlNTpP8AhNN6BXtA8KG5tRQIf8NQEyM450yybEDYnavFPCm3BqLafKoIpkptQylFSNQA9NutQfj8qKy7fGvFaaxaAE+R+VVJB2w3yoxWqMtFMDAu36tj1wenWkDOg15MhkDkYC7AZwPTan5VyCM41bcs+lKeyS5VE1M+d9Y0g/P41mrGhLUWEiSzuLmVlUcuv/5XrVlFwO8CF1EfQfnTT8EviHkEYZeZEbBifhQILOUShTGwLsFDFSMAnbPzoxaijZW5t/ZaZw8q6vd1YPz/AOKpdmEwEIq5yDgJWrxW2sI+HwezwlbvSO0UA5DAbn4/KsTORmrLIpU0c2jV2NW7qLeMYz3eVVjimhTvKu5H7xPl0FLGVkHdYjLAEjwwT+VXW7bsWwT3TzXbI3/KrwjFrpKba8GiSudcbL5jcfOrA+RPxpBZNaF2kXUu+k5J+tNwtiJRvtty86ScYr/EaLb9GGLZXGxyQN+pBoZdSVK8mOcUqbhyOe/Q+FWFwM5MSfBiPwqDi2XjJI9D7yf+mPstaFnGC6tLnQDtWfZgtMh6dkP/AK1oSS4XSux8fCg7Mqo07y/j7DsbY4UDvN19B51hvcFjIvIAYx4d4cvlUEkHyqhjI7V9WzAbf6hSRhqUlPZF0SKUMJOYbA7oP/NWFuw/Yyn01fg350GNwHcf5/woytvTUDZEk3EJBkRT/ECn15VpLxESxvHcJJCkmDq06hkelK24dmwpKjrg0Z2gU7Rrnqy5U/TFZxZNtMWuDGdPZzJIGYe6aW05Vc9A3+6jysnbR7ElmwC2CRt0OM1EOnspCRnCnH89UqlZJSt0Chh1HLZIHSuv/Ry3HsxYkKueVclFIUBx41uw3kkFi2nbY/lXNm3apHTBRXR29vYNMhXdmk6eArNmuSyxFcAiQ8xnHdNZ8jPojAbfGo0vLcTtEphRmVWJLhcjkRj686TR0Xhpt01458ymPtHD4ySVBH2o7Ssia3ki0jq4K/bP2rn4uKOcZVGzsCCRRZo7qa0kunbARCyZHP0HQVLSV9OvJ+GrR0MT9pGrgYyOR6Vfc9BSfDpQ9op8z9d/xpzWBvWdpnMVKktyG1QVbwFXQ7ZPM7mpJxQsFACGxyFDYN4L86YJFUanUgNCsuVQltIHiTQmkfOBEf8AUdP33+lWvpAkGT1P4E0ipuFhSQKxRlDDHfwD5cxTtv6Hxwg+yYft2LsoMTMOahjkV4zqB+sBTzPL5ikp72QHRGihjjcDOfQUtcLc9n2s+rTkDDNjmccqMHJ+j5ceJcXpo3LmIK2oJgkhs8jjY/Wiw3EQBkkgEoYYZM4IPken5Gsq8lLWFsOpTH1A/ChyPJE3ZpIw07Eg88Ej8KaSd2hMTjo4s1brisOdMEUqkjHfc7fXepkFvFDZyxY1nSxUkZyOYO3jWV2V30Eo/wBQH41U21zqyVfJ66x+dM02SWi+zTvL5XkJyRlQMeHwpCEqEUSqAcbEjn/zSjtIswhYPqJA9/b71DAo41FlZWHM8jWxQ1dC5NWmMzISx0A6TzURnc/KhFf1bApICefdJ6dNq0knDxKxIDHmCeRqoIUsWl1ZORkjbyr1I40vs81zv6MzSzJgKCF5A/0KbhLBN9tycVafSD2isuP3hkb+fqKioTTi6ZWDT6K17NeqKkOWhmaMhCrEhdmjO4AwNwedMRXUcu0cschPQ9xvkaTj/tb/APpUmP2D/wAP4mtQL6buV1d/KH/MMVdxiJvPH+4UO1/sMf8ABVLf+zP/ABj7ihXQ7cIRGNwzADTqIPyFNKpY6V+JoUP95/GfsKOv7KT0q6SItsv2yqNCch9ajORk0uKL+7T0I2Ckb/uYf4vwNWi6j/Kf99Cf+0RfxfhRIve/0n/fUpjw9LouGHrTlzLiBVzt1pWP3qpxb+xSfwH71KiyYjxC/EwfsGxHkKWHMjHTyr0csk1usbzqqoukIu2ccqzv3JPX8aZX9ifX8BU5IrjttllDJIA4GcryNHV5FgCpcPhlwyE7b0rH09V+9Mxe9D/GfxpGunQuxTZr8LuVWBYxuNsH4Y/CtLXnAB5msHhPJv8A1DW0n7RfQ1KcUgKVsaD71Jeg1YVOhyS9UZq940M86ZIVsS4qxaNY1OCwbn6Y/GkVmupUWNrhLcKAoUDvHH9eNMcZ/ZD+BvutZ3/874VRDqKcCspP6oKxU4TveFVuLidojCZVlBxv4YOedVvP2I/gWg3H7BaaPgMiuQxr1tChGQjHl4aifxrzvqmD45sD9c1MXuH+L8BQ/wB5fVftT14ST/y/ofN7nfTQzdknl9aX8aiqUjntg5SzXay6dtSnapuyGkkK9VB/r5VY0Kb3n/g/Os1SGg22W1ERDChmJwMjPSozJkZVF/0GvD3I/U/avS+4PUV1ObTSOZRTVnlfUrKQuSpOwxTi5Kg+IzSNv+0b0b7CtCL9in8I+1Lk7QYfZ//Z" alt="Phố đêm Sài Gòn" class="absolute inset-0 w-full h-full object-cover opacity-85 pointer-events-none" />
+        <div id="stage-time-tint" class="absolute inset-0 bg-gradient-to-b from-slate-900/20 via-transparent to-slate-950/75 pointer-events-none transition-colors duration-700"></div>
+
+        <!-- THANH TRẠNG THÁI BIẾN CỐ -->
+        <div id="cart-active-buff-bar" class="hidden mb-1 px-3 py-0.5 rounded-full bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 text-white font-black text-[10px] flex items-center justify-between shadow relative z-20 animate-pulse">
+          <span id="cart-buff-title">🔥 Bão Đơn Tóp Tóp</span>
+          <span id="cart-buff-timer" class="px-1.5 rounded-full bg-black/30">45s</span>
+        </div>
+
+        <!-- Banner Thử Thách Đơn Sỉ -->
+        <div id="bulk-rush-banner" class="hidden mb-1 p-1.5 rounded-xl bg-gradient-to-r from-rose-700 via-red-600 to-orange-600 text-white border-2 border-yellow-300 flex items-center justify-between shadow relative z-20">
+          <div>
+            <div id="bulk-rush-title" class="font-black text-[10px] uppercase text-yellow-200">🏢 ĐƠN SỈ QUẬN 1: 4 PHẦN!</div>
+            <div id="bulk-rush-progress" class="text-[9px] font-bold">Đã giao: 0/4 • Thưởng: +40.000đ</div>
+          </div>
+          <div id="bulk-rush-timer" class="px-2 py-0.5 rounded-lg bg-yellow-300 text-red-950 font-black text-xs">25s</div>
+        </div>
+
+        <div id="stage-decor-lights-bar" class="hidden relative z-10 flex items-center justify-around py-0.5 px-2 -mt-1 mb-0.5 rounded-full bg-black/35 border border-yellow-400/40 text-xs select-none pointer-events-none"></div>
+
+        <div class="flex items-center justify-between gap-1 relative z-10">
+          <div class="flex items-center gap-1 shrink-0">
+            <button onclick="openStoryModal()" class="soft-btn px-1.5 py-0.5 rounded-full bg-amber-800 border border-amber-300 text-yellow-200 font-black text-[8.5px] shadow whitespace-nowrap">
+              📍 <span id="stage-location-badge">Hẻm Q.4</span>
+            </button>
+            <span id="stage-scale-mini-badge" class="px-1.5 py-0.5 rounded-full bg-amber-950/90 text-yellow-300 font-black text-[8px] border border-amber-500 shadow hidden whitespace-nowrap"></span>
+          </div>
+
+          <div id="stage-sign-box" class="saigon-decal-sign px-2 py-0.5 text-center flex items-center justify-center gap-1 min-w-0 flex-1 max-w-[220px] sm:max-w-[300px] transition-all duration-300">
+            <span id="cart-light-bulb" class="text-xs shrink-0">💡</span>
+            <span id="stage-shop-name" class="font-black text-[10.5px] sm:text-xs saigon-red-title uppercase leading-tight break-words line-clamp-1">BÁNH TRÁNG DÌ TƯ</span>
+            <span id="stage-decor-prop-badge" class="hidden text-xs shrink-0 animate-bounce" title="Trang trí"></span>
+            <span id="stage-sub-info" class="hidden"></span>
+          </div>
+
+          <div class="flex items-center gap-1 shrink-0">
+            <button onclick="toggleRainTarp()" id="btn-rain-tarp" class="hidden soft-btn px-1.5 py-0.5 rounded-full bg-sky-500 text-white font-black text-[8.5px] shadow animate-bounce whitespace-nowrap">
+              ☂️ Che Bạt
+            </button>
+            <span id="stage-slot-cap-badge" class="px-1.5 py-0.5 rounded-full bg-amber-950/90 text-amber-200 font-black text-[8.5px] border border-amber-600 shadow whitespace-nowrap">
+              👥 2 chỗ
+            </span>
+          </div>
+        </div>
+
+        <!-- HÀNG NGANG 4 Ô CHÂN DUNG 2D KHÁCH HÀNG -->
+        <div id="customer-slots-row" class="grid grid-cols-4 gap-1 py-1.5 relative z-10"></div>
+
+        <!-- BONG BÓNG ORDER TRỰC QUAN NẰM GỌN NGAY TRONG SÂN KHẤU -->
+        <div class="relative z-10 bg-white/95 border-2 border-amber-900 rounded-xl p-1.5 flex items-center gap-2 shadow-md">
+          <div id="order-bubble-icon" onclick="quickSelectCustomerWantedDish()" title="Chạm để chọn nhanh món khách gọi" class="cursor-pointer hover:scale-105 active:scale-95 transition-transform w-9 h-9 rounded-lg bg-amber-50 border-2 border-amber-500 flex items-center justify-center shrink-0 overflow-hidden shadow-sm"></div>
+          <div class="flex-1 min-w-0">
+            <div id="order-bubble-text" class="text-[11px] font-bold text-amber-950 flex flex-wrap items-center gap-1">
+              Đang đợi khách ghé xe...
+            </div>
+            <div class="w-full h-1 bg-amber-100 rounded-full overflow-hidden mt-1">
+              <div id="order-bubble-patience-bar" class="h-full bg-amber-500 transition-all duration-300" style="width: 100%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. BĂNG CHUYỀN MÓN ĂN 1 HÀNG NGANG -->
+      <div class="bg-slate-800/90 border-2 border-slate-600 rounded-2xl p-1 flex items-center gap-1 shadow-inner">
+        <button onclick="scrollDishRibbon(-140)" class="soft-btn w-6 h-12 rounded-xl bg-amber-400 text-amber-950 font-black text-xs flex items-center justify-center shrink-0 shadow">◀</button>
+        <div id="sell-dish-grid" class="flex-1 flex items-center gap-1.5 overflow-x-auto py-0.5 px-0.5 scroll-smooth"></div>
+        <button onclick="scrollDishRibbon(140)" class="soft-btn w-6 h-12 rounded-xl bg-amber-400 text-amber-950 font-black text-xs flex items-center justify-center shrink-0 shadow">▶</button>
+      </div>
+
+      <!-- Dải nhân viên & thông tin thời tiết ngày -->
+      <div id="staff-active-strip" class="flex flex-wrap items-center justify-between gap-1 px-2 py-1 rounded-xl bg-amber-100/90 border border-amber-300 text-[9px] font-bold text-amber-950"></div>
+
+      <!-- 3. BÀN TRỘN GỖ 2D CASUAL + THAU INOX + ANIMATION NGUYÊN LIỆU BAY VÀO THAU -->
+      <div id="main-worktable-box" class="inox-worktable p-2 grid grid-cols-12 gap-1.5 items-stretch relative transition-all duration-300">
+        <!-- Cột Trái: 3 Bước Chế Biến -->
+        <div class="col-span-3 flex flex-col justify-between gap-1.5 z-10">
+          <button onclick="doStep1Base()" id="step-btn-1" class="soft-btn btn-game-green active-red-ring p-1.5 rounded-2xl text-center flex flex-col items-center justify-center flex-1">
+            <span class="text-lg leading-none drop-shadow">✂️</span>
+            <span class="font-black text-[10px] leading-tight mt-0.5 uppercase">1. Cắt Bánh</span>
+            <span id="step-check-1" class="text-[8px] font-black px-1.5 rounded-full bg-black/25 text-white mt-0.5">B1</span>
+          </button>
+
+          <button onclick="doStep2Sauce()" id="step-btn-2" class="soft-btn btn-game-yellow p-1.5 rounded-2xl text-center flex flex-col items-center justify-center flex-1">
+            <span class="text-lg leading-none drop-shadow">🥣</span>
+            <span class="font-black text-[10px] leading-tight mt-0.5 uppercase">2. Rưới Sốt</span>
+            <span id="step-check-2" class="text-[8px] font-black px-1.5 rounded-full bg-black/20 text-amber-950 mt-0.5">B2</span>
+          </button>
+
+          <button onclick="doStep3Mix()" id="step-btn-3" class="soft-btn btn-game-blue p-1.5 rounded-2xl text-center flex flex-col items-center justify-center flex-1">
+            <span class="text-lg leading-none drop-shadow">🧤</span>
+            <span class="font-black text-[10px] leading-tight mt-0.5 uppercase">3. Trộn Đều</span>
+            <span id="step-check-3" class="text-[8px] font-black px-1.5 rounded-full bg-black/25 text-yellow-200 mt-0.5">0%</span>
+          </button>
+        </div>
+
+        <!-- Cột Giữa: Thau Inox 304 Lớn + Nguyên Liệu 2D Bay Vào Thau -->
+        <div class="col-span-6 flex flex-col justify-between items-center relative">
+          <div id="bowl-container-box" onclick="triggerNextStepSmart()" class="cursor-pointer w-full flex-1 flex flex-col items-center justify-between relative min-h-[142px] overflow-visible">
+            <div class="w-full flex items-center justify-between z-20 px-0.5">
+              <span id="vessel-mode-label" class="text-[8px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-950/90 text-yellow-300 shadow">
+                🥣 Thau Inox
+              </span>
+              <button onclick="event.stopPropagation(); resetBowl(true)" class="soft-btn px-2 py-0.5 rounded-lg bg-slate-900/85 text-white font-black text-[9px] shadow">
+                🗑️ Đổ
+              </button>
+            </div>
+
+            <div id="floating-fx-container" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-40 overflow-visible"></div>
+            <div id="flying-ingredients-layer" class="absolute inset-0 flex items-center justify-center pointer-events-none z-30 overflow-visible"></div>
+            <div id="particle-burst-layer" class="absolute inset-0 flex items-center justify-center pointer-events-none z-30"></div>
+
+            <div id="bowl-visual-wrapper" class="relative w-24 h-24 flex items-center justify-center my-0.5">
+              <svg id="bowl-svg" class="w-24 h-24 transition-transform duration-200 drop-shadow-xl" viewBox="0 0 160 160">
+                <defs>
+                  <radialGradient id="inoxGrad" cx="50%" cy="45%" r="55%">
+                    <stop offset="0%" stop-color="#ffffff"/><stop offset="65%" stop-color="#cbd5e1"/><stop offset="100%" stop-color="#64748b"/>
+                  </radialGradient>
+                  <radialGradient id="grillGrad" cx="50%" cy="50%" r="55%">
+                    <stop offset="0%" stop-color="#ef4444"/><stop offset="60%" stop-color="#991b1b"/><stop offset="100%" stop-color="#1e293b"/>
+                  </radialGradient>
+                  <radialGradient id="bambooGrad" cx="50%" cy="50%" r="55%">
+                    <stop offset="0%" stop-color="#15803d"/><stop offset="75%" stop-color="#166534"/><stop offset="100%" stop-color="#b45309"/>
+                  </radialGradient>
+                </defs>
+                <circle id="svg-vessel-rim" cx="80" cy="80" r="74" fill="#94a3b8" stroke="#1e293b" stroke-width="4"/>
+                <circle id="svg-vessel-inner" cx="80" cy="80" r="65" fill="url(#inoxGrad)" stroke="#e2e8f0" stroke-width="2"/>
+                <g id="svg-grill-lines" class="hidden">
+                  <circle cx="65" cy="70" r="14" fill="#fb923c" opacity="0.65"/>
+                  <circle cx="95" cy="88" r="16" fill="#f97316" opacity="0.65"/>
+                  <g stroke="#cbd5e1" stroke-width="1.6" opacity="0.75">
+                    <line x1="28" y1="55" x2="132" y2="55"/><line x1="22" y1="80" x2="138" y2="80"/><line x1="28" y1="105" x2="132" y2="105"/>
+                  </g>
+                </g>
+                <g id="svg-layer-base" class="hidden">
+                  <path id="svg-ricepaper-body" d="M35,66 Q80,36 122,70 Q104,122 42,110 Z" fill="#fef9c3" opacity="0.96"/>
+                  <line x1="46" y1="62" x2="108" y2="66" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"/>
+                  <line x1="50" y1="76" x2="112" y2="74" stroke="#84cc16" stroke-width="4" stroke-linecap="round"/>
+                  <line x1="52" y1="90" x2="106" y2="86" stroke="#fde047" stroke-width="4" stroke-linecap="round"/>
+                  <g id="svg-anim-scissors" class="hidden">
+                    <line x1="95" y1="35" x2="65" y2="75" stroke="#475569" stroke-width="3.5" stroke-linecap="round"/>
+                    <line x1="110" y1="48" x2="60" y2="68" stroke="#64748b" stroke-width="3.5" stroke-linecap="round"/>
+                  </g>
+                </g>
+                <g id="svg-layer-sauce" class="hidden">
+                  <circle cx="78" cy="78" r="28" fill="#c2410c" opacity="0.5"/>
+                  <polyline id="svg-anim-zigzag" points="46,64 108,68 50,80 112,84 56,96 104,98" fill="none" stroke="#facc15" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <g id="svg-anim-kumquat">
+                    <circle cx="104" cy="48" r="9" fill="#16a34a"/><circle cx="104" cy="48" r="6" fill="#a3e635"/>
+                  </g>
+                </g>
+                <g id="svg-layer-herbs" class="hidden">
+                  <ellipse cx="60" cy="64" rx="7" ry="4" fill="#15803d" transform="rotate(-20 60 64)"/>
+                  <ellipse cx="94" cy="88" rx="7" ry="4" fill="#16a34a" transform="rotate(15 94 88)"/>
+                  <circle cx="68" cy="88" r="4" fill="#b45309"/>
+                </g>
+                <g id="svg-layer-topping" class="hidden">
+                  <rect x="52" y="64" width="16" height="9" rx="2.5" fill="#7f1d1d"/>
+                  <ellipse cx="68" cy="88" rx="9" ry="7" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+                  <circle cx="68" cy="88" r="3.5" fill="#f59e0b"/>
+                </g>
+                <g id="svg-anim-glove" class="hidden">
+                  <path d="M88,42 C96,38 106,46 100,56 L86,74 C78,80 68,72 74,62 Z" fill="rgba(255,255,255,0.75)" stroke="#94a3b8" stroke-width="1.8"/>
+                </g>
+              </svg>
+            </div>
+
+            <span id="bowl-instruction" class="relative z-10 text-[9px] font-black text-amber-950 bg-white/95 px-2 py-0.5 rounded-full border border-amber-500 text-center shadow-sm">
+              🧤 Chạm thau làm tiếp
+            </span>
+
+            <div class="w-full mt-1 relative z-10">
+              <div id="mix-bar-track" class="w-full h-2.5 bg-slate-900/50 rounded-full overflow-hidden border border-amber-950 relative">
+                <div id="sweet-spot-zone" class="absolute top-0 bottom-0 bg-emerald-400/95 border-x-2 border-white shadow" style="left: 68%; width: 24%"></div>
+                <div id="mix-bar-fill" class="h-full bg-gradient-to-r from-amber-400 via-orange-500 to-emerald-500 transition-all duration-150" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cột Phải: 4 Nút Topping (Khách gọi gì mới bấm chọn nấy -> Bấm đúng bật Xanh Lá!) -->
+        <div class="col-span-3 flex flex-col justify-between gap-1 z-10">
+          <button onclick="setOption('rau', !bowl.rau)" id="opt-rau-toggle" class="soft-btn py-1 px-1.5 rounded-full font-black text-[10px] bg-slate-200 text-amber-950 border-2 border-slate-400 shadow flex items-center justify-between">
+            <span>🌿 Rau</span>
+            <span class="text-[9px] font-black">+</span>
+          </button>
+
+          <button onclick="setOption('hanh', !bowl.hanh)" id="opt-hanh-toggle" class="soft-btn py-1 px-1.5 rounded-full font-black text-[10px] bg-slate-200 text-amber-950 border-2 border-slate-400 shadow flex items-center justify-between">
+            <span>🧅 Hành</span>
+            <span class="text-[9px] font-black">+</span>
+          </button>
+
+          <button onclick="cycleSpiceLevel()" id="spice-bottle-btn" class="soft-btn py-1 px-1.5 rounded-full font-black text-[10px] bg-slate-200 text-amber-950 border-2 border-slate-400 shadow flex items-center justify-between">
+            <span id="spice-bottle-label" class="font-black text-[10px]">🌶️ Ớt</span>
+            <span id="spice-bottle-icons" class="text-[9px] font-black">+</span>
+          </button>
+
+          <button onclick="toggleTraTacOption()" id="opt-tratac-btn" class="soft-btn py-1 px-1.5 rounded-full font-black text-[10px] bg-slate-200 text-amber-950 border-2 border-slate-400 shadow flex items-center justify-between">
+            <span>🧋 Trà</span>
+            <span class="text-[9px] font-black">+</span>
+          </button>
+
+          <button onclick="doStep4Serve()" id="step-btn-4" class="soft-btn btn-game-green w-full py-2 rounded-2xl font-black text-[11px] tracking-wide uppercase shadow-lg mt-0.5">
+            TRAO KHÁCH
+          </button>
+        </div>
+      </div>
+
+      <!-- 4. DẢI 9 ICON NGUYÊN LIỆU 2D TRÒN DƯỚI ĐÁY -->
+      <div class="px-1.5 py-1.5 rounded-2xl bg-[#451a03] border-2 border-[#78350f] shadow-lg">
+        <div id="bottom-ingredient-tray" class="grid grid-cols-9 gap-1 items-center"></div>
+      </div>
+    </div> <!-- Đóng #screen-street-sell -->
+
+  </main>
+
+  <!-- ================= POP-UP MENU TIỆN ÍCH NHANH ================= -->
+  <div id="modal-quick-menu" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="w-full max-w-xs wooden-clipboard-frame">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner space-y-2 text-xs">
+        <div class="flex items-center justify-between border-b border-amber-200 pb-1.5">
+          <span class="font-black text-sm text-amber-950">☰ Menu Tiện Ích Quán</span>
+          <button onclick="closeQuickMenuModal()" class="px-2 py-0.5 bg-amber-100 rounded-lg font-black">✕</button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-1.5">
+          <button onclick="closeQuickMenuModal(); openDiTuTutorialModal(0)" class="soft-btn p-2.5 rounded-xl bg-amber-100 border-2 border-amber-400 font-black text-amber-950 flex flex-col items-center gap-1">
+            <span class="text-2xl">👵</span><span>Bí Kíp Dì Tư</span>
+          </button>
+          <button onclick="closeQuickMenuModal(); openAchievementsModal()" class="soft-btn p-2.5 rounded-xl bg-orange-100 border-2 border-orange-400 font-black text-amber-950 flex flex-col items-center gap-1">
+            <span class="text-2xl">🎖️</span><span>16 Thành Tựu</span>
+          </button>
+          <button onclick="closeQuickMenuModal(); openStoryModal()" class="soft-btn p-2.5 rounded-xl bg-emerald-100 border-2 border-emerald-400 font-black text-emerald-950 flex flex-col items-center gap-1">
+            <span class="text-2xl">📖</span><span>Hồi Ký 8 Chương</span>
+          </button>
+          <button onclick="closeQuickMenuModal(); openReviewsModal()" class="soft-btn p-2.5 rounded-xl bg-rose-100 border-2 border-rose-400 font-black text-rose-950 flex flex-col items-center gap-1 relative">
+            <span class="text-2xl">📱</span><span>Tóp Tóp MXH</span>
+            <span id="prep-unreplied-badge" class="hidden absolute top-1 right-1 px-1.5 rounded-full bg-red-600 text-white font-black text-[9px]">0</span>
+          </button>
+          <button onclick="closeQuickMenuModal(); openProfileEditModal()" class="soft-btn p-2.5 rounded-xl bg-emerald-100 border-2 border-emerald-500 font-black text-emerald-950 flex flex-col items-center gap-1">
+            <span class="text-2xl">🔑</span><span>Mã Khôi Phục</span>
+          </button>
+          <button onclick="closeQuickMenuModal(); openProfileEditModal()" class="soft-btn p-2.5 rounded-xl bg-blue-100 border-2 border-blue-400 font-black text-blue-950 flex flex-col items-center gap-1">
+            <span class="text-2xl">⚙️</span><span>Đổi Bảng Hiệu</span>
+          </button>
+          <button onclick="closeQuickMenuModal(); openCustomerCodexModal()" class="soft-btn col-span-2 p-2.5 rounded-xl bg-gradient-to-r from-yellow-100 via-amber-100 to-emerald-100 border-2 border-amber-500 font-black text-amber-950 flex items-center justify-center gap-2 relative shadow-sm">
+            <span class="text-xl">📖</span><span>Sổ Tay Khách Quen Mối Ruột (VIP)</span>
+            <span id="menu-codex-badge" class="hidden px-1.5 py-0.5 rounded-full bg-red-600 text-white font-black text-[9px]">NHẬN THƯỞNG</span>
+          </button>
+          <button onclick="closeQuickMenuModal(); openGiftcodeModal()" class="soft-btn col-span-2 p-2.5 rounded-xl bg-gradient-to-r from-rose-100 via-amber-100 to-orange-100 border-2 border-rose-400 font-black text-rose-950 flex items-center justify-center gap-2 relative shadow-sm">
+            <span class="text-xl">🎁</span><span>Nhập Giftcode & Hộp Thư Sự Kiện</span>
+            <span id="menu-gift-badge" class="hidden px-1.5 py-0.5 rounded-full bg-red-600 text-white font-black text-[9px]">MỚI</span>
+          </button>
+          <button onclick="closeQuickMenuModal(); openLeaderboardFromAnywhere()" class="soft-btn p-2.5 rounded-xl bg-yellow-100 border-2 border-amber-500 font-black text-amber-950 flex flex-col items-center gap-1">
+            <span class="text-2xl">🏆</span><span>Bảng Xếp Hạng</span>
+          </button>
+          <button onclick="closeQuickMenuModal(); openFirebaseConfigModal()" class="soft-btn p-2.5 rounded-xl bg-teal-100 border-2 border-teal-500 font-black text-teal-950 flex flex-col items-center gap-1">
+            <span class="text-2xl">☁️</span><span>Kết Nối Firebase</span>
+          </button>
+          <button onclick="closeQuickMenuModal(); openPwaInstallModal()" class="soft-btn col-span-2 p-2.5 rounded-xl bg-gradient-to-r from-emerald-100 via-teal-100 to-cyan-100 border-2 border-emerald-500 font-black text-emerald-950 flex items-center justify-center gap-2 relative shadow-sm">
+            <span class="text-xl">📲</span><span>Hướng Dẫn Cài Ra Màn Hình Chính</span>
+          </button>
+        </div>
+
+        <div class="flex gap-1.5 pt-1 border-t border-amber-200">
+          <button onclick="toggleAudioSystem()" class="soft-btn flex-1 py-2 rounded-xl bg-amber-800 text-white font-black text-xs flex items-center justify-center gap-1">
+            <span id="audio-icon">🎵</span><span>Nhạc nền</span>
+          </button>
+          <button onclick="closeQuickMenuModal(); openLoginModalForSwitch()" class="soft-btn flex-1 py-2 rounded-xl bg-slate-700 text-white font-black text-xs flex items-center justify-center gap-1">
+            <span>🔑</span><span>Đổi Quán</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= POP-UP HƯỚNG DẪN CÀI GAME RA MÀN HÌNH CHÍNH ================= -->
+  <div id="modal-pwa-install" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3 overflow-y-auto">
+    <div class="w-full max-w-sm wooden-clipboard-frame my-auto">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner space-y-2.5 text-xs">
+        <div class="flex items-center justify-between border-b border-amber-200 pb-1.5">
+          <span class="font-black text-sm text-amber-950">📲 Cài Game Ra Màn Hình Chính</span>
+          <button onclick="closePwaInstallModal()" class="px-2.5 py-0.5 bg-amber-100 rounded-lg font-black text-amber-950">✕</button>
+        </div>
+
+        <div class="flex items-center gap-2.5 p-2 rounded-2xl bg-gradient-to-r from-amber-100 to-orange-100 border-2 border-amber-400">
+          <img src="data:image/jpeg;base64,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" alt="Vua Bánh Tráng Sài Gòn" class="w-16 h-16 rounded-2xl object-cover border-2 border-amber-600 shadow shrink-0" />
+          <div class="space-y-1 flex-1 min-w-0">
+            <div class="font-black text-xs sm:text-sm text-amber-950">Vua Bánh Tráng Sài Gòn</div>
+            <p class="text-[10px] text-amber-800 font-semibold leading-snug">Chơi toàn màn hình mượt mà như ứng dụng thật trên điện thoại!</p>
+            <button type="button" id="btn-trigger-pwa-install" onclick="triggerPwaInstallNow()" class="soft-btn btn-game-green w-full py-1.5 rounded-xl font-black text-[11px]">
+              📲 Bấm Cài Đặt Ngay
+            </button>
+          </div>
+        </div>
+
+        <div id="pwa-install-feedback" class="hidden p-2 rounded-xl bg-amber-50 border border-amber-400 text-amber-950 font-bold text-[11px] text-center"></div>
+
+        <div class="space-y-2 text-[11px] leading-relaxed">
+          <div class="p-2.5 rounded-2xl bg-emerald-50 border-2 border-emerald-300">
+            <div class="font-black text-emerald-950 text-xs mb-1">🤖 Trên điện thoại Android (Chrome / Cốc Cốc):</div>
+            <ol class="list-decimal list-inside space-y-1 text-emerald-900 font-semibold">
+              <li>Bấm nút <b>"📲 Bấm Cài Đặt Ngay"</b> phía trên (nếu trình duyệt hỗ trợ cài nhanh).</li>
+              <li>Hoặc chạm vào biểu tượng <b>3 chấm (⋮)</b> ở góc trên bên phải trình duyệt.</li>
+              <li>Chọn <b>"Cài đặt ứng dụng"</b> hoặc <b>"Thêm vào màn hình chính"</b> ➔ bấm <b>Cài đặt</b>.</li>
+            </ol>
+          </div>
+
+          <div class="p-2.5 rounded-2xl bg-orange-50 border-2 border-orange-300">
+            <div class="font-black text-orange-950 text-xs mb-1">🍎 Trên iPhone / iPad (Safari):</div>
+            <ol class="list-decimal list-inside space-y-1 text-orange-900 font-semibold">
+              <li>Mở game bằng trình duyệt <b>Safari</b>.</li>
+              <li>Chạm nút <b>Chia sẻ (biểu tượng mũi tên lên ↑)</b> ở thanh dưới cùng.</li>
+              <li>Kéo xuống chọn <b>"Thêm vào MH chính" (Add to Home Screen)</b> ➔ bấm <b>Thêm</b> ở góc trên bên phải.</li>
+            </ol>
+          </div>
+        </div>
+
+        <button type="button" onclick="closePwaInstallModal()" class="soft-btn btn-game-red w-full py-2 rounded-xl font-black text-xs">
+          Đã Hiểu • Quay Lại Game
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= POP-UP NHẬP GIFTCODE & HỘP THƯ ADMIN ================= -->
+  <div id="modal-giftcode" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="w-full max-w-md wooden-clipboard-frame relative overflow-hidden">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-3.5 space-y-2.5 text-xs max-h-[85vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-amber-200 pb-1.5">
+          <div class="flex items-center gap-1.5">
+            <span class="text-lg">🎁</span>
+            <div>
+              <h3 class="font-black text-sm text-amber-950">Giftcode & Hộp Thư Quán</h3>
+              <p class="text-[10px] font-bold text-amber-800">Nhận quà sự kiện & thông báo từ Ban Quản Trị</p>
+            </div>
+          </div>
+          <button onclick="closeGiftcodeModal()" class="px-2.5 py-1 bg-amber-100 hover:bg-amber-200 rounded-lg font-black text-amber-950">✕</button>
+        </div>
+
+        <!-- Khu vực 1: Ô nhập Giftcode -->
+        <div class="p-2.5 rounded-2xl bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50 border-2 border-rose-300 space-y-2 shadow-inner">
+          <div class="font-black text-rose-950 flex items-center justify-between">
+            <span>🎟️ Nhập Mã Giftcode Nhận Thưởng</span>
+            <span id="giftcode-shop-tag" class="text-[10px] font-bold text-amber-800"></span>
+          </div>
+          <div class="flex gap-1.5">
+            <input id="giftcode-input" type="text" maxlength="24" placeholder="Nhập mã (VD: TANTHU50K)..." class="flex-1 px-3 py-2 rounded-xl border-2 border-amber-400 bg-white font-black text-amber-950 uppercase tracking-wider text-xs focus:outline-none focus:border-rose-500" />
+            <button id="btn-redeem-giftcode" onclick="handleRedeemGiftcode()" class="soft-btn btn-game-orange px-3.5 py-2 rounded-xl font-black text-xs shrink-0 shadow">
+              🎁 Nhận Quà
+            </button>
+          </div>
+          <div id="giftcode-status-msg" class="hidden text-[11px] font-black p-2 rounded-xl text-center"></div>
+        </div>
+
+        <!-- Khu vực 2: Hộp thư & Quà từ Ban Quản Trị (Broadcast + Thư riêng) -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-black text-amber-950">📬 Hộp Thư & Quà Ban Quản Trị</span>
+            <button onclick="syncAdminLiveOpsAndMail(true)" class="text-[10px] font-black text-blue-700 underline">🔄 Kiểm tra thư mới</button>
+          </div>
+          <div id="admin-mail-container" class="space-y-1.5">
+            <div class="text-center py-3 text-amber-800 font-bold bg-amber-50/70 rounded-xl border border-amber-200">Chưa có thư hoặc quà đền bù mới.</div>
+          </div>
+        </div>
+
+        <!-- Khu vực 3: Sự kiện toàn Server đang áp dụng -->
+        <div class="p-2.5 rounded-2xl bg-purple-50 border border-purple-300 space-y-1">
+          <div class="font-black text-purple-950 flex items-center justify-between">
+            <span>⚡ Sự Kiện Toàn Server</span>
+            <span id="live-ops-modal-status" class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-black text-[9px]">Mặc định</span>
+          </div>
+          <div id="live-ops-modal-desc" class="text-[11px] font-bold text-purple-900">
+            Nhịp độ khách, điểm kinh nghiệm và giá chợ đang ở mức chuẩn Sài Gòn.
+          </div>
+        </div>
+
+        <!-- Lịch sử mã đã nhập -->
+        <div class="pt-1 border-t border-amber-200">
+          <div class="text-[10px] font-bold text-amber-800">Mã đã nhập tại quán: <span id="redeemed-codes-list" class="font-black text-amber-950">Chưa có</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= POP-UP DÌ TƯ TRUYỀN NGHỀ ================= -->
+  <div id="modal-ditu-tutorial" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="w-full max-w-md wooden-clipboard-frame relative overflow-hidden">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-4 relative">
+        <span class="poetic-floating-badge absolute top-2 left-3 text-xl pointer-events-none">🌿</span>
+        <span class="poetic-floating-badge absolute top-4 right-4 text-xl pointer-events-none" style="animation-delay: 0.8s">🌶️</span>
+
+        <div class="flex flex-col items-center text-center">
+          <div class="relative w-24 h-24 rounded-full border-4 border-amber-400 shadow-xl overflow-hidden bg-amber-50 mb-1.5">
+            <img src="data:image/jpeg;base64,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" alt="Dì Tư Truyền Nghề" class="w-full h-full object-cover" />
+          </div>
+          <span id="tutorial-step-badge" class="px-3 py-0.5 rounded-full bg-amber-800 text-yellow-200 font-black text-[10px] uppercase">
+            Bí Kíp Truyền Nghề • Phần 1/4
+          </span>
+          <h3 id="tutorial-step-title" class="text-base font-black text-amber-950 mt-1">
+            Hương Vị Của Góc Phố Sài Gòn
+          </h3>
+        </div>
+
+        <div class="mt-2.5 p-3 rounded-2xl bg-gradient-to-br from-amber-50 via-orange-50/70 to-yellow-50 border-2 border-amber-400 shadow-inner min-h-[105px] flex flex-col justify-center">
+          <p id="tutorial-poetic-quote" class="text-xs sm:text-sm font-bold text-amber-950 italic leading-relaxed text-center"></p>
+        </div>
+
+        <div id="tutorial-key-tip" class="mt-2 p-2 rounded-xl bg-emerald-50 border border-emerald-400 text-[11px] font-extrabold text-emerald-950 text-center"></div>
+
+        <div class="flex items-center justify-between gap-2 mt-3">
+          <button onclick="closeDiTuTutorialModal()" class="soft-btn px-3 py-2 rounded-xl bg-gray-200 text-amber-950 font-bold text-xs">
+            Đóng
+          </button>
+          <div class="flex gap-1.5">
+            <button id="btn-tut-prev" onclick="stepDiTuTutorial(-1)" class="soft-btn px-3 py-2 rounded-xl bg-amber-200 text-amber-950 font-black text-xs">
+              ◀ Trước
+            </button>
+            <button id="btn-tut-next" onclick="stepDiTuTutorial(1)" class="soft-btn btn-game-orange px-4 py-2 rounded-xl font-black text-xs">
+              Tiếp theo ▶
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CÁC POP-UP CHỨC NĂNG KHÁC ================= -->
+
+    <!-- 0A. POP-UP MINIGAME TRẢ GIÁ CHỢ ĐẦU MỐI -->
+  <div id="modal-bargain" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="w-full max-w-sm wooden-clipboard-frame">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-3.5 text-center space-y-2.5 text-xs">
+        <div class="flex items-center justify-between border-b border-amber-200 pb-1.5">
+          <span class="font-black text-sm text-amber-950">🤝 Minigame Trả Giá Chợ Đầu Mối</span>
+          <button onclick="closeBargainModal()" class="px-2 py-0.5 bg-amber-100 rounded-lg font-black">✕</button>
+        </div>
+        <div class="flex items-center gap-2.5 bg-amber-50 p-2 rounded-2xl border border-amber-300 text-left">
+          <img id="bargain-modal-img" src="" alt="Trả giá chợ sỉ" class="w-16 h-16 rounded-xl object-cover border-2 border-amber-500 shrink-0 shadow" />
+          <div>
+            <div class="font-black text-amber-950">🗣️ Cô Tư Mối Sỉ Chợ Đầu Mối:</div>
+            <p class="text-[11px] text-amber-800 leading-snug mt-0.5">“Canh kim chạy vào đúng vạch Đỏ giữa thanh để chốt mức giảm tới <b>-10%</b> toàn bộ nguyên liệu hôm nay nghen!”</p>
+          </div>
+        </div>
+
+        <!-- Thanh Gauge Canh Nhịp Trả Giá (-2% | -5% | -10% | -5% | -2%) -->
+        <div class="space-y-1 pt-1">
+          <div class="flex justify-between text-[10px] font-black px-1">
+            <span class="text-emerald-700">Xanh: -2%</span>
+            <span class="text-amber-600">Vàng: -5%</span>
+            <span class="text-red-600 animate-pulse">🎯 Tâm Đỏ: -10%</span>
+            <span class="text-amber-600">Vàng: -5%</span>
+            <span class="text-emerald-700">Xanh: -2%</span>
+          </div>
+          <div class="relative w-full h-7 rounded-full overflow-hidden border-2 border-amber-950 shadow-inner flex">
+            <div class="w-[22%] h-full bg-emerald-500 flex items-center justify-center text-[9px] font-black text-white">-2%</div>
+            <div class="w-[20%] h-full bg-amber-400 flex items-center justify-center text-[9px] font-black text-amber-950">-5%</div>
+            <div class="w-[16%] h-full bg-rose-600 flex items-center justify-center text-[10px] font-black text-yellow-200 border-x-2 border-white">-10%</div>
+            <div class="w-[20%] h-full bg-amber-400 flex items-center justify-center text-[9px] font-black text-amber-950">-5%</div>
+            <div class="w-[22%] h-full bg-emerald-500 flex items-center justify-center text-[9px] font-black text-white">-2%</div>
+            <div id="bargain-needle" class="absolute top-0 bottom-0 w-2 bg-white border-2 border-slate-950 rounded-full shadow-lg" style="left: 50%; transform: translateX(-50%);"></div>
+          </div>
+        </div>
+
+        <div id="bargain-result-msg" class="text-[11px] font-black text-amber-900 min-h-[18px]">
+          Kim đang chạy! Bấm nút bên dưới để chốt mức chiết khấu!
+        </div>
+
+        <div class="flex gap-2">
+          <button onclick="closeBargainModal()" class="soft-btn flex-1 py-2.5 rounded-xl bg-gray-200 text-amber-950 font-bold text-xs">Đóng</button>
+          <button id="btn-stop-bargain" onclick="stopBargainNeedle()" class="soft-btn btn-game-red flex-[2] py-2.5 rounded-xl font-black text-xs uppercase tracking-wide shadow-lg">
+            🗣️ Chốt Giá Ngay!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 0B. POP-UP SỔ TAY KHÁCH QUEN MỐI RUỘT (CUSTOMER CODEX) -->
+  <div id="modal-codex" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="w-full max-w-md wooden-clipboard-frame max-h-[90vh] flex flex-col">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-3.5 flex-1 flex flex-col overflow-hidden text-xs">
+        <div class="flex items-center justify-between border-b border-amber-200 pb-2 mb-2">
+          <div class="flex items-center gap-2">
+            <img id="codex-header-img" src="" alt="Sổ tay khách quen" class="w-10 h-10 rounded-xl object-cover border border-amber-500 shrink-0" />
+            <div>
+              <h3 class="text-sm font-black text-amber-950">📖 Sổ Tay Khách Quen Mối Ruột</h3>
+              <p class="text-[10px] font-bold text-amber-800">Phục vụ đạt 5⭐ đủ 3 lần/khách để kết thân Mối Ruột (+25.000đ/khách)!</p>
+            </div>
+          </div>
+          <button onclick="closeCustomerCodexModal()" class="text-xs font-black px-2.5 py-1 bg-amber-100 rounded-lg">✕</button>
+        </div>
+        <div id="codex-summary-banner" class="p-2 rounded-xl bg-amber-100 border border-amber-300 font-black text-[11px] text-amber-950 mb-2 flex items-center justify-between"></div>
+        <div id="codex-list-container" class="space-y-2 overflow-y-auto flex-1 pr-1"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. POP-UP SƠ CHẾ -->
+  <div id="modal-prep" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="w-full max-w-sm wooden-clipboard-frame">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-4 text-center">
+        <div id="prep-modal-icon" class="text-5xl mb-1">🌶️</div>
+        <h3 id="prep-modal-title" class="text-base font-black text-amber-950">Thắng Sa Tế</h3>
+        <p id="prep-modal-desc" class="text-xs text-amber-800 my-1.5">Đảo đều tay cho dậy mùi thơm!</p>
+        <div class="w-full h-3.5 bg-amber-200 rounded-full overflow-hidden border mb-3"><div id="prep-modal-bar" class="h-full bg-gradient-to-r from-orange-500 to-red-600" style="width: 0%"></div></div>
+        <div class="flex gap-2">
+          <button onclick="closePrepModal()" class="soft-btn flex-1 py-2.5 rounded-xl bg-gray-200 text-xs font-bold">Đóng</button>
+          <button onclick="tapPrepAction()" class="soft-btn btn-game-orange flex-[2] py-2.5 rounded-xl text-xs font-black">🔥 Đảo Đều Tay</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. POP-UP MXH TÓP TÓP & FOODY -->
+  <div id="modal-reviews" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="w-full max-w-md wooden-clipboard-frame max-h-[90vh] flex flex-col">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-3.5 flex-1 flex flex-col overflow-hidden">
+        <div class="flex items-center justify-between border-b border-amber-200 pb-2 mb-2">
+          <div class="text-sm font-black text-amber-950">📱 Tóp Tóp & Foody Sài Gòn</div>
+          <button onclick="closeReviewsModal()" class="text-xs font-black px-2.5 py-1 bg-amber-100 rounded-lg">✕</button>
+        </div>
+        <div class="p-2.5 rounded-xl bg-gradient-to-r from-amber-100 to-rose-100 border border-rose-300 space-y-1.5 mb-2 text-xs">
+          <div class="flex items-center justify-between font-bold">
+            <span>Sao Quán: <b id="social-modal-rating" class="text-sm">5.0 ⭐</b></span>
+            <span id="social-modal-tier" class="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black">Đỉnh Nóc</span>
+          </div>
+          <div id="social-rating-impact-desc" class="text-[10px] font-bold text-amber-950 bg-white/80 px-2 py-1 rounded-lg border border-amber-300">
+            🌟 Hiệu ứng: Khách tối đa +15% • Tỷ lệ VIP +20% • Chịu giá +1.000đ • Phí App -2%
+          </div>
+          <div>
+            <div class="flex justify-between text-[10px] font-extrabold text-rose-900 mb-0.5">
+              <span>🔥 Độ Nổi Tiếng: <b id="social-viral-pct">20%</b></span>
+              <span id="social-viral-hint">Đạt 80%+ kích hoạt Bão Đơn 45s!</span>
+            </div>
+            <div class="w-full h-2.5 bg-white rounded-full overflow-hidden border border-rose-400">
+              <div id="social-viral-bar" class="h-full bg-gradient-to-r from-orange-500 via-rose-500 to-pink-600 transition-all duration-300" style="width: 20%"></div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 pt-0.5">
+            <button type="button" id="btn-reply-all-positive" onclick="replyAllPositiveReviews()" class="hidden soft-btn flex-1 py-1.5 px-2 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black text-[10px] shadow">
+              ⚡ Thả Tim Nhanh Tất Cả Đơn Khen
+            </button>
+            <button type="button" id="btn-manual-viral-storm" onclick="triggerViralStormFromModal()" class="hidden soft-btn flex-1 py-1.5 px-2 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 text-white font-black text-[10px] shadow animate-pulse">
+              🔥 Kích Hoạt Bão Đơn Ngay!
+            </button>
+          </div>
+        </div>
+        <div id="reviews-list-container" class="space-y-2 overflow-y-auto flex-1 pr-1 text-xs"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. POP-UP ĐỨT HÀNG GIỮA CA -->
+  <div id="modal-out-of-stock" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="w-full max-w-md wooden-clipboard-frame">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-3.5 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-black text-red-950">🚨 Đứt Hàng Trong Khay!</h3>
+          <button onclick="closeOutOfStockModal()" class="soft-btn px-2 py-1 rounded-lg bg-gray-200 text-gray-800 font-black text-xs">✕ Đóng tạm</button>
+        </div>
+        <p id="oos-desc" class="text-xs text-amber-950 bg-red-50 p-2.5 rounded-xl border border-red-200"></p>
+        <div id="oos-minigame-box" class="hidden p-3 rounded-xl bg-orange-100 border text-center space-y-2">
+          <div class="text-xs font-black text-orange-950">🔪 Sơ Chế Cấp Tốc (Bấm 3 lần)!</div>
+          <div class="w-full h-3 bg-white rounded-full overflow-hidden border"><div id="oos-minigame-bar" class="h-full bg-orange-600" style="width: 0%"></div></div>
+          <button onclick="tapOosMinigame()" class="soft-btn btn-game-orange w-full py-2 rounded-xl text-xs font-black">⚡ Cắt Bào Nhanh</button>
+        </div>
+        <div id="oos-choices-box" class="space-y-1.5 text-xs">
+          <button onclick="handleOosOption1SelfBuy(6)" class="soft-btn btn-game-orange w-full p-2.5 rounded-xl font-black text-left flex justify-between"><span>🛵 1. Tự chạy mua lẻ 6 phần</span><span id="oos-cost-self-5">-0đ</span></button>
+          <button onclick="handleOosOption2StaffBuy()" id="oos-btn-staff" class="soft-btn btn-game-green w-full p-2.5 rounded-xl font-black text-left flex justify-between"><span id="oos-staff-label">👦 2. Sai Phụ Bếp mua 10 phần</span><span id="oos-cost-staff">-0đ</span></button>
+          <button onclick="handleOosOption3Apologize()" class="soft-btn w-full p-2.5 rounded-xl bg-gray-200 text-gray-900 font-bold text-left flex justify-between"><span>🙇 3. Xin lỗi khách đơn này</span><span class="text-red-700">-0.10⭐</span></button>
+          <button onclick="handleOosOption4CloseEarly()" class="soft-btn w-full p-2.5 rounded-xl bg-amber-100 border border-amber-400 text-amber-950 font-black text-left flex justify-between"><span>🪧 4. Treo bảng "Cháy Hàng" & Nghỉ sớm</span><span class="text-emerald-700">Chốt sổ</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. POP-UP CHUYỆN NGOÀI PHỐ -->
+  <div id="modal-dilemma" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="w-full max-w-md wooden-clipboard-frame">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-3.5 space-y-2.5">
+        <div class="flex items-center gap-2.5">
+          <div id="dilemma-icon" class="w-12 h-12 rounded-2xl bg-amber-100 border border-amber-400 flex items-center justify-center text-3xl shrink-0">🎭</div>
+          <div>
+            <span id="dilemma-category" class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-orange-600 text-white">Chuyện Ngoài Phố</span>
+            <h3 id="dilemma-title" class="text-sm font-black text-amber-950 mt-0.5">Sự Kiện Bất Ngờ!</h3>
+            <div id="dilemma-speaker" class="text-[11px] font-bold text-orange-800">Khách quen Sài Gòn</div>
+          </div>
+        </div>
+        <p id="dilemma-desc" class="text-xs text-amber-950 bg-amber-50 p-2.5 rounded-xl border italic leading-relaxed"></p>
+        <div id="dilemma-choices" class="space-y-1.5 text-xs"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. POP-UP HỒ SƠ CHỦ QUÁN -->
+  <div id="modal-profile-edit" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="w-full max-w-md wooden-clipboard-frame">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-3.5 space-y-2.5">
+        <div class="flex items-center justify-between border-b pb-2 text-sm font-black text-amber-950">
+          <span>⚙️ Đổi Bảng Hiệu & Avatar 2D</span>
+          <button onclick="closeProfileEditModal()" class="px-2.5 py-0.5 bg-amber-100 rounded-lg">✕</button>
+        </div>
+        <div class="flex items-center gap-3 bg-amber-50 p-2.5 rounded-xl border">
+          <div id="profile-edit-preview" class="w-14 h-14 rounded-xl bg-white border-2 border-amber-400 flex items-center justify-center text-3xl overflow-hidden shrink-0">👩‍🍳</div>
+          <button type="button" onclick="triggerAvatarUpload('profile')" class="soft-btn btn-game-orange px-3 py-2 rounded-xl font-black text-xs">📷 Tải Ảnh Từ Máy</button>
+        </div>
+        <div id="profile-avatar-grid" class="grid grid-cols-6 gap-1.5"></div>
+        <input id="profile-edit-name" type="text" maxlength="24" placeholder="Nhập tên bảng hiệu..." class="w-full px-3 py-2 rounded-xl border-2 border-amber-300 text-sm font-black bg-white" />
+        <div class="p-2.5 rounded-xl bg-blue-50 border-2 border-blue-300 space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[10px] font-black uppercase text-blue-800">🔑 Mã Khóa Khôi Phục Quán:</div>
+              <div id="profile-recovery-code" class="text-sm font-black text-blue-950 tracking-wider mt-0.5">BT-000000</div>
+              <div class="text-[9.5px] font-semibold text-blue-700">Dùng kèm Mã PIN 4 số hoặc Mã Sao Lưu bên dưới</div>
+            </div>
+            <button type="button" onclick="copyRecoveryCode()" class="soft-btn btn-game-blue px-2.5 py-1.5 rounded-xl font-black text-[11px] shrink-0">
+              📋 Copy Mã BT
+            </button>
+          </div>
+          <div class="pt-1.5 border-t border-blue-200 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-black text-emerald-900">📲 Mã Sao Lưu Đổi Máy (BTT1-...):</span>
+              <button type="button" onclick="copyFullPortableRecoveryCode()" class="soft-btn px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-black text-[10px] shadow">
+                📋 Copy Mã Đổi Máy
+              </button>
+            </div>
+            <input id="profile-portable-code-preview" type="text" readonly onclick="this.select()" class="w-full px-2 py-1 rounded-lg bg-white border border-blue-300 text-[10px] font-mono text-slate-700" value="BTT1-..." />
+            <div class="grid grid-cols-2 gap-1.5 pt-1">
+              <button type="button" onclick="exportSaveJson()" class="soft-btn py-1.5 rounded-lg bg-amber-100 border border-amber-400 text-amber-950 font-black text-[10px]">
+                💾 Tải File Lưu (.json)
+              </button>
+              <button type="button" onclick="triggerImportSaveJson()" class="soft-btn py-1.5 rounded-lg bg-sky-100 border border-sky-400 text-sky-950 font-black text-[10px]">
+                📂 Nạp File Lưu (.json)
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="closeProfileEditModal()" class="soft-btn flex-1 py-2 rounded-xl bg-gray-200 text-xs font-bold">Hủy</button>
+          <button onclick="saveProfileChanges()" class="soft-btn btn-game-green flex-[2] py-2 rounded-xl text-xs font-black">✅ Lưu Thay Đổi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. POP-UP HỒI KÝ -->
+  <div id="modal-story" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="w-full max-w-md wooden-clipboard-frame max-h-[85vh] flex flex-col">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-3.5 overflow-y-auto">
+        <div class="flex items-center justify-between border-b pb-2 mb-2 text-sm font-black text-amber-950"><span>📖 Hồi Ký 30 Năm Dì Tư (8 Chương)</span><button onclick="closeStoryModal()" class="px-2.5 py-0.5 bg-amber-100 rounded-lg">✕</button></div>
+        <div id="story-chapters-container" class="space-y-2 text-xs"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. POP-UP THÀNH TỰU -->
+  <div id="modal-achievements" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="w-full max-w-md wooden-clipboard-frame max-h-[90vh] flex flex-col">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-3.5 flex-1 flex flex-col overflow-hidden">
+        <div class="flex items-center justify-between border-b border-amber-200 pb-2 mb-2">
+          <div>
+            <h3 class="text-sm font-black text-amber-950">🎖️ Phòng Truyền Thống & Thành Tựu</h3>
+            <p class="text-[10px] text-amber-800">Hoàn thành các cột mốc để nhận thưởng nóng!</p>
+          </div>
+          <button onclick="closeAchievementsModal()" class="text-xs font-black px-2.5 py-1 bg-amber-100 rounded-lg">✕</button>
+        </div>
+        <div id="achievements-list-container" class="space-y-1.5 overflow-y-auto flex-1 pr-1 text-xs"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. POP-UP CHỐT SỔ CUỐI NGÀY -->
+  <div id="modal-end-day" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="w-full max-w-md wooden-clipboard-frame max-h-[92vh] flex flex-col">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-3.5 text-xs overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-amber-200 pb-2 mb-2">
+          <h3 id="end-day-title" class="text-sm sm:text-base font-black text-amber-950">🌙 Chốt Sổ Cuối Ngày</h3>
+          <button onclick="closeEndDayModal()" class="soft-btn px-2 py-1 rounded-lg bg-gray-200 text-gray-800 font-black text-xs">✕ Đóng</button>
+        </div>
+        <div id="end-day-details" class="space-y-1.5 bg-amber-50 p-3 rounded-2xl border mb-3"></div>
+        <div class="flex gap-2">
+          <button onclick="closeEndDayModal()" class="soft-btn flex-1 py-2.5 rounded-xl bg-gray-200 text-amber-950 font-black text-xs">
+            ⬅️ Bán Tiếp
+          </button>
+          <button onclick="startNextDay()" class="soft-btn btn-game-red flex-[2] py-2.5 rounded-xl font-black text-xs sm:text-sm">
+            ☀️ Qua Ngày Mới
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. POP-UP VAY CỨU TRỢ HOẶC PHÁ SẢN -->
+  <div id="modal-bankruptcy" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="w-full max-w-md wooden-clipboard-frame">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-4 text-center space-y-3">
+        <div id="bankruptcy-icon" class="text-5xl">🏦</div>
+        <h3 id="bankruptcy-title" class="text-lg font-black text-red-950">Nguy Cơ Đóng Quán & Vay Cứu Trợ!</h3>
+        <p id="bankruptcy-desc" class="text-xs text-amber-950 bg-red-50 p-3 rounded-xl border border-red-200 leading-relaxed"></p>
+        <div id="bankruptcy-actions" class="space-y-2 text-xs"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. POP-UP THĂNG CẤP -->
+  <div id="modal-level-up" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="w-full max-w-sm wooden-clipboard-frame">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-4 text-center space-y-2.5">
+        <div class="text-4xl animate-bounce">🎉</div>
+        <div class="inline-block px-3 py-0.5 rounded-full bg-red-600 text-white font-black text-[10px] uppercase">Thăng cấp thành công</div>
+        <h3 id="lvlup-title" class="text-lg font-black text-amber-950">Đạt Cấp Độ 2!</h3>
+        <div id="lvlup-unlocked-box" class="p-2.5 rounded-2xl bg-emerald-50 border-2 border-emerald-300 text-xs text-emerald-950 text-left space-y-1"></div>
+        <div id="lvlup-next-teaser" class="p-2 rounded-xl bg-amber-100/80 border border-amber-300 text-[11px] font-bold text-amber-900"></div>
+        <button onclick="closeLevelUpModal()" class="soft-btn btn-game-orange w-full py-2.5 rounded-xl font-black text-xs sm:text-sm">
+          🚀 TIẾP TỤC PHÁT TRIỂN!
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 11. POP-UP CẤU HÌNH KẾT NỐI FIREBASE REALTIME DATABASE & ĐỒNG BỘ 105 QUÁN -->
+  <div id="modal-firebase-config" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3 overflow-y-auto">
+    <div class="w-full max-w-md wooden-clipboard-frame my-auto">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-3.5 space-y-2.5 text-xs max-h-[88vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-amber-200 pb-1.5">
+          <div class="flex items-center gap-1.5">
+            <span class="text-lg">☁️</span>
+            <div>
+              <h3 class="font-black text-sm text-amber-950">Kết Nối Máy Chủ Firebase Cloud</h3>
+              <p class="text-[10px] font-bold text-amber-800">Lưu trữ dữ liệu người chơi & Bảng Xếp Hạng thời gian thực</p>
+            </div>
+          </div>
+          <button type="button" onclick="closeFirebaseConfigModal()" class="px-2.5 py-0.5 bg-amber-100 rounded-lg font-black text-amber-950">✕</button>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block font-black text-amber-950 text-[11px]">1. Đường dẫn URL Firebase Realtime Database:</label>
+          <input id="firebase-db-url-input" type="url" placeholder="https://ten-project-default-rtdb.asia-southeast1.firebasedatabase.app" class="w-full px-2.5 py-2 rounded-xl border-2 border-amber-400 focus:border-emerald-600 focus:outline-none text-xs font-bold text-amber-950 bg-white" />
+          <div class="flex gap-1.5">
+            <button type="button" id="btn-test-firebase-conn" onclick="saveAndTestFirebaseConnection()" class="soft-btn btn-game-green flex-1 py-2 rounded-xl font-black text-xs">
+              🔍 Kiểm Tra & Lưu Kết Nối
+            </button>
+            <button type="button" onclick="forceManualCloudSync()" class="soft-btn btn-game-blue px-3 py-2 rounded-xl font-black text-xs">
+              ☁️ Đồng Bộ Ngay
+            </button>
+          </div>
+        </div>
+
+        <div id="firebase-config-status-msg" class="p-2 rounded-xl border bg-amber-50 border-amber-300 text-amber-900 text-[11px] font-bold"></div>
+
+        <!-- Công cụ Khôi phục / Đẩy 105 quán cũ lên Firebase -->
+        <div class="p-2.5 rounded-2xl bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 border-2 border-emerald-400 space-y-1.5">
+          <div class="font-black text-emerald-950 text-xs flex items-center justify-between">
+            <span>📦 Kho Dữ Liệu 105 Quán Cũ (Migration Tool)</span>
+            <span class="px-1.5 py-0.5 rounded bg-emerald-600 text-white text-[9px] font-black">Sẵn sàng</span>
+          </div>
+          <p class="text-[10.5px] font-semibold text-emerald-900 leading-snug">
+            File gốc của bạn có sẵn dữ liệu 105 quán. Sau khi gắn URL Firebase ở trên, bạn có thể đẩy toàn bộ 105 quán này lên Firebase chỉ với 1 cú chạm hoặc tải file JSON chuẩn để Import vào Firebase Console:
+          </p>
+          <div class="grid grid-cols-2 gap-1.5 pt-0.5">
+            <button type="button" id="btn-push-seed-firebase" onclick="pushAll105SeedShopsToFirebase()" class="soft-btn btn-game-orange py-2 px-2 rounded-xl font-black text-[10.5px]">
+              📤 Đẩy 105 Quán Lên Firebase
+            </button>
+            <button type="button" onclick="downloadFirebaseSeedJsonFile()" class="soft-btn py-2 px-2 rounded-xl bg-white border-2 border-emerald-500 text-emerald-950 font-black text-[10.5px]">
+              📥 Tải File JSON Import
+            </button>
+          </div>
+        </div>
+
+        <!-- Hướng dẫn nhanh 3 bước cài đặt Firebase -->
+        <div class="p-2.5 rounded-2xl bg-amber-50 border border-amber-300 space-y-1 text-[10.5px] leading-relaxed text-amber-950">
+          <div class="font-black text-amber-950">📘 Hướng dẫn lấy link Firebase Realtime Database (2 phút):</div>
+          <div><b>B1:</b> Truy cập <b>console.firebase.google.com</b> ➔ Mở Project của bạn ➔ Chọn mục <b>Build ➔ Realtime Database</b> ➔ Bấm <b>Create Database</b>.</div>
+          <div><b>B2:</b> Qua tab <b>Rules (Quy tắc)</b>, chỉnh thành:<br/>
+            <code class="block bg-amber-950 text-yellow-200 px-2 py-1 rounded mt-0.5 font-mono text-[9.5px] select-all">{ "rules": { ".read": true, ".write": true } }</code>
+            rồi bấm <b>Publish</b>.
+          </div>
+          <div><b>B3:</b> Copy đường dẫn URL ở đầu tab <b>Data</b> (có dạng <i>https://...-default-rtdb...firebasedatabase.app</i>) dán vào ô số 1 phía trên (hoặc dán cố định vào biến <code>DEFAULT_FIREBASE_DB_URL</code> trong file <code>js/firebase-config.js</code>).</div>
+        </div>
+
+        <button type="button" onclick="closeFirebaseConfigModal()" class="soft-btn btn-game-red w-full py-2 rounded-xl font-black text-xs">
+          Đóng Bảng Cấu Hình
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12. POP-UP XEM HỒ SƠ QUÁN ĐỐI THỦ TRÊN BẢNG XẾP HẠNG -->
+  <div id="modal-rival-profile" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3 overflow-y-auto">
+    <div class="w-full max-w-sm wooden-clipboard-frame my-auto">
+      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-3.5 space-y-2.5 text-xs">
+        <div class="flex items-center justify-between border-b border-amber-200 pb-1.5">
+          <span class="font-black text-sm text-amber-950">🏆 Hồ Sơ Đế Chế Bánh Tráng</span>
+          <button type="button" onclick="closeRivalProfileModal()" class="px-2.5 py-0.5 bg-amber-100 rounded-lg font-black text-amber-950">✕</button>
+        </div>
+        <div id="rival-profile-modal-body" class="space-y-2"></div>
+        <button type="button" onclick="closeRivalProfileModal()" class="soft-btn btn-game-orange w-full py-2 rounded-xl font-black text-xs">
+          Đóng Hồ Sơ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST THÔNG BÁO -->
+  <div id="toast-box" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 -translate-y-3 w-11/12 max-w-sm">
+    <div id="toast-content" class="px-4 py-2 rounded-2xl bg-amber-950/95 text-yellow-200 font-extrabold text-xs shadow-2xl border-2 border-yellow-400 text-center mobile-safe-text">Thông báo</div>
+  </div>
+
+
+  <!-- ================= HỆ THỐNG MODULE JAVASCRIPT (TÁCH NHỎ GỌN NHẸ CHUẨN PWA) ================= -->
+  <script src="./js/firebase-config.js"></script>
+  <script src="./js/assets.js"></script>
+  <script src="./js/seed-shops.js"></script>
+  <script src="./js/audio-fx.js"></script>
+  <script src="./js/catalog-data.js"></script>
+  <script src="./js/state-economy.js"></script>
+  <script src="./js/firebase-cloud.js"></script>
+  <script src="./js/leaderboard-social.js"></script>
+  <script src="./js/gameplay-prep.js"></script>
+  <script src="./js/gameplay-street.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+</html>
