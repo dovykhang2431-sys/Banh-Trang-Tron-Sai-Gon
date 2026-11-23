@@ -614,6 +614,9 @@
         const persistObj = { ...state, localCustomAvatar: null };
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(persistObj));
         saveShopToLocalVault(persistObj);
+        if (typeof lastDisplayedResumeSave !== "undefined") {
+          lastDisplayedResumeSave = persistObj;
+        }
       } catch (e) {
         console.warn("[SaveLocal] Lỗi lưu localStorage:", e);
       }

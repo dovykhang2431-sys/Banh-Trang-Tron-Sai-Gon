@@ -93,6 +93,9 @@ function isSaveRecordNewer(candidate, existing) {
   if (!existing || typeof existing !== "object") return true;
   const cSeq = Number(candidate.saveSeq || 0);
   const eSeq = Number(existing.saveSeq || 0);
+  // Snapshot mẫu (saveSeq === 0) không bao giờ được thắng bản lưu local (saveSeq >= 1)
+  if (cSeq === 0 && eSeq >= 1) return false;
+  if (cSeq >= 1 && eSeq === 0) return true;
   if (cSeq !== eSeq) return cSeq > eSeq;
   const cTs = Number(candidate.updatedAt || candidate.fullState?.updatedAt || 0);
   const eTs = Number(existing.updatedAt || existing.fullState?.updatedAt || 0);
@@ -106,24 +109,34 @@ function isSaveRecordNewer(candidate, existing) {
 function getMaxKnownSaveMeta(shopKey) {
   let maxSeq = 0;
   let maxTs = 0;
+  const consider = (rec) => {
+    if (!rec || typeof rec !== "object") return;
+    maxSeq = Math.max(maxSeq, Number(rec.saveSeq || 0));
+    maxTs = Math.max(maxTs, Number(rec.updatedAt || rec.fullState?.updatedAt || 0));
+  };
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (raw) {
       const m = JSON.parse(raw);
       const mk = m?.shopKey || sanitizeShopKey(m?.shopName || "");
-      if (mk && mk === shopKey) {
-        maxSeq = Math.max(maxSeq, Number(m.saveSeq || 0));
-        maxTs = Math.max(maxTs, Number(m.updatedAt || 0));
-      }
+      if (!shopKey || (mk && mk === shopKey)) consider(m);
     }
     const vRaw = localStorage.getItem(LOCAL_SHOPS_REGISTRY_KEY);
     if (vRaw) {
       const vMap = JSON.parse(vRaw) || {};
-      const v = vMap[shopKey];
-      if (v) {
-        maxSeq = Math.max(maxSeq, Number(v.saveSeq || 0));
-        maxTs = Math.max(maxTs, Number(v.updatedAt || 0));
-      }
+      if (shopKey && vMap[shopKey]) consider(vMap[shopKey]);
+      Object.values(vMap).forEach((entry) => {
+        if (!entry || typeof entry !== "object") return;
+        const ek = entry.shopKey || sanitizeShopKey(entry.shopName || "");
+        if (!shopKey || ek === shopKey) consider(entry);
+      });
+    }
+    if (typeof EMBEDDED_SERVER_SHOPS_SNAPSHOT === "object" && EMBEDDED_SERVER_SHOPS_SNAPSHOT && shopKey && EMBEDDED_SERVER_SHOPS_SNAPSHOT[shopKey]) {
+      consider(EMBEDDED_SERVER_SHOPS_SNAPSHOT[shopKey]);
+    }
+    if (lastDisplayedResumeSave && typeof lastDisplayedResumeSave === "object") {
+      const lk = lastDisplayedResumeSave.shopKey || sanitizeShopKey(lastDisplayedResumeSave.shopName || "");
+      if (!shopKey || lk === shopKey) consider(lastDisplayedResumeSave);
     }
   } catch (e) {}
   return { maxSeq, maxTs };
@@ -134,7 +147,7 @@ function getCombinedShopsVault() {
   if (typeof EMBEDDED_SERVER_SHOPS_SNAPSHOT === "object" && EMBEDDED_SERVER_SHOPS_SNAPSHOT) {
     Object.entries(EMBEDDED_SERVER_SHOPS_SNAPSHOT).forEach(([k, v]) => {
       if (v && typeof v === "object" && !k.startsWith("npc_")) {
-        merged[k] = v;
+        merged[k] = { ...v, saveSeq: Number(v.saveSeq || 0) };
       }
     });
   }
@@ -145,7 +158,9 @@ function getCombinedShopsVault() {
       if (localMap && typeof localMap === "object") {
         Object.entries(localMap).forEach(([k, v]) => {
           if (!v || typeof v !== "object") return;
-          merged[k] = v;
+          if (!merged[k] || isSaveRecordNewer(v, merged[k])) {
+            merged[k] = v;
+          }
         });
       }
     }
@@ -200,30 +215,44 @@ function saveShopToLocalVault(shopState) {
   } catch (e) {}
 }
 
-function getLatestLocalSaveData(preferredKey = null) {
+function getLatestLocalSaveData(preferredKey = null, logContext = "") {
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem("banh_trang_tron_saigon_v5_master_save");
-    let master = raw ? JSON.parse(raw) : null;
-    const key = preferredKey || (master && (master.shopKey || sanitizeShopKey(master.shopName || ""))) || "";
+    const master = raw ? JSON.parse(raw) : null;
+    const masterKey = (master && (master.shopKey || sanitizeShopKey(master.shopName || ""))) || "";
+    const key = preferredKey || masterKey || "";
     const vaultRaw = localStorage.getItem(LOCAL_SHOPS_REGISTRY_KEY);
     const vaultMap = vaultRaw ? (JSON.parse(vaultRaw) || {}) : {};
     const vaultEntry = key ? vaultMap[key] : null;
+    const seedEntry = (typeof EMBEDDED_SERVER_SHOPS_SNAPSHOT === "object" && EMBEDDED_SERVER_SHOPS_SNAPSHOT && key)
+      ? EMBEDDED_SERVER_SHOPS_SNAPSHOT[key]
+      : null;
+
+    // Chỉ xét bản ghi thuộc cùng shopKey khi preferredKey được chỉ định
+    const masterCandidate = (master && master.shopName && (!key || masterKey === key)) ? master : null;
+    const vaultCandidate = (vaultEntry && vaultEntry.shopName) ? vaultEntry : null;
 
     let chosen = null;
-    if (master && master.shopName && vaultEntry && vaultEntry.shopName) {
-      chosen = isSaveRecordNewer(vaultEntry, master) ? vaultEntry : master;
-    } else if (master && master.shopName) {
-      chosen = master;
-    } else if (vaultEntry && vaultEntry.shopName) {
-      chosen = vaultEntry;
+    if (masterCandidate && vaultCandidate) {
+      chosen = isSaveRecordNewer(vaultCandidate, masterCandidate) ? vaultCandidate : masterCandidate;
+    } else {
+      chosen = masterCandidate || vaultCandidate || null;
     }
+
+    if (logContext) {
+      const fmt = (r) => r ? `seq=${Number(r.saveSeq || 0)} ts=${Number(r.updatedAt || 0)} day=${r.day} lv=${r.level} money=${r.money}` : "null";
+      console.log(`[SaveDiag:${logContext}] key=${key} | master=(${fmt(masterCandidate)}) | registry=(${fmt(vaultCandidate)}) | seed=(${fmt(seedEntry)}) => chosen=(${fmt(chosen)})`);
+    }
+
     if (!chosen) return null;
 
-    // Đồng bộ lại cả 2 kho để thẻ lưu, BXH và Chơi Tiếp luôn nhìn thấy đúng 1 bản duy nhất
+    // Đồng bộ 2 chiều có chốt chặn: KHÔNG BAO GIỜ ghi đè bản mới hơn bằng bản cũ hơn
     try {
       const cleanChosen = { ...chosen, localCustomAvatar: null };
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cleanChosen));
-      if (key) {
+      if (!masterCandidate || isSaveRecordNewer(cleanChosen, masterCandidate)) {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cleanChosen));
+      }
+      if (key && (!vaultCandidate || isSaveRecordNewer(cleanChosen, vaultCandidate))) {
         vaultMap[key] = cleanChosen;
         localStorage.setItem(LOCAL_SHOPS_REGISTRY_KEY, JSON.stringify(vaultMap));
       }
@@ -287,7 +316,7 @@ function quickResumeGame() {
   initAudio(); startChillBGM();
   try {
     const preferredKey = (lastDisplayedResumeSave && (lastDisplayedResumeSave.shopKey || sanitizeShopKey(lastDisplayedResumeSave.shopName || ""))) || null;
-    let localData = getLatestLocalSaveData(preferredKey);
+    let localData = getLatestLocalSaveData(preferredKey, "quickResumeGame");
     if (lastDisplayedResumeSave && lastDisplayedResumeSave.shopName) {
       if (!localData || isSaveRecordNewer(lastDisplayedResumeSave, localData)) {
         localData = lastDisplayedResumeSave;
