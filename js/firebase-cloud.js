@@ -7,6 +7,7 @@
  */
 
 let userManuallyChangedLoginAvatar = false;
+let lastDisplayedResumeSave = null;
 let pvpRoomLeaderboardCache = [];
 
 const OFFLINE_VALID_PVP_ROOMS = ["SAIGON01", "QUAN1", "QUAN4", "HOTHIKY", "BUIVIEN"];
@@ -92,12 +93,14 @@ function isSaveRecordNewer(candidate, existing) {
   if (!existing || typeof existing !== "object") return true;
   const cSeq = Number(candidate.saveSeq || 0);
   const eSeq = Number(existing.saveSeq || 0);
-  if (cSeq > 0 || eSeq > 0) {
-    if (cSeq !== eSeq) return cSeq > eSeq;
-  }
+  if (cSeq !== eSeq) return cSeq > eSeq;
   const cTs = Number(candidate.updatedAt || candidate.fullState?.updatedAt || 0);
   const eTs = Number(existing.updatedAt || existing.fullState?.updatedAt || 0);
-  return cTs >= eTs;
+  if (cTs !== eTs) return cTs > eTs;
+  const cDay = Number(candidate.day || 1);
+  const eDay = Number(existing.day || 1);
+  if (cDay !== eDay) return cDay > eDay;
+  return Number(candidate.totalSold || 0) >= Number(existing.totalSold || 0);
 }
 
 function getMaxKnownSaveMeta(shopKey) {
@@ -180,6 +183,9 @@ function saveShopToLocalVault(shopState) {
       saveSeq: Number(shopState.saveSeq || 1),
       updatedAt: Number(shopState.updatedAt || Date.now())
     };
+    if (localMap[key] && !isSaveRecordNewer(slimEntry, localMap[key])) {
+      return;
+    }
     localMap[key] = slimEntry;
     try {
       localStorage.setItem(LOCAL_SHOPS_REGISTRY_KEY, JSON.stringify(localMap));
@@ -233,6 +239,7 @@ function checkExistingLocalSaveForLoginScreen() {
     userManuallyChangedLoginAvatar = false;
     updateFirebaseStatusBadgesUI();
     const saved = getLatestLocalSaveData();
+    lastDisplayedResumeSave = saved || null;
     if (!saved || !saved.shopName) {
       renderLoginTop3Preview();
       return;
@@ -279,7 +286,13 @@ function prefillLoginShopName(shopName) {
 function quickResumeGame() {
   initAudio(); startChillBGM();
   try {
-    const localData = getLatestLocalSaveData();
+    const preferredKey = (lastDisplayedResumeSave && (lastDisplayedResumeSave.shopKey || sanitizeShopKey(lastDisplayedResumeSave.shopName || ""))) || null;
+    let localData = getLatestLocalSaveData(preferredKey);
+    if (lastDisplayedResumeSave && lastDisplayedResumeSave.shopName) {
+      if (!localData || isSaveRecordNewer(lastDisplayedResumeSave, localData)) {
+        localData = lastDisplayedResumeSave;
+      }
+    }
     if (localData) {
       state = getInitialDefaultState();
       mergeLoadedState(localData);
@@ -301,7 +314,6 @@ function quickResumeGame() {
   }
   if (state.isStreetSelling) startStreetSellingPhase(true);
   showToast(`🎉 Chào mừng chủ quán "${state.shopName}" (Mã: ${state.recoveryCode}) quay trở lại!`);
-  saveGameEverywhere(false);
 }
 
 function handleLoginOrRegister() {
