@@ -604,12 +604,16 @@
         if (state.stockBatches && typeof state.stockBatches === "object") {
           syncTotalStockFromBatches();
         }
+        state.shopKey = state.shopKey || sanitizeShopKey(state.shopName || "");
+        const meta = typeof getMaxKnownSaveMeta === "function" ? getMaxKnownSaveMeta(state.shopKey) : { maxSeq: 0, maxTs: 0 };
+        state.saveSeq = Math.max(Number(state.saveSeq || 0), meta.maxSeq) + 1;
         state.offlineMode = true;
         state.saveMode = "local";
-        state.updatedAt = Date.now();
+        state.updatedAt = Math.max(Date.now(), meta.maxTs + 1);
         state.securitySeal = computeSecuritySeal(state);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
-        saveShopToLocalVault(state);
+        const persistObj = { ...state, localCustomAvatar: null };
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(persistObj));
+        saveShopToLocalVault(persistObj);
       } catch (e) {
         console.warn("[SaveLocal] Lỗi lưu localStorage:", e);
       }

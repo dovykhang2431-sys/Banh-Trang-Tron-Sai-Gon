@@ -87,6 +87,45 @@ function closeRecoveryModalFromMenu() {
   if (modal) modal.classList.add("hidden");
 }
 
+function isSaveRecordNewer(candidate, existing) {
+  if (!candidate || typeof candidate !== "object") return false;
+  if (!existing || typeof existing !== "object") return true;
+  const cSeq = Number(candidate.saveSeq || 0);
+  const eSeq = Number(existing.saveSeq || 0);
+  if (cSeq > 0 || eSeq > 0) {
+    if (cSeq !== eSeq) return cSeq > eSeq;
+  }
+  const cTs = Number(candidate.updatedAt || candidate.fullState?.updatedAt || 0);
+  const eTs = Number(existing.updatedAt || existing.fullState?.updatedAt || 0);
+  return cTs >= eTs;
+}
+
+function getMaxKnownSaveMeta(shopKey) {
+  let maxSeq = 0;
+  let maxTs = 0;
+  try {
+    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (raw) {
+      const m = JSON.parse(raw);
+      const mk = m?.shopKey || sanitizeShopKey(m?.shopName || "");
+      if (mk && mk === shopKey) {
+        maxSeq = Math.max(maxSeq, Number(m.saveSeq || 0));
+        maxTs = Math.max(maxTs, Number(m.updatedAt || 0));
+      }
+    }
+    const vRaw = localStorage.getItem(LOCAL_SHOPS_REGISTRY_KEY);
+    if (vRaw) {
+      const vMap = JSON.parse(vRaw) || {};
+      const v = vMap[shopKey];
+      if (v) {
+        maxSeq = Math.max(maxSeq, Number(v.saveSeq || 0));
+        maxTs = Math.max(maxTs, Number(v.updatedAt || 0));
+      }
+    }
+  } catch (e) {}
+  return { maxSeq, maxTs };
+}
+
 function getCombinedShopsVault() {
   const merged = {};
   if (typeof EMBEDDED_SERVER_SHOPS_SNAPSHOT === "object" && EMBEDDED_SERVER_SHOPS_SNAPSHOT) {
@@ -103,9 +142,21 @@ function getCombinedShopsVault() {
       if (localMap && typeof localMap === "object") {
         Object.entries(localMap).forEach(([k, v]) => {
           if (!v || typeof v !== "object") return;
-          // Bản lưu thực tế trên máy của người chơi luôn ưu tiên hơn snapshot mẫu
           merged[k] = v;
         });
+      }
+    }
+  } catch (e) {}
+  // Hợp nhất luôn bản lưu chính LOCAL_STORAGE_KEY nếu mới hơn bản trong vault
+  try {
+    const mRaw = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (mRaw) {
+      const m = JSON.parse(mRaw);
+      if (m && m.shopName) {
+        const mk = m.shopKey || sanitizeShopKey(m.shopName);
+        if (mk && (!merged[mk] || isSaveRecordNewer(m, merged[mk]))) {
+          merged[mk] = m;
+        }
       }
     }
   } catch (e) {}
@@ -126,13 +177,13 @@ function saveShopToLocalVault(shopState) {
       shopKey: key,
       offlineMode: true,
       saveMode: "local",
+      saveSeq: Number(shopState.saveSeq || 1),
       updatedAt: Number(shopState.updatedAt || Date.now())
     };
     localMap[key] = slimEntry;
     try {
       localStorage.setItem(LOCAL_SHOPS_REGISTRY_KEY, JSON.stringify(localMap));
     } catch (quotaErr) {
-      // Nếu bộ nhớ đầy, chỉ giữ 12 quán cập nhật gần nhất + quán hiện tại
       const entries = Object.entries(localMap)
         .sort((a, b) => Number(b[1]?.updatedAt || 0) - Number(a[1]?.updatedAt || 0))
         .slice(0, 12);
@@ -143,26 +194,35 @@ function saveShopToLocalVault(shopState) {
   } catch (e) {}
 }
 
-function getLatestLocalSaveData() {
+function getLatestLocalSaveData(preferredKey = null) {
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY) || localStorage.getItem("banh_trang_tron_saigon_v5_master_save");
     let master = raw ? JSON.parse(raw) : null;
-    if (!master || !master.shopName) return null;
-    const key = master.shopKey || sanitizeShopKey(master.shopName);
+    const key = preferredKey || (master && (master.shopKey || sanitizeShopKey(master.shopName || ""))) || "";
     const vaultRaw = localStorage.getItem(LOCAL_SHOPS_REGISTRY_KEY);
-    if (vaultRaw && key) {
-      const vaultMap = JSON.parse(vaultRaw) || {};
-      const vaultEntry = vaultMap[key];
-      if (vaultEntry && vaultEntry.shopName) {
-        const masterTs = Number(master.updatedAt || 0);
-        const vaultTs = Number(vaultEntry.updatedAt || 0);
-        if (vaultTs > masterTs) {
-          master = vaultEntry;
-          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(master));
-        }
-      }
+    const vaultMap = vaultRaw ? (JSON.parse(vaultRaw) || {}) : {};
+    const vaultEntry = key ? vaultMap[key] : null;
+
+    let chosen = null;
+    if (master && master.shopName && vaultEntry && vaultEntry.shopName) {
+      chosen = isSaveRecordNewer(vaultEntry, master) ? vaultEntry : master;
+    } else if (master && master.shopName) {
+      chosen = master;
+    } else if (vaultEntry && vaultEntry.shopName) {
+      chosen = vaultEntry;
     }
-    return master;
+    if (!chosen) return null;
+
+    // Đồng bộ lại cả 2 kho để thẻ lưu, BXH và Chơi Tiếp luôn nhìn thấy đúng 1 bản duy nhất
+    try {
+      const cleanChosen = { ...chosen, localCustomAvatar: null };
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cleanChosen));
+      if (key) {
+        vaultMap[key] = cleanChosen;
+        localStorage.setItem(LOCAL_SHOPS_REGISTRY_KEY, JSON.stringify(vaultMap));
+      }
+    } catch (syncErr) {}
+    return chosen;
   } catch (e) {
     return null;
   }
@@ -331,6 +391,9 @@ function showLoginMessage(text, type) {
 }
 
 function openLoginModalForSwitch() {
+  if (state && state.shopName) {
+    saveGameEverywhere(false);
+  }
   userManuallyChangedLoginAvatar = false;
   checkExistingLocalSaveForLoginScreen();
   fetchCloudLeaderboard(false);
