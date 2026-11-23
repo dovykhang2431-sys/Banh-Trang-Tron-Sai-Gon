@@ -383,8 +383,24 @@
         el.value = toBuy > 0 ? toBuy : "";
       });
 
-      recalcMarketOrderTotal();
-      showToast(`✨ Đã lấy đủ nguyên liệu cho ~${targetBags} bịch! Bấm '✅ Nhập Kho' nhé!`);
+      const { totalUnits, totalCost } = recalcMarketOrderTotal();
+      if (totalUnits <= 0) {
+        // Nếu kho đã đủ cho targetBags, vẫn tự động điền thêm 1 lượt dự phòng (+targetBags/2) để người chơi có thể nhập ngay nếu muốn
+        INGREDIENTS.forEach(ing => {
+          const el = document.getElementById(`buy-qty-${ing.id}`);
+          if (!el) return;
+          if (ing.id === "tratac") {
+            el.value = Math.max(2, Math.ceil(targetDrink * 0.5));
+            return;
+          }
+          const isUsed = unlocked.some(dKey => Boolean(DISH_MENU[dKey]?.recipe?.[ing.id]));
+          if (isUsed) el.value = Math.max(2, Math.ceil(targetBags * 0.5));
+        });
+        const retry = recalcMarketOrderTotal();
+        showToast(`✨ Kho đã đủ ~${targetBags} bịch! Đã điền thêm +${retry.totalUnits} phần dự phòng (${formatVND(retry.totalCost)})!`);
+      } else {
+        showToast(`✨ Đã điền ${totalUnits} phần (${formatVND(totalCost)}) cho ~${targetBags} bịch! Bấm '✅ Nhập Kho' nhé!`);
+      }
     }
 
     function clearMarketInputs() {
@@ -462,10 +478,24 @@
           state.totalPrepDays = (state.totalPrepDays || 0) + 1;
         }
         addXP(15);
-        setTimeout(() => { document.getElementById("modal-prep").classList.add("hidden"); updateAllUI(); saveGameEverywhere(); showToast("🎉 Sơ chế hoàn tất!"); }, 180);
+        const doneNow = ["sate", "hanhphi", "trungcut"].filter(k => state.prepDone[k]).length;
+        setTimeout(() => {
+          document.getElementById("modal-prep").classList.add("hidden");
+          updateAllUI();
+          saveGameEverywhere();
+          showToast(doneNow >= 3 ? "🎉 Sơ chế hoàn tất 3/3 món (+1.000đ Tip/bịch)!" : `✅ Đã xong ${doneNow}/3 món sơ chế!`);
+        }, 180);
       }
     }
-    function closePrepModal() { document.getElementById("modal-prep").classList.add("hidden"); activePrepKey = null; }
+    function closePrepModal() {
+      document.getElementById("modal-prep").classList.add("hidden");
+      activePrepKey = null;
+      if (pendingLevelUpQueue.length > 0 && !state.isStreetSelling) {
+        const nextLvl = Math.max(...pendingLevelUpQueue);
+        pendingLevelUpQueue = [];
+        showLevelUpModal(nextLvl);
+      }
+    }
 
 
     // ================= 19. SỔ THU CHI CHI TIẾT TỪNG NGÀY (BẤM MỞ BUNG 4 NHÓM CHI TIẾT) & 4 TÍNH NĂNG MỚI =================
@@ -943,7 +973,7 @@
     function renderCustomSauceLab() {
       const box = document.getElementById("custom-sauce-lab-box");
       if (!box) return;
-      const curSauce = state.selectedDailySauce || "bo_toi";
+      const curSauce = state.selectedDailySauce || "";
 
       box.innerHTML = `
         <div class="flex items-center gap-2 p-2 rounded-xl bg-amber-50 border border-amber-300 mb-1.5">
@@ -1113,6 +1143,11 @@
     }
 
     function showLevelUpModal(newLvl) {
+      const prepModal = document.getElementById("modal-prep");
+      if (prepModal && !prepModal.classList.contains("hidden")) {
+        pendingLevelUpQueue.push(newLvl);
+        return;
+      }
       const modal = document.getElementById("modal-level-up");
       if (!modal) return;
       playSFX("cash");
@@ -1129,7 +1164,11 @@
       box.innerHTML = unlockedItems.length > 0
         ? `<div class="font-black text-emerald-800 mb-1">🎁 Mở khóa ở Cấp ${newLvl}:</div>` + unlockedItems.map(i => `<div>• ${i}</div>`).join("")
         : `<div class="font-bold text-emerald-800">✨ Thưởng thăng cấp <b>+20.000đ</b> vào két tiền!</div>`;
-      if (unlockedItems.length === 0) state.money += 20000;
+      if (unlockedItems.length === 0) {
+        state.money += 20000;
+        state.todayRevenue = (state.todayRevenue || 0) + 20000;
+        recordExtraEventRevDetail(20000);
+      }
 
       document.getElementById("lvlup-next-teaser").innerHTML = `🔥 Vào tab <b>🥙 Thực Đơn</b> và <b>🛠️ Nâng Cấp</b> để nâng đời Đồ Nghề & mở rộng xe đẩy nhé!`;
       modal.classList.remove("hidden");

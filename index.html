@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Vua Bánh Tráng Sài Gòn - Đế Chế 80 Cấp</title>
-  <meta name="description" content="Game mô phỏng khởi nghiệp xe bánh tráng Sài Gòn: Đi chợ, sơ chế, trộn bánh 3 hệ, xây chuỗi nhượng quyền và đua Bảng Xếp Hạng Firebase Cloud." />
+  <meta name="description" content="Game mô phỏng khởi nghiệp xe bánh tráng Sài Gòn Ver 17 Offline 100%: Đi chợ, sơ chế, trộn bánh 3 hệ, xây chuỗi nhượng quyền và đua Bảng Xếp Hạng nội bộ." />
   <meta name="theme-color" content="#562328" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -99,10 +99,7 @@
               <span id="login-network-mode-label" class="text-emerald-700 font-black">Tự động lưu & Khôi phục bằng Mã/PIN</span>
             </div>
             <div class="flex items-center gap-1 shrink-0">
-              <button type="button" onclick="openFirebaseConfigModal()" class="soft-btn px-2 py-0.5 rounded-lg bg-emerald-600 text-white font-black text-[9px] shadow">
-                ☁️ Firebase
-              </button>
-              <button type="button" onclick="openProfileEditModal()" class="soft-btn px-2 py-0.5 rounded-lg bg-amber-100 border border-amber-400 text-amber-950 font-black text-[9px]">
+              <button type="button" onclick="selectLocalSaveMode()" class="soft-btn px-2 py-0.5 rounded-lg bg-emerald-600 text-white font-black text-[9px] shadow">
                 🔑 Mã Quán
               </button>
             </div>
@@ -183,7 +180,7 @@
         <div class="coin-inner-pill px-2 py-0.5 flex items-center gap-1">
           <span class="w-3.5 h-3.5 rounded-full bg-gradient-to-b from-yellow-300 to-amber-500 text-amber-950 font-black text-[9px] flex items-center justify-center border border-white shadow-sm shrink-0">★</span>
           <span id="topbar-money" class="font-black text-xs sm:text-sm text-white tracking-tight whitespace-nowrap">350,0k</span>
-          <button id="cloud-sync-btn" onclick="forceManualCloudSync()" title="Đồng bộ Cloud" class="ml-0.5 w-3.5 h-3.5 rounded-full bg-black/45 border border-white/25 flex items-center justify-center hover:bg-black/70 transition shrink-0">
+          <button id="cloud-sync-btn" onclick="forceManualCloudSync()" title="Lưu Local trên máy" class="ml-0.5 w-3.5 h-3.5 rounded-full bg-black/45 border border-white/25 flex items-center justify-center hover:bg-black/70 transition shrink-0">
             <span id="cloud-sync-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
             <span id="cloud-sync-text" class="sr-only">Đã lưu</span>
           </button>
@@ -423,9 +420,9 @@
                 <span id="lb-total-shops-count" class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-950 font-black text-[9.5px]">105 quán</span>
               </div>
               <div class="flex items-center gap-1">
-                <button type="button" onclick="openFirebaseConfigModal()" class="soft-btn px-2 py-1 rounded-xl bg-amber-100 border border-amber-400 text-amber-950 font-black text-[9.5px]">
-                  ☁️ Cấu Hình Firebase
-                </button>
+                <span class="px-2 py-1 rounded-xl bg-emerald-100 border border-emerald-400 text-emerald-950 font-black text-[9.5px]">
+                  💾 Offline 100%
+                </span>
                 <button type="button" onclick="fetchCloudLeaderboard(true)" class="soft-btn btn-game-green px-2.5 py-1 rounded-xl font-black text-[10px]">
                   🔄 Làm mới
                 </button>
@@ -701,6 +698,10 @@
             </span>
 
             <div class="w-full mt-1 relative z-10">
+              <div class="flex items-center justify-between text-[8px] font-black text-amber-950 px-0.5 mb-0.5">
+                <span id="sweet-spot-range-label">🎯 Vùng chuẩn: 68%–87%</span>
+                <span class="text-emerald-800">Dừng trong vùng xanh</span>
+              </div>
               <div id="mix-bar-track" class="w-full h-2.5 bg-slate-900/50 rounded-full overflow-hidden border border-amber-950 relative">
                 <div id="sweet-spot-zone" class="absolute top-0 bottom-0 bg-emerald-400/95 border-x-2 border-white shadow" style="left: 68%; width: 24%"></div>
                 <div id="mix-bar-fill" class="h-full bg-gradient-to-r from-amber-400 via-orange-500 to-emerald-500 transition-all duration-150" style="width: 0%"></div>
@@ -769,7 +770,7 @@
             <span class="text-2xl">📱</span><span>Tóp Tóp MXH</span>
             <span id="prep-unreplied-badge" class="hidden absolute top-1 right-1 px-1.5 rounded-full bg-red-600 text-white font-black text-[9px]">0</span>
           </button>
-          <button onclick="closeQuickMenuModal(); openProfileEditModal()" class="soft-btn p-2.5 rounded-xl bg-emerald-100 border-2 border-emerald-500 font-black text-emerald-950 flex flex-col items-center gap-1">
+          <button onclick="closeQuickMenuModal(); openRecoveryModalFromMenu()" class="soft-btn p-2.5 rounded-xl bg-emerald-100 border-2 border-emerald-500 font-black text-emerald-950 flex flex-col items-center gap-1">
             <span class="text-2xl">🔑</span><span>Mã Khôi Phục</span>
           </button>
           <button onclick="closeQuickMenuModal(); openProfileEditModal()" class="soft-btn p-2.5 rounded-xl bg-blue-100 border-2 border-blue-400 font-black text-blue-950 flex flex-col items-center gap-1">
@@ -786,8 +787,8 @@
           <button onclick="closeQuickMenuModal(); openLeaderboardFromAnywhere()" class="soft-btn p-2.5 rounded-xl bg-yellow-100 border-2 border-amber-500 font-black text-amber-950 flex flex-col items-center gap-1">
             <span class="text-2xl">🏆</span><span>Bảng Xếp Hạng</span>
           </button>
-          <button onclick="closeQuickMenuModal(); openFirebaseConfigModal()" class="soft-btn p-2.5 rounded-xl bg-teal-100 border-2 border-teal-500 font-black text-teal-950 flex flex-col items-center gap-1">
-            <span class="text-2xl">☁️</span><span>Kết Nối Firebase</span>
+          <button onclick="closeQuickMenuModal(); forceManualCloudSync()" class="soft-btn p-2.5 rounded-xl bg-teal-100 border-2 border-teal-500 font-black text-teal-950 flex flex-col items-center gap-1">
+            <span class="text-2xl">💾</span><span>Lưu Trên Máy</span>
           </button>
           <button onclick="closeQuickMenuModal(); openPwaInstallModal()" class="soft-btn col-span-2 p-2.5 rounded-xl bg-gradient-to-r from-emerald-100 via-teal-100 to-cyan-100 border-2 border-emerald-500 font-black text-emerald-950 flex items-center justify-center gap-2 relative shadow-sm">
             <span class="text-xl">📲</span><span>Hướng Dẫn Cài Ra Màn Hình Chính</span>
@@ -1268,74 +1269,43 @@
   </div>
 
 
-  <!-- 11. POP-UP CẤU HÌNH KẾT NỐI FIREBASE REALTIME DATABASE & ĐỒNG BỘ 105 QUÁN -->
-  <div id="modal-firebase-config" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3 overflow-y-auto">
+  <!-- 11. POP-UP MÃ KHÔI PHỤC LOCAL (BT-XXXXXX + PIN & BTT1-...) -->
+  <div id="modal-recovery-local" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3 overflow-y-auto">
     <div class="w-full max-w-md wooden-clipboard-frame my-auto">
       <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
-      <div class="clipboard-paper-inner p-3.5 space-y-2.5 text-xs max-h-[88vh] overflow-y-auto">
+      <div class="clipboard-paper-inner p-3.5 space-y-2.5 text-xs">
         <div class="flex items-center justify-between border-b border-amber-200 pb-1.5">
-          <div class="flex items-center gap-1.5">
-            <span class="text-lg">☁️</span>
+          <span class="font-black text-sm text-amber-950">🔑 Mã Khôi Phục Quán (Offline Local)</span>
+          <button type="button" onclick="closeRecoveryModalFromMenu()" class="px-2.5 py-0.5 bg-amber-100 rounded-lg font-black text-amber-950">✕</button>
+        </div>
+        <div class="p-2.5 rounded-xl bg-emerald-50 border-2 border-emerald-400 space-y-1.5">
+          <div class="flex items-center justify-between">
             <div>
-              <h3 class="font-black text-sm text-amber-950">Kết Nối Máy Chủ Firebase Cloud</h3>
-              <p class="text-[10px] font-bold text-amber-800">Lưu trữ dữ liệu người chơi & Bảng Xếp Hạng thời gian thực</p>
+              <div class="text-[10px] font-black text-emerald-900">Mã Quán hiện tại:</div>
+              <div id="modal-rec-current-code" class="text-base font-black text-blue-950 tracking-wider">BT-000000</div>
             </div>
+            <button type="button" onclick="copyRecoveryCode()" class="soft-btn btn-game-blue px-2.5 py-1.5 rounded-xl font-black text-[11px]">📋 Copy Mã BT</button>
           </div>
-          <button type="button" onclick="closeFirebaseConfigModal()" class="px-2.5 py-0.5 bg-amber-100 rounded-lg font-black text-amber-950">✕</button>
+          <div class="pt-1 border-t border-emerald-200 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-black text-emerald-900">📲 Mã Sao Lưu Đổi Máy (BTT1-...):</span>
+              <button type="button" onclick="copyFullPortableRecoveryCode()" class="soft-btn px-2 py-1 rounded-lg bg-emerald-600 text-white font-black text-[10px]">📋 Copy BTT1</button>
+            </div>
+            <input id="modal-rec-btt1-preview" type="text" readonly onclick="this.select()" class="w-full px-2 py-1 rounded-lg bg-white border border-emerald-300 text-[10px] font-mono text-slate-700" value="BTT1-..." />
+          </div>
         </div>
-
-        <div class="space-y-1.5">
-          <label class="block font-black text-amber-950 text-[11px]">1. Đường dẫn URL Firebase Realtime Database:</label>
-          <input id="firebase-db-url-input" type="url" placeholder="https://ten-project-default-rtdb.asia-southeast1.firebasedatabase.app" class="w-full px-2.5 py-2 rounded-xl border-2 border-amber-400 focus:border-emerald-600 focus:outline-none text-xs font-bold text-amber-950 bg-white" />
+        <div class="p-2.5 rounded-xl bg-blue-50 border-2 border-blue-300 space-y-2">
+          <div class="font-black text-blue-950">🔓 Khôi phục quán khác bằng Mã + PIN:</div>
           <div class="flex gap-1.5">
-            <button type="button" id="btn-test-firebase-conn" onclick="saveAndTestFirebaseConnection()" class="soft-btn btn-game-green flex-1 py-2 rounded-xl font-black text-xs">
-              🔍 Kiểm Tra & Lưu Kết Nối
-            </button>
-            <button type="button" onclick="forceManualCloudSync()" class="soft-btn btn-game-blue px-3 py-2 rounded-xl font-black text-xs">
-              ☁️ Đồng Bộ Ngay
-            </button>
+            <input id="modal-rec-code-input" type="text" placeholder="Nhập BT-236264 hoặc BTT1-..." class="flex-1 px-2.5 py-1.5 rounded-lg border border-blue-400 text-xs font-black text-blue-950 bg-white" />
+            <input id="modal-rec-pin-input" type="password" inputmode="numeric" maxlength="4" placeholder="PIN (nếu có)" class="w-24 px-2 py-1.5 rounded-lg border border-blue-400 text-xs font-black text-center text-blue-950 bg-white" />
           </div>
+          <div id="modal-rec-status-msg" class="hidden"></div>
+          <button type="button" onclick="handleRecoverByCode(true)" class="soft-btn btn-game-blue w-full py-2 rounded-xl font-black text-xs">🔑 Khôi Phục Ngay</button>
         </div>
-
-        <div id="firebase-config-status-msg" class="p-2 rounded-xl border bg-amber-50 border-amber-300 text-amber-900 text-[11px] font-bold"></div>
-
-        <!-- Công cụ Khôi phục / Đẩy 105 quán cũ lên Firebase -->
-        <div class="p-2.5 rounded-2xl bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 border-2 border-emerald-400 space-y-1.5">
-          <div class="font-black text-emerald-950 text-xs flex items-center justify-between">
-            <span>📦 Kho Dữ Liệu 105 Quán Cũ (Migration Tool)</span>
-            <span class="px-1.5 py-0.5 rounded bg-emerald-600 text-white text-[9px] font-black">Sẵn sàng</span>
-          </div>
-          <p class="text-[10.5px] font-semibold text-emerald-900 leading-snug">
-            File gốc của bạn có sẵn dữ liệu 105 quán. Sau khi gắn URL Firebase ở trên, bạn có thể đẩy toàn bộ 105 quán này lên Firebase chỉ với 1 cú chạm hoặc tải file JSON chuẩn để Import vào Firebase Console:
-          </p>
-          <div class="grid grid-cols-2 gap-1.5 pt-0.5">
-            <button type="button" id="btn-push-seed-firebase" onclick="pushAll105SeedShopsToFirebase()" class="soft-btn btn-game-orange py-2 px-2 rounded-xl font-black text-[10.5px]">
-              📤 Đẩy 105 Quán Lên Firebase
-            </button>
-            <button type="button" onclick="downloadFirebaseSeedJsonFile()" class="soft-btn py-2 px-2 rounded-xl bg-white border-2 border-emerald-500 text-emerald-950 font-black text-[10.5px]">
-              📥 Tải File JSON Import
-            </button>
-          </div>
-        </div>
-
-        <!-- Hướng dẫn nhanh 3 bước cài đặt Firebase -->
-        <div class="p-2.5 rounded-2xl bg-amber-50 border border-amber-300 space-y-1 text-[10.5px] leading-relaxed text-amber-950">
-          <div class="font-black text-amber-950">📘 Hướng dẫn lấy link Firebase Realtime Database (2 phút):</div>
-          <div><b>B1:</b> Truy cập <b>console.firebase.google.com</b> ➔ Mở Project của bạn ➔ Chọn mục <b>Build ➔ Realtime Database</b> ➔ Bấm <b>Create Database</b>.</div>
-          <div><b>B2:</b> Qua tab <b>Rules (Quy tắc)</b>, chỉnh thành:<br/>
-            <code class="block bg-amber-950 text-yellow-200 px-2 py-1 rounded mt-0.5 font-mono text-[9.5px] select-all">{ "rules": { ".read": true, ".write": true } }</code>
-            rồi bấm <b>Publish</b>.
-          </div>
-          <div><b>B3:</b> Copy đường dẫn URL ở đầu tab <b>Data</b> (có dạng <i>https://...-default-rtdb...firebasedatabase.app</i>) dán vào ô số 1 phía trên (hoặc dán cố định vào biến <code>DEFAULT_FIREBASE_DB_URL</code> trong file <code>js/firebase-config.js</code>).</div>
-        </div>
-
-        <button type="button" onclick="closeFirebaseConfigModal()" class="soft-btn btn-game-red w-full py-2 rounded-xl font-black text-xs">
-          Đóng Bảng Cấu Hình
-        </button>
       </div>
     </div>
   </div>
-
   <!-- 12. POP-UP XEM HỒ SƠ QUÁN ĐỐI THỦ TRÊN BẢNG XẾP HẠNG -->
   <div id="modal-rival-profile" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3 overflow-y-auto">
     <div class="w-full max-w-sm wooden-clipboard-frame my-auto">

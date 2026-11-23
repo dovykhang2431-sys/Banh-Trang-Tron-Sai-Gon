@@ -1,16 +1,12 @@
 /**
- * Service Worker Chuẩn PWA - Vua Bánh Tráng Sài Gòn (Ver 16 Modular + Firebase Cloud)
- * - Cache-First / Stale-While-Revalidate cho toàn bộ tài nguyên tĩnh (HTML, CSS, JS modules, Icons)
- * - Network-Only cho toàn bộ request tới Firebase Realtime Database (*.firebasedatabase.app / *.firebaseio.com)
- *   để đảm bảo dữ liệu người chơi và Bảng Xếp Hạng luôn tươi mới 100% theo thời gian thực.
+ * Service Worker Chuẩn PWA - Vua Bánh Tráng Sài Gòn (Ver 17 Offline 100%)
+ * - Pre-cache toàn bộ tài nguyên tĩnh (HTML, CSS, JS modules, Icons) để chơi hoàn toàn Offline sau lần tải đầu.
  */
-const CACHE_NAME = "vua-banh-trang-saigon-pwa-v16.2";
+const CACHE_NAME = "vua-banh-trang-saigon-pwa-v17";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
   "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./css/styles.css",
@@ -54,33 +50,28 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   const req = event.request;
-  const url = new URL(req.url);
+  if (req.method !== "GET") return;
 
-  // 1. Không bao giờ cache các lệnh gọi API tới Firebase Realtime Database hoặc phương thức PUT/POST/PATCH/DELETE
-  if (
-    req.method !== "GET" ||
-    url.hostname.includes("firebasedatabase.app") ||
-    url.hostname.includes("firebaseio.com") ||
-    (url.hostname.includes("googleapis.com") && url.pathname.includes("/v1/"))
-  ) {
-    return;
-  }
-
-  // 2. Chiến lược Network-First kèm Fallback Cache cho trang chính (index.html)
-  if (req.mode === "navigate" || url.pathname.endsWith("/index.html") || url.pathname.endsWith("/")) {
+  // 1. Điều hướng trang chính: Cache-First có cập nhật nền & Fallback ./index.html
+  if (req.mode === "navigate") {
     event.respondWith(
-      fetch(req)
-        .then((networkRes) => {
-          const clone = networkRes.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
-          return networkRes;
-        })
-        .catch(() => caches.match(req).then((cached) => cached || caches.match("./index.html")))
+      caches.match(req).then((cached) => {
+        const net = fetch(req)
+          .then((res) => {
+            if (res && res.status === 200) {
+              const clone = res.clone();
+              caches.open(CACHE_NAME).then((c) => c.put(req, clone));
+            }
+            return res;
+          })
+          .catch(() => cached || caches.match("./index.html"));
+        return cached || net;
+      })
     );
     return;
   }
 
-  // 3. Chiến lược Stale-While-Revalidate cho các module JS, CSS, Fonts và Icons
+  // 2. Tài nguyên tĩnh: Cache-First / Stale-While-Revalidate
   event.respondWith(
     caches.match(req).then((cachedRes) => {
       const fetchPromise = fetch(req)

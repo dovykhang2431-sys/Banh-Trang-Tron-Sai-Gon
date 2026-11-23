@@ -196,14 +196,15 @@
         if (activeCartBuff && activeCartBuff.id === "tiktok_storm") { maxAllowed = 4; spawnProb = 1.0; }
         if (activeCartBuff && activeCartBuff.id === "alley_hide") { maxAllowed = 1; spawnProb = 0.35; }
         if (activeCount < maxAllowed && Math.random() < spawnProb) {
-          spawnCustomerIntoEmptySlot(false);
+          spawnCustomerIntoEmptySlot(Boolean(activeCartBuff && activeCartBuff.id === "tiktok_storm"));
         }
       }, finalSpawnMs);
     }
 
     function spawnCustomerIntoEmptySlot(forceManualCall = false) {
-      if (state.clockMinutes >= 22 * 60 || isAnyBlockingModalOpen()) return;
       const isRushBuff = activeCartBuff && ["tiktok_storm", "intl_bus_rush", "tv_report_rush", "spicy_king_rush"].includes(activeCartBuff.id);
+      if (state.clockMinutes >= 22 * 60) return;
+      if (!forceManualCall && !isRushBuff && isAnyBlockingModalOpen()) return;
       const maxSlots = isRushBuff ? 4 : getMaxActiveCustomerSlots();
       const emptyIdx = customerSlots.findIndex((x, idx) => x === null && idx < maxSlots);
       if (emptyIdx === -1) return;
@@ -682,7 +683,7 @@
         if (!isUnlocked) {
           return `
             <button onclick="showToast('🔒 Mở món ' + '${d.name}' + ' ở mục Thực Đơn - Cấp ' + '${d.reqLevel}' + '!')" class="soft-btn shrink-0 min-w-[74px] py-1 px-1.5 rounded-xl ${isDemandedNow ? 'bg-red-100 border-2 border-red-500 animate-pulse' : 'bg-slate-700/70 border border-slate-500 opacity-60'} flex flex-col items-center justify-center relative">
-              ${isDemandedNow ? `<span class="absolute -top-1 right-0 px-1 rounded bg-red-600 text-white font-black text-[7px]">Hỏi!</span>` : `<span class="absolute top-0.5 right-0.5 text-[8px]">🔒${d.reqLevel}</span>`}
+              ${isDemandedNow ? `<span class="absolute -top-1 right-0 px-1 rounded bg-red-600 text-white font-black text-[7px]">Mới!</span>` : `<span class="absolute top-0.5 right-0.5 text-[8px]">🔒${d.reqLevel}</span>`}
               <div class="grayscale">${getDishSvgIcon(d.id, "w-9 h-9")}</div>
               <span class="font-bold text-[9px] text-white whitespace-nowrap mt-0.5">${d.short}</span>
             </button>
@@ -945,6 +946,8 @@
       const { min, max } = getSweetSpotBounds();
       const zone = document.getElementById("sweet-spot-zone");
       if (zone) { zone.style.left = `${min}%`; zone.style.width = `${max - min}%`; }
+      const lbl = document.getElementById("sweet-spot-range-label");
+      if (lbl) lbl.textContent = `🎯 Vùng chuẩn: ${min}%–${max}%`;
     }
 
     // Đặt lại thau hoàn toàn trống cho mẻ bánh tiếp theo (selectedDish = null, 4 nút Topping đều tắt màu xám)
@@ -1013,15 +1016,18 @@
           else if (Boolean(bowl.tratac) !== Boolean(c.wantedTraTac)) mismatch = c.wantedTraTac ? "⚠️ Bấm Trà!" : "⚠️ Bỏ Trà!";
 
           if (mismatch) {
+            b4.disabled = true;
             b4.textContent = mismatch;
-            b4.className = "soft-btn btn-game-orange active-red-ring w-full py-2 rounded-2xl font-black text-[10px] tracking-wide uppercase shadow-lg mt-0.5";
+            b4.className = "soft-btn btn-game-orange w-full py-2 rounded-2xl font-black text-[10px] tracking-wide uppercase shadow-lg mt-0.5 opacity-60 cursor-not-allowed";
           } else {
+            b4.disabled = false;
             b4.textContent = "✅ TRAO NGAY!";
             b4.className = "soft-btn btn-game-green active-red-ring w-full py-2 rounded-2xl font-black text-[11px] tracking-wide uppercase shadow-lg mt-0.5";
           }
         } else {
+          b4.disabled = true;
           b4.textContent = "TRAO KHÁCH";
-          b4.className = "soft-btn btn-game-green w-full py-2 rounded-2xl font-black text-[11px] tracking-wide uppercase shadow-lg mt-0.5";
+          b4.className = "soft-btn btn-game-green w-full py-2 rounded-2xl font-black text-[11px] tracking-wide uppercase shadow-lg mt-0.5 opacity-50 cursor-not-allowed";
         }
       }
     }
@@ -1353,6 +1359,11 @@ function doStep4Serve() {
   if (!c) { showToast("🍃 Chưa có khách nào để trao bánh!"); return; }
   if (!bowl.selectedDish) { showToast("⚠️ Hãy chọn Món Bánh trước!"); return; }
   if (!bowl.step1Done || !bowl.step2Done || !bowl.step3Done) { showToast("⚠️ Hãy làm đủ B1 ➔ B2 ➔ B3 trước khi trao khách!"); return; }
+  const { min: _swMin, max: _swMax } = getSweetSpotBounds();
+  if (!bowl.sweetSpotLockedPass && (bowl.mixProgress < _swMin || bowl.mixProgress > _swMax)) {
+    showToast(`⚠️ Chưa đạt vùng chuẩn (${_swMin}%–${_swMax}%)!`);
+    return;
+  }
 
   if (bowl.tratac && (state.stock.tratac || 0) < 1) {
     openOutOfStockModal([INGREDIENTS.find(x => x.id === "tratac")]);
@@ -1587,6 +1598,7 @@ function doStep4Serve() {
 
   const packUnit = (state.activeSalesStrategy === "office_combo" || state.dailyCampaigns?.combo_student) ? 800 : 1000;
   const packagingCost = usedQty * packUnit;
+  state.money -= packagingCost;
   state.todayCogsSpent += packagingCost;
   state.cumulativeCosts.cogs = (state.cumulativeCosts.cogs || 0) + packagingCost;
 
@@ -1689,6 +1701,8 @@ function doStep4Serve() {
   const servedSlot = selectedSlotIndex;
   customerSlots[servedSlot] = null;
   resetBowl(false);
+  const instrEl = document.getElementById("bowl-instruction");
+  if (instrEl) instrEl.textContent = "Chọn Món & Topping";
   autoSelectFirstAvailableSlot();
   renderSelectedOrderBubble(praiseHtml);
 
@@ -2041,7 +2055,7 @@ setInterval(() => {
         }
       });
 
-      const netProfit = state.todayRevenue + franchiseDividend - state.todayCogsSpent - totalFixed - spoiledTotalVal;
+      const netProfit = state.todayRevenue + franchiseDividend - state.todayCogsSpent - totalFixed;
 
       pendingEndDayData = {
         depCost, utilCost, rentCost, staffWages, progressiveTax, bankInstallment,
@@ -2190,6 +2204,7 @@ function startNextDay() {
   state.dilemmaTriggeredToday = false;
   state.dailyBargainDone = false;
   state.dailyBargainDiscountPct = 0;
+  state.selectedDailySauce = "";
   state.activeSalesStrategy = "";
   state.pendingGuaranteedRushEvent = false;
   state.todayDetail = null;

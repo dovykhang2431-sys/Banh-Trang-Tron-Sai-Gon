@@ -1,8 +1,8 @@
 {
-  "id": "vua-banh-trang-sai-gon-v16",
-  "name": "Vua Bánh Tráng Sài Gòn - Đế Chế 80 Cấp",
+  "id": "vua-banh-trang-sai-gon-v17",
+  "name": "Vua Bánh Tráng Sài Gòn - Đế Chế 80 Cấp (Ver 17 Offline)",
   "short_name": "Vua Bánh Tráng",
-  "description": "Game mô phỏng khởi nghiệp xe bánh tráng Sài Gòn: Đi chợ, sơ chế, trộn bánh 3 hệ, xây chuỗi nhượng quyền và đua Bảng Xếp Hạng Firebase Cloud.",
+  "description": "Game mô phỏng khởi nghiệp xe bánh tráng Sài Gòn chơi Offline 100%: Đi chợ, sơ chế, trộn bánh 3 hệ, xây chuỗi nhượng quyền và đua Bảng Xếp Hạng nội bộ.",
   "lang": "vi-VN",
   "start_url": "./index.html",
   "scope": "./",
@@ -27,12 +27,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    },
-    {
-      "src": "./icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
     }
   ]
 }

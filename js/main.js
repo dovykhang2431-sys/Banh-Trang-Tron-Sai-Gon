@@ -1,5 +1,5 @@
 /**
- * ================= ĐIỂM KHỞI CHẠY CHÍNH (BOOTSTRAP), PWA & AUTO-SYNC =================
+ * ================= ĐIỂM KHỞI CHẠY CHÍNH (BOOTSTRAP) & PWA OFFLINE 100% (VER 17) =================
  */
 
 let deferredPwaPrompt = null;
@@ -47,48 +47,16 @@ async function triggerPwaInstallNow() {
   }
 }
 
-// Tự động đồng bộ khi người chơi quay lại tab hoặc khi mạng Internet kết nối lại
+// Làm mới dữ liệu local khi quay lại tab
 window.addEventListener("focus", () => {
   checkExistingLocalSaveForLoginScreen();
-  syncAdminLiveOpsAndMail(false);
   fetchCloudLeaderboard(false);
 });
 
-window.addEventListener("online", () => {
-  if (isFirebaseConfigured() && state && state.shopName) {
-    syncShopToFirebaseCloud(false);
-    fetchCloudLeaderboard(false);
-  }
-});
-
-window.addEventListener("storage", (ev) => {
-  if (ev.key === LOCAL_STORAGE_KEY && ev.newValue) {
-    try {
-      const incoming = JSON.parse(ev.newValue);
-      if (incoming && incoming.shopKey && incoming.shopKey === state.shopKey) {
-        if (Number(incoming.adminOverrideAt || 0) > Number(state.adminOverrideAt || 0) || Boolean(incoming.isBankrupt) !== Boolean(state.isBankrupt)) {
-          mergeLoadedState(incoming);
-          updateAllUI();
-          if (state.isBankrupt) {
-            declareTrueBankruptcy(true);
-          } else {
-            const bkModal = document.getElementById("modal-bankruptcy");
-            if (bkModal) bkModal.classList.add("hidden");
-          }
-          showToast("⚡ Đã đồng bộ tức thì thay đổi từ Trang Quản Trị!");
-        }
-      }
-    } catch (e) {}
-  }
-});
-
-// Tự động lưu an toàn mỗi 15 giây
+// Tự động lưu local an toàn mỗi 15 giây
 setInterval(() => {
   if (document.visibilityState === "visible" && state && state.shopName) {
     saveToLocalOnly();
-    if (isFirebaseConfigured()) {
-      syncShopToFirebaseCloud(false);
-    }
   }
 }, 15000);
 
@@ -112,8 +80,6 @@ window.addEventListener("DOMContentLoaded", () => {
   syncStep3VesselChibiAndLabel();
   renderCompactStreetControlStrip();
   fetchCloudLeaderboard(false);
-  syncAdminLiveOpsAndMail(false);
-  syncRemoteGameConfigV15();
   updateAllUI();
   startDayClock();
 });
