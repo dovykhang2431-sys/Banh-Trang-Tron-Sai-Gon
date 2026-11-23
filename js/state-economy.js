@@ -612,7 +612,22 @@
         state.updatedAt = Math.max(Date.now(), meta.maxTs + 1);
         state.securitySeal = computeSecuritySeal(state);
         const persistObj = { ...state, localCustomAvatar: null };
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(persistObj));
+        let shouldWriteMaster = true;
+        try {
+          const existingRaw = localStorage.getItem(LOCAL_STORAGE_KEY);
+          if (existingRaw) {
+            const existingMaster = JSON.parse(existingRaw);
+            const existingKey = existingMaster?.shopKey || sanitizeShopKey(existingMaster?.shopName || "");
+            if (existingKey && existingKey === state.shopKey && typeof isSaveRecordNewer === "function") {
+              if (!isSaveRecordNewer(persistObj, existingMaster)) {
+                shouldWriteMaster = false;
+              }
+            }
+          }
+        } catch (guardErr) {}
+        if (shouldWriteMaster) {
+          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(persistObj));
+        }
         saveShopToLocalVault(persistObj);
         if (typeof lastDisplayedResumeSave !== "undefined") {
           lastDisplayedResumeSave = persistObj;

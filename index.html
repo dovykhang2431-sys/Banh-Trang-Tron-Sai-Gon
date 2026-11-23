@@ -73,6 +73,15 @@
               Chơi Tiếp ▶
             </button>
           </div>
+          <div id="save-diag-strip" class="mt-1.5 pt-1.5 border-t border-emerald-200/80 text-[9px] text-emerald-900">
+            <div class="flex items-center justify-between gap-1">
+              <span id="save-diag-summary" class="font-bold truncate">🔍 Chẩn đoán lưu: đang kiểm tra...</span>
+              <button type="button" onclick="toggleSaveDiagDetails()" class="px-1.5 py-0.5 rounded bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-black text-[9px] shrink-0 border border-emerald-400">
+                🔍 Xem log lưu
+              </button>
+            </div>
+            <pre id="save-diag-details" class="hidden mt-1 p-1.5 rounded-lg bg-white/95 border border-emerald-300 text-[8.5px] leading-tight font-mono text-slate-800 whitespace-pre-wrap break-all max-h-32 overflow-y-auto"></pre>
+          </div>
         </div>
 
         <div class="space-y-2 bg-amber-50/90 p-2.5 rounded-2xl border-2 border-amber-300">

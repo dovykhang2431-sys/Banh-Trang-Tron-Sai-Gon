@@ -88,22 +88,73 @@ function closeRecoveryModalFromMenu() {
   if (modal) modal.classList.add("hidden");
 }
 
+const SAVE_DIAG_LOG_KEY = "btt_save_diag_log_v175";
+
+function formatSaveDiagRec(r) {
+  if (!r || typeof r !== "object") return "null";
+  return `day=${r.day || 1} lv=${r.level || 1} money=${Math.round(Number(r.money || 0))} seq=${Number(r.saveSeq || 0)} ts=${Number(r.updatedAt || 0)}`;
+}
+
+function recordSaveDiagEntry(context, key, masterRec, vaultRec, seedRec, chosenRec) {
+  try {
+    const line = `[${context}] key=${key || "-"} | master(${formatSaveDiagRec(masterRec)}) | reg(${formatSaveDiagRec(vaultRec)}) | seed(${formatSaveDiagRec(seedRec)}) => chosen(${formatSaveDiagRec(chosenRec)})`;
+    let logs = [];
+    const raw = localStorage.getItem(SAVE_DIAG_LOG_KEY);
+    if (raw) logs = JSON.parse(raw) || [];
+    logs.unshift(line);
+    logs = logs.slice(0, 6);
+    localStorage.setItem(SAVE_DIAG_LOG_KEY, JSON.stringify(logs));
+    renderSaveDiagUI(line, logs);
+  } catch (e) {}
+}
+
+function renderSaveDiagUI(latestLine = null, allLogs = null) {
+  try {
+    const sumEl = document.getElementById("save-diag-summary");
+    const detEl = document.getElementById("save-diag-details");
+    if (!sumEl && !detEl) return;
+    let logs = allLogs;
+    if (!Array.isArray(logs)) {
+      const raw = localStorage.getItem(SAVE_DIAG_LOG_KEY);
+      logs = raw ? (JSON.parse(raw) || []) : [];
+    }
+    const top = latestLine || logs[0] || "Chưa có log lưu/tải.";
+    if (sumEl) sumEl.textContent = `🔍 ${top}`;
+    if (detEl) detEl.textContent = logs.join("\n---\n");
+  } catch (e) {}
+}
+
+function toggleSaveDiagDetails() {
+  const detEl = document.getElementById("save-diag-details");
+  if (!detEl) return;
+  renderSaveDiagUI();
+  detEl.classList.toggle("hidden");
+}
+
 function isSaveRecordNewer(candidate, existing) {
   if (!candidate || typeof candidate !== "object") return false;
   if (!existing || typeof existing !== "object") return true;
   const cSeq = Number(candidate.saveSeq || 0);
   const eSeq = Number(existing.saveSeq || 0);
-  // Snapshot mẫu (saveSeq === 0) không bao giờ được thắng bản lưu local (saveSeq >= 1)
+  // 1. Snapshot mẫu (saveSeq === 0) không bao giờ thắng bản lưu local (saveSeq >= 1)
   if (cSeq === 0 && eSeq >= 1) return false;
   if (cSeq >= 1 && eSeq === 0) return true;
-  if (cSeq !== eSeq) return cSeq > eSeq;
-  const cTs = Number(candidate.updatedAt || candidate.fullState?.updatedAt || 0);
-  const eTs = Number(existing.updatedAt || existing.fullState?.updatedAt || 0);
-  if (cTs !== eTs) return cTs > eTs;
+  // 2. Nếu có reset phá sản mới hơn thì ưu tiên bản sau reset
+  const cReset = Number(candidate.bankruptcyResetAt || 0);
+  const eReset = Number(existing.bankruptcyResetAt || 0);
+  if (cReset !== eReset) return cReset > eReset;
+  // 3. Ưu tiên NGÀY (day) cao hơn: bản Ngày 4 không bao giờ thắng bản Ngày 5 cùng quán
   const cDay = Number(candidate.day || 1);
   const eDay = Number(existing.day || 1);
   if (cDay !== eDay) return cDay > eDay;
-  return Number(candidate.totalSold || 0) >= Number(existing.totalSold || 0);
+  // 4. Cùng ngày: ưu tiên tổng bịch đã bán cao hơn, rồi saveSeq, rồi updatedAt
+  const cSold = Number(candidate.totalSold || 0);
+  const eSold = Number(existing.totalSold || 0);
+  if (cSold !== eSold) return cSold > eSold;
+  if (cSeq !== eSeq) return cSeq > eSeq;
+  const cTs = Number(candidate.updatedAt || candidate.fullState?.updatedAt || 0);
+  const eTs = Number(existing.updatedAt || existing.fullState?.updatedAt || 0);
+  return cTs >= eTs;
 }
 
 function getMaxKnownSaveMeta(shopKey) {
@@ -240,23 +291,11 @@ function getLatestLocalSaveData(preferredKey = null, logContext = "") {
     }
 
     if (logContext) {
-      const fmt = (r) => r ? `seq=${Number(r.saveSeq || 0)} ts=${Number(r.updatedAt || 0)} day=${r.day} lv=${r.level} money=${r.money}` : "null";
-      console.log(`[SaveDiag:${logContext}] key=${key} | master=(${fmt(masterCandidate)}) | registry=(${fmt(vaultCandidate)}) | seed=(${fmt(seedEntry)}) => chosen=(${fmt(chosen)})`);
+      recordSaveDiagEntry(logContext, key, masterCandidate, vaultCandidate, seedEntry, chosen);
     }
 
     if (!chosen) return null;
-
-    // Đồng bộ 2 chiều có chốt chặn: KHÔNG BAO GIỜ ghi đè bản mới hơn bằng bản cũ hơn
-    try {
-      const cleanChosen = { ...chosen, localCustomAvatar: null };
-      if (!masterCandidate || isSaveRecordNewer(cleanChosen, masterCandidate)) {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cleanChosen));
-      }
-      if (key && (!vaultCandidate || isSaveRecordNewer(cleanChosen, vaultCandidate))) {
-        vaultMap[key] = cleanChosen;
-        localStorage.setItem(LOCAL_SHOPS_REGISTRY_KEY, JSON.stringify(vaultMap));
-      }
-    } catch (syncErr) {}
+    // Chỉ đọc thuần túy, không ghi đè ngược localStorage khi đang đọc
     return chosen;
   } catch (e) {
     return null;
@@ -267,7 +306,7 @@ function checkExistingLocalSaveForLoginScreen() {
   try {
     userManuallyChangedLoginAvatar = false;
     updateFirebaseStatusBadgesUI();
-    const saved = getLatestLocalSaveData();
+    const saved = getLatestLocalSaveData(null, "loginCard");
     lastDisplayedResumeSave = saved || null;
     if (!saved || !saved.shopName) {
       renderLoginTop3Preview();
