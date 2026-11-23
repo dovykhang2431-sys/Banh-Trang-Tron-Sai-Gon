@@ -591,8 +591,9 @@
         }).slice(0, MAX_LEDGER_DAYS);
       }
     }
-    function saveToLocalOnly() {
+    function saveToLocalOnly(sourceLabel = "auto") {
       try {
+        if (!state || !state.shopName) return false;
         if (!isStateLegitimate(state) && !state.isBanned) {
           const adminAllowance = Math.max(0, Number(state.adminGrantedMoney || 0));
           const franBonus = Math.max(0, Number(state.cumulativeFranchiseRev || 0));
@@ -605,35 +606,71 @@
           syncTotalStockFromBatches();
         }
         state.shopKey = state.shopKey || sanitizeShopKey(state.shopName || "");
-        const meta = typeof getMaxKnownSaveMeta === "function" ? getMaxKnownSaveMeta(state.shopKey) : { maxSeq: 0, maxTs: 0 };
+        const shopKey = state.shopKey;
+
+        // CHỐT CHẶN TRƯỚC KHI TĂNG saveSeq: kiểm tra cả master lẫn registry
+        let existingBest = null;
+        try {
+          const existingRaw = localStorage.getItem(LOCAL_STORAGE_KEY);
+          if (existingRaw) {
+            const em = JSON.parse(existingRaw);
+            const emk = em?.shopKey || sanitizeShopKey(em?.shopName || "");
+            if (em && em.shopName && emk === shopKey) existingBest = em;
+          }
+          const vRaw = localStorage.getItem(LOCAL_SHOPS_REGISTRY_KEY);
+          if (vRaw) {
+            const vMap = JSON.parse(vRaw) || {};
+            const ev = vMap[shopKey];
+            if (ev && ev.shopName && (!existingBest || (typeof isSaveRecordNewer === "function" && isSaveRecordNewer(ev, existingBest)))) {
+              existingBest = ev;
+            }
+          }
+        } catch (guardErr) {}
+
+        // Nếu tồn tại bản lưu cùng quán có NGÀY cao hơn (và không phải vừa reset phá sản), CHẶN HẲN trước khi tăng saveSeq!
+        if (existingBest) {
+          const curReset = Number(state.bankruptcyResetAt || 0);
+          const exReset = Number(existingBest.bankruptcyResetAt || 0);
+          const isNewerReset = curReset > exReset;
+          if (!isNewerReset) {
+            const curDay = Number(state.day || 1);
+            const exDay = Number(existingBest.day || 1);
+            const curSold = Number(state.totalSold || 0);
+            const exSold = Number(existingBest.totalSold || 0);
+            const curSeq = Number(state.saveSeq || 0);
+            const exSeq = Number(existingBest.saveSeq || 0);
+            const isBgWriter = ["interval_15s", "beforeunload", "pagehide", "visibilitychange"].includes(sourceLabel);
+            if (curDay < exDay || (curDay === exDay && curSold < exSold) || (isBgWriter && curDay === exDay && curSold === exSold && curSeq > 0 && curSeq < exSeq)) {
+              if (typeof recordSaveWriteDiag === "function") {
+                recordSaveWriteDiag(sourceLabel, state, "BLOCKED", "stale_state", existingBest);
+              }
+              return false;
+            }
+          }
+        }
+
+        // Chỉ tăng saveSeq & updatedAt sau khi đã qua chốt chặn
+        const meta = typeof getMaxKnownSaveMeta === "function" ? getMaxKnownSaveMeta(shopKey) : { maxSeq: 0, maxTs: 0 };
         state.saveSeq = Math.max(Number(state.saveSeq || 0), meta.maxSeq) + 1;
         state.offlineMode = true;
         state.saveMode = "local";
         state.updatedAt = Math.max(Date.now(), meta.maxTs + 1);
         state.securitySeal = computeSecuritySeal(state);
+
         const persistObj = { ...state, localCustomAvatar: null };
-        let shouldWriteMaster = true;
-        try {
-          const existingRaw = localStorage.getItem(LOCAL_STORAGE_KEY);
-          if (existingRaw) {
-            const existingMaster = JSON.parse(existingRaw);
-            const existingKey = existingMaster?.shopKey || sanitizeShopKey(existingMaster?.shopName || "");
-            if (existingKey && existingKey === state.shopKey && typeof isSaveRecordNewer === "function") {
-              if (!isSaveRecordNewer(persistObj, existingMaster)) {
-                shouldWriteMaster = false;
-              }
-            }
-          }
-        } catch (guardErr) {}
-        if (shouldWriteMaster) {
-          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(persistObj));
-        }
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(persistObj));
+        // Registry luôn được đồng bộ suy ra từ đúng persistObj vừa ghi vào master
         saveShopToLocalVault(persistObj);
         if (typeof lastDisplayedResumeSave !== "undefined") {
           lastDisplayedResumeSave = persistObj;
         }
+        if (typeof recordSaveWriteDiag === "function") {
+          recordSaveWriteDiag(sourceLabel, persistObj, "OK", "", existingBest);
+        }
+        return true;
       } catch (e) {
         console.warn("[SaveLocal] Lỗi lưu localStorage:", e);
+        return false;
       }
     }
 

@@ -53,23 +53,29 @@ window.addEventListener("focus", () => {
   fetchCloudLeaderboard(false);
 });
 
-// Lưu tức thì khi người chơi rời tab hoặc tải lại trang để không bao giờ mất tiến độ
+function isActiveGameSessionOpen() {
+  const loginEl = document.getElementById("login-screen");
+  const isLoginHidden = Boolean(loginEl && loginEl.classList.contains("hidden"));
+  return Boolean(isLoginHidden && state && state.shopName);
+}
+
+// Lưu tức thì khi người chơi rời tab hoặc tải lại trang (CHỈ khi đang trong phiên chơi, không ở màn hình đăng nhập)
 window.addEventListener("beforeunload", () => {
-  if (state && state.shopName) saveToLocalOnly();
+  if (isActiveGameSessionOpen()) saveToLocalOnly("beforeunload");
 });
 window.addEventListener("pagehide", () => {
-  if (state && state.shopName) saveToLocalOnly();
+  if (isActiveGameSessionOpen()) saveToLocalOnly("pagehide");
 });
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "hidden" && state && state.shopName) {
-    saveToLocalOnly();
+  if (document.visibilityState === "hidden" && isActiveGameSessionOpen()) {
+    saveToLocalOnly("visibilitychange");
   }
 });
 
-// Tự động lưu local an toàn mỗi 15 giây
+// Tự động lưu local an toàn mỗi 15 giây (CHỈ khi đang trong phiên chơi)
 setInterval(() => {
-  if (document.visibilityState === "visible" && state && state.shopName) {
-    saveToLocalOnly();
+  if (document.visibilityState === "visible" && isActiveGameSessionOpen()) {
+    saveToLocalOnly("interval_15s");
   }
 }, 15000);
 

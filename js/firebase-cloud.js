@@ -102,7 +102,20 @@ function recordSaveDiagEntry(context, key, masterRec, vaultRec, seedRec, chosenR
     const raw = localStorage.getItem(SAVE_DIAG_LOG_KEY);
     if (raw) logs = JSON.parse(raw) || [];
     logs.unshift(line);
-    logs = logs.slice(0, 6);
+    logs = logs.slice(0, 16);
+    localStorage.setItem(SAVE_DIAG_LOG_KEY, JSON.stringify(logs));
+    renderSaveDiagUI(line, logs);
+  } catch (e) {}
+}
+
+function recordSaveWriteDiag(sourceLabel, stateObj, status, reason = "", existingRec = null) {
+  try {
+    const line = `[SAVE:${status}:${sourceLabel || "auto"}] st(${formatSaveDiagRec(stateObj)})${existingRec ? ` vs cur(${formatSaveDiagRec(existingRec)})` : ""}${reason ? ` [${reason}]` : ""}`;
+    let logs = [];
+    const raw = localStorage.getItem(SAVE_DIAG_LOG_KEY);
+    if (raw) logs = JSON.parse(raw) || [];
+    logs.unshift(line);
+    logs = logs.slice(0, 16);
     localStorage.setItem(SAVE_DIAG_LOG_KEY, JSON.stringify(logs));
     renderSaveDiagUI(line, logs);
   } catch (e) {}
@@ -249,9 +262,23 @@ function saveShopToLocalVault(shopState) {
       saveSeq: Number(shopState.saveSeq || 1),
       updatedAt: Number(shopState.updatedAt || Date.now())
     };
-    if (localMap[key] && !isSaveRecordNewer(slimEntry, localMap[key])) {
-      return;
+    // Chốt chặn vô điều kiện cho VAULT: không bao giờ ghi đè bản có ngày cao hơn hoặc mới hơn
+    if (localMap[key]) {
+      const existingV = localMap[key];
+      if (Number(slimEntry.day || 1) < Number(existingV.day || 1)) return;
+      if (!isSaveRecordNewer(slimEntry, existingV)) return;
     }
+    // Đối chiếu luôn với master để registry luôn là bản sao đồng bộ, không bao giờ tụt ngày sau master
+    try {
+      const mRaw = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (mRaw) {
+        const mObj = JSON.parse(mRaw);
+        const mk = mObj?.shopKey || sanitizeShopKey(mObj?.shopName || "");
+        if (mk && mk === key && Number(slimEntry.day || 1) < Number(mObj.day || 1)) {
+          return;
+        }
+      }
+    } catch (mErr) {}
     localMap[key] = slimEntry;
     try {
       localStorage.setItem(LOCAL_SHOPS_REGISTRY_KEY, JSON.stringify(localMap));
@@ -335,7 +362,6 @@ function checkExistingLocalSaveForLoginScreen() {
       loginSelectedAvatar = saved.avatar || "av_ditu";
       renderLoginAvatarGrid();
     }
-    saveShopToLocalVault(saved);
     renderLoginTop3Preview();
   } catch (e) {}
 }
@@ -444,7 +470,7 @@ function handleLoginOrRegister() {
     return;
   }
 
-  saveGameEverywhere(false);
+  saveGameEverywhere(false, "loginOrReg");
   document.getElementById("login-screen").classList.add("hidden");
   updateAllUI();
   if (state.money < 0 || (state.money < 15000 && (state.stock.banhtrang || 0) < 1)) {
@@ -472,7 +498,7 @@ function showLoginMessage(text, type) {
 
 function openLoginModalForSwitch() {
   if (state && state.shopName) {
-    saveGameEverywhere(false);
+    saveGameEverywhere(false, "switchShop");
   }
   userManuallyChangedLoginAvatar = false;
   checkExistingLocalSaveForLoginScreen();
@@ -482,7 +508,7 @@ function openLoginModalForSwitch() {
 
 function openProfileEditModal() {
   ensureRecoveryCode();
-  saveToLocalOnly();
+  saveToLocalOnly("profileModal");
   profileTempAvatar = state.avatar || "av_ditu";
   document.getElementById("profile-edit-name").value = state.shopName || "";
   const codeEl = document.getElementById("profile-recovery-code");
@@ -511,7 +537,7 @@ function saveProfileChanges() {
   const newName = document.getElementById("profile-edit-name").value.trim();
   if (newName.length < 2) { showToast("⚠️ Tên bảng hiệu từ 2 ký tự!"); return; }
   state.shopName = newName; state.avatar = profileTempAvatar; loginSelectedAvatar = profileTempAvatar;
-  closeProfileEditModal(); playSFX("cash"); updateAllUI(); saveGameEverywhere(true);
+  closeProfileEditModal(); playSFX("cash"); updateAllUI(); saveGameEverywhere(true, "profileSave");
   showToast(`✅ Đã lưu Bảng Hiệu mới! (Mã Quán Local: ${state.recoveryCode})`);
 }
 
@@ -583,7 +609,7 @@ function copyRecoveryCode() {
 }
 
 function copyFullPortableRecoveryCode() {
-  saveToLocalOnly();
+  saveToLocalOnly("copyBTT1");
   const portableCode = generatePortableSaveCode(state);
   const previewEl = document.getElementById("profile-portable-code-preview");
   if (previewEl) previewEl.value = portableCode;
@@ -636,7 +662,7 @@ function handleRecoverByCode(fromModal = false) {
     state.offlineMode = true;
     state.saveMode = "local";
     ensureRecoveryCode();
-    saveGameEverywhere(false);
+    saveGameEverywhere(false, "recoverBTT1");
     document.getElementById("login-screen").classList.add("hidden");
     closeRecoveryModalFromMenu();
     updateAllUI();
@@ -683,7 +709,7 @@ function handleRecoverByCode(fromModal = false) {
   state.offlineMode = true;
   state.saveMode = "local";
   ensureRecoveryCode();
-  saveGameEverywhere(false);
+  saveGameEverywhere(false, "recoverBT");
   document.getElementById("login-screen").classList.add("hidden");
   closeRecoveryModalFromMenu();
   updateAllUI();
@@ -716,17 +742,16 @@ function updateFirebaseStatusBadgesUI() {
 
 function forceManualCloudSync() {
   playSFX("cash");
-  saveGameEverywhere(true);
+  saveGameEverywhere(true, "manualSave");
 }
 
-function saveGameEverywhere(isManual = false) {
+function saveGameEverywhere(isManual = false, sourceLabel = "saveEverywhere") {
   ensureRecoveryCode();
   state.offlineMode = true;
   state.saveMode = "local";
-  state.updatedAt = Date.now();
   const key = state.shopKey || sanitizeShopKey(state.shopName);
   state.shopKey = key;
-  saveToLocalOnly();
+  saveToLocalOnly(sourceLabel);
   setCloudSyncIndicator("saved");
   if (isManual) showToast(`💾 Đã lưu quán "${state.shopName}" trên máy (Mã: ${state.recoveryCode})!`);
   return true;
