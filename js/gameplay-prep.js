@@ -424,7 +424,8 @@
         }
         if (el) el.value = "";
       });
-      playSFX("cash"); updateAllUI(); saveGameEverywhere();
+      saveGameEverywhere(false);
+      playSFX("cash"); updateAllUI();
       showToast(`✅ Đã nhập ${totalUnits} phần vào kho (-${formatVND(totalCost)})!`);
     }
 
@@ -478,11 +479,12 @@
           state.totalPrepDays = (state.totalPrepDays || 0) + 1;
         }
         addXP(15);
+        saveGameEverywhere(false);
         const doneNow = ["sate", "hanhphi", "trungcut"].filter(k => state.prepDone[k]).length;
         setTimeout(() => {
           document.getElementById("modal-prep").classList.add("hidden");
           updateAllUI();
-          saveGameEverywhere();
+          saveGameEverywhere(false);
           showToast(doneNow >= 3 ? "🎉 Sơ chế hoàn tất 3/3 món (+1.000đ Tip/bịch)!" : `✅ Đã xong ${doneNow}/3 món sơ chế!`);
         }, 180);
       }
@@ -729,7 +731,8 @@
         }
       };
 
-      const todayNetPreview = (state.todayRevenue || 0) - (state.todayCogsSpent || 0) - fixedToday;
+      const todayStartBal = Number.isFinite(Number(state.dayStartMoney)) ? Number(state.dayStartMoney) : ((state.money || 0) - (state.todayRevenue || 0) + (state.todayCogsSpent || 0));
+      const todayNetPreview = ((state.money || 0) - fixedToday) - todayStartBal;
       const isTodayExpanded = Boolean(expandedLedgerDays["today"]);
 
       const renderCleanDayCard = (cardKey, badgeHtml, titleHtml, subQtyHtml, netVal, revVal, cogsVal, fixVal, endBalVal, isExp, detailObj, appFeeVal, isLive) => `
@@ -963,9 +966,9 @@
         return;
       }
       state.selectedDailySauce = sauceId;
+      saveGameEverywhere(false);
       playSFX("sauce");
       renderCustomSauceLab();
-      saveGameEverywhere();
       const sObj = DAILY_SAUCE_OPTIONS.find(x => x.id === sauceId);
       if (sObj) showToast(`🥣 Đã chọn ${sObj.name} làm vị sốt chủ đạo hôm nay!`);
     }

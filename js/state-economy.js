@@ -22,6 +22,7 @@
         seenIntroTutorial: false,
         v13MarketingReset: true,
         money: 350000,
+        dayStartMoney: 350000,
         rating: 4.3,
         viralPct: 15,
         level: 1, levelAtStartOfDay: 1,
@@ -547,7 +548,8 @@
         redeemedGiftcodes: Array.isArray(loaded.redeemedGiftcodes) ? loaded.redeemedGiftcodes : [],
         dailyBargainDone: Boolean(loaded.dailyBargainDone),
         dailyBargainDiscountPct: Number(loaded.dailyBargainDiscountPct || 0),
-        selectedDailySauce: loaded.selectedDailySauce || "bo_toi",
+        dayStartMoney: Number.isFinite(Number(loaded.dayStartMoney)) ? Number(loaded.dayStartMoney) : (Number(loaded.money ?? 350000) - (Number(loaded.todayRevenue || 0) - Number(loaded.todayCogsSpent || 0))),
+        selectedDailySauce: loaded.selectedDailySauce !== undefined ? loaded.selectedDailySauce : "bo_toi",
         customerLoyaltyCounts: (loaded.customerLoyaltyCounts && typeof loaded.customerLoyaltyCounts === "object") ? loaded.customerLoyaltyCounts : {},
         claimedLoyaltyRewards: Array.isArray(loaded.claimedLoyaltyRewards) ? loaded.claimedLoyaltyRewards : [],
         todayDetail: (loaded.todayDetail && typeof loaded.todayDetail === "object") ? loaded.todayDetail : null,
@@ -599,12 +601,18 @@
           state.level = Math.min(MAX_PLAYER_LEVEL, Math.max(1, state.level));
         }
         ensureRecoveryCode();
-        state.offlineMode = !isFirebaseConfigured();
+        if (state.stockBatches && typeof state.stockBatches === "object") {
+          syncTotalStockFromBatches();
+        }
+        state.offlineMode = true;
+        state.saveMode = "local";
         state.updatedAt = Date.now();
         state.securitySeal = computeSecuritySeal(state);
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
         saveShopToLocalVault(state);
-      } catch (e) {}
+      } catch (e) {
+        console.warn("[SaveLocal] Lỗi lưu localStorage:", e);
+      }
     }
 
 

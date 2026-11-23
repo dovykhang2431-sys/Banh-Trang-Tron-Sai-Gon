@@ -53,6 +53,19 @@ window.addEventListener("focus", () => {
   fetchCloudLeaderboard(false);
 });
 
+// Lưu tức thì khi người chơi rời tab hoặc tải lại trang để không bao giờ mất tiến độ
+window.addEventListener("beforeunload", () => {
+  if (state && state.shopName) saveToLocalOnly();
+});
+window.addEventListener("pagehide", () => {
+  if (state && state.shopName) saveToLocalOnly();
+});
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden" && state && state.shopName) {
+    saveToLocalOnly();
+  }
+});
+
 // Tự động lưu local an toàn mỗi 15 giây
 setInterval(() => {
   if (document.visibilityState === "visible" && state && state.shopName) {

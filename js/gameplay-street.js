@@ -2055,30 +2055,44 @@ setInterval(() => {
         }
       });
 
-      const netProfit = state.todayRevenue + franchiseDividend - state.todayCogsSpent - totalFixed;
+      const startBalance = Number.isFinite(Number(state.dayStartMoney))
+        ? Number(state.dayStartMoney)
+        : ((state.money || 0) - (state.todayRevenue || 0) + (state.todayCogsSpent || 0));
+      const preCloseBalance = Number(state.money || 0);
+      const otherCashDelta = (preCloseBalance - startBalance) - ((state.todayRevenue || 0) - (state.todayCogsSpent || 0));
+      const closeDelta = franchiseDividend - totalFixed;
+      const endBalance = preCloseBalance + closeDelta;
+      const netProfit = endBalance - startBalance;
 
       pendingEndDayData = {
         depCost, utilCost, rentCost, staffWages, progressiveTax, bankInstallment,
-        totalFixed, spoiledTotalVal, spoiledSummaryItems, nextStockBatches, netProfit, franchiseDividend
+        totalFixed, spoiledTotalVal, spoiledSummaryItems, nextStockBatches,
+        netProfit, franchiseDividend, startBalance, preCloseBalance, otherCashDelta, endBalance
       };
 
       const sched = getTodayScheduleInfo(state.day);
       document.getElementById("end-day-title").textContent = `🌙 Chốt Sổ Ngày ${state.day} (${sched.dowName})`;
       document.getElementById("end-day-details").innerHTML = `
-        <div class="flex justify-between"><span>Doanh thu bán bánh (${state.todaySold} phần):</span><b class="text-emerald-700">+${formatVND(state.todayRevenue)}</b></div>
-        ${franchiseDividend > 0 ? `<div class="flex justify-between text-teal-700"><span>🏢 Thưởng Quy mô & Cổ tức Chi nhánh:</span><b>+${formatVND(franchiseDividend)}</b></div>` : ''}
-        <div class="flex justify-between text-blue-700"><span>Phí sàn App đã trừ:</span><b>-${formatVND(state.todayAppFees || 0)}</b></div>
-        <div class="flex justify-between text-amber-800"><span>Tiền đi chợ & Túi đựng:</span><b>-${formatVND(state.todayCogsSpent)}</b></div>
-        <div class="flex justify-between text-red-700"><span>Điện đèn, Vỉa hè, Lương & Thuế:</span><b>-${formatVND(totalFixed)}</b></div>
-        <div class="flex justify-between text-orange-700">
-          <span>Hàng hư quá hạn (${spoiledSummaryItems.length ? spoiledSummaryItems.join(", ") : "0"}):</span>
-          <b>-${formatVND(spoiledTotalVal)}</b>
+        <div class="flex justify-between text-amber-900"><span>Số dư đầu Ngày ${state.day}:</span><b>${formatVND(startBalance)}</b></div>
+        <div class="flex justify-between"><span>Doanh thu bán bánh (${state.todaySold} phần • đã vào két):</span><b class="text-emerald-700">+${formatVND(state.todayRevenue)}</b></div>
+        ${(state.todayAppFees || 0) > 0 ? `<div class="text-[10px] text-blue-700 text-right -mt-1">(Đã khấu trừ Phí sàn App ${formatVND(state.todayAppFees)} trước khi vào doanh thu)</div>` : ''}
+        <div class="flex justify-between text-amber-800"><span>Tiền đi chợ & Túi đựng (đã trừ trong ngày):</span><b>-${formatVND(state.todayCogsSpent)}</b></div>
+        ${otherCashDelta !== 0 ? `<div class="flex justify-between ${otherCashDelta >= 0 ? 'text-emerald-700' : 'text-rose-700'}"><span>Thu/Chi khác trong ngày (Nâng cấp/Mở món/Thưởng):</span><b>${otherCashDelta >= 0 ? '+' : ''}${formatVND(otherCashDelta)}</b></div>` : ''}
+        <div class="flex justify-between text-slate-700 border-t border-dashed border-amber-300 pt-1"><span>Số dư hiện tại (trước chốt sổ):</span><b>${formatVND(preCloseBalance)}</b></div>
+        ${franchiseDividend > 0 ? `<div class="flex justify-between text-teal-700"><span>🏢 Thưởng Quy mô & Cổ tức (cộng lúc chốt sổ):</span><b>+${formatVND(franchiseDividend)}</b></div>` : ''}
+        <div class="flex justify-between text-red-700"><span>Điện đèn, Vỉa hè, Lương & Thuế (trừ lúc chốt sổ):</span><b>-${formatVND(totalFixed)}</b></div>
+        <div class="flex justify-between border-t border-amber-300 pt-1.5 text-sm font-black ${netProfit >= 0 ? 'text-emerald-800' : 'text-red-700'}">
+          <span>Lãi ròng Ngày ${state.day} (Cuối - Đầu ngày):</span><span>${netProfit >= 0 ? '+' : ''}${formatVND(netProfit)}</span>
+        </div>
+        <div class="flex justify-between text-xs font-black text-amber-950 bg-amber-100/80 px-2 py-1 rounded-lg border border-amber-300">
+          <span>💰 Số dư cuối Ngày ${state.day} (đầu Ngày ${state.day + 1}):</span><span>${formatVND(endBalance)}</span>
+        </div>
+        <div class="text-[10.5px] text-orange-800 bg-orange-50 p-1.5 rounded-lg border border-orange-200 flex justify-between gap-2">
+          <span>📦 Hàng hư hủy kho (${spoiledSummaryItems.length ? spoiledSummaryItems.join(", ") : "0"} • không trừ thêm tiền mặt):</span>
+          <b class="shrink-0">${formatVND(spoiledTotalVal)}</b>
         </div>
         ${savedTotalQty > 0 ? `<div class="text-[10px] font-bold text-emerald-800 bg-emerald-50 p-1.5 rounded-lg border border-emerald-200">🧊 Tủ Kính Sạch & Thùng Đá (Cấp ${coolerLvl}) đã bảo quản thành công <b>+${savedTotalQty} phần</b> cận date qua đêm!</div>` : ''}
         ${spoiledTotalVal > 0 && coolerLvl < 5 ? `<div class="text-[10px] font-bold text-rose-700 bg-rose-50 p-1.5 rounded-lg border border-rose-200">💡 Mẹo: Nâng cấp <b>🧊 Tủ Kính Sạch & Thùng Đá</b> ở mục Nâng Cấp để cộng tới +3 ngày HSD và bảo toàn 100% nguyên liệu qua đêm!</div>` : ''}
-        <div class="flex justify-between border-t border-amber-300 pt-1.5 text-sm font-black ${netProfit >= 0 ? 'text-emerald-800' : 'text-red-700'}">
-          <span>Lãi ròng Ngày ${state.day}:</span><span>${netProfit >= 0 ? '+' : ''}${formatVND(netProfit)}</span>
-        </div>
       `;
       document.getElementById("modal-end-day").classList.remove("hidden");
     }
@@ -2153,6 +2167,8 @@ function startNextDay() {
       fixed: d.totalFixed || 0,
       appFee: state.todayAppFees || 0,
       spoiled: d.spoiledTotalVal || 0,
+      startBalance: d.startBalance,
+      otherCashDelta: d.otherCashDelta || 0,
       netProfit: d.netProfit,
       endBalance: state.money,
       detail: {
@@ -2199,6 +2215,7 @@ function startNextDay() {
   state.clockMinutes = 13 * 60;
   state.isStreetSelling = false;
   state.levelAtStartOfDay = state.level;
+  state.dayStartMoney = Number(state.money || 0);
   state.todaySold = 0; state.todayCartBagsSpawned = 0; state.todayRevenue = 0; state.todayCogsSpent = 0; state.todayAppFees = 0;
   state.featuredSoldToday = 0; state.featuredRewardClaimed = false;
   state.dilemmaTriggeredToday = false;
