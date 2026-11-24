@@ -53,18 +53,18 @@
           </div>
 
           <h1 class="text-lg sm:text-xl font-black text-amber-950 tracking-tight">VUA BÁNH TRÁNG SÀI GÒN</h1>
-          <p class="text-[11px] text-amber-800 font-bold">Khởi Nghiệp Hẻm Nhỏ ➔ Mở Rộng Đế Chế Sài Thành
+          <p class="text-[11px] text-amber-800 font-bold">Khởi Nghiệp Hẻm Nhỏ ➔ Mở Rộng Đế Chế Sài Thành</p>
           <div class="mt-1.5 flex items-center justify-center gap-2">
-            <button type="button" onclick="handleVersionBadgeDebugTap()" class="px-2.5 py-0.5 rounded-full bg-amber-900 text-yellow-200 font-black text-xs border border-yellow-400">Ver 18.0 Offline</button>
+            <button type="button" onclick="handleVersionBadgeDebugTap()" class="px-2.5 py-0.5 rounded-full bg-amber-900 text-yellow-200 font-black text-xs border border-yellow-400">Ver 18.1 Offline</button>
             <button type="button" onclick="document.getElementById('v18-whats-new-box').classList.toggle('hidden')" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 font-black text-xs border border-emerald-500">✨ Có gì mới?</button>
           </div>
           <div id="v18-whats-new-box" class="hidden mt-2 p-2.5 rounded-xl bg-amber-50 border-2 border-amber-400 text-left text-xs text-amber-950 space-y-1">
-            <div class="font-black text-orange-800">✨ Có gì mới ở Ver 18.0:</div>
-            <div>• Bố cục 2 cột rộng trên desktop/tablet, chữ lớn dễ đọc, nút Mở Cửa không che nội dung.</div>
-            <div>• Màn <b>Hành Trình</b> (gộp Hồi Ký + Thành Tựu + Cấp Độ) & màn <b>Hồ Sơ Quán</b> (5 hệ sâu).</div>
-            <div>• Nút tăng tốc <b>2x</b> cho ca bán hàng, tách 137 ảnh tải lười nhẹ & mở nhanh hơn.</div>
-            <div>• Nhãn rõ ràng hơn (Ớt, trộn %, bảng kê tiền, giải thích sao, thẻ gọi thêm giữa chừng).</div>
-          </div></p>
+            <div class="font-black text-orange-800">✨ Có gì mới ở Ver 18.1:</div>
+            <div>• Đổi toàn bộ giao diện sang phong cách <b>Sài Gòn xưa</b> (nền giấy vàng kem, khung gỗ, cam ấm + xanh cổ vịt, đơn hàng giấy note dán).</div>
+            <div>• Sửa nút <b>🗺️ Hành Trình</b> mở đúng modal Hành Trình 3 tab (không mở nhầm Hồ Sơ Quán).</div>
+            <div>• Sửa nút tăng tốc <b>2x</b>, <b>Bảng kê sau bán</b>, <b>Thẻ khách gọi thêm</b> hiển thị ổn định, không bị xóa khi cập nhật vùng chuẩn.</div>
+            <div>• Sửa nhãn <b>Ớt (0/2)(1/2)(2/2)</b> đồng bộ đúng nút ớt thật; tăng đệm đáy kho không che dòng Tép mỡ; đổi nút chốt sổ thành <b>🌙 Chốt sổ</b>.</div>
+          </div>
           <button type="button" onclick="openPwaInstallModal()" class="soft-btn mt-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-[11px] shadow flex items-center gap-1.5">
             <span>📲</span><span>Cài Game Ra Màn Hình Chính</span>
           </button>
@@ -227,8 +227,8 @@
 
       <!-- Phải: Nút BXH 🏆 + Nút Menu Tròn ☰ -->
       <div class="flex items-center gap-1 shrink-0">
-        <button onclick="handleTopLeftButtonClick()" id="topbar-mode-btn" class="hidden soft-btn w-9 h-9 rounded-full menu-round-btn flex items-center justify-center text-sm font-black text-white" title="Chốt sổ">
-          ⏸
+        <button type="button" onclick="handleTopLeftButtonClick()" id="topbar-mode-btn" class="hidden soft-btn px-2.5 h-9 rounded-full menu-round-btn flex items-center justify-center gap-1 text-xs font-black text-white whitespace-nowrap" title="Chốt sổ cuối ngày">
+          🌙 Chốt sổ
         </button>
         <button onclick="openLeaderboardFromAnywhere()" class="soft-btn w-9 h-9 rounded-full menu-round-btn flex items-center justify-center text-sm font-black text-yellow-100 relative" title="Bảng Xếp Hạng Đế Chế">
           🏆
@@ -255,18 +255,22 @@
     <!-- ========================================================================= -->
     <!-- MÀN HÌNH 1: SÂN NHÀ CHUẨN BỊ GỌN GÀNG (CÓ BOTTOM DOCK BAR CỐ ĐỊNH)         -->
     <!-- ========================================================================= -->
-    <div id="screen-home-prep" class="flex flex-col gap-2 pb-44">
+    <div id="screen-home-prep" class="flex flex-col gap-2 pb-56">
 
       <!-- 1. THANH TRẠNG THÁI NGÀY MỚI SIÊU GỌN (TIẾT KIỆM DIỆN TÍCH DỌC) -->
       <div class="mentor-banner-card px-2 py-1.5 flex flex-col gap-1">
         <div class="flex items-center justify-between gap-1">
           <!-- Trái: Avatar Dì Tư nhỏ + Thứ/Ngày + Dự báo lượng khách hôm nay -->
-          <div onclick="openShopProfileModal()" class="soft-btn btn-game-blue py-2 rounded-xl font-black text-xs">📊 Hồ Sơ Quán</button><button type="button" onclick="openJourneyModal('story')" class="soft-btn btn-game-purple py-2 rounded-xl font-black text-xs">🗺️ Hành Trình</button><button type="button" onclick="openDiTuTutorialModal(0)" class="cursor-pointer flex items-center gap-1.5 min-w-0">
+          <div class="flex items-center gap-1.5 min-w-0 flex-wrap">
+            <button type="button" onclick="openShopProfileModal()" class="soft-btn btn-game-blue px-2 py-1.5 rounded-xl font-black text-xs">📊 Hồ Sơ Quán</button>
+            <button type="button" onclick="openJourneyModal('story')" class="soft-btn btn-game-purple px-2 py-1.5 rounded-xl font-black text-xs">🗺️ Hành Trình</button>
+            <button type="button" onclick="openDiTuTutorialModal(0)" class="cursor-pointer flex items-center gap-1.5 min-w-0 bg-transparent border-0 p-0 text-left">
             <img src="data:image/jpeg;base64,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" alt="Dì Tư" class="w-8 h-8 rounded-full object-cover border-2 border-amber-700 shrink-0 shadow-sm" />
             <div class="flex items-center gap-1 flex-wrap">
               <span id="prep-forecast-title" class="hidden font-black text-xs text-amber-950 whitespace-nowrap">Thứ Hai</span>
               <span id="prep-demand-badge" class="px-2 py-0.5 rounded-full bg-sky-600 text-white font-black text-[9.5px] whitespace-nowrap shadow-sm">🎯 Dự kiến ~18 bịch</span>
             </div>
+            </button>
           </div>
 
           <!-- Phải: Món Hot Hôm Nay + Huy hiệu Chương -->
@@ -745,17 +749,20 @@
             </span>
 
             <div class="w-full mt-1 relative z-10">
-              <div class="flex items-center justify-between text-[8px] font-black text-amber-950 px-0.5 mb-0.5">
-                <span id="sweet-spot-range-label">🎯 Chuẩn: 68–87% (+22%/lần bấm • Combo 3 mẻ 5⭐ nới thành 68–93%)
-<div class="mt-1.5 flex flex-wrap items-center justify-between gap-1.5"><button type="button" id="btn-speed-toggle-2x" onclick="toggleGameSpeed2x()" class="soft-btn px-2.5 py-1 rounded-xl font-black text-xs bg-white/90 text-amber-950 border-2 border-amber-400">⏱️ Tốc độ: 1x</button><span id="v18-b3-lock-warning" class="text-xs font-black text-rose-700 bg-rose-100 border border-rose-400 px-2 py-0.5 rounded-lg">⚠️ B3 sẽ khóa topping!</span></div>
-<div id="v18-mid-order-card" class="hidden mt-1.5"></div>
-<div id="v18-last-sale-receipt" class="hidden mt-1.5 p-2 rounded-xl bg-emerald-50 border border-emerald-400 text-xs text-emerald-950"></div></span>
+              <div class="flex items-center justify-between text-[8px] font-black text-amber-950 px-0.5 mb-0.5 gap-1 flex-wrap">
+                <span id="sweet-spot-range-label">🎯 Chuẩn: 68–87% (+22%/lần bấm • Combo 3 mẻ 5⭐ nới thành 68–93%)</span>
                 <span class="text-emerald-800">Dừng trong vùng xanh</span>
               </div>
               <div id="mix-bar-track" class="w-full h-2.5 bg-slate-900/50 rounded-full overflow-hidden border border-amber-950 relative">
                 <div id="sweet-spot-zone" class="absolute top-0 bottom-0 bg-emerald-400/95 border-x-2 border-white shadow" style="left: 68%; width: 24%"></div>
                 <div id="mix-bar-fill" class="h-full bg-gradient-to-r from-amber-400 via-orange-500 to-emerald-500 transition-all duration-150" style="width: 0%"></div>
               </div>
+              <div id="v18-street-controls-row" class="mt-1.5 flex flex-wrap items-center justify-between gap-1.5">
+                <button type="button" id="btn-speed-toggle-2x" onclick="toggleGameSpeed2x()" class="soft-btn px-2.5 py-1 rounded-xl font-black text-xs bg-white/90 text-amber-950 border-2 border-amber-400">⏱️ Tốc độ: 1x</button>
+                <span id="v18-b3-lock-warning" class="text-xs font-black text-rose-700 bg-rose-100 border border-rose-400 px-2 py-0.5 rounded-lg">⚠️ B3 sẽ khóa topping!</span>
+              </div>
+              <div id="v18-mid-order-card" class="hidden mt-1.5"></div>
+              <div id="v18-last-sale-receipt" class="hidden mt-1.5 p-2 rounded-xl bg-emerald-50 border border-emerald-400 text-xs text-emerald-950"></div>
             </div>
           </div>
         </div>
@@ -773,7 +780,7 @@
           </button>
 
           <button onclick="cycleSpiceLevel()" id="spice-bottle-btn" class="soft-btn py-1 px-1.5 rounded-full font-black text-[10px] bg-slate-200 text-amber-950 border-2 border-slate-400 shadow flex items-center justify-between">
-            <span id="spice-bottle-label" class="font-black text-[10px]">🌶️ Ớt</span>
+            <span id="spice-bottle-label" class="font-black text-[10px]">🌶️ Ớt (0/2)</span>
             <span id="spice-bottle-icons" class="text-[9px] font-black">+</span>
           </button>
 

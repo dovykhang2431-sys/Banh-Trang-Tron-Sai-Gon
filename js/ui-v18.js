@@ -225,14 +225,20 @@ function showMidOrderAddonCardV18(text) {
   el.innerHTML = `<div class="v18-mid-order-card text-xs font-black text-orange-950">⚡ KHÁCH VỪA GỌI THÊM GIỮA CHỪNG: ${text}</div>`;
 }
 
-// G3a / G3b / G5b: Cập nhật nhãn nút Ớt, cảnh báo B3, vùng chuẩn trộn
+// G3a / G3b / G5b: Cập nhật nhãn nút Ớt (#spice-bottle-btn), cảnh báo B3
 function syncV18StreetLabels() {
-  const spiceBtn = document.getElementById("btn-topping-spice");
+  const spiceBtn = document.getElementById("spice-bottle-btn");
   if (spiceBtn && typeof bowl !== "undefined") {
     const sp = Number(bowl.spice || 0);
-    if (sp === 0) spiceBtn.textContent = "🌶️ Ớt: Không cay (0/2)";
-    else if (sp === 1) spiceBtn.textContent = "🌶️ Ớt: Cay vừa (1/2) • +1 để Siêu cay";
-    else spiceBtn.textContent = "🌶️🌶️ Siêu cay (2/2)";
+    const lblEl = document.getElementById("spice-bottle-label");
+    const targetTxt = sp === 0 ? "🌶️ Ớt (0/2)" : (sp === 1 ? "🌶️ Cay vừa (1/2)" : "🌶️🌶️ Siêu cay (2/2)");
+    if (lblEl) {
+      if (!lblEl.textContent.includes(`(${sp}/2)`)) {
+        lblEl.textContent = targetTxt;
+      }
+    } else if (!spiceBtn.textContent.includes(`(${sp}/2)`)) {
+      spiceBtn.textContent = targetTxt;
+    }
   }
   const b3Warn = document.getElementById("v18-b3-lock-warning");
   if (b3Warn && typeof bowl !== "undefined") {

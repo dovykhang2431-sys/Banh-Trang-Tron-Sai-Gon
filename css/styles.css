@@ -578,3 +578,241 @@
   box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);
   animation: tagPop 0.25s ease-out;
 }
+
+/* ==========================================================================
+   VER 18.1 — PHONG CÁCH "SÀI GÒN XƯA" (RETRO COMIC SAIGON THEME)
+   Áp dụng toàn game: Màn đăng nhập, Chuẩn bị, Bán hàng, Modals, Dock, HUD
+   Bảng màu: Giấy vàng kem (#f6ebd2), Xanh cổ vịt (#1b5e6d), Cam ấm (#e87d24),
+             Gỗ cũ (#8f5a2d / #693e1a), Viền mực truyện tranh (#2b1810)
+   ========================================================================== */
+
+:root {
+  --sg-paper: #f6ebd2;
+  --sg-paper-card: #fdf6e3;
+  --sg-paper-warm: #f2e1bc;
+  --sg-teal: #1e6271;
+  --sg-teal-dark: #134450;
+  --sg-teal-light: #2d7d8e;
+  --sg-orange: #ea7d24;
+  --sg-orange-dark: #c45811;
+  --sg-ochre: #e4a93c;
+  --sg-wood: #966134;
+  --sg-wood-dark: #633b18;
+  --sg-ink: #2b1810;
+}
+
+/* Nền giấy vàng kem có hạt giấy cũ kiểu truyện tranh */
+html, body {
+  background-color: var(--sg-paper) !important;
+  background-image:
+    radial-gradient(rgba(139, 90, 43, 0.14) 1.2px, transparent 1.2px),
+    radial-gradient(rgba(30, 98, 113, 0.06) 1px, transparent 1px),
+    linear-gradient(180deg, #faf1db 0%, #f1e1bd 100%) !important;
+  background-size: 18px 18px, 34px 34px, 100% 100% !important;
+  color: var(--sg-ink) !important;
+}
+
+/* Mái hiên sọc Cam ấm + Xanh cổ vịt Sài Gòn xưa */
+.casual-awning-roof {
+  height: 16px;
+  background: repeating-linear-gradient(
+    90deg,
+    #d96b27 0px, #d96b27 24px,
+    #1e6271 24px, #1e6271 48px
+  ) !important;
+  border-bottom: 3.5px solid var(--sg-ink) !important;
+  box-shadow: 0 3px 0 rgba(43, 24, 16, 0.35) !important;
+}
+
+/* Header HUD kiểu bảng hiệu gỗ sơn xanh cổ vịt viền vàng đồng & mực đen */
+.wooden-header-board {
+  background: linear-gradient(180deg, var(--sg-teal-light) 0%, var(--sg-teal) 52%, var(--sg-teal-dark) 100%) !important;
+  border-bottom: 4px solid var(--sg-ink) !important;
+  box-shadow: inset 0 2px 0 rgba(254, 240, 180, 0.35), inset 0 -2px 0 var(--sg-ochre), 0 5px 0 rgba(43, 24, 16, 0.25) !important;
+  color: #fdf6e3 !important;
+}
+
+.wooden-coin-board {
+  background: linear-gradient(180deg, #d89631 0%, #a56718 100%) !important;
+  border: 2.5px solid var(--sg-ink) !important;
+  border-radius: 16px !important;
+  box-shadow: inset 0 2px 0 rgba(255, 245, 200, 0.45), 0 3px 0 var(--sg-ink) !important;
+}
+
+.coin-inner-pill {
+  background: linear-gradient(180deg, #3c2112 0%, #241209 100%) !important;
+  border: 2px solid var(--sg-ochre) !important;
+}
+
+.menu-round-btn {
+  background: linear-gradient(180deg, #f39c38 0%, #d46916 100%) !important;
+  border: 2.5px solid var(--sg-ink) !important;
+  box-shadow: inset 0 2px 0 rgba(255, 245, 200, 0.45), 0 3px 0 var(--sg-ink) !important;
+  color: #fffaf0 !important;
+}
+
+/* Bảng gỗ chunky + giấy vàng kem (Màn đăng nhập, Chợ, Thực Đơn, Xây Quán, Thu Chi, BXH) */
+.wooden-clipboard-frame {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(43, 24, 16, 0.06) 0px,
+    rgba(43, 24, 16, 0.06) 2px,
+    transparent 2px,
+    transparent 12px
+  ), linear-gradient(180deg, #a66f3f 0%, #7d4d25 100%) !important;
+  border: 3px solid var(--sg-ink) !important;
+  border-radius: 22px !important;
+  box-shadow: inset 0 2px 0 rgba(255, 236, 185, 0.35), 0 6px 0 var(--sg-ink) !important;
+}
+
+.clipboard-paper-inner,
+.mentor-banner-card {
+  background: var(--sg-paper-card) !important;
+  border: 2.5px solid var(--sg-ink) !important;
+  border-radius: 16px !important;
+  box-shadow: 2px 3px 0 rgba(43, 24, 16, 0.22) !important;
+}
+
+/* Màn Đăng Nhập Sài Gòn Xưa */
+#login-screen > div {
+  background: var(--sg-paper-card) !important;
+  border: 3.5px solid var(--sg-ink) !important;
+  box-shadow: 0 8px 0 var(--sg-ink), 0 18px 36px rgba(43, 24, 16, 0.45) !important;
+}
+#login-screen h1 {
+  color: var(--sg-orange-dark) !important;
+  text-shadow: 1.5px 1.5px 0 #fdf6e3, 2.5px 2.5px 0 rgba(43, 24, 16, 0.25);
+}
+#quick-resume-box {
+  background: linear-gradient(135deg, #e7f4f4 0%, #fdf6e3 100%) !important;
+  border: 2.5px solid var(--sg-teal) !important;
+  box-shadow: 0 3px 0 var(--sg-ink) !important;
+}
+
+/* Thanh Dock gỗ chunky phía dưới & nút tab kiểu thẻ giấy gỗ bo tròn */
+.wooden-bottom-dock {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(43, 24, 16, 0.08) 0px,
+    rgba(43, 24, 16, 0.08) 2px,
+    transparent 2px,
+    transparent 38px
+  ), linear-gradient(180deg, #986336 0%, #6d411c 100%) !important;
+  border-top: 3.5px solid var(--sg-ink) !important;
+  box-shadow: inset 0 2px 0 rgba(255, 236, 185, 0.3), 0 -5px 14px rgba(43, 24, 16, 0.35) !important;
+}
+
+.dock-tab-btn {
+  background: var(--sg-paper-card) !important;
+  color: var(--sg-ink) !important;
+  border: 2px solid var(--sg-ink) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 3px 0 var(--sg-ink) !important;
+}
+
+.dock-tab-active {
+  background: linear-gradient(180deg, #f59b38 0%, #dc6b16 100%) !important;
+  color: #fffaf0 !important;
+  border: 2.5px solid var(--sg-ink) !important;
+  box-shadow: inset 0 2px 0 rgba(255, 245, 200, 0.45), 0 4px 0 var(--sg-ink) !important;
+  transform: translateY(-4px) scale(1.03) !important;
+}
+
+/* Nút bấm gỗ/truyện tranh chunky viền đậm đồng bộ toàn game */
+.btn-game-orange {
+  background: linear-gradient(180deg, #f59a36 0%, #dc6b16 100%) !important;
+  border: 2.5px solid var(--sg-ink) !important;
+  box-shadow: inset 0 2px 0 rgba(255, 245, 200, 0.45), 0 4px 0 var(--sg-ink) !important;
+  color: #fffaf0 !important;
+}
+.btn-game-blue {
+  background: linear-gradient(180deg, #2d8394 0%, #1b5c6b 100%) !important;
+  border: 2.5px solid var(--sg-ink) !important;
+  box-shadow: inset 0 2px 0 rgba(210, 245, 250, 0.35), 0 4px 0 var(--sg-ink) !important;
+  color: #fffaf0 !important;
+}
+.btn-game-green {
+  background: linear-gradient(180deg, #3da369 0%, #247849 100%) !important;
+  border: 2.5px solid var(--sg-ink) !important;
+  box-shadow: inset 0 2px 0 rgba(220, 255, 230, 0.4), 0 4px 0 var(--sg-ink) !important;
+  color: #fffaf0 !important;
+}
+.btn-game-red {
+  background: linear-gradient(180deg, #e05a47 0%, #b83726 100%) !important;
+  border: 2.5px solid var(--sg-ink) !important;
+  box-shadow: inset 0 2px 0 rgba(255, 225, 215, 0.4), 0 4px 0 var(--sg-ink) !important;
+  color: #fffaf0 !important;
+}
+.btn-game-yellow {
+  background: linear-gradient(180deg, #f4c653 0%, #d89626 100%) !important;
+  border: 2.5px solid var(--sg-ink) !important;
+  box-shadow: inset 0 2px 0 rgba(255, 250, 220, 0.55), 0 4px 0 var(--sg-ink) !important;
+  color: var(--sg-ink) !important;
+}
+.btn-game-purple {
+  background: linear-gradient(180deg, #2a7886 0%, #164b56 100%) !important;
+  border: 2.5px solid var(--sg-ink) !important;
+  box-shadow: inset 0 2px 0 rgba(210, 245, 250, 0.35), 0 4px 0 var(--sg-ink) !important;
+  color: #fdf6e3 !important;
+}
+
+/* Sân khấu xe đẩy & Bảng hiệu Sài Gòn xưa */
+.inox-cart-stage {
+  border: 3.5px solid var(--sg-ink) !important;
+  border-radius: 20px !important;
+  box-shadow: inset 0 0 0 2px var(--sg-ochre), 0 6px 0 var(--sg-ink) !important;
+}
+
+.saigon-decal-sign {
+  background: linear-gradient(180deg, var(--sg-teal-light) 0%, var(--sg-teal-dark) 100%) !important;
+  border: 3px solid var(--sg-ink) !important;
+  box-shadow: inset 0 0 0 2px var(--sg-ochre), 0 4px 0 var(--sg-ink) !important;
+  border-radius: 14px !important;
+}
+.saigon-decal-sign .saigon-red-title {
+  color: #f7b74c !important;
+  text-shadow: -1.5px -1.5px 0 var(--sg-ink), 1.5px -1.5px 0 var(--sg-ink), -1.5px 1.5px 0 var(--sg-ink), 1.5px 1.5px 0 var(--sg-ink) !important;
+}
+
+.inox-worktable {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(43, 24, 16, 0.05) 0px,
+    rgba(43, 24, 16, 0.05) 2px,
+    transparent 2px,
+    transparent 14px
+  ), linear-gradient(180deg, #b67d47 0%, #8a5629 100%) !important;
+  border: 3px solid var(--sg-ink) !important;
+  box-shadow: inset 0 2px 0 rgba(255, 236, 185, 0.35), 0 5px 0 var(--sg-ink) !important;
+}
+
+/* Đơn hàng hiển thị dạng giấy note dán cổ điển */
+#selected-order-bubble {
+  background: #fdf6e3 !important;
+  border: 2.5px solid var(--sg-ink) !important;
+  border-radius: 14px !important;
+  box-shadow: 3px 4px 0 rgba(43, 24, 16, 0.35) !important;
+  position: relative;
+}
+
+/* Khung bao quanh ảnh sprite JPG trong assets/sprites/ hài hòa với nét vẽ Sài Gòn xưa */
+img[src*="./assets/sprites/"] {
+  border-color: var(--sg-ink) !important;
+  background-color: var(--sg-paper-card);
+  box-shadow: 1px 2px 0 rgba(43, 24, 16, 0.25);
+}
+
+/* Toàn bộ Modal theo phong cách giấy vàng kem + viền mực + header xanh cổ vịt */
+[id^="modal-"] > div {
+  background-color: var(--sg-paper-card) !important;
+  border: 3.5px solid var(--sg-ink) !important;
+  box-shadow: 0 8px 0 var(--sg-ink), 0 20px 40px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* BUG 5 FIX: Đệm đáy đủ lớn cho vùng cuộn để thanh dock cố định + nút Mở Cửa không che hàng cuối kho (Tép mỡ) */
+#main-scroll-viewport {
+  padding-bottom: 190px !important;
+}
+#screen-home-prep {
+  padding-bottom: 220px !important;
+}

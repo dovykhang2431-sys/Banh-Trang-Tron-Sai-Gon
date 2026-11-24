@@ -804,23 +804,23 @@
         }
       }
 
-      // 3. Nút Ớt (0 = Chưa bỏ ớt [xám], 1 = Cay vừa, 2 = Siêu cay)
+      // 3. Nút Ớt (0 = Không cay (0/2), 1 = Cay vừa (1/2), 2 = Siêu cay (2/2))
       const spiceBtn = document.getElementById("spice-bottle-btn");
       if (spiceBtn) {
         if (bowl.spice === 0) {
-          spiceBtn.innerHTML = `<span id="spice-bottle-label" class="font-black text-[10px]">🌶️ Ớt</span><span id="spice-bottle-icons" class="text-[9px] font-black">+</span>`;
-          spiceBtn.className = "soft-btn py-1 px-1.5 rounded-full font-black text-[10px] bg-slate-200 text-amber-950 border-2 border-slate-400 shadow flex items-center justify-between";
+          spiceBtn.innerHTML = `<span id="spice-bottle-label" class="font-black text-[10px]">🌶️ Ớt (0/2)</span><span id="spice-bottle-icons" class="text-[9px] font-black">+</span>`;
+          spiceBtn.className = "soft-btn v18-topping-btn py-1 px-1.5 font-black text-[10px] bg-slate-200 text-amber-950 border-2 border-slate-400 shadow flex items-center justify-between";
         } else {
-          const spLabel = bowl.spice === 1 ? "🌶️ Cay vừa" : "🌶️🌶️ Siêu cay";
+          const spLabel = bowl.spice === 1 ? "🌶️ Cay vừa (1/2)" : "🌶️🌶️ Siêu cay (2/2)";
           if (!c || bowl.spice === c.wantedSpice) {
             spiceBtn.innerHTML = `<span id="spice-bottle-label" class="font-black text-[10px]">${spLabel}</span><span id="spice-bottle-icons" class="text-[10px] font-black">✓</span>`;
-            spiceBtn.className = "soft-btn py-1 px-1.5 rounded-full font-black text-[10px] bg-emerald-600 text-white border-2 border-emerald-900 shadow flex items-center justify-between";
+            spiceBtn.className = "soft-btn v18-topping-btn py-1 px-1.5 font-black text-[10px] bg-emerald-600 text-white border-2 border-emerald-900 shadow flex items-center justify-between";
           } else if (c.wantedSpice === 2 && bowl.spice === 1) {
-            spiceBtn.innerHTML = `<span id="spice-bottle-label" class="font-black text-[10px]">🌶️ Ớt</span><span id="spice-bottle-icons" class="text-[10px] font-black">+</span>`;
-            spiceBtn.className = "soft-btn py-1 px-1.5 rounded-full font-black text-[10px] bg-amber-500 text-white border-2 border-amber-800 shadow flex items-center justify-between";
+            spiceBtn.innerHTML = `<span id="spice-bottle-label" class="font-black text-[10px]">🌶️ Cay vừa (1/2)</span><span id="spice-bottle-icons" class="text-[10px] font-black">+1</span>`;
+            spiceBtn.className = "soft-btn v18-topping-btn py-1 px-1.5 font-black text-[10px] bg-amber-500 text-white border-2 border-amber-800 shadow flex items-center justify-between";
           } else {
-            spiceBtn.innerHTML = `<span id="spice-bottle-label" class="font-black text-[10px]">❌ Sai Ớt</span><span id="spice-bottle-icons" class="text-[10px] font-black">✕</span>`;
-            spiceBtn.className = "soft-btn py-1 px-1.5 rounded-full font-black text-[10px] bg-rose-600 text-white border-2 border-rose-900 shadow flex items-center justify-between animate-pulse";
+            spiceBtn.innerHTML = `<span id="spice-bottle-label" class="font-black text-[10px]">❌ Sai Ớt (${bowl.spice}/2)</span><span id="spice-bottle-icons" class="text-[10px] font-black">✕</span>`;
+            spiceBtn.className = "soft-btn v18-topping-btn py-1 px-1.5 font-black text-[10px] bg-rose-600 text-white border-2 border-rose-900 shadow flex items-center justify-between animate-pulse";
           }
         }
       }
@@ -839,6 +839,7 @@
           traBtn.className = "soft-btn py-1 px-1.5 rounded-full font-black text-[10px] bg-rose-600 text-white border-2 border-rose-900 shadow flex items-center justify-between animate-pulse";
         }
       }
+      if (typeof syncV18StreetLabels === "function") syncV18StreetLabels();
     }
 
     function selectDish(dishKey) {
@@ -947,7 +948,14 @@
       const zone = document.getElementById("sweet-spot-zone");
       if (zone) { zone.style.left = `${min}%`; zone.style.width = `${max - min}%`; }
       const lbl = document.getElementById("sweet-spot-range-label");
-      if (lbl) lbl.textContent = `🎯 Chuẩn: ${min}–${max}%`;
+      if (lbl) {
+        const nextText = `🎯 Chuẩn: ${min}–${max}% (+22%/lần)`;
+        if (lbl.firstChild && lbl.firstChild.nodeType === 3) {
+          lbl.firstChild.nodeValue = nextText;
+        } else {
+          lbl.textContent = nextText;
+        }
+      }
     }
 
     // Đặt lại thau hoàn toàn trống cho mẻ bánh tiếp theo (selectedDish = null, 4 nút Topping đều tắt màu xám)
