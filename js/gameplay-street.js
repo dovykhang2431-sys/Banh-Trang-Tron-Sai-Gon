@@ -1989,17 +1989,21 @@ setInterval(() => {
         const h = Math.floor(state.clockMinutes / 60), m = state.clockMinutes % 60;
         const remainingCustomers = customerSlots.filter(Boolean).length;
 
+        const closeBanner = document.getElementById("closing-22h-banner");
         if (state.clockMinutes >= 22 * 60) {
+          if (closeBanner) closeBanner.classList.remove("hidden");
           if (remainingCustomers > 0) {
             document.getElementById("topbar-sub-time").textContent = `22:00 (${remainingCustomers})`;
             if (!closingTimeNotified) {
               closingTimeNotified = true;
-              showToast(`🌙 Đã 22:00! Phục vụ xong ${remainingCustomers} khách cuối sẽ đóng cửa!`);
+              showToast(`🌙 Đã 22:00! Bấm "Chốt Sổ & Qua Ngày" hoặc phục vụ nốt ${remainingCustomers} khách!`);
             }
           } else {
+            document.getElementById("topbar-sub-time").textContent = `22:00`;
             checkAndTriggerClosingIfEmpty();
           }
         } else {
+          if (closeBanner) closeBanner.classList.add("hidden");
           document.getElementById("topbar-sub-time").textContent = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
         }
 

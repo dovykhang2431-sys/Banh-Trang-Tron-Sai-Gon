@@ -377,7 +377,7 @@
           return;
         }
 
-        const usageRatio = Math.min(1, (dishesUsingWeight / totalWeight) * 1.10);
+        const usageRatio = Math.min(1, dishesUsingWeight / totalWeight);
         const needed = Math.ceil(targetBags * usageRatio);
         const toBuy = Math.max(0, needed - (state.stock[ing.id] || 0));
         el.value = toBuy > 0 ? toBuy : "";
@@ -385,21 +385,9 @@
 
       const { totalUnits, totalCost } = recalcMarketOrderTotal();
       if (totalUnits <= 0) {
-        // Nếu kho đã đủ cho targetBags, vẫn tự động điền thêm 1 lượt dự phòng (+targetBags/2) để người chơi có thể nhập ngay nếu muốn
-        INGREDIENTS.forEach(ing => {
-          const el = document.getElementById(`buy-qty-${ing.id}`);
-          if (!el) return;
-          if (ing.id === "tratac") {
-            el.value = Math.max(2, Math.ceil(targetDrink * 0.5));
-            return;
-          }
-          const isUsed = unlocked.some(dKey => Boolean(DISH_MENU[dKey]?.recipe?.[ing.id]));
-          if (isUsed) el.value = Math.max(2, Math.ceil(targetBags * 0.5));
-        });
-        const retry = recalcMarketOrderTotal();
-        showToast(`✨ Kho đã đủ ~${targetBags} bịch! Đã điền thêm +${retry.totalUnits} phần dự phòng (${formatVND(retry.totalCost)})!`);
+        showToast(`✅ Kho đã đủ cho dự kiến ~${targetBags} bịch hôm nay, không cần nhập thêm!`);
       } else {
-        showToast(`✨ Đã điền ${totalUnits} phần (${formatVND(totalCost)}) cho ~${targetBags} bịch! Bấm '✅ Nhập Kho' nhé!`);
+        showToast(`✨ Đã điền đúng ${totalUnits} phần còn thiếu (${formatVND(totalCost)}) cho ~${targetBags} bịch! Bấm '✅ Nhập Kho' nhé!`);
       }
     }
 
@@ -3135,7 +3123,8 @@ function switchPrepSubTab(sub) {
 
   const vp = document.getElementById("main-scroll-viewport");
   if (vp) vp.scrollTop = 0;
-  if (sub === "kho") { renderMorningForecastBriefing(); renderMarketGrid(); renderBargainBanner(); }
+  if (sub === "kho") { renderMorningForecastBriefing();
+  if (typeof renderDay1OnboardingChecklist === "function") renderDay1OnboardingChecklist(); renderMarketGrid(); renderBargainBanner(); }
   else if (sub === "soche") { renderPrepStatus(); renderCustomSauceLab(); }
   else if (sub === "menu") { renderMorningForecastBriefing(); renderMenuAndPricingTab(); }
   else if (sub === "marketing") renderMarketingCenterTab();

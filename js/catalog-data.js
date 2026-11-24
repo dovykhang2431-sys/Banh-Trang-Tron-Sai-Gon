@@ -74,15 +74,60 @@
       if (nextBtn) nextBtn.textContent = (currentTutorialIdx === DITU_TUTORIAL_STEPS.length - 1) ? "✅ Đã hiểu lời Dì!" : "Tiếp theo ▶";
 
       const quoteEl = document.getElementById("tutorial-poetic-quote");
-      quoteEl.innerHTML = "";
-      const words = step.poeticQuote.split(" ");
-      words.forEach((w, idx) => {
-        const span = document.createElement("span");
-        span.className = "poetic-word mr-1";
-        span.style.animationDelay = `${idx * 32}ms`;
-        span.textContent = w;
-        quoteEl.appendChild(span);
-      });
+      if (quoteEl) quoteEl.textContent = step.poeticQuote;
+    }
+
+    function dismissDay1Checklist() {
+      state.day1ChecklistDismissed = true;
+      const el = document.getElementById("day1-onboarding-checklist");
+      if (el) el.classList.add("hidden");
+      if (typeof saveToLocalOnly === "function") saveToLocalOnly("checklistDismiss");
+    }
+
+    function renderDay1OnboardingChecklist() {
+      const box = document.getElementById("day1-onboarding-checklist");
+      if (!box) return;
+      if (!state || !state.shopName || state.day > 1 || state.day1ChecklistDismissed) {
+        box.classList.add("hidden");
+        return;
+      }
+      const prepCount = Object.values(state.prepDone || {}).filter(Boolean).length;
+      const step1Done = (state.todayCogsSpent || 0) > 0 || (state.stock?.banhtrang || 0) >= 6;
+      const step2Done = prepCount >= 1;
+      const step3Done = Boolean(state.isStreetSelling) || (state.todaySold || 0) >= 1;
+      const step4Done = (state.todaySold || 0) >= 1;
+      if (step1Done && step2Done && step3Done && step4Done) {
+        box.classList.add("hidden");
+        return;
+      }
+      const nextStep = !step1Done ? 1 : !step2Done ? 2 : !step3Done ? 3 : 4;
+      const chip = (num, label, done) => {
+        const cls = done
+          ? "bg-emerald-600 text-white border-emerald-800"
+          : (num === nextStep ? "bg-orange-500 text-white border-yellow-300 ring-2 ring-yellow-300 animate-pulse" : "bg-white text-amber-900 border-amber-300");
+        return `<span class="px-2 py-0.5 rounded-lg border text-[10px] font-black ${cls}">${done ? "✓ " : ""}${num}. ${label}</span>`;
+      };
+      const tipText = nextStep === 1
+        ? "👉 Bước 1: Kiểm tra kho & bấm '⚡ LẤY ĐỦ HÀNG' (nếu thiếu) ở tab Đi Chợ."
+        : nextStep === 2
+          ? "👉 Bước 2: Bấm tab '🌶️ Sơ Chế & Pha Sốt' để làm sẵn nguyên liệu (+1.000đ Tip/bịch)."
+          : nextStep === 3
+            ? "👉 Bước 3: Bấm nút xanh '🚀 MỞ CỬA HÀNG' để đẩy xe ra phố bán!"
+            : "👉 Bước 4: Chọn Món + thêm Topping (Rau/Hành/Ớt) TRƯỚC B3 (khách có thể gọi thêm Trà giữa chừng!), rồi bấm B1 ➔ B2 ➔ B3 ➔ Trao Khách!";
+      box.classList.remove("hidden");
+      box.innerHTML = `
+        <div class="flex items-center justify-between gap-1">
+          <span class="text-[10px] font-black text-amber-950 uppercase">📋 Hướng Dẫn Ngày Đầu (4 Bước)</span>
+          <button type="button" onclick="dismissDay1Checklist()" class="text-[9px] font-bold text-amber-700 underline">Ẩn</button>
+        </div>
+        <div class="flex flex-wrap gap-1">
+          ${chip(1, "Đi chợ", step1Done)}
+          ${chip(2, "Sơ chế", step2Done)}
+          ${chip(3, "Mở cửa", step3Done)}
+          ${chip(4, "B1→B2→B3", step4Done)}
+        </div>
+        <div class="text-[10px] font-extrabold text-amber-950 leading-snug">${tipText}</div>
+      `;
     }
 
 

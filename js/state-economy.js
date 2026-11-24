@@ -640,7 +640,8 @@
             const curSeq = Number(state.saveSeq || 0);
             const exSeq = Number(existingBest.saveSeq || 0);
             const isBgWriter = ["interval_15s", "beforeunload", "pagehide", "visibilitychange"].includes(sourceLabel);
-            if (curDay < exDay || (curDay === exDay && curSold < exSold) || (isBgWriter && curDay === exDay && curSold === exSold && curSeq > 0 && curSeq < exSeq)) {
+            const isPointerReclaim = sourceLabel === "reclaim_pointer";
+            if (!isPointerReclaim && (curDay < exDay || (curDay === exDay && curSold < exSold) || (isBgWriter && curDay === exDay && curSold === exSold && curSeq > 0 && curSeq < exSeq))) {
               if (typeof recordSaveWriteDiag === "function") {
                 recordSaveWriteDiag(sourceLabel, state, "BLOCKED", "stale_state", existingBest);
               }

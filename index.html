@@ -84,7 +84,19 @@
           </div>
         </div>
 
-        <div class="space-y-2 bg-amber-50/90 p-2.5 rounded-2xl border-2 border-amber-300">
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" id="btn-mode-continue" onclick="switchLoginMode('continue')" class="soft-btn btn-game-green py-2 rounded-xl font-black text-xs">
+            ▶️ Chơi Tiếp
+          </button>
+          <button type="button" id="btn-mode-create" onclick="switchLoginMode('create')" class="soft-btn btn-game-orange py-2 rounded-xl font-black text-xs">
+            🆕 Tạo Quán Mới
+          </button>
+        </div>
+
+        <div id="login-form-panel" class="space-y-2 bg-amber-50/90 p-2.5 rounded-2xl border-2 border-amber-300">
+          <div id="login-create-safe-note" class="hidden px-2 py-1 rounded-xl bg-emerald-50 border border-emerald-400 text-[10px] font-extrabold text-emerald-900 text-center">
+            🛡️ Tạo quán mới: các quán cũ của bạn sẽ KHÔNG bị xóa, vẫn nằm nguyên trong mục Chơi Tiếp!
+          </div>
           <div>
             <div class="flex items-center justify-between mb-1">
               <label class="block text-[11px] font-extrabold text-amber-950">1. Chọn Avatar Chủ Quán 2D:</label>
@@ -99,7 +111,7 @@
             </div>
             <div>
               <label class="block text-[11px] font-extrabold text-amber-950 mb-0.5">3. PIN (4 số):</label>
-              <input id="login-shop-pin" type="password" inputmode="numeric" maxlength="4" placeholder="1234" class="w-full px-2 py-1.5 rounded-xl border-2 border-amber-400 focus:border-orange-600 focus:outline-none text-xs font-black tracking-widest text-center text-amber-950 bg-white" />
+              <input id="login-shop-pin" type="password" inputmode="numeric" maxlength="4" autocomplete="new-password" placeholder="••••" class="w-full px-2 py-1.5 rounded-xl border-2 border-amber-400 focus:border-orange-600 focus:outline-none text-xs font-black tracking-widest text-center text-amber-950 bg-white" />
             </div>
           </div>
           <div class="flex items-center justify-between gap-1.5 px-2 py-1 rounded-xl bg-white/95 border border-emerald-400 text-[9.5px]">
@@ -140,12 +152,13 @@
           </div>
         </div>
 
-        <div class="bg-white/95 rounded-2xl p-2 border-2 border-amber-300">
+        <div id="login-saved-list-panel" class="bg-white/95 rounded-2xl p-2 border-2 border-amber-300 space-y-1.5">
           <div class="flex items-center justify-between mb-1">
             <span class="text-[10px] font-black text-amber-950 uppercase">🏪 Quán Đã Lưu Trong Hệ Thống</span>
             <span id="login-cloud-badge" class="text-[9px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">🛡️ Độc lập 100%</span>
           </div>
-          <div id="login-top3-list" class="space-y-1 text-xs max-h-28 overflow-y-auto pr-0.5">
+          <input id="login-shop-search" type="text" oninput="renderLoginTop3Preview()" placeholder="🔍 Tìm tên quán bất kỳ (VD: Đánh Giá Mới)..." class="w-full px-2.5 py-1 rounded-xl border border-amber-300 text-[11px] font-bold text-amber-950 bg-amber-50/50 focus:outline-none focus:border-orange-500" />
+          <div id="login-top3-list" class="space-y-1 text-xs max-h-40 overflow-y-auto pr-0.5">
             <div class="text-center text-amber-700 py-1 text-xs">Nhập Tên Bảng Hiệu + PIN 4 số để vào quán.</div>
           </div>
         </div>
@@ -226,6 +239,7 @@
 
   <!-- ================= KHUNG CHÍNH CỦA GAME ================= -->
   <main id="main-scroll-viewport" class="w-full max-w-lg px-2 pt-1.5 flex flex-col gap-2">
+        <div id="day1-onboarding-checklist" class="hidden p-2 rounded-2xl bg-gradient-to-r from-amber-50 via-yellow-50 to-emerald-50 border-2 border-amber-500 shadow-md space-y-1"></div>
 
     <!-- ========================================================================= -->
     <!-- MÀN HÌNH 1: SÂN NHÀ CHUẨN BỊ GỌN GÀNG (CÓ BOTTOM DOCK BAR CỐ ĐỊNH)         -->
@@ -302,6 +316,10 @@
             </div>
 
             <!-- Thanh Trả Giá Chợ Sỉ Gọn 1 Hàng -->
+            <div class="px-2 py-1 rounded-xl bg-amber-50 border border-amber-300 text-[10px] font-bold text-amber-950 flex flex-wrap items-center justify-between gap-1">
+              <span>📦 <b>1 bịch = 1 phần</b> mỗi nguyên liệu • 🛍️ Phí túi: <b>1.000đ/bịch</b></span>
+              <span class="text-rose-700 font-black">⚠️ Đồ tươi HSD 1 ngày (đỏ) hư nếu tồn qua đêm!</span>
+            </div>
             <div id="market-bargain-banner" class="px-2 py-1 rounded-xl bg-gradient-to-r from-amber-100 via-yellow-50 to-orange-100 border border-amber-400 flex items-center justify-between gap-1.5 shadow-sm"></div>
 
             <!-- Thanh nút hành động Đi Chợ đặt ngay đầu giúp thao tác 1 chạm không cần cuộn -->
@@ -546,6 +564,15 @@
         </div>
 
         <!-- Banner Thử Thách Đơn Sỉ -->
+        <div id="closing-22h-banner" class="hidden p-2 rounded-2xl bg-gradient-to-r from-indigo-700 to-purple-800 text-white border-2 border-yellow-300 shadow-lg flex items-center justify-between gap-2">
+          <div class="text-[11px] font-black leading-tight">
+            🌙 Đã 22:00 giờ đóng cửa! Bạn có thể chốt sổ ngay.
+          </div>
+          <button type="button" onclick="endDaySummary()" class="soft-btn btn-game-yellow shrink-0 px-3 py-1.5 rounded-xl font-black text-[11px]">
+            🌙 Chốt Sổ & Qua Ngày ▶
+          </button>
+        </div>
+
         <div id="bulk-rush-banner" class="hidden mb-1 p-1.5 rounded-xl bg-gradient-to-r from-rose-700 via-red-600 to-orange-600 text-white border-2 border-yellow-300 flex items-center justify-between shadow relative z-20">
           <div>
             <div id="bulk-rush-title" class="font-black text-[10px] uppercase text-yellow-200">🏢 ĐƠN SỈ QUẬN 1: 4 PHẦN!</div>
@@ -930,9 +957,9 @@
 
   <!-- ================= POP-UP DÌ TƯ TRUYỀN NGHỀ ================= -->
   <div id="modal-ditu-tutorial" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-3">
-    <div class="w-full max-w-md wooden-clipboard-frame relative overflow-hidden">
-      <div class="clipboard-metal-clip"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
-      <div class="clipboard-paper-inner p-4 relative">
+    <div class="w-full max-w-md wooden-clipboard-frame relative max-h-[88vh] flex flex-col">
+      <div class="clipboard-metal-clip shrink-0"><div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div></div>
+      <div class="clipboard-paper-inner p-4 relative overflow-y-auto max-h-[78vh]">
         <span class="poetic-floating-badge absolute top-2 left-3 text-xl pointer-events-none">🌿</span>
         <span class="poetic-floating-badge absolute top-4 right-4 text-xl pointer-events-none" style="animation-delay: 0.8s">🌶️</span>
 

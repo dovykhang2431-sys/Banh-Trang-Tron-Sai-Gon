@@ -52,7 +52,17 @@ const CURRENT_TAB_ID = "tab_" + Date.now() + "_" + Math.random().toString(36).sl
 
 function claimActiveTabLeadership() {
   try {
+    const prevHolder = localStorage.getItem(ACTIVE_TAB_LOCK_KEY);
     localStorage.setItem(ACTIVE_TAB_LOCK_KEY, CURRENT_TAB_ID);
+    if (prevHolder && prevHolder !== CURRENT_TAB_ID && isActiveGameSessionOpen()) {
+      const curKey = state.shopKey || (typeof sanitizeShopKey === "function" ? sanitizeShopKey(state.shopName) : "");
+      const mRaw = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const mObj = mRaw ? JSON.parse(mRaw) : null;
+      const mKey = mObj ? (mObj.shopKey || (typeof sanitizeShopKey === "function" ? sanitizeShopKey(mObj.shopName || "") : "")) : "";
+      if (curKey && mKey && mKey !== curKey) {
+        saveToLocalOnly("reclaim_pointer");
+      }
+    }
   } catch (e) {}
 }
 

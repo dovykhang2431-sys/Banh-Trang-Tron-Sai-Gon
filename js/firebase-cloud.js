@@ -357,7 +357,7 @@ function checkExistingLocalSaveForLoginScreen() {
       }
     }
     document.getElementById("login-shop-name").value = saved.shopName;
-    document.getElementById("login-shop-pin").value = (!String(saved.pin || "").startsWith("PINH_")) ? (saved.pin || "") : "";
+    document.getElementById("login-shop-pin").value = "";
     if (!userManuallyChangedLoginAvatar) {
       loginSelectedAvatar = saved.avatar || "av_ditu";
       renderLoginAvatarGrid();
@@ -366,15 +366,52 @@ function checkExistingLocalSaveForLoginScreen() {
   } catch (e) {}
 }
 
+let currentLoginScreenMode = "continue";
+
+function switchLoginMode(mode = "continue") {
+  currentLoginScreenMode = mode === "create" ? "create" : "continue";
+  const btnCont = document.getElementById("btn-mode-continue");
+  const btnCreate = document.getElementById("btn-mode-create");
+  const safeNote = document.getElementById("login-create-safe-note");
+  const submitBtn = document.getElementById("btn-login-submit");
+  const listPanel = document.getElementById("login-saved-list-panel");
+  const nameInp = document.getElementById("login-shop-name");
+  const pinInp = document.getElementById("login-shop-pin");
+
+  if (btnCont) btnCont.className = currentLoginScreenMode === "continue"
+    ? "soft-btn btn-game-green py-2 rounded-xl font-black text-xs ring-2 ring-yellow-300"
+    : "soft-btn py-2 rounded-xl font-black text-xs bg-white text-amber-950 border-2 border-amber-300";
+  if (btnCreate) btnCreate.className = currentLoginScreenMode === "create"
+    ? "soft-btn btn-game-orange py-2 rounded-xl font-black text-xs ring-2 ring-yellow-300"
+    : "soft-btn py-2 rounded-xl font-black text-xs bg-white text-amber-950 border-2 border-amber-300";
+
+  if (safeNote) safeNote.classList.toggle("hidden", currentLoginScreenMode !== "create");
+  if (listPanel) listPanel.classList.toggle("hidden", currentLoginScreenMode === "create");
+
+  if (currentLoginScreenMode === "create") {
+    if (nameInp) { nameInp.value = ""; nameInp.focus(); }
+    if (pinInp) pinInp.value = "";
+    if (submitBtn) submitBtn.textContent = "🆕 TẠO QUÁN MỚI & RA NGHỀ!";
+    const msgEl = document.getElementById("login-status-msg");
+    if (msgEl) msgEl.classList.add("hidden");
+  } else {
+    if (submitBtn) submitBtn.textContent = "▶️ VÀO QUÁN ĐÃ CHỌN!";
+    renderLoginTop3Preview();
+  }
+}
+
 function prefillLoginShopName(shopName) {
+  currentLoginScreenMode = "continue";
   const inp = document.getElementById("login-shop-name");
   const pinInp = document.getElementById("login-shop-pin");
+  const submitBtn = document.getElementById("btn-login-submit");
   if (inp) inp.value = shopName;
   if (pinInp) {
     pinInp.value = "";
     pinInp.focus();
   }
-  showLoginMessage(`🔑 Hãy nhập Mã PIN 4 số của quán "${shopName}" rồi bấm Đẩy Xe Ra Nghề!`, "info");
+  if (submitBtn) submitBtn.textContent = "▶️ VÀO QUÁN ĐÃ CHỌN!";
+  showLoginMessage(`🔑 Hãy nhập Mã PIN 4 số của quán "${shopName}" rồi bấm VÀO QUÁN ĐÃ CHỌN!`, "info");
 }
 
 function quickResumeGame() {
@@ -429,6 +466,10 @@ function handleLoginOrRegister() {
   let loadedAvatar = null;
 
   if (matchedRecord) {
+    if (currentLoginScreenMode === "create") {
+      showLoginMessage(`⚠️ Quán "${nameInput}" đã tồn tại! Hãy đặt tên khác để tạo quán mới (quán cũ không bị xóa), hoặc chuyển sang tab "Chơi Tiếp".`, "error");
+      return;
+    }
     const recordPin = matchedRecord.pin || matchedRecord.fullState?.pin || "";
     if (recordPin && recordPin !== "LOCAL") {
       if (!verifyShopPin(key, pinInput, recordPin)) {
@@ -479,8 +520,9 @@ function handleLoginOrRegister() {
   }
   if (state.isStreetSelling) {
     startStreetSellingPhase(true);
-  } else if (!isExistingShop && !state.seenIntroTutorial && state.day === 1 && state.totalSold === 0) {
-    openDiTuTutorialModal(0);
+  } else if (!isExistingShop && state.day === 1 && state.totalSold === 0) {
+    state.seenIntroTutorial = true;
+    if (typeof renderDay1OnboardingChecklist === "function") renderDay1OnboardingChecklist();
   }
   showToast(isExistingShop
     ? `🎉 Chào mừng quán "${state.shopName}" (Cấp ${state.level} • Mã: ${state.recoveryCode}) trở lại!`
@@ -810,9 +852,23 @@ function renderLoginTop3Preview() {
   const badge = document.getElementById("login-cloud-badge");
   if (!container) return;
   const vault = getCombinedShopsVault();
-  const list = Object.values(vault)
+  const q = String(document.getElementById("login-shop-search")?.value || "").trim().toLowerCase();
+  const allList = Object.values(vault)
     .filter(x => x && (x.shopName || x.fullState?.shopName))
-    .sort((a, b) => Number(b.netWorth || b.money || b.fullState?.money || 0) - Number(a.netWorth || a.money || a.fullState?.money || 0));
+    .sort((a, b) => {
+      const aLocal = Number(a.saveSeq || 0) >= 1 ? 1 : 0;
+      const bLocal = Number(b.saveSeq || 0) >= 1 ? 1 : 0;
+      if (aLocal !== bLocal) return bLocal - aLocal;
+      return Number(b.netWorth || b.money || b.fullState?.money || 0) - Number(a.netWorth || a.money || a.fullState?.money || 0);
+    });
+  const list = q
+    ? allList.filter(rawItem => {
+        const it = rawItem.fullState ? { ...rawItem.fullState, ...rawItem } : rawItem;
+        const nm = String(it.shopName || rawItem.shopKey || "").toLowerCase();
+        const code = String(it.recoveryCode || "").toLowerCase();
+        return nm.includes(q) || code.includes(q);
+      })
+    : allList;
   if (badge) {
     badge.textContent = `💾 Offline (${list.length} quán)`;
   }
@@ -820,7 +876,7 @@ function renderLoginTop3Preview() {
     container.innerHTML = `<div class="text-center text-amber-700 py-1 text-[11px]">Nhập Tên Bảng Hiệu + PIN 4 số để tạo quán hoặc mở lại quán.</div>`;
     return;
   }
-  container.innerHTML = list.slice(0, 30).map((rawItem, idx) => {
+  container.innerHTML = list.map((rawItem, idx) => {
     const item = rawItem.fullState ? { ...rawItem.fullState, ...rawItem } : rawItem;
     const sName = item.shopName || rawItem.shopKey;
     const medal = idx === 0 ? "🥇 " : idx === 1 ? "🥈 " : idx === 2 ? "🥉 " : `#${idx + 1} `;
