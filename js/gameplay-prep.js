@@ -294,7 +294,7 @@
           ? `<span class="text-[8px] font-bold text-slate-500 bg-slate-200 px-1.5 py-0.5 rounded-full whitespace-nowrap">Chưa dùng</span>`
           : expTodayQty > 0
             ? `<span class="text-[8px] font-black text-white bg-red-600 px-1.5 py-0.5 rounded-full whitespace-nowrap animate-pulse">⚠️ ${expTodayQty} cận date</span>`
-            : `<span class="text-[8px] font-bold text-amber-900 bg-amber-200/75 px-1.5 py-0.5 rounded-full whitespace-nowrap">HSD ${maxLife}N</span>`;
+            : (maxLife <= 1 ? `<span class="text-[8px] font-black text-white bg-rose-600 px-1.5 py-0.5 rounded-full whitespace-nowrap border border-rose-800 shadow-sm">⚠️ HSD 1N</span>` : `<span class="text-[8px] font-bold text-amber-900 bg-amber-200/75 px-1.5 py-0.5 rounded-full whitespace-nowrap">HSD ${maxLife}N</span>`);
 
         const wsDiscPct = getWorkshopDiscountPctForIng(ing.id);
         const wholesaleBtnHtml = wsDiscPct > 0
@@ -383,6 +383,10 @@
         el.value = toBuy > 0 ? toBuy : "";
       });
 
+      if ((state.day || 1) === 1) {
+        state.day1MarketDone = true;
+        if (typeof renderDay1OnboardingChecklist === "function") renderDay1OnboardingChecklist();
+      }
       const { totalUnits, totalCost } = recalcMarketOrderTotal();
       if (totalUnits <= 0) {
         showToast(`✅ Kho đã đủ cho dự kiến ~${targetBags} bịch hôm nay, không cần nhập thêm!`);
@@ -402,6 +406,7 @@
       if (totalCost > state.money) { showToast("❌ Không đủ tiền mặt thanh toán đơn hàng này!"); return; }
       state.money -= totalCost;
       state.todayCogsSpent += totalCost;
+      if ((state.day || 1) === 1) state.day1MarketDone = true;
       state.cumulativeCosts.cogs = (state.cumulativeCosts.cogs || 0) + totalCost;
       INGREDIENTS.forEach(ing => {
         const el = document.getElementById(`buy-qty-${ing.id}`);
@@ -3142,6 +3147,7 @@ function renderLedgerTab() {
 }
 
 function updateAllUI() {
+  if (typeof renderDay1OnboardingChecklist === "function") renderDay1OnboardingChecklist();
   ensureV15State(state);
   if (!state.localCustomAvatar) {
     try {

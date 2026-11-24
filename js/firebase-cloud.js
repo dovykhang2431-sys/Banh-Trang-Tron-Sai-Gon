@@ -89,6 +89,22 @@ function closeRecoveryModalFromMenu() {
 }
 
 const SAVE_DIAG_LOG_KEY = "btt_save_diag_log_v175";
+const TAB_SESSION_SHOP_KEY = "btt_tab_shop_key_v179";
+
+function setTabSessionShopKey(shopKey) {
+  try {
+    const k = String(shopKey || "").trim();
+    if (k) sessionStorage.setItem(TAB_SESSION_SHOP_KEY, k);
+  } catch (e) {}
+}
+
+function getTabSessionShopKey() {
+  try {
+    return String(sessionStorage.getItem(TAB_SESSION_SHOP_KEY) || "").trim();
+  } catch (e) {
+    return "";
+  }
+}
 
 function formatSaveDiagRec(r) {
   if (!r || typeof r !== "object") return "null";
@@ -333,7 +349,11 @@ function checkExistingLocalSaveForLoginScreen() {
   try {
     userManuallyChangedLoginAvatar = false;
     updateFirebaseStatusBadgesUI();
-    const saved = getLatestLocalSaveData(null, "loginCard");
+    const tabKey = getTabSessionShopKey();
+    let saved = tabKey ? getLatestLocalSaveData(tabKey, "loginCard:tabSession") : null;
+    if (!saved) {
+      saved = getLatestLocalSaveData(null, "loginCard");
+    }
     lastDisplayedResumeSave = saved || null;
     if (!saved || !saved.shopName) {
       renderLoginTop3Preview();
@@ -417,10 +437,13 @@ function prefillLoginShopName(shopName) {
 function quickResumeGame() {
   initAudio(); startChillBGM();
   try {
-    const preferredKey = (lastDisplayedResumeSave && (lastDisplayedResumeSave.shopKey || sanitizeShopKey(lastDisplayedResumeSave.shopName || ""))) || null;
-    let localData = getLatestLocalSaveData(preferredKey, "quickResumeGame");
+    const tabKey = getTabSessionShopKey();
+    const displayedKey = (lastDisplayedResumeSave && (lastDisplayedResumeSave.shopKey || sanitizeShopKey(lastDisplayedResumeSave.shopName || ""))) || null;
+    const preferredKey = tabKey || displayedKey || null;
+    let localData = getLatestLocalSaveData(preferredKey, tabKey ? "quickResumeGame:tabSession" : "quickResumeGame");
     if (lastDisplayedResumeSave && lastDisplayedResumeSave.shopName) {
-      if (!localData || isSaveRecordNewer(lastDisplayedResumeSave, localData)) {
+      const lKey = lastDisplayedResumeSave.shopKey || sanitizeShopKey(lastDisplayedResumeSave.shopName);
+      if ((!preferredKey || lKey === preferredKey) && (!localData || isSaveRecordNewer(lastDisplayedResumeSave, localData))) {
         localData = lastDisplayedResumeSave;
       }
     }
@@ -430,6 +453,7 @@ function quickResumeGame() {
       state.offlineMode = true;
       state.saveMode = "local";
       ensureRecoveryCode();
+      setTabSessionShopKey(state.shopKey || sanitizeShopKey(state.shopName));
     }
   } catch (e) {}
   document.getElementById("login-screen").classList.add("hidden");
@@ -511,6 +535,7 @@ function handleLoginOrRegister() {
     return;
   }
 
+  setTabSessionShopKey(key);
   saveGameEverywhere(false, "loginOrReg");
   document.getElementById("login-screen").classList.add("hidden");
   updateAllUI();
@@ -704,6 +729,7 @@ function handleRecoverByCode(fromModal = false) {
     state.offlineMode = true;
     state.saveMode = "local";
     ensureRecoveryCode();
+    setTabSessionShopKey(state.shopKey || sanitizeShopKey(state.shopName));
     saveGameEverywhere(false, "recoverBTT1");
     document.getElementById("login-screen").classList.add("hidden");
     closeRecoveryModalFromMenu();
@@ -751,6 +777,7 @@ function handleRecoverByCode(fromModal = false) {
   state.offlineMode = true;
   state.saveMode = "local";
   ensureRecoveryCode();
+  setTabSessionShopKey(sKey);
   saveGameEverywhere(false, "recoverBT");
   document.getElementById("login-screen").classList.add("hidden");
   closeRecoveryModalFromMenu();

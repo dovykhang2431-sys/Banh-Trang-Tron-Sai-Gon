@@ -92,7 +92,7 @@
         return;
       }
       const prepCount = Object.values(state.prepDone || {}).filter(Boolean).length;
-      const step1Done = (state.todayCogsSpent || 0) > 0 || (state.stock?.banhtrang || 0) >= 6;
+      const step1Done = Boolean(state.day1MarketDone) || (state.todayCogsSpent || 0) > 0;
       const step2Done = prepCount >= 1;
       const step3Done = Boolean(state.isStreetSelling) || (state.todaySold || 0) >= 1;
       const step4Done = (state.todaySold || 0) >= 1;
