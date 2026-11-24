@@ -93,7 +93,7 @@
       }
       const prepCount = Object.values(state.prepDone || {}).filter(Boolean).length;
       const step1Done = Boolean(state.day1MarketDone) || (state.todayCogsSpent || 0) > 0;
-      const step2Done = prepCount >= 1;
+      const step2Done = prepCount >= 3;
       const step3Done = Boolean(state.isStreetSelling) || (state.todaySold || 0) >= 1;
       const step4Done = (state.todaySold || 0) >= 1;
       if (step1Done && step2Done && step3Done && step4Done) {
