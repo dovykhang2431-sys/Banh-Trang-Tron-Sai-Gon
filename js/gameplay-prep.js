@@ -573,7 +573,7 @@
       const dishEntries = Object.entries(detail.dishes || {}).filter(([_, v]) => v && v.qty > 0);
       const dishRows = dishEntries.map(([dKey, v]) => {
         const dName = DISH_MENU[dKey]?.short || DISH_MENU[dKey]?.name || dKey;
-        return leaderRow(`🥙 ${escapeHtml(dName)} (${v.qty}p)`, `+${formatVND(v.rev)}`, "text-emerald-700");
+        return leaderRow(`🥙 ${escapeHtml(dName)} (${v.qty} phút)`, `+${formatVND(v.rev)}`, "text-emerald-700");
       }).join("");
       const traTacRow = (detail.traTac && detail.traTac.qty > 0)
         ? leaderRow(`🧋 Trà Tắc (${detail.traTac.qty} ly)`, `+${formatVND(detail.traTac.rev)}`, "text-emerald-700")

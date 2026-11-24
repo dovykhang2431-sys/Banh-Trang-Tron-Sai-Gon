@@ -246,7 +246,7 @@
 
     const STORY_CHAPTERS = [
       {
-        id: 1, reqLevel: 1, shortLoc: "Hẻm Q.4",
+        id: 1, reqLevel: 1, shortLoc: "Chương 1: Hẻm Quận 4",
         img: CASUAL_2D_ASSETS.chap_alley,
         title: "Chương 1: Đầu Hẻm Nhỏ Quận 4 (Cấp 1–6)",
         story: "Khởi nghiệp cùng Dì Tư với chiếc xe gỗ nhỏ nơi đầu hẻm. Tiếng kéo cắt bánh tráng lách cách mỗi chiều gọi đám học trò và bà con lối xóm ghé ủng hộ.",

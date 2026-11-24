@@ -514,3 +514,67 @@
       border: 1.5px solid #fde68a;
       color: #fffbeb;
     }
+
+/* ================= VER 18.0: G1 RESPONSIVE LAYOUT, READABLE TYPE & NON-OVERLAPPING DOCK ================= */
+.text-\[8px\], .text-\[8\.5px\] { font-size: 11px !important; line-height: 1.3 !important; }
+.text-\[9px\], .text-\[9\.5px\] { font-size: 11.5px !important; line-height: 1.32 !important; }
+.text-\[10px\] { font-size: 12px !important; line-height: 1.35 !important; }
+
+/* Đảm bảo phần đáy viewport luôn thoáng, nút Mở Cửa Hàng không che món cuối */
+#main-scroll-viewport {
+  padding-bottom: 120px !important;
+}
+#prep-open-street-footer, #prep-sticky-cta-bar {
+  position: relative !important;
+  z-index: 25;
+}
+
+/* Desktop & Tablet rộng (>= 900px): mở rộng khung 1120px & bố cục 2 cột */
+@media (min-width: 900px) {
+  #main-scroll-viewport,
+  header,
+  .wooden-header-board,
+  .wooden-bottom-dock,
+  #game-bottom-dock {
+    max-width: 1120px !important;
+    width: 100% !important;
+  }
+  #street-selling-section {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+  #market-grid,
+  #menu-dishes-grid,
+  #upgrades-list-container,
+  #leaderboard-container {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+}
+
+/* G5c: Nút Topping dạng nút bấm thật (không còn cảm giác dropdown) */
+.v18-topping-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-width: 2px;
+  border-radius: 12px;
+  font-weight: 800;
+  box-shadow: 0 3px 0 rgba(69, 26, 3, 0.45);
+  transition: transform 0.1s ease, background-color 0.15s ease;
+}
+.v18-topping-btn:active { transform: translateY(2px); }
+
+/* G5a: Thẻ to khách gọi thêm giữa chừng */
+.v18-mid-order-card {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border: 2.5px solid #ea580c;
+  border-radius: 14px;
+  padding: 8px 10px;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);
+  animation: tagPop 0.25s ease-out;
+}

@@ -1,9 +1,9 @@
 /**
- * Service Worker Chuẩn PWA - Vua Bánh Tráng Sài Gòn (Ver 17.9.2 Offline 100%)
+ * Service Worker Chuẩn PWA - Vua Bánh Tráng Sài Gòn (Ver 18.0.1 Offline 100%)
  * - Pre-cache toàn bộ tài nguyên tĩnh (HTML, CSS, JS modules, Icons) để chơi hoàn toàn Offline sau lần tải đầu.
  * - Khi có mạng: ưu tiên tải bản mới nhất cho HTML/JS/CSS rồi cập nhật cache; khi mất mạng: phục vụ 100% từ cache.
  */
-const CACHE_NAME = "vua-banh-trang-saigon-pwa-v17.9.2";
+const CACHE_NAME = "vua-banh-trang-saigon-pwa-v18.0.1";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -11,13 +11,14 @@ const STATIC_ASSETS = [
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./css/styles.css",
-  "./js/firebase-config.js",
+  "./js/local-config.js",
   "./js/assets.js",
   "./js/seed-shops.js",
   "./js/audio-fx.js",
   "./js/catalog-data.js",
   "./js/state-economy.js",
-  "./js/firebase-cloud.js",
+  "./js/local-storage-engine.js",
+  "./js/ui-v18.js",
   "./js/leaderboard-social.js",
   "./js/gameplay-prep.js",
   "./js/gameplay-street.js",

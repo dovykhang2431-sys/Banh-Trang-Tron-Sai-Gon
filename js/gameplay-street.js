@@ -625,7 +625,7 @@
       }
 
       if (c.wantedTraTac) {
-        tags.push(renderOrderTag("🧋 Trà +1", bowl.tratac ? "match" : "pending"));
+        tags.push(renderOrderTag("🧋 Trà tắc (+1 khách)", bowl.tratac ? "match" : "pending"));
       } else if (bowl.tratac) {
         tags.push(renderOrderTag("Dư Trà!", "wrong"));
       }
@@ -844,7 +844,7 @@
     function selectDish(dishKey) {
       if (!state.unlockedDishes.includes(dishKey)) return;
       if (bowl.step1Done && bowl.selectedDish !== dishKey) {
-        showToast("⚠️ Thau đang làm dở! Bấm '🗑️ Đổ' nếu muốn đổi sang món khác!");
+        showToast("⚠️ Thau đang làm dở! Bấm '🗑️ Đổ rác' nếu muốn đổi sang món khác!");
         return;
       }
       bowl.selectedDish = dishKey;
@@ -947,7 +947,7 @@
       const zone = document.getElementById("sweet-spot-zone");
       if (zone) { zone.style.left = `${min}%`; zone.style.width = `${max - min}%`; }
       const lbl = document.getElementById("sweet-spot-range-label");
-      if (lbl) lbl.textContent = `🎯 Vùng chuẩn: ${min}%–${max}%`;
+      if (lbl) lbl.textContent = `🎯 Chuẩn: ${min}–${max}%`;
     }
 
     // Đặt lại thau hoàn toàn trống cho mẻ bánh tiếp theo (selectedDish = null, 4 nút Topping đều tắt màu xám)
@@ -1043,17 +1043,20 @@
         playSFX("whistle");
         spawnFloatingFX("🗣️ Khách gọi thêm Trà Tắc!", "orange");
         showToast(`🗣️ ${c.name}: "À quên, lấy thêm cho 1 ly Trà Tắc nữa nha!"`);
+        if (typeof showMidOrderAddonCardV18 === "function") showMidOrderAddonCardV18("1 ly Trà Tắc (+1 khách)");
       } else if (c.wantedSpice < 2) {
         c.wantedSpice += 1;
         playSFX("whistle");
         const spTxt = c.wantedSpice === 1 ? "Cay vừa" : "Siêu cay";
         spawnFloatingFX(`🗣️ Đổi sang ${spTxt}!`, "orange");
         showToast(`🗣️ ${c.name}: "Cho thêm miếng ớt (${spTxt}) mới đã miệng nha!"`);
+        if (typeof showMidOrderAddonCardV18 === "function") showMidOrderAddonCardV18(`Thêm ớt (${spTxt})`);
       } else if (!c.wantedHanh) {
         c.wantedHanh = true;
         playSFX("whistle");
         spawnFloatingFX("🗣️ Khách dặn thêm Hành phi!", "orange");
         showToast(`🗣️ ${c.name}: "Bỏ thêm hành phi giòn rụm vô giùm nha!"`);
+        if (typeof showMidOrderAddonCardV18 === "function") showMidOrderAddonCardV18("Thêm Hành phi giòn rụm");
       }
       syncToppingButtonsUI();
       renderSelectedOrderBubble();
@@ -1650,6 +1653,8 @@ function doStep4Serve() {
   const xpGained = Math.round(stars * 7 * usedQty * (1 + (state.equipLevels?.upg_neon || 0) * 0.05 + sauceXpMult + cashierXpMult));
 
   recordDishSaleDetail(bowl.selectedDish, usedQty, netDishRevAfterLoss, (c.wantedTraTac && bowl.tratac) ? 1 : 0, traTacRev, tip, packagingCost);
+  if (typeof showLastSaleReceiptV18 === "function") showLastSaleReceiptV18(netDishRevAfterLoss + traTacRev, tip, appFeeDeducted, finalEarned);
+  if (typeof showMidOrderAddonCardV18 === "function") showMidOrderAddonCardV18("");
 
   state.money += finalEarned;
   state.todayRevenue += finalEarned;
@@ -1983,7 +1988,7 @@ setInterval(() => {
 
         if (state.clockMinutes < 22 * 60) {
           manualDismissedClosingAt22 = false;
-          state.clockMinutes = Math.min(22 * 60, state.clockMinutes + 3);
+          state.clockMinutes = Math.min(22 * 60, state.clockMinutes + (3 * (window.gameSpeedMult || 1)));
         }
 
         const h = Math.floor(state.clockMinutes / 60), m = state.clockMinutes % 60;
