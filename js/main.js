@@ -47,11 +47,34 @@ async function triggerPwaInstallNow() {
   }
 }
 
-// Làm mới dữ liệu local khi quay lại tab
+const ACTIVE_TAB_LOCK_KEY = "btt_active_tab_leader_v177";
+const CURRENT_TAB_ID = "tab_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
+
+function claimActiveTabLeadership() {
+  try {
+    localStorage.setItem(ACTIVE_TAB_LOCK_KEY, CURRENT_TAB_ID);
+  } catch (e) {}
+}
+
+function isCurrentTabLeader() {
+  try {
+    const holder = localStorage.getItem(ACTIVE_TAB_LOCK_KEY);
+    return !holder || holder === CURRENT_TAB_ID;
+  } catch (e) {
+    return true;
+  }
+}
+
+claimActiveTabLeadership();
+
+// Làm mới dữ liệu local & nhận quyền tab đang dùng khi quay lại tab
 window.addEventListener("focus", () => {
+  claimActiveTabLeadership();
   checkExistingLocalSaveForLoginScreen();
   fetchCloudLeaderboard(false);
 });
+window.addEventListener("pointerdown", claimActiveTabLeadership, { passive: true });
+window.addEventListener("keydown", claimActiveTabLeadership, { passive: true });
 
 function isActiveGameSessionOpen() {
   const loginEl = document.getElementById("login-screen");
@@ -59,24 +82,39 @@ function isActiveGameSessionOpen() {
   return Boolean(isLoginHidden && state && state.shopName);
 }
 
-// Lưu tức thì khi người chơi rời tab hoặc tải lại trang (CHỈ khi đang trong phiên chơi, không ở màn hình đăng nhập)
+function tryBackgroundGuardedSave(sourceLabel, requireVisibleFocus = false) {
+  if (!isActiveGameSessionOpen()) return false;
+  const isVisible = document.visibilityState === "visible";
+  const hasFocus = typeof document.hasFocus === "function" ? document.hasFocus() : true;
+  const isLeader = isCurrentTabLeader();
+  const allowed = requireVisibleFocus ? (isVisible && hasFocus && isLeader) : isLeader;
+  if (!allowed) {
+    if (typeof recordSaveWriteDiag === "function") {
+      recordSaveWriteDiag(sourceLabel, state, "SKIP:background", `vis=${isVisible} focus=${hasFocus} leader=${isLeader}`);
+    }
+    return false;
+  }
+  return saveToLocalOnly(sourceLabel);
+}
+
+// Lưu tức thì khi người chơi rời tab hoặc tải lại trang (CHỈ khi tab này là tab đang dùng)
 window.addEventListener("beforeunload", () => {
-  if (isActiveGameSessionOpen()) saveToLocalOnly("beforeunload");
+  tryBackgroundGuardedSave("beforeunload", false);
 });
 window.addEventListener("pagehide", () => {
-  if (isActiveGameSessionOpen()) saveToLocalOnly("pagehide");
+  tryBackgroundGuardedSave("pagehide", false);
 });
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "hidden" && isActiveGameSessionOpen()) {
-    saveToLocalOnly("visibilitychange");
+  if (document.visibilityState === "visible") {
+    claimActiveTabLeadership();
+  } else if (document.visibilityState === "hidden") {
+    tryBackgroundGuardedSave("visibilitychange", false);
   }
 });
 
-// Tự động lưu local an toàn mỗi 15 giây (CHỈ khi đang trong phiên chơi)
+// Tự động lưu local an toàn mỗi 15 giây (CHỈ khi tab đang hiển thị, có focus và là tab đang dùng)
 setInterval(() => {
-  if (document.visibilityState === "visible" && isActiveGameSessionOpen()) {
-    saveToLocalOnly("interval_15s");
-  }
+  tryBackgroundGuardedSave("interval_15s", true);
 }, 15000);
 
 // Đăng ký Service Worker PWA
